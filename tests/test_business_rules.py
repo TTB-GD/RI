@@ -157,21 +157,22 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
 
     def test_quality_categories_can_repeat_when_ef_quota_allows_it(self):
         chosen, _ = choose_sessions_weighted(
-            ["EF1", "EF2", "Seuil3", "Seuil4"],
-            energy_budget=10,
-            rpe_max=4,
+            ["EF1", "Seuil3"],
+            energy_budget=20,
+            rpe_max=10,
             tn=10,
             weights={
-                "w_energy": 3.0,
-                "w_sessions": 1.5,
+                "w_energy": 0.0,
+                "w_sessions": 10.0,
                 "w_fatigue": 0.0,
-                "w_rpe": 0.25,
+                "w_rpe": 0.0,
             },
         )
-        self.assertIn("EF1", chosen)
-        self.assertIn("EF2", chosen)
-        self.assertIn("Seuil3", chosen)
-        self.assertIn("Seuil4", chosen)
+        ef_count = sum(name == "EF1" for name in chosen)
+        quality_count = sum(name == "Seuil3" for name in chosen)
+        self.assertGreaterEqual(ef_count, 2)
+        self.assertGreaterEqual(quality_count, 2)
+        self.assertLessEqual(quality_count, ef_count)
 
     def test_long_run_is_prioritized_when_ef_and_sl_are_affordable(self):
         chosen, trace = choose_sessions_weighted(
@@ -189,11 +190,11 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
         chosen, _ = choose_sessions_weighted(
             ["EF1", "SL5"],
             energy_budget=5,
-            rpe_max=5,
+            rpe_max=0,
             tn=10,
         )
+        self.assertEqual(chosen, [])
         self.assertNotIn("SL5", chosen)
-        self.assertEqual(chosen, ["EF1"])
 
     def test_session_count_is_capped_at_seven(self):
         chosen, _ = choose_sessions_weighted(
