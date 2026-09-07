@@ -34,7 +34,7 @@ départager les combinaisons qui respectent déjà toutes ces contraintes.
 PRIORITÉ SORTIE LONGUE : une SL doit être casée dès que possible (dans la
 limite d'1/tour). Comme la contrainte qualité<=EF est maintenant stricte
 par tour, une SL (catégorie qualité) exige qu'au moins une EF soit choisie
-dans le MÊME tour pour ouvrir le quota. `_prioritize_long_run` traite donc
+le MÊME tour pour ouvrir le quota. `_prioritize_long_run` traite donc
 ce cas en préambule : si une SL est accessible et qu'une EF est affordable,
 les deux sont ajoutées avant de laisser le moteur pondéré arbitrer le reste
 du budget — plutôt que de laisser la SL être noyée dans la comparaison
@@ -59,7 +59,8 @@ MAX_SESSIONS_PER_TURN = 7
 SINGLE_PER_TURN_CATEGORIES = {"SL"}  # catégories limitées à 1 occurrence / tour
 
 # Poids par défaut : équirépartis, à ajuster/tester comme DEFAULT_WEIGHTS
-# du moteur de dés. w_fatigue soustrait, les autres s'additionnent.
+# du moteur de dés. w_fatigue soustrait ; w_rpe positif favorise les séances
+# à intensité (RPE) plus élevée. Les autres termes s'additionnent.
 DEFAULT_SESSION_WEIGHTS = {
     "w_energy": 3.0,
     "w_sessions": 1.5,
