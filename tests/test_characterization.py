@@ -48,6 +48,10 @@ class TestSessionEffectsCharacterization(unittest.TestCase):
         self.assertEqual(result["dice_used"], [5, 4, 3, 2])
         self.assertEqual(result["total"], 14)
 
+    def test_unsupported_dice_count_raises(self):
+        with self.assertRaises(ValueError):
+            session_outcome([1, 2, 3, 4, 5, 6, 1], [1, 2, 3, 4, 5, 6, 1], 6)
+
 
 class TestSessionSelectorCharacterization(unittest.TestCase):
     def test_quality_requires_ef_in_same_turn(self):
