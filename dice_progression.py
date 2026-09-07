@@ -4,7 +4,7 @@ tour. `dice_types`/`decision_engine` restent des fonctions pures sur un pool
 donné pour UN tour ; ce module gère l'ÉVOLUTION de ce pool d'un tour à
 l'autre pour un joueur qui persiste sur toute la simulation.
 
-Règles (fournies par l'utilisateur) :
+Règles :
     - Pool initial : 4 d6.
     - Jusqu'à 2 dés supplémentaires débloqués aux paliers de CTL CUMULÉ 50
       et 100 (1 dé par palier franchi, jamais plus). Toujours des d6 à
@@ -13,7 +13,7 @@ Règles (fournies par l'utilisateur) :
       au-delà).
     - Jusqu'à 4 améliorations de dé au total sur TOUT le pool (dés
       initiaux et dés ajoutés confondus, budget global unique) : une
-      amélioration devient disponible toutes les 8 séances de qualité
+      amélioration devient disponible toutes les 4 séances de qualité
       cumulées. Un dé progresse d6 -> d8 -> d10 -> d12 (plafond à d12).
     - Quel dé améliorer en premier (répartir l'effort sur plusieurs dés vs
       le concentrer sur un ou deux) est un choix de profil de joueur : géré
@@ -24,7 +24,7 @@ Comme pour le déblocage de séances (`sessions_catalog.available_sessions`,
 appelé en tout début de tour), les paliers/améliorations dus sont appliqués
 en DÉBUT de tour, à partir de l'état accumulé (CTL, séances de qualité) à
 la fin du tour précédent : un joueur qui franchit CTL=50 ou complète sa
-8e séance de qualité pendant le tour N n'en profite qu'à partir du tour N+1.
+4e séance de qualité pendant le tour N n'en profite qu'à partir du tour N+1.
 """
 from dataclasses import dataclass, field
 
@@ -94,7 +94,7 @@ class PlayerDicePool:
 
     def maybe_upgrade(self, quality_total, weights=None):
         """
-        Applique toutes les améliorations dues (une par tranche de 8 séances
+        Applique toutes les améliorations dues (une par tranche de 4 séances
         de qualité cumulées, plafonné à MAX_UPGRADES), en choisissant à
         chaque fois le dé cible via `choose_die_to_upgrade`. Ne fait rien
         si aucune amélioration n'est due, si le budget global est épuisé,
