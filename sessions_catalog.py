@@ -1,12 +1,26 @@
 """
 Catalogue des séances d'entraînement et arbre de déblocage progressif.
 
-Règles de déblocage fournies exhaustivement par l'utilisateur (plus
-d'extrapolation nécessaire, contrairement à la première version) : chaque
-séance a un ou plusieurs prérequis de la forme "avoir réalisé N fois la
-séance X" (cumulé, pas nécessairement consécutif). Quand plusieurs prérequis
-sont listés pour une même séance, N'IMPORTE LEQUEL suffit (ex: SL6 et Spec6
-se débloquent dès que Force5 OU VMA5 OU Seuil5 a été fait 3 fois).
+Règles de déblocage : chaque séance a un ou plusieurs prérequis de la forme
+"avoir réalisé N fois la séance X" (cumulé, pas nécessairement consécutif).
+Quand plusieurs prérequis sont listés pour une même séance, N'IMPORTE LEQUEL
+suffit.
+
+Progression actuelle :
+- EF : EF1/EF2 sont initiales, puis EF3 -> EF4 -> EF5, chaque niveau
+  demandant 2 réalisations du niveau précédent.
+- Seuil, VMA et Force : le niveau 3 est accessible après 2 EF2, puis chaque
+  branche progresse linéairement par 2 réalisations du niveau précédent.
+- Spec : Spec4 est accessible après 2 Force3 OU 2 VMA3 OU 2 Seuil3. À partir
+  de Spec4, la branche devient linéaire : Spec5 -> Spec6 -> Spec7 -> Spec8
+  -> Spec9, avec 2 réalisations du niveau précédent à chaque étape.
+- SL : SL5 est accessible après 2 EF4. À partir de SL5, la branche devient
+  linéaire : SL6 -> SL7 -> SL8 -> SL9, avec 2 réalisations du niveau
+  précédent à chaque étape.
+
+Ainsi, Spec6 n'a pas de prérequis direct en Force5/VMA5/Seuil5 : il dépend de
+Spec5. De même, SL6 dépend de SL5. Les branches Spec et SL deviennent donc
+autonomes après leur point d'entrée respectif (Spec4 et SL5).
 
 Une séance nouvellement débloquée à la fin du tour N n'est disponible qu'à
 partir du tour N+1 : c'est automatique ici, car available_sessions() est
@@ -94,7 +108,6 @@ SESSION_PREREQ = {
     "Seuil6": [("Seuil5", 2)],
     "SL6": [("SL5", 2)],
     "Spec6": [("Spec5", 2)],
-
 
     "VMA7": [("VMA6", 2)],
     "Seuil7": [("Seuil6", 2)],
