@@ -74,11 +74,19 @@ class TestSessionSelectorCharacterization(unittest.TestCase):
         self.assertLessEqual(sum(name.startswith("SL") for name in chosen), 1)
 
     def test_session_count_is_capped_at_seven(self):
+        # Neutralise the fatigue penalty: this test isolates the hard
+        # structural limit of seven sessions per turn.
         chosen, _ = choose_sessions_weighted(
             ["EF1"],
             energy_budget=20,
             rpe_max=1,
             tn=10,
+            weights={
+                "w_energy": 3.0,
+                "w_sessions": 1.5,
+                "w_fatigue": 0.0,
+                "w_rpe": 0.25,
+            },
         )
         self.assertEqual(len(chosen), 7)
 
