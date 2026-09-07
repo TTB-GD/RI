@@ -74,6 +74,33 @@ class TestDiceProgressionBusinessRules(unittest.TestCase):
         self.assertEqual(pool.upgrades_used, 4)
         self.assertEqual(pool.sizes, [8, 8, 8, 8])
 
+    def test_added_fifth_die_is_eligible_for_upgrade(self):
+        pool = PlayerDicePool()
+        pool.maybe_add_dice(50)
+        pool.maybe_upgrade(4)
+        self.assertEqual(pool.sizes, [8, 6, 6, 6, 6])
+        self.assertEqual(pool.upgrades_used, 1)
+
+    def test_added_sixth_die_is_eligible_for_upgrade(self):
+        pool = PlayerDicePool()
+        pool.maybe_add_dice(100)
+        pool.maybe_upgrade(4)
+        self.assertEqual(pool.sizes, [8, 6, 6, 6, 6, 6])
+        self.assertEqual(pool.upgrades_used, 1)
+
+    def test_four_upgrade_budget_is_global_across_all_six_dice(self):
+        pool = PlayerDicePool()
+        pool.maybe_add_dice(100)
+        pool.maybe_upgrade(20)
+        self.assertEqual(pool.upgrades_used, 4)
+        self.assertEqual(pool.sizes, [8, 8, 8, 8, 6, 6])
+        self.assertNotEqual(pool.sizes, [12, 8, 8, 8, 6, 6])
+
+    def test_mixed_pool_respects_spread_profile(self):
+        pool = PlayerDicePool(sizes=[12, 8, 6, 6])
+        pool.maybe_upgrade(4)
+        self.assertEqual(pool.sizes, [12, 8, 8, 6])
+
     def test_choose_die_to_upgrade_respects_concentration_weight(self):
         weights = {"w_concentration": 2.0, "w_spread": 1.0}
         self.assertEqual(choose_die_to_upgrade([6, 6, 8, 10], weights), 3)
