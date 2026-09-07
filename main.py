@@ -1,3 +1,11 @@
+"""
+Simulation de démonstration du moteur de dés, avec des pools indépendants.
+
+Ce module teste le moteur décisionnel sur un pool artificiel reconstruit à
+chaque tour. Il ne simule donc PAS la progression longitudinale d'un joueur.
+Pour une simulation multi-tours avec un pool persistant et évolutif, utiliser
+`simulate_player.py`.
+"""
 import sys
 import os
 
@@ -144,6 +152,14 @@ def play_turn(turn_id, weights=DEFAULT_WEIGHTS):
 
 
 def run_simulation(n_turns=50, weights=DEFAULT_WEIGHTS, seed=42):
+    """
+    Simule des tours indépendants du moteur de dés.
+
+    Le pool est volontairement recréé à chaque tour : cette fonction sert à
+    tester le comportement du moteur sur des situations de pool indépendantes,
+    et non la progression d'un joueur. Pour cette dernière, utiliser
+    `run_player_simulation()` dans `simulate_player.py`.
+    """
     random.seed(seed)
     turns, decisions = [], []
     for turn_id in range(1, n_turns + 1):
