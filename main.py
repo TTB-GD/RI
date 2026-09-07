@@ -6,12 +6,13 @@ import os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import random
-from dice_types import example_pool, pool_tn
+from dice_types import make_pool, pool_tn
 from patterns import pattern_name
 from dice_result import create_dice_result
 from decision_engine import choose_weighted_action, energy_and_fatigue, rank_to_records
 from session_effects import session_outcome
 from game_logger import write_csv
+
 # Poids par défaut du moteur pondéré. Un w_rpe positif augmente l'utilité des
 # options à RPE max attendu plus élevé ; ce n'est donc pas un terme de pénalité.
 DEFAULT_WEIGHTS = {
@@ -20,10 +21,35 @@ DEFAULT_WEIGHTS = {
     "w_fatigue": 1.0,
     "w_rpe": 1.0,
 }
+
+
 def get_max_dice():
     return random.choice([4, 5, 6])
+
+
 def initial_active_size(max_dice):
     return max_dice - 1
+
+
+def example_pool(max_dice):
+    """
+    Génère le pool artificiel utilisé par la simulation de démonstration.
+
+    Le pool contient max_dice - 1 dés actifs et un dé de réserve. Pour
+    l'instant, chaque dé actif est un d6 avec 50 % de chance qu'un seul soit
+    remplacé par un d8, d10 ou d12. Le dé de réserve reste toujours un d6.
+    """
+    active_size = max_dice - 1
+    sizes = [6] * active_size
+
+    if random.random() < 0.5:  # 50% de chance d'avoir un dé amélioré ce tour
+        idx = random.randrange(active_size)
+        sizes[idx] = random.choice([8, 10, 12])
+
+    sizes.append(6)  # dé de réserve : toujours un d6 pour l'instant
+    return make_pool(sizes)
+
+
 def roll_dice(dice_objects):
     faces, values = [], []
     for d in dice_objects:
@@ -31,6 +57,8 @@ def roll_dice(dice_objects):
         faces.append(face)
         values.append(value)
     return faces, values
+
+
 def _apply_action(choice, index, active, reserve_die, faces, values):
     """
     Exécute l'action retenue et retourne (active, faces, values) mis à jour.
@@ -57,6 +85,8 @@ def _apply_action(choice, index, active, reserve_die, faces, values):
         values[index] = value2
     # "keep" : rien à faire, on retourne l'état inchangé.
     return active, faces, values
+
+
 def play_turn(turn_id, weights=DEFAULT_WEIGHTS):
     """
     Joue un tour complet et retourne (turn_row, decision_rows) :
@@ -111,6 +141,8 @@ def play_turn(turn_id, weights=DEFAULT_WEIGHTS):
         "fatigue": fatigue,
     }
     return turn_row, decision_records
+
+
 def run_simulation(n_turns=50, weights=DEFAULT_WEIGHTS, seed=42):
     random.seed(seed)
     turns, decisions = [], []
@@ -119,6 +151,8 @@ def run_simulation(n_turns=50, weights=DEFAULT_WEIGHTS, seed=42):
         turns.append(turn_row)
         decisions.extend(decision_rows)
     return turns, decisions
+
+
 def print_summary(turns):
     """
     Résumé console minimal (contrôle rapide, pas un journal détaillé).
@@ -138,6 +172,8 @@ def print_summary(turns):
     print(f"Séances moyennes : {avg_sessions:.2f}")
     print(f"Écart d'utilité moyen (1er vs 2e choix) : {avg_gap:.2f}")
     print(f"Répartition des actions choisies : {action_counts}")
+
+
 if __name__ == "__main__":
     turns, decisions = run_simulation(n_turns=50)
     write_csv("turns.csv", turns)
