@@ -8,8 +8,8 @@ les contraintes de progression/déblocage (`session_selector`).
 Pool de dés : contrairement à la version précédente (taille de pool
 re-tirée au hasard à CHAQUE tour via `get_max_dice`), le pool est
 maintenant un état qui persiste et évolue pour un même joueur — cf.
-`dice_progression.PlayerDicePool` (paliers CTL 50/100, améliorations tous
-les 8 séances de qualité). Les évolutions dues sont appliquées en DÉBUT de
+`dice_progression.PlayerDicePool` (paliers CTL 50/100, améliorations toutes
+les 4 séances de qualité). Les évolutions dues sont appliquées en DÉBUT de
 tour, à partir de l'état accumulé à la fin du tour précédent (même
 principe que le déblocage de séances : rien de nouveau n'est disponible le
 tour même où le seuil est franchi).
@@ -43,6 +43,8 @@ from session_selector import choose_sessions_weighted, DEFAULT_SESSION_WEIGHTS
 from dice_progression import DEFAULT_UPGRADE_WEIGHTS
 from player_state import Player
 from game_logger import write_csv
+# Poids par défaut du moteur de dés. Un w_rpe positif augmente l'utilité des
+# options à RPE max attendu plus élevé ; ce n'est donc pas un terme de pénalité.
 DEFAULT_WEIGHTS = {"w_energy": 1.0, "w_sessions": 1.0, "w_fatigue": 1.0, "w_rpe": 1.0}
 def _split_active_reserve(dice_objects):
     """
