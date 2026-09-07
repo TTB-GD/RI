@@ -1,5 +1,25 @@
 # Notes de nettoyage
 
+## Passe 3 — suppression du planner obsolète et nettoyage mineur
+
+**Supprimé :**
+- `turn_planner.py` : ancien moteur de sélection des séances, remplacé par
+  `session_selector.py`. La recherche des références dans le dépôt ne
+  retournait aucune utilisation de `turn_planner` ni de
+  `choose_sessions_for_turn`. Le moteur actuellement utilisé par
+  `simulate_player.py` est `choose_sessions_weighted()`.
+
+**Nettoyé :**
+- `decision_engine.py` : suppression de la définition dupliquée de
+  `energy_and_fatigue()`. La fonction ne possède désormais qu'une seule
+  définition.
+
+**Non modifié volontairement :**
+- Les règles de gameplay, les pondérations, les interfaces publiques et le
+  fonctionnement de la simulation n'ont pas été changés dans cette passe.
+- `DEFAULT_WEIGHTS` reste présent dans `main.py` et `simulate_player.py` car
+  il est utilisé comme valeur par défaut des fonctions de simulation.
+
 ## Passe 2 — simplification + sortie structurée
 
 **Supprimé :**
