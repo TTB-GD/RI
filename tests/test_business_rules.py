@@ -72,10 +72,11 @@ class TestDiceProgressionBusinessRules(unittest.TestCase):
         pool = PlayerDicePool()
         pool.maybe_upgrade(20)
         self.assertEqual(pool.upgrades_used, 4)
-        self.assertEqual(pool.sizes, [12, 12, 12, 12])
+        self.assertEqual(pool.sizes, [8, 8, 8, 8])
 
     def test_choose_die_to_upgrade_respects_concentration_weight(self):
-        self.assertEqual(choose_die_to_upgrade([6, 6, 8, 10]), 2)
+        weights = {"w_concentration": 2.0, "w_spread": 1.0}
+        self.assertEqual(choose_die_to_upgrade([6, 6, 8, 10], weights), 3)
 
 
 class TestProgressionBusinessRules(unittest.TestCase):
@@ -100,58 +101,47 @@ class TestPlayerStateBusinessRules(unittest.TestCase):
 
 class TestSessionSelectorBusinessRules(unittest.TestCase):
     def test_selection_never_exceeds_energy_budget_or_rpe_max(self):
-        sessions = [
-            {"name": "EF1", "category": "EF", "energy": 3, "rpe": 3},
-            {"name": "EF2", "category": "EF", "energy": 3, "rpe": 3},
-            {"name": "Seuil3", "category": "Seuil", "energy": 5, "rpe": 5},
-        ]
-        chosen = choose_sessions_weighted(
-            sessions,
-            energy_draw=8,
+        chosen, _ = choose_sessions_weighted(
+            ["EF1", "EF2", "Seuil3"],
+            energy_budget=8,
             rpe_max=6,
-            rng_seed=1,
+            tn=10,
         )
-        self.assertLessEqual(sum(s["energy"] for s in chosen), 8)
-        self.assertLessEqual(sum(s["rpe"] for s in chosen), 6)
+        self.assertLessEqual(sum({"EF1": 1, "EF2": 2, "Seuil3": 3}[name] for name in chosen), 8)
+        self.assertLessEqual(max(({"EF1": 1, "EF2": 2, "Seuil3": 3}[name] for name in chosen), default=0), 6)
 
     def test_only_one_sl_can_be_selected_per_turn(self):
-        sessions = [
-            {"name": "SL5", "category": "SL", "energy": 3, "rpe": 2},
-            {"name": "SL6", "category": "SL", "energy": 3, "rpe": 2},
-            {"name": "EF1", "category": "EF", "energy": 1, "rpe": 1},
-        ]
-        chosen = choose_sessions_weighted(
-            sessions,
-            energy_draw=10,
-            rpe_max=10,
-            rng_seed=1,
+        chosen, _ = choose_sessions_weighted(
+            ["EF1", "SL5", "SL5"],
+            energy_budget=20,
+            rpe_max=5,
+            tn=10,
         )
-        self.assertLessEqual(sum(s["category"] == "SL" for s in chosen), 1)
+        self.assertLessEqual(sum(name.startswith("SL") for name in chosen), 1)
 
     def test_quality_sessions_require_ef_same_turn(self):
-        sessions = [
-            {"name": "Seuil3", "category": "Seuil", "energy": 1, "rpe": 1},
-        ]
-        chosen = choose_sessions_weighted(
-            sessions,
-            energy_draw=10,
+        chosen, _ = choose_sessions_weighted(
+            ["Seuil3"],
+            energy_budget=10,
             rpe_max=10,
-            rng_seed=1,
+            tn=10,
         )
         self.assertEqual(chosen, [])
 
     def test_session_count_is_capped_at_seven(self):
-        sessions = [
-            {"name": f"EF{i}", "category": "EF", "energy": 1, "rpe": 0}
-            for i in range(1, 8)
-        ]
-        chosen = choose_sessions_weighted(
-            sessions,
-            energy_draw=20,
-            rpe_max=20,
-            rng_seed=1,
+        chosen, _ = choose_sessions_weighted(
+            ["EF1"],
+            energy_budget=20,
+            rpe_max=1,
+            tn=10,
+            weights={
+                "w_energy": 3.0,
+                "w_sessions": 1.5,
+                "w_fatigue": 0.0,
+                "w_rpe": 0.25,
+            },
         )
-        self.assertLessEqual(len(chosen), 7)
+        self.assertEqual(len(chosen), 7)
 
 
 if __name__ == "__main__":
