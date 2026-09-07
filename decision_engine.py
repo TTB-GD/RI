@@ -11,10 +11,10 @@ Deux briques, liées mais distinctes :
    de branche spéciale : "keep" avec un mauvais total aura simplement une
    utilité plus faible que d'autres options).
 """
-from session_effects import session_outcome
-
 
 import math
+
+from session_effects import session_outcome
 
 
 def _round_half_away_from_zero(x):
@@ -35,6 +35,7 @@ def fibonacci(k):
         a, b = b, a + b
     return a
 
+
 def recovery_curve(offset):
     """
     Récupération selon l'écart sous le TN.
@@ -44,7 +45,6 @@ def recovery_curve(offset):
     -2 et -3 : charge faible mais neutre
     <= -4    : récupération progressive
     """
-
     recovery_fib = {
         -4: 1,
         -5: 1,
@@ -54,7 +54,6 @@ def recovery_curve(offset):
         -9: 5,
         -10: 8,
     }
-
     return recovery_fib.get(offset, 8)
 
 
@@ -63,7 +62,7 @@ def energy_and_fatigue(spend, tn):
     Nouvelle architecture (remplace l'ancienne courbe plafonnée à TN) :
 
     - L'énergie n'est PLUS plafonnée : énergie = spend, telle quelle, sans
-      bonus ni malus. Simplicité et clarté avant tout.
+      bonus ni malus.
     - La fatigue suit une suite quasi-Fibonacci selon la proximité au TN :
 
           offset = spend - tn
@@ -76,16 +75,7 @@ def energy_and_fatigue(spend, tn):
           offset == 4   : fatigue = 13  (et ainsi de suite)
 
       Concrètement : fatigue = fibonacci(offset + 3) pour offset >= -1.
-
-    IMPORTANT — hypothèse de simplification actuelle : 'spend' devrait être
-    l'énergie EFFECTIVEMENT dépensée en séances (un choix du joueur, qui
-    peut être inférieur à l'énergie réelle générée par les dés). Le choix
-    des séances n'étant pas encore modélisé dans ce prototype, on utilise
-    ici spend = énergie réelle totale des dés (on suppose que tout est
-    dépensé). Voir la section "angles morts" pour la conséquence de ce
-    raccourci.
     """
-def energy_and_fatigue(spend, tn):
     energy = spend
     offset = _round_half_away_from_zero(spend - tn)
 
@@ -130,7 +120,7 @@ def evaluate_action(faces, active_dice, reserve_die, max_dice, tn,
 
     energies, fatigues, sessions_list, bonus_flags, rpe_list = [], [], [], [], []
     for new_faces in outcomes:
-        outcome = session_outcome(new_faces, new_faces, max_dice)  # bonus=0 -> values=faces
+        outcome = session_outcome(new_faces, new_faces, max_dice)
         energy, fatigue = energy_and_fatigue(outcome["total"], tn)
         energies.append(energy)
         fatigues.append(fatigue)
@@ -159,12 +149,6 @@ def choose_weighted_action(active_dice, reserve_die, faces, max_dice, tn,
                 + w_rpe      * RPE_max_attendu
                 - w_fatigue  * fatigue_attendue
 
-    Poids équirépartis par défaut (1.0 chacun) : point de départ neutre, à
-    ajuster/tester. Le RPE est ajouté (comme énergie/séances) plutôt que
-    soustrait : hypothèse que viser un RPE plus haut est généralement
-    souhaitable (accès à des séances plus exigeantes, cf. GDD), à confirmer —
-    voir la note sur ce choix dans mon retour.
-
     Retourne (choix, index, classement) où classement est la liste complète
     des options évaluées, triée par utilité décroissante (pour audit/debug).
     """
@@ -192,21 +176,14 @@ def choose_weighted_action(active_dice, reserve_die, faces, max_dice, tn,
                 - w_fatigue * m["expected_fatigue"])
 
     ranked = sorted(candidates, key=lambda c: utility(c[2]), reverse=True)
-    best_choice, best_index, best_metrics = ranked[0]
+    best_choice, best_index, _ = ranked[0]
     return best_choice, best_index, ranked
 
 
 def rank_to_records(ranked, weights):
     """
     Convertit le classement retourné par choose_weighted_action en une liste
-    de dicts "plats" (une ligne par option évaluée), prête à être journalisée
-    (CSV/JSON) plutôt qu'imprimée. Remplace l'ancien print_weighted_analysis :
-    même information, mais exploitable pour de l'analyse (tableur, notebook)
-    au lieu d'être uniquement lisible en console.
-
-    weights : dict avec les clés w_energy, w_sessions, w_fatigue, w_rpe,
-    utilisé pour recalculer l'utilité de chaque ligne (traçabilité : on sait
-    sous quelle pondération chaque utilité a été obtenue).
+    de dicts plats, prête à être journalisée (CSV/JSON).
     """
     def utility(m):
         return (weights["w_energy"] * m["expected_energy"]
