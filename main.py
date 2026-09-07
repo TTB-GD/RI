@@ -12,8 +12,8 @@ from dice_result import create_dice_result
 from decision_engine import choose_weighted_action, energy_and_fatigue, rank_to_records
 from session_effects import session_outcome
 from game_logger import write_csv
-# Poids par défaut du moteur pondéré. Centralisés ici pour être faciles à
-# faire varier d'une simulation à l'autre sans toucher au moteur lui-même.
+# Poids par défaut du moteur pondéré. Un w_rpe positif augmente l'utilité des
+# options à RPE max attendu plus élevé ; ce n'est donc pas un terme de pénalité.
 DEFAULT_WEIGHTS = {
     "w_energy": 1.0,
     "w_sessions": 1.0,
