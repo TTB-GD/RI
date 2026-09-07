@@ -71,7 +71,10 @@ def session_outcome(faces, values, max_dice):
         total         : somme de dice_used.
     """
     n = len(faces)
-    table = SESSION_EFFECTS.get(n, {})
+    if n not in SESSION_EFFECTS:
+        raise ValueError(f"Unsupported number of dice: {n}")
+
+    table = SESSION_EFFECTS[n]
     sig = pattern_signature(faces)
     sessions, bonus_pool = table.get(sig, (1, False))
 
