@@ -3,6 +3,7 @@ import unittest
 from experiments.current.bust_trigger.run import (
     check_candidate_bust,
     first_bust_index,
+    ordered_scenarios,
     risk_die_size,
     selector_risk_gap,
     theoretical_bust_probability,
@@ -24,6 +25,10 @@ class TestCandidateBustTriggerHarness(unittest.TestCase):
         self.assertTrue(check_candidate_bust("VMA6", 4, 8, 2).bust)
         self.assertFalse(check_candidate_bust("VMA6", 4, 8, 3).bust)
 
+    def test_gap_three_boundary(self):
+        self.assertTrue(check_candidate_bust("Spec7", 4, 10, 3).bust)
+        self.assertFalse(check_candidate_bust("Spec7", 4, 10, 4).bust)
+
     def test_largest_pool_die_is_candidate_risk_die(self):
         self.assertEqual(risk_die_size([6, 6, 8, 10]), 10)
 
@@ -39,6 +44,17 @@ class TestCandidateBustTriggerHarness(unittest.TestCase):
         self.assertEqual(len(checks), 2)
         self.assertEqual(checks[-1].session, "VMA6")
         self.assertTrue(checks[-1].bust)
+
+    def test_ordered_scenario_matrix_and_resolution(self):
+        cases = {case["name"]: case for case in ordered_scenarios()}
+        self.assertEqual(cases["no_risky_session"]["risk_rolls_consumed"], 0)
+        self.assertIsNone(cases["one_risky_session_no_bust"]["bust_index"])
+        self.assertEqual(cases["multiple_risks_no_bust"]["risk_rolls_consumed"], 3)
+        self.assertEqual(cases["bust_on_first_risk"]["risk_rolls_consumed"], 1)
+        intermediate = cases["bust_on_intermediate_risk"]
+        self.assertEqual(intermediate["bust_index"], 3)
+        self.assertEqual(intermediate["risk_rolls_consumed"], 2)
+        self.assertEqual(intermediate["resolution"]["cancelled_sessions"], ("Force5",))
 
     def test_exact_probability(self):
         self.assertAlmostEqual(theoretical_bust_probability(1, 6), 1 / 6)
