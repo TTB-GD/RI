@@ -41,6 +41,7 @@ from patterns import pattern_name
 from sessions_catalog import SESSION_CATALOG
 from session_selector import choose_sessions_weighted, DEFAULT_SESSION_WEIGHTS
 from session_resolution import resolve_session_plan
+from session_risk import first_bust_index
 from dice_progression import DEFAULT_UPGRADE_WEIGHTS
 from player_state import Player
 from game_logger import write_csv
@@ -103,7 +104,8 @@ def roll_turn_budget(dice_pool, weights=DEFAULT_WEIGHTS):
         "action_chosen": choice,
     }
 def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
-                      session_weights=None, upgrade_weights=None, bust_index=None):
+                      session_weights=None, upgrade_weights=None, bust_index=None,
+                      risk_roll_face=None):
     """
     Joue un tour pour un joueur et retourne (turn_row, session_rows) :
     - turn_row     : dict résumant le tour (tirage, CTL, fatigue, état de
@@ -122,11 +124,17 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
     player.dice_pool.maybe_upgrade(player.progress.quality_total, upgrade_weights or DEFAULT_UPGRADE_WEIGHTS)
     roll = roll_turn_budget(player.dice_pool, weights)
     available = player.progress.available_sessions()
+    tentable = player.progress.tentable_sessions()
     chosen, trace = choose_sessions_weighted(
-        available, roll["energy_budget"], roll["rpe_max"], roll["tn"],
+        tentable, roll["energy_budget"], roll["rpe_max"], roll["tn"],
         quality_limit=roll["quality_sessions_from_roll"],
         weights=session_weights or DEFAULT_SESSION_WEIGHTS,
+        best_die_size=max(player.dice_pool.sizes),
     )
+    if bust_index is None:
+        bust_index = first_bust_index(
+            chosen, roll["rpe_max"], player.dice_pool.sizes, risk_roll_face,
+        )
     resolution = resolve_session_plan(chosen, available, roll["rpe_max"], bust_index)
     ctl = resolution.energy_effective
     _, fatigue = energy_and_fatigue(ctl, roll["tn"])

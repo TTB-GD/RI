@@ -19,7 +19,8 @@ dés gardé tel quel ou d'une somme de séances choisies.
 RÈGLES DU JEU appliquées comme contraintes DURES (jamais arbitrées par les
 poids, seulement filtrées) :
     - énergie  : somme des coûts (RPE) des séances choisies <= energy_budget.
-    - RPE      : RPE individuel de chaque séance choisie <= rpe_max.
+    - risque   : RPE Max délimite la zone sûre ; une qualité au-dessus reste
+                 possible sauf si son seuil atteint la taille du meilleur dé.
     - qualité  : contrainte STRICTE PAR TOUR (pas cumulative) — le nombre de
                  séances de qualité choisies CE TOUR ne peut jamais dépasser
                  le nombre de séances EF choisies CE TOUR. Un stock d'EF
@@ -56,6 +57,7 @@ from dataclasses import dataclass, field
 
 from decision_engine import energy_and_fatigue
 from sessions_catalog import SESSION_CATALOG, QUALITY_CATEGORIES
+from session_risk import is_risk_tentable
 
 MAX_SESSIONS_PER_TURN = 7
 SINGLE_PER_TURN_CATEGORIES = {"SL"}  # catégories limitées à 1 occurrence / tour
@@ -82,13 +84,19 @@ class _SelectionState:
     used_single_categories: set = field(default_factory=set)
 
 
-def _is_affordable(name, state, energy_budget, rpe_max, quality_limit):
+def _is_affordable(name, state, energy_budget, rpe_max, quality_limit,
+                   best_die_size=None):
     """Contraintes DURES : la séance `name` peut-elle rejoindre `state` ?"""
     category, rpe = SESSION_CATALOG[name]
     if len(state.chosen) >= MAX_SESSIONS_PER_TURN:
         return False
     if rpe > rpe_max:
-        return False
+        if category not in QUALITY_CATEGORIES:
+            return False
+        if best_die_size is None or not is_risk_tentable(
+            name, rpe_max, best_die_size
+        ):
+            return False
     if state.energy_used + rpe > energy_budget:
         return False
     if category in SINGLE_PER_TURN_CATEGORIES and category in state.used_single_categories:
@@ -118,7 +126,7 @@ def _commit(name, state):
 
 
 def _prioritize_long_run(available_session_names, state, energy_budget, rpe_max,
-                         quality_limit, trace):
+                         quality_limit, trace, best_die_size=None):
     """
     Case une Sortie Longue dès que possible (au plus 1/tour). Sous la règle
     stricte qualité<=EF PAR TOUR, une SL exige une EF dans le même tour pour
@@ -137,7 +145,7 @@ def _prioritize_long_run(available_session_names, state, energy_budget, rpe_max,
     ef_candidates = [n for n in available_session_names if SESSION_CATALOG[n][0] == "EF"]
     affordable_ef = [
         n for n in ef_candidates
-        if _is_affordable(n, state, energy_budget, rpe_max, quality_limit)
+        if _is_affordable(n, state, energy_budget, rpe_max, quality_limit, best_die_size)
     ]
     if not affordable_ef:
         return  # pas d'EF possible ce tour -> pas de quota qualité -> pas de SL non plus
@@ -151,7 +159,7 @@ def _prioritize_long_run(available_session_names, state, energy_budget, rpe_max,
 
     affordable_sl = [
         n for n in sl_candidates
-        if _is_affordable(n, state, energy_budget, rpe_max, quality_limit)
+        if _is_affordable(n, state, energy_budget, rpe_max, quality_limit, best_die_size)
     ]
     if not affordable_sl:
         return
@@ -201,14 +209,14 @@ def _marginal_utility(name, state, energy_budget, rpe_max, tn, weights):
 
 
 def choose_sessions_weighted(available_session_names, energy_budget, rpe_max, tn,
-                             quality_limit, weights=None):
+                             quality_limit, weights=None, best_die_size=None):
     """
     Sélectionne les séances du tour par construction gloutonne sur l'utilité
     marginale pondérée, sous les contraintes dures du jeu.
 
     Paramètres
     ----------
-    available_session_names : séances débloquées (progress.available_sessions()).
+    available_session_names : séances tentables (progress.tentable_sessions()).
     energy_budget            : énergie disponible ce tour (dés).
     rpe_max                  : RPE maximum atteignable ce tour (dés).
     tn                       : Target Number du tour, pour que la fatigue des
@@ -218,6 +226,8 @@ def choose_sessions_weighted(available_session_names, energy_budget, rpe_max, tn
                                 consomme un slot comme toute autre qualité.
     weights                  : dict w_energy/w_sessions/w_fatigue/w_rpe
                                 (DEFAULT_SESSION_WEIGHTS si omis).
+    best_die_size            : meilleur dé du pool persistant. Sans valeur,
+                                les qualités au-dessus de RPE Max sont filtrées.
 
     Note : la contrainte qualité<=EF est désormais STRICTEMENT PAR TOUR
     (pas de compteurs cumulés en entrée) — ce tour doit se suffire à
@@ -239,12 +249,15 @@ def choose_sessions_weighted(available_session_names, energy_budget, rpe_max, tn
 
     _prioritize_long_run(
         available_session_names, state, energy_budget, rpe_max, quality_limit, trace,
+        best_die_size,
     )
 
     while True:
         candidates = [
             name for name in available_session_names
-            if _is_affordable(name, state, energy_budget, rpe_max, quality_limit)
+            if _is_affordable(
+                name, state, energy_budget, rpe_max, quality_limit, best_die_size
+            )
         ]
         if not candidates:
             break

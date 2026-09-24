@@ -1,12 +1,14 @@
 # Bust Trigger Harness
 
-Status: **CURRENT EXPERIMENT — NOT PRODUCTION BEHAVIOR**
+Status: **CURRENT EXPERIMENT — BASE RULE NOW IN PRODUCTION**
 
 ## Question
 
-Characterize the missing upstream risk/bust trigger before `session_resolution.resolve_session_plan()` without changing production rules.
+Retain the deterministic characterization and probability analysis of the
+upstream risk/bust trigger now used before `session_resolution.resolve_session_plan()`.
 
-The current production selector rejects sessions whose RPE exceeds the turn's `rpe_max`. Therefore production cannot currently generate the risky quality sessions that the post-bust resolver knows how to resolve.
+Production now admits catalogue-eligible risky qualities and delegates the
+first generated `bust_index` to the existing post-bust resolver.
 
 ## Candidate rule characterized
 
@@ -20,17 +22,16 @@ This harness isolates the historical Fatigue V1 candidate rule:
 - the first bust stops later risk tests;
 - post-bust consequences remain the responsibility of `session_resolution.resolve_session_plan()`.
 
-The "largest die in the current pool" choice is an **EXPERIMENTAL POLICY ASSUMPTION** in this harness. It is not promoted to production by this experiment.
+The "largest die in the current pool" choice is now the CURRENT production
+rule. The harness remains useful for deterministic scenarios and its exact
+probability matrix; it is not an independent production engine.
 
-## Representation audit and ambiguity
+## Representation audit
 
-Production exposes the persistent pool as `PlayerDicePool.sizes`, a list of
-supported sizes, and can materialize it as `Die` objects. It does **not** expose
-a named "best die" or "risk die". Turn rolling separately partitions that pool
-into active dice plus the smallest reserve die. Consequently, "best die" could
-mean the largest size in the complete persistent pool (the harness assumption),
-the largest active die for that turn, or a separately designated risk die. The
-repository does not currently settle that choice.
+Production exposes the complete persistent pool as `PlayerDicePool.sizes` and
+materializes supported sizes as `Die` objects. The CURRENT rule explicitly
+selects `max(PlayerDicePool.sizes)`, independently of the active/reserve split
+used for the turn budget.
 
 The harness uses a uniform raw face in `1..max(pool_sizes)`. This currently
 equals `Die.roll()`'s final value because every configured die bonus is zero;
@@ -54,9 +55,10 @@ zero.
 - deterministic boundary cases for risk/no-risk and bust/pass;
 - exact theoretical bust probability by overshoot and die size;
 - ordered multi-risk examples and first-bust stopping;
-- the current selector's inability to plan a risky quality session.
+- the production selector's ability to plan an eligible risky quality session.
 
-No production files, GDD rules, selector weights, Fatigue V1 parameters or post-bust rules are modified.
+The harness shares the production base-threshold function. It does not alter
+selector weights, Fatigue V1 parameters or post-bust rules.
 
 ## Run
 

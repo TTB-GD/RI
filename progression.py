@@ -10,7 +10,12 @@ réalisées lors des tours précédents ne créent donc aucun quota de qualité
 supplémentaire pour le tour courant.
 """
 from collections import defaultdict
-from sessions_catalog import SESSION_CATALOG, QUALITY_CATEGORIES, available_sessions
+from sessions_catalog import (
+    SESSION_CATALOG,
+    QUALITY_CATEGORIES,
+    available_sessions,
+    tentable_sessions,
+)
 
 
 class PlayerProgress:
@@ -21,6 +26,10 @@ class PlayerProgress:
 
     def available_sessions(self):
         return available_sessions(self.completions)
+
+    def tentable_sessions(self):
+        """Expose l'accès CURRENT : débloquées + prochaine étape qualité."""
+        return tentable_sessions(self.completions)
 
     def record_session(self, session_name):
         """Enregistre qu'une séance vient d'être réalisée (met à jour les compteurs)."""
