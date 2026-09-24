@@ -40,6 +40,7 @@ from session_effects import session_outcome
 from patterns import pattern_name
 from sessions_catalog import SESSION_CATALOG
 from session_selector import choose_sessions_weighted, DEFAULT_SESSION_WEIGHTS
+from session_resolution import resolve_session_plan
 from dice_progression import DEFAULT_UPGRADE_WEIGHTS
 from player_state import Player
 from game_logger import write_csv
@@ -102,7 +103,7 @@ def roll_turn_budget(dice_pool, weights=DEFAULT_WEIGHTS):
         "action_chosen": choice,
     }
 def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
-                      session_weights=None, upgrade_weights=None):
+                      session_weights=None, upgrade_weights=None, bust_index=None):
     """
     Joue un tour pour un joueur et retourne (turn_row, session_rows) :
     - turn_row     : dict résumant le tour (tirage, CTL, fatigue, état de
@@ -123,13 +124,17 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
     available = player.progress.available_sessions()
     chosen, trace = choose_sessions_weighted(
         available, roll["energy_budget"], roll["rpe_max"], roll["tn"],
+        quality_limit=roll["quality_sessions_from_roll"],
         weights=session_weights or DEFAULT_SESSION_WEIGHTS,
     )
-    ctl = sum(SESSION_CATALOG[name][1] for name in chosen)
+    resolution = resolve_session_plan(chosen, available, roll["rpe_max"], bust_index)
+    ctl = resolution.energy_effective
     _, fatigue = energy_and_fatigue(ctl, roll["tn"])
     player.cumulative_ctl += ctl
     session_rows = []
-    for name, step in zip(chosen, trace):
+    trace_by_name = {step["session"]: step for step in trace}
+    for name in resolution.completed_sessions:
+        step = trace_by_name.get(name, {})
         category, rpe = SESSION_CATALOG[name]
         session_rows.append({
             "turn": turn_id,
@@ -137,9 +142,9 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
             "category": category,
             "rpe": rpe,
             "energy_cost": rpe,
-            "marginal_utility": step["marginal_utility"],
-            "alternatives_considered": step["alternatives_considered"],
-            "note": step["note"],
+            "marginal_utility": step.get("marginal_utility"),
+            "alternatives_considered": step.get("alternatives_considered"),
+            "note": step.get("note", "redistribution_EF"),
         })
         player.progress.record_session(name)
     turn_row = {
@@ -156,7 +161,10 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
         "rpe_max": roll["rpe_max"],
         "quality_sessions_from_roll": roll["quality_sessions_from_roll"],
         "sessions_chosen": "-".join(chosen) if chosen else "",
-        "nb_sessions": len(chosen),
+        "nb_sessions": len(resolution.counted_sessions),
+        "sessions_completed": "-".join(resolution.completed_sessions),
+        "sessions_cancelled": "-".join(resolution.cancelled_sessions),
+        "energy_lost": resolution.energy_lost,
         "ctl": ctl,
         "cumulative_ctl": player.cumulative_ctl,
         "fatigue_turn": fatigue,
