@@ -127,6 +127,9 @@ def _prioritize_long_run(available_session_names, state, energy_budget, rpe_max,
     Ne force rien si aucune SL n'est débloquée, ou si aucune EF n'est
     affordable pour lui ouvrir le quota.
     """
+    if quality_limit <= 0:
+        return
+
     sl_candidates = [n for n in available_session_names if SESSION_CATALOG[n][0] == "SL"]
     if not sl_candidates:
         return
