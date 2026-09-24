@@ -324,20 +324,38 @@ Ajouter des tests ciblés lorsque la mission introduit :
 
 ## 15. Git, remote et synchronisation
 
-À la fin d'une mission importante :
+À la fin d'une mission importante qui crée ou modifie un commit :
 
-1. vérifier `git status` ;
-2. exécuter les tests nécessaires ;
-3. vérifier `git diff --check` ;
-4. créer un commit si demandé ;
-5. donner le SHA exact ;
-6. donner la branche courante ;
-7. vérifier `git remote -v` ;
-8. vérifier l'upstream de la branche courante ;
-9. faire un `fetch` lorsque le remote est disponible ;
-10. comparer le HEAD local au HEAD distant correspondant.
+1. rester dans **la même tâche / le même workspace Codex** pour effectuer les opérations Git de clôture ;
+2. ne jamais supposer qu'une nouvelle tâche Codex partage le même clone local, les mêmes commits, branches ou remotes ;
+3. vérifier `git status` ;
+4. exécuter les tests nécessaires ;
+5. vérifier `git diff --check` ;
+6. créer le commit si demandé ;
+7. donner le SHA exact ;
+8. donner la branche courante ;
+9. vérifier `git remote -v` ;
+10. vérifier l'upstream de la branche courante ;
+11. faire un `fetch` lorsque le remote est disponible ;
+12. comparer le HEAD local au HEAD distant correspondant ;
+13. tenter le push depuis **ce même workspace** lorsque le remote authentifié est disponible.
+
+Ne jamais différer volontairement la synchronisation d'un commit vers une nouvelle tâche si elle peut être tentée dans la tâche qui vient de créer ce commit.
 
 Ne jamais affirmer qu'un commit est disponible sur GitHub sans vérification.
+
+### Nouveau workspace Codex
+
+Lorsqu'une tâche Git est lancée dans un nouveau workspace :
+
+* vérifier d'abord le HEAD local réel ;
+* vérifier que le commit attendu existe localement avec `git cat-file` ou commande équivalente ;
+* ne jamais supposer qu'un SHA créé dans une autre tâche est présent ;
+* si le commit attendu est absent, arrêter la tentative de synchronisation et signaler :
+
+`EXPECTED COMMIT NOT PRESENT IN THIS WORKSPACE`
+
+Dans ce cas, ne pas tenter de reconstruire silencieusement le commit à partir de mémoire.
 
 ### Remote absent
 
@@ -357,6 +375,15 @@ Lorsqu'un commit est créé et qu'un remote authentifié est disponible :
 * ne pas écraser `main` ;
 * ne pas fusionner automatiquement une branche dans `main`.
 
+Si le réseau ou l'authentification bloque le `fetch` ou le `push` dans le workspace qui contient le commit :
+
+* ne pas multiplier les tentatives dans de nouvelles tâches ;
+* conserver le commit local intact ;
+* fournir le SHA exact et, si utile, un patch/export Git permettant de récupérer le travail ailleurs ;
+* signaler :
+
+`REMOTE CONFIGURED BUT PUSH BLOCKED`
+
 ### Synchronisation finale
 
 Une mission avec commit n'est considérée comme complètement synchronisée que si :
@@ -375,6 +402,10 @@ Si le remote existe mais que le push échoue, indiquer :
 
 `REMOTE CONFIGURED BUT PUSH BLOCKED`
 
+Si le commit attendu n'existe pas dans le workspace courant, indiquer :
+
+`EXPECTED COMMIT NOT PRESENT IN THIS WORKSPACE`
+
 Si le local et le remote divergent de manière nécessitant un arbitrage, indiquer :
 
 `DIVERGENCE REQUIRES USER DECISION`
@@ -384,9 +415,10 @@ Toujours préciser :
 * HEAD local ;
 * branche locale ;
 * branche distante correspondante ;
-* HEAD distant ;
+* HEAD distant si visible ;
 * working tree propre ou non ;
 * éventuelle PR.
+
 
 ---
 
