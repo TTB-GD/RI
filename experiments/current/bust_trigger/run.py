@@ -3,8 +3,15 @@
 CURRENT EXPERIMENT — NOT PRODUCTION BEHAVIOR.
 """
 
+import sys
 from dataclasses import asdict, dataclass
+from pathlib import Path
 
+REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+if str(REPOSITORY_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPOSITORY_ROOT))
+
+from session_resolution import resolve_session_plan
 from session_selector import choose_sessions_weighted
 from sessions_catalog import QUALITY_CATEGORIES, SESSION_CATALOG
 
@@ -140,25 +147,51 @@ def deterministic_scenarios():
         asdict(check_candidate_bust("Seuil5", rpe_max=4, die_size=6, roll=2)),
         asdict(check_candidate_bust("VMA6", rpe_max=4, die_size=8, roll=2)),
         asdict(check_candidate_bust("VMA6", rpe_max=4, die_size=8, roll=3)),
+        asdict(check_candidate_bust("Spec7", rpe_max=4, die_size=10, roll=3)),
+        asdict(check_candidate_bust("Spec7", rpe_max=4, die_size=10, roll=4)),
     ]
 
 
-def ordered_scenario():
-    planned = ["EF1", "Seuil5", "EF2", "VMA6", "Force5"]
-    bust_index, checks = first_bust_index(
+def ordered_case(name, planned, risk_rolls, rpe_max=4):
+    """Run one reproducible ordering case and, on bust, the current resolver."""
+    pool_sizes = [6, 6, 8, 10]
+    bust_index, checks = first_bust_index(planned, rpe_max, pool_sizes, risk_rolls)
+    resolution = resolve_session_plan(
         planned,
-        rpe_max=4,
-        pool_sizes=[6, 6, 8, 10],
-        risk_rolls=[5, 2, 1],
+        available_session_names=list(SESSION_CATALOG),
+        rpe_max=rpe_max,
+        bust_index=bust_index,
     )
     return {
+        "name": name,
         "planned": planned,
-        "risk_die_size": risk_die_size([6, 6, 8, 10]),
+        "supplied_risk_rolls": risk_rolls,
+        "risk_die_size": risk_die_size(pool_sizes),
         "bust_index": bust_index,
         "busted_session": planned[bust_index] if bust_index is not None else None,
         "tested_risks": [asdict(check) for check in checks],
         "risk_rolls_consumed": len(checks),
+        "resolution": asdict(resolution),
     }
+
+
+def ordered_scenarios():
+    """Minimal cases covering risk order and the first-bust short circuit."""
+    return [
+        ordered_case("no_risky_session", ["EF1", "Seuil3"], []),
+        ordered_case("one_risky_session_no_bust", ["EF1", "Seuil5"], [2]),
+        ordered_case(
+            "multiple_risks_no_bust", ["Seuil5", "VMA6", "Force5"], [2, 3, 2],
+        ),
+        ordered_case(
+            "bust_on_first_risk", ["Seuil5", "VMA6", "Force5"], [1, 9, 9],
+        ),
+        ordered_case(
+            "bust_on_intermediate_risk",
+            ["EF1", "Seuil5", "EF2", "VMA6", "Force5"],
+            [5, 2, 9],
+        ),
+    ]
 
 
 def run():
@@ -166,7 +199,7 @@ def run():
         "status": "CURRENT EXPERIMENT — NOT PRODUCTION BEHAVIOR",
         "selector_gap": selector_risk_gap(),
         "boundary_scenarios": deterministic_scenarios(),
-        "ordered_scenario": ordered_scenario(),
+        "ordered_scenarios": ordered_scenarios(),
         "probability_matrix": probability_matrix(),
     }
 
