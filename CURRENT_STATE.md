@@ -79,7 +79,7 @@ The existing `experiments/d99_bust_resolution/` harness is current and predates 
 
 Priority technical questions currently open:
 
-1. implement or specify the production risk/bust trigger before `resolve_session_plan()`;
+1. characterize and then implement/specify the production risk/bust trigger before `resolve_session_plan()`; a current deterministic harness now exists at `experiments/current/bust_trigger/`, while production remains unchanged;
 2. continue Fatigue V1 design work without silently replacing the current model;
 3. re-evaluate the Standard Training Player only against the corrected D99/repetition/SL/bust rules;
 4. implement race objectives and the concrete role of SL when their design thresholds are validated.
