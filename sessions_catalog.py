@@ -137,9 +137,10 @@ def tentable_sessions(completions):
     """Séances débloquées, plus l'étape qualité immédiatement suivante.
 
     ``SESSION_PREREQ`` est l'arbre explicite du catalogue : une séance
-    verrouillée est donc l'étape suivante lorsque l'un de ses prédécesseurs
-    explicites est déjà débloqué. Les EF conservent leur accès CURRENT et ne
-    bénéficient pas de cette anticipation réservée aux qualités.
+    verrouillée devient tentable lorsque l'un de ses prédécesseurs explicites
+    est déjà débloqué *et* a été réussi au moins une fois. Le seuil normal du
+    prérequis continue de gouverner son déblocage. Les EF conservent leur accès
+    CURRENT et ne bénéficient pas de cette anticipation réservée aux qualités.
     """
     unlocked = available_sessions(completions)
     unlocked_set = set(unlocked)
@@ -148,6 +149,10 @@ def tentable_sessions(completions):
         if name not in unlocked_set
         and SESSION_CATALOG[name][0] in QUALITY_CATEGORIES
         and prerequisites
-        and any(prerequisite in unlocked_set for prerequisite, _ in prerequisites)
+        and any(
+            prerequisite in unlocked_set
+            and completions.get(prerequisite, 0) >= 1
+            for prerequisite, _ in prerequisites
+        )
     ]
     return unlocked + next_quality

@@ -20,8 +20,10 @@ This file is the fast-entry snapshot for the current prototype state. It does no
 - Quality sessions must not outnumber EF sessions in the same turn.
 - Maximum 7 counted sessions per turn.
 - RPE Max is the turn's safe-quality boundary, not a hard access ceiling for
-  quality sessions. Catalogue-unlocked qualities and the immediately following
-  explicit catalogue step are tentable; later steps cannot be skipped.
+  quality sessions. Catalogue-unlocked qualities are tentable; after one
+  successful completion of a quality level, its immediately following explicit
+  catalogue step also becomes tentable. Later steps cannot be skipped, and the
+  normal prerequisite threshold still governs normal unlocks.
 - A risky quality (`session RPE > RPE Max`) is excluded when its overshoot
   `k = session RPE - RPE Max` is greater than or equal to the largest die in
   the complete persistent pool, avoiding a choice with certain bust.

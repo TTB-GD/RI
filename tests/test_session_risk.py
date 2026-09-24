@@ -23,22 +23,42 @@ RISK_FRIENDLY_WEIGHTS = {
 
 
 class TestTentableCatalogProgression(unittest.TestCase):
-    def test_unlocked_and_only_immediate_next_quality_are_tentable(self):
+    def test_unlocked_predecessor_without_completion_does_not_open_successor(self):
         progress = PlayerProgress()
         progress.completions["Spec5"] = 2
 
         self.assertIn("Spec6", progress.available_sessions())
         self.assertIn("Spec6", progress.tentable_sessions())
+        self.assertNotIn("Spec7", progress.tentable_sessions())
+
+    def test_one_success_opens_only_immediate_successor(self):
+        progress = PlayerProgress()
+        progress.completions["Spec5"] = 2
+        progress.completions["Spec6"] = 1
+
+        self.assertNotIn("Spec7", progress.available_sessions())
         self.assertIn("Spec7", progress.tentable_sessions())
         self.assertNotIn("Spec8", progress.tentable_sessions())
 
-    def test_cannot_skip_next_quality_level(self):
+    def test_normal_threshold_unlocks_successor_but_not_following_level(self):
         progress = PlayerProgress()
-        progress.completions["VMA5"] = 2
+        progress.completions["Spec5"] = 2
+        progress.completions["Spec6"] = 2
 
-        self.assertIn("VMA6", progress.available_sessions())
-        self.assertIn("VMA7", progress.tentable_sessions())
+        self.assertIn("Spec7", progress.available_sessions())
+        self.assertIn("Spec7", progress.tentable_sessions())
         self.assertNotIn("Spec8", progress.tentable_sessions())
+
+    def test_multibranch_entry_uses_explicit_predecessor_graph(self):
+        progress = PlayerProgress()
+        progress.completions["EF2"] = 2
+
+        self.assertIn("Seuil3", progress.available_sessions())
+        self.assertNotIn("Spec4", progress.tentable_sessions())
+
+        progress.completions["Seuil3"] = 1
+        self.assertNotIn("Spec4", progress.available_sessions())
+        self.assertIn("Spec4", progress.tentable_sessions())
 
 
 class TestRiskBoundaries(unittest.TestCase):
