@@ -93,6 +93,8 @@ Pour une investigation, préférer :
 
 ## 4. Inspecter avant de modifier
 
+Pour toute mission touchant au comportement courant du prototype, lire d'abord `CURRENT_STATE.md` s'il existe. Il sert de snapshot rapide de l'état courant et des limitations ouvertes ; il ne remplace pas le GDD ni la vérification du code réel.
+
 Avant d'écrire du code :
 
 1. identifier les fichiers réellement concernés ;
@@ -282,6 +284,16 @@ Toujours indiquer :
 
 ## 13. Outputs expérimentaux
 
+Convention de dépôt :
+
+* `tests/` contient uniquement les tests du comportement CURRENT du prototype ;
+* `experiments/current/` peut contenir les expériences qui décrivent encore les règles courantes ;
+* `experiments/archive/` contient les expériences historiques conservées uniquement pour traçabilité ;
+* les tests propres à une expérience historique restent avec cette expérience et ne vont pas dans `tests/` ;
+* toute expérience historique doit porter explicitement la mention `HISTORICAL — NOT CURRENT BEHAVIOR`.
+
+Un harness courant existant peut rester à son emplacement actuel si le déplacer n'apporte aucune valeur immédiate.
+
 Pour une expérience significative, préférer une structure telle que :
 
 `experiments/<experiment_name>/`
@@ -419,12 +431,30 @@ Toujours préciser :
 * working tree propre ou non ;
 * éventuelle PR.
 
+Pour toute modification significative du comportement CURRENT, terminer également le rapport par un bloc compact :
+
+```text
+CURRENT:
+- ce qui a changé dans le comportement courant
+
+OPEN:
+- limitations ou questions encore non résolues
+
+GITHUB:
+- main à jour : oui/non
+- commit / PR de référence : ...
+```
+
+Lorsque la mission modifie substantiellement l'état courant du prototype, mettre à jour `CURRENT_STATE.md` dans la même mission ou signaler explicitement qu'il est devenu obsolète.
+
 
 ---
 
 ## 16. Documentation et décisions
 
 Le GDD décrit l'état canonique actuel du jeu.
+
+`CURRENT_STATE.md` décrit de façon compacte l'état consolidé du prototype, les limitations ouvertes et les prochaines cibles techniques. C'est un point d'entrée, pas une autorité supérieure au GDD ou aux décisions validées.
 
 Un éventuel fichier `DECISIONS.md` décrit l'historique et les arbitrages validés.
 
