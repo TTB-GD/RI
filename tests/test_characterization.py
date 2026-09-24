@@ -60,7 +60,7 @@ class TestSessionSelectorCharacterization(unittest.TestCase):
             energy_budget=4,
             rpe_max=3,
             tn=10,
-        quality_limit=3,
+            quality_limit=3,
         )
         self.assertIn("EF1", chosen)
         self.assertIn("Seuil3", chosen)
@@ -75,7 +75,7 @@ class TestSessionSelectorCharacterization(unittest.TestCase):
             energy_budget=20,
             rpe_max=5,
             tn=10,
-        quality_limit=3,
+            quality_limit=3,
         )
         self.assertLessEqual(sum(name.startswith("SL") for name in chosen), 1)
 
@@ -87,6 +87,7 @@ class TestSessionSelectorCharacterization(unittest.TestCase):
             energy_budget=20,
             rpe_max=1,
             tn=10,
+            quality_limit=3,
             weights={
                 "w_energy": 3.0,
                 "w_sessions": 1.5,
