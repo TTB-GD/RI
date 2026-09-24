@@ -133,6 +133,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=8,
             rpe_max=6,
             tn=10,
+        quality_limit=3,
         )
         self.assertLessEqual(sum({"EF1": 1, "EF2": 2, "Seuil3": 3}[name] for name in chosen), 8)
         self.assertLessEqual(max(({"EF1": 1, "EF2": 2, "Seuil3": 3}[name] for name in chosen), default=0), 6)
@@ -143,6 +144,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=20,
             rpe_max=5,
             tn=10,
+        quality_limit=3,
         )
         self.assertLessEqual(sum(name.startswith("SL") for name in chosen), 1)
 
@@ -152,10 +154,11 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=10,
             rpe_max=10,
             tn=10,
+        quality_limit=3,
         )
         self.assertEqual(chosen, [])
 
-    def test_quality_categories_can_repeat_when_ef_quota_allows_it(self):
+    def test_quality_entry_cannot_repeat_when_ef_quota_allows_it(self):
         chosen, _ = choose_sessions_weighted(
             ["EF1", "Seuil3"],
             energy_budget=20,
@@ -171,7 +174,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
         ef_count = sum(name == "EF1" for name in chosen)
         quality_count = sum(name == "Seuil3" for name in chosen)
         self.assertGreaterEqual(ef_count, 2)
-        self.assertGreaterEqual(quality_count, 2)
+        self.assertEqual(quality_count, 1)
         self.assertLessEqual(quality_count, ef_count)
 
     def test_long_run_is_prioritized_when_ef_and_sl_are_affordable(self):
@@ -180,6 +183,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=7,
             rpe_max=5,
             tn=10,
+        quality_limit=3,
         )
         self.assertIn("SL5", chosen)
         self.assertEqual(chosen[0], "EF2")
@@ -192,6 +196,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=5,
             rpe_max=0,
             tn=10,
+        quality_limit=3,
         )
         self.assertEqual(chosen, [])
         self.assertNotIn("SL5", chosen)
