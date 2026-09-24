@@ -133,7 +133,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=8,
             rpe_max=6,
             tn=10,
-        quality_limit=3,
+            quality_limit=3,
         )
         self.assertLessEqual(sum({"EF1": 1, "EF2": 2, "Seuil3": 3}[name] for name in chosen), 8)
         self.assertLessEqual(max(({"EF1": 1, "EF2": 2, "Seuil3": 3}[name] for name in chosen), default=0), 6)
@@ -144,7 +144,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=20,
             rpe_max=5,
             tn=10,
-        quality_limit=3,
+            quality_limit=3,
         )
         self.assertLessEqual(sum(name.startswith("SL") for name in chosen), 1)
 
@@ -154,7 +154,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=10,
             rpe_max=10,
             tn=10,
-        quality_limit=3,
+            quality_limit=3,
         )
         self.assertEqual(chosen, [])
 
@@ -164,6 +164,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=20,
             rpe_max=10,
             tn=10,
+            quality_limit=3,
             weights={
                 "w_energy": 0.0,
                 "w_sessions": 10.0,
@@ -183,7 +184,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=7,
             rpe_max=5,
             tn=10,
-        quality_limit=3,
+            quality_limit=3,
         )
         self.assertIn("SL5", chosen)
         self.assertEqual(chosen[0], "EF2")
@@ -196,7 +197,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=5,
             rpe_max=0,
             tn=10,
-        quality_limit=3,
+            quality_limit=3,
         )
         self.assertEqual(chosen, [])
         self.assertNotIn("SL5", chosen)
@@ -207,6 +208,7 @@ class TestSessionSelectorBusinessRules(unittest.TestCase):
             energy_budget=20,
             rpe_max=1,
             tn=10,
+            quality_limit=3,
             weights={
                 "w_energy": 3.0,
                 "w_sessions": 1.5,
