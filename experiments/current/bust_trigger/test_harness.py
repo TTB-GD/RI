@@ -61,10 +61,10 @@ class TestCandidateBustTriggerHarness(unittest.TestCase):
         self.assertAlmostEqual(theoretical_bust_probability(2, 10), 0.2)
         self.assertAlmostEqual(theoretical_bust_probability(4, 12), 1 / 3)
 
-    def test_current_selector_cannot_plan_risky_quality(self):
+    def test_current_selector_can_plan_eligible_risky_quality(self):
         probe = selector_risk_gap()
-        self.assertFalse(probe["risky_quality_planned"])
-        self.assertNotIn("Seuil5", probe["chosen"])
+        self.assertTrue(probe["risky_quality_planned"])
+        self.assertIn("Seuil5", probe["chosen"])
 
 
 if __name__ == "__main__":

@@ -19,21 +19,31 @@ This file is the fast-entry snapshot for the current prototype state. It does no
 - SL remains limited to at most one session per turn.
 - Quality sessions must not outnumber EF sessions in the same turn.
 - Maximum 7 counted sessions per turn.
+- RPE Max is the turn's safe-quality boundary, not a hard access ceiling for
+  quality sessions. Catalogue-unlocked qualities and the immediately following
+  explicit catalogue step are tentable; later steps cannot be skipped.
+- A risky quality (`session RPE > RPE Max`) is excluded when its overshoot
+  `k = session RPE - RPE Max` is greater than or equal to the largest die in
+  the complete persistent pool, avoiding a choice with certain bust.
+- The production turn flow now tests tentable risky qualities in planned order
+  with the largest persistent die and its raw face. It busts on `raw face <= k`,
+  stops at the first bust, and passes that exact plan index to the resolver.
 - Post-bust session resolution is implemented:
   - the session that busts counts toward the 7-session limit;
   - its energy is lost;
   - it produces no CTL/progression;
   - later risky quality sessions are cancelled;
   - their planned energy may be redistributed into EF work, subject to remaining session slots and RPE accessibility.
-- A risky quality session is currently identified relative to the turn's RPE Max: `session RPE > rpe_max`.
+- A risky quality session is identified relative to the turn's RPE Max:
+  `session RPE > rpe_max`; safe sessions consume no risk roll.
 - CTL, progression and turn fatigue use effective realised load after post-bust resolution.
 - Targeted production tests cover D99, repetition, SL, the 7-session cap and post-bust resolution.
 - A deterministic current harness exists at `experiments/d99_bust_resolution/run.py`.
 
 ## CURRENT LIMITATIONS / OPEN IMPLEMENTATION
 
-- The upstream production trigger/roll that determines whether a risky quality session actually busts is not yet implemented in the production turn flow.
-- `resolve_session_plan()` can resolve a bust when `bust_index` is supplied; this is a resolution layer, not yet the complete risk engine.
+- `resolve_session_plan()` remains the sole post-bust consequence layer; the
+  production trigger only determines and supplies the first `bust_index`.
 - Fatigue V1 remains experimental and is not yet the definitive production fatigue model.
 - The current session selector remains a technical weighted/greedy baseline, not a final human-player model.
 - The Standard Training Player remains experimental.
@@ -79,7 +89,8 @@ The existing `experiments/d99_bust_resolution/` harness is current and predates 
 
 Priority technical questions currently open:
 
-1. characterize and then implement/specify the production risk/bust trigger before `resolve_session_plan()`; a current deterministic harness now exists at `experiments/current/bust_trigger/`, while production remains unchanged;
+1. observe the production risk/bust trigger and selector policy; the current
+   deterministic analysis remains at `experiments/current/bust_trigger/`;
 2. continue Fatigue V1 design work without silently replacing the current model;
 3. re-evaluate the Standard Training Player only against the corrected D99/repetition/SL/bust rules;
 4. implement race objectives and the concrete role of SL when their design thresholds are validated.

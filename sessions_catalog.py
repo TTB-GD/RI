@@ -131,3 +131,23 @@ def is_unlocked(session_name, completions):
 def available_sessions(completions):
     """Liste des noms de séances actuellement accessibles au joueur."""
     return [name for name in SESSION_CATALOG if is_unlocked(name, completions)]
+
+
+def tentable_sessions(completions):
+    """Séances débloquées, plus l'étape qualité immédiatement suivante.
+
+    ``SESSION_PREREQ`` est l'arbre explicite du catalogue : une séance
+    verrouillée est donc l'étape suivante lorsque l'un de ses prédécesseurs
+    explicites est déjà débloqué. Les EF conservent leur accès CURRENT et ne
+    bénéficient pas de cette anticipation réservée aux qualités.
+    """
+    unlocked = available_sessions(completions)
+    unlocked_set = set(unlocked)
+    next_quality = [
+        name for name, prerequisites in SESSION_PREREQ.items()
+        if name not in unlocked_set
+        and SESSION_CATALOG[name][0] in QUALITY_CATEGORIES
+        and prerequisites
+        and any(prerequisite in unlocked_set for prerequisite, _ in prerequisites)
+    ]
+    return unlocked + next_quality

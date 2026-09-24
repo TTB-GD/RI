@@ -1,6 +1,6 @@
-"""Deterministic characterization harness for the missing bust trigger.
+"""Deterministic characterization harness for the production bust trigger.
 
-CURRENT EXPERIMENT — NOT PRODUCTION BEHAVIOR.
+CURRENT EXPERIMENT — production now implements the characterized base rule.
 """
 
 import sys
@@ -12,6 +12,7 @@ if str(REPOSITORY_ROOT) not in sys.path:
     sys.path.insert(0, str(REPOSITORY_ROOT))
 
 from session_resolution import resolve_session_plan
+from session_risk import base_bust_threshold
 from session_selector import choose_sessions_weighted
 from sessions_catalog import QUALITY_CATEGORIES, SESSION_CATALOG
 
@@ -38,7 +39,7 @@ def check_candidate_bust(session_name, rpe_max, die_size, roll):
     """Characterize one session under the candidate Fatigue V1 bust rule."""
     category, rpe = SESSION_CATALOG[session_name]
     risky = category in QUALITY_CATEGORIES and rpe > rpe_max
-    overshoot = max(0, rpe - rpe_max) if category in QUALITY_CATEGORIES else 0
+    overshoot = base_bust_threshold(rpe, rpe_max) if category in QUALITY_CATEGORIES else 0
 
     if not risky:
         return RiskCheck(
@@ -102,7 +103,7 @@ def theoretical_bust_probability(overshoot, die_size):
 
 
 def selector_risk_gap():
-    """FACT probe: current selector hard-blocks RPE above rpe_max."""
+    """FACT probe: the production selector can now plan an eligible risk."""
     chosen, _ = choose_sessions_weighted(
         ["EF1", "Seuil5"],
         energy_budget=20,
@@ -115,6 +116,7 @@ def selector_risk_gap():
             "w_fatigue": 0.0,
             "w_rpe": 0.0,
         },
+        best_die_size=6,
     )
     return {
         "input": ["EF1", "Seuil5"],
@@ -196,7 +198,7 @@ def ordered_scenarios():
 
 def run():
     return {
-        "status": "CURRENT EXPERIMENT — NOT PRODUCTION BEHAVIOR",
+        "status": "CURRENT EXPERIMENT — BASE RULE NOW IN PRODUCTION",
         "selector_gap": selector_risk_gap(),
         "boundary_scenarios": deterministic_scenarios(),
         "ordered_scenarios": ordered_scenarios(),
