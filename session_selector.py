@@ -25,8 +25,10 @@ poids, seulement filtrées) :
                  le nombre de séances EF choisies CE TOUR. Un stock d'EF
                  réalisées les tours précédents ne finance rien : chaque
                  tour doit se suffire à lui-même sur ce ratio.
-    - SL       : au plus une Sortie Longue par tour (seule catégorie
-                 structurellement limitée à 1 occurrence).
+    - D99      : le nombre de qualités planifiées, SL comprise, ne dépasse
+                 jamais le plafond obtenu aux dés.
+    - répétition: une entrée qualité ne peut apparaître qu'une fois ; les EF
+                 restent répétables. Une seule SL au total reste autorisée.
     - quantité : au plus MAX_SESSIONS_PER_TURN séances par tour.
 Les poids (w_energy, w_sessions, w_fatigue, w_rpe) n'interviennent QUE pour
 départager les combinaisons qui respectent déjà toutes ces contraintes.
@@ -40,8 +42,8 @@ les deux sont ajoutées avant de laisser le moteur pondéré arbitrer le reste
 du budget — plutôt que de laisser la SL être noyée dans la comparaison
 d'utilité marginale et potentiellement jamais choisie.
 
-STRATÉGIE DE RECHERCHE : énumérer tous les multi-ensembles possibles est
-combinatoire (répétitions autorisées, jusqu'à 7 séances) et inutile ici.
+STRATÉGIE DE RECHERCHE : énumérer tous les bundles possibles est
+combinatoire (EF répétables, jusqu'à 7 séances) et inutile ici.
 On construit la sélection pas à pas : à CHAQUE étape, on ajoute la séance
 qui maximise l'UTILITÉ MARGINALE (pas juste le RPE brut comme l'ancien
 _best_affordable), et on s'arrête dès que même la meilleure option
@@ -76,10 +78,11 @@ class _SelectionState:
     energy_used: int = 0
     ef_this_turn: int = 0                         # règle stricte : compteurs remis à 0 chaque tour
     quality_this_turn: int = 0
+    used_quality_names: set = field(default_factory=set)
     used_single_categories: set = field(default_factory=set)
 
 
-def _is_affordable(name, state, energy_budget, rpe_max):
+def _is_affordable(name, state, energy_budget, rpe_max, quality_limit):
     """Contraintes DURES : la séance `name` peut-elle rejoindre `state` ?"""
     category, rpe = SESSION_CATALOG[name]
     if len(state.chosen) >= MAX_SESSIONS_PER_TURN:
@@ -90,8 +93,13 @@ def _is_affordable(name, state, energy_budget, rpe_max):
         return False
     if category in SINGLE_PER_TURN_CATEGORIES and category in state.used_single_categories:
         return False
-    if category in QUALITY_CATEGORIES and state.quality_this_turn + 1 > state.ef_this_turn:
-        return False
+    if category in QUALITY_CATEGORIES:
+        if name in state.used_quality_names:
+            return False
+        if state.quality_this_turn >= quality_limit:
+            return False
+        if state.quality_this_turn + 1 > state.ef_this_turn:
+            return False
     return True
 
 
@@ -102,13 +110,15 @@ def _commit(name, state):
     state.energy_used += rpe
     if category in QUALITY_CATEGORIES:
         state.quality_this_turn += 1
+        state.used_quality_names.add(name)
     else:
         state.ef_this_turn += 1
     if category in SINGLE_PER_TURN_CATEGORIES:
         state.used_single_categories.add(category)
 
 
-def _prioritize_long_run(available_session_names, state, energy_budget, rpe_max, trace):
+def _prioritize_long_run(available_session_names, state, energy_budget, rpe_max,
+                         quality_limit, trace):
     """
     Case une Sortie Longue dès que possible (au plus 1/tour). Sous la règle
     stricte qualité<=EF PAR TOUR, une SL exige une EF dans le même tour pour
@@ -122,7 +132,10 @@ def _prioritize_long_run(available_session_names, state, energy_budget, rpe_max,
         return
 
     ef_candidates = [n for n in available_session_names if SESSION_CATALOG[n][0] == "EF"]
-    affordable_ef = [n for n in ef_candidates if _is_affordable(n, state, energy_budget, rpe_max)]
+    affordable_ef = [
+        n for n in ef_candidates
+        if _is_affordable(n, state, energy_budget, rpe_max, quality_limit)
+    ]
     if not affordable_ef:
         return  # pas d'EF possible ce tour -> pas de quota qualité -> pas de SL non plus
     best_ef = max(affordable_ef, key=lambda n: SESSION_CATALOG[n][1])
@@ -133,7 +146,10 @@ def _prioritize_long_run(available_session_names, state, energy_budget, rpe_max,
         "alternatives_considered": len(affordable_ef), "note": "priorite_SL:EF_prealable",
     })
 
-    affordable_sl = [n for n in sl_candidates if _is_affordable(n, state, energy_budget, rpe_max)]
+    affordable_sl = [
+        n for n in sl_candidates
+        if _is_affordable(n, state, energy_budget, rpe_max, quality_limit)
+    ]
     if not affordable_sl:
         return
     best_sl = max(affordable_sl, key=lambda n: SESSION_CATALOG[n][1])
@@ -181,7 +197,8 @@ def _marginal_utility(name, state, energy_budget, rpe_max, tn, weights):
     return u_after - u_before
 
 
-def choose_sessions_weighted(available_session_names, energy_budget, rpe_max, tn, weights=None):
+def choose_sessions_weighted(available_session_names, energy_budget, rpe_max, tn,
+                             quality_limit, weights=None):
     """
     Sélectionne les séances du tour par construction gloutonne sur l'utilité
     marginale pondérée, sous les contraintes dures du jeu.
@@ -194,6 +211,8 @@ def choose_sessions_weighted(available_session_names, energy_budget, rpe_max, tn
     tn                       : Target Number du tour, pour que la fatigue des
                                 séances choisies suive la même courbe que
                                 celle des dés (energy_and_fatigue).
+    quality_limit            : plafond D99 de qualités planifiables. Une SL
+                                consomme un slot comme toute autre qualité.
     weights                  : dict w_energy/w_sessions/w_fatigue/w_rpe
                                 (DEFAULT_SESSION_WEIGHTS si omis).
 
@@ -212,12 +231,17 @@ def choose_sessions_weighted(available_session_names, energy_budget, rpe_max, tn
     state = _SelectionState()
     trace = []
 
-    _prioritize_long_run(available_session_names, state, energy_budget, rpe_max, trace)
+    if quality_limit < 0:
+        raise ValueError("quality_limit must be non-negative")
+
+    _prioritize_long_run(
+        available_session_names, state, energy_budget, rpe_max, quality_limit, trace,
+    )
 
     while True:
         candidates = [
             name for name in available_session_names
-            if _is_affordable(name, state, energy_budget, rpe_max)
+            if _is_affordable(name, state, energy_budget, rpe_max, quality_limit)
         ]
         if not candidates:
             break
