@@ -1,0 +1,3 @@
+cause,count,percentage,mean_energy_remaining,mean_fatigue_before,mean_headroom_tn
+marginal_utility_negative,1088,68.0,4.897977941176471,-6.3400735294117645,5.848805147058823
+no_energy_affordable,512,32.0,0,-6.09375,3.3076171875
