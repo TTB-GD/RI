@@ -396,6 +396,33 @@ Si le réseau ou l'authentification bloque le `fetch` ou le `push` dans le works
 
 `REMOTE CONFIGURED BUT PUSH BLOCKED`
 
+### Pull Request — workflow préféré
+
+Pour toute modification significative de production, de règles, de tests CURRENT ou d'expérience CURRENT, préférer une Pull Request vers `main` plutôt qu'une modification directe de `main`.
+
+Ordre de clôture recommandé :
+
+1. terminer la modification et les tests dans le workspace courant ;
+2. créer le commit local ;
+3. tenter le push de la branche depuis ce même workspace si le remote fonctionne ;
+4. si le push CLI fonctionne, créer une Pull Request vers `main` ;
+5. si le push/fetch CLI est bloqué mais que l'interface Codex propose explicitement **Créer une pull request**, utiliser cette action manuelle depuis la tâche qui contient le commit ;
+6. ne recourir à l'export d'un patch qu'en dernier recours si ni le push normal ni la création manuelle de PR depuis Codex ne sont possibles.
+
+Le chemin de récupération standard est donc :
+
+```text
+A. Push + Pull Request normal depuis le workspace Codex
+B. Bouton « Créer une pull request » dans l'interface Codex
+C. Export patch / récupération manuelle uniquement si A et B échouent
+```
+
+Ne pas créer une nouvelle tâche Codex uniquement pour synchroniser un commit existant dans une autre tâche.
+
+Si une PR est créée depuis l'interface Codex malgré un échec CLI, ne pas qualifier le travail de `COMMIT LOCAL ONLY` : vérifier d'abord la présence réelle de la branche/PR sur GitHub et reporter son URL ou numéro.
+
+Ne pas fusionner automatiquement une PR dans `main` depuis Codex sauf instruction explicite de l'utilisateur.
+
 ### Synchronisation finale
 
 Une mission avec commit n'est considérée comme complètement synchronisée que si :
