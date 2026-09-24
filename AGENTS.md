@@ -322,7 +322,7 @@ Ajouter des tests ciblés lorsque la mission introduit :
 
 ---
 
-## 15. Git et traçabilité
+## 15. Git, remote et synchronisation
 
 À la fin d'une mission importante :
 
@@ -331,14 +331,62 @@ Ajouter des tests ciblés lorsque la mission introduit :
 3. vérifier `git diff --check` ;
 4. créer un commit si demandé ;
 5. donner le SHA exact ;
-6. donner la branche ;
-7. vérifier le remote réellement configuré.
+6. donner la branche courante ;
+7. vérifier `git remote -v` ;
+8. vérifier l'upstream de la branche courante ;
+9. faire un `fetch` lorsque le remote est disponible ;
+10. comparer le HEAD local au HEAD distant correspondant.
 
 Ne jamais affirmer qu'un commit est disponible sur GitHub sans vérification.
 
-Si le commit est uniquement local, indiquer explicitement :
+### Remote absent
+
+Si aucun remote n'est configuré :
+
+* le signaler explicitement ;
+* ne pas inventer de credentials ;
+* ne pas modifier la configuration Git globale ;
+* si l'environnement permet d'ajouter proprement le remote du dépôt courant, le faire uniquement lorsque cela est explicitement autorisé par la mission.
+
+### Push
+
+Lorsqu'un commit est créé et qu'un remote authentifié est disponible :
+
+* pousser la branche courante vers sa branche distante correspondante ;
+* ne jamais utiliser de force-push sauf instruction explicite ;
+* ne pas écraser `main` ;
+* ne pas fusionner automatiquement une branche dans `main`.
+
+### Synchronisation finale
+
+Une mission avec commit n'est considérée comme complètement synchronisée que si :
+
+`LOCAL HEAD == REMOTE BRANCH HEAD`
+
+Lorsque c'est le cas, indiquer explicitement :
+
+`LOCAL / REMOTE SYNCHRONIZED`
+
+Si le commit reste local, indiquer :
 
 `COMMIT LOCAL ONLY — NOT PRESENT ON REMOTE`
+
+Si le remote existe mais que le push échoue, indiquer :
+
+`REMOTE CONFIGURED BUT PUSH BLOCKED`
+
+Si le local et le remote divergent de manière nécessitant un arbitrage, indiquer :
+
+`DIVERGENCE REQUIRES USER DECISION`
+
+Toujours préciser :
+
+* HEAD local ;
+* branche locale ;
+* branche distante correspondante ;
+* HEAD distant ;
+* working tree propre ou non ;
+* éventuelle PR.
 
 ---
 
