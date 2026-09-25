@@ -5,7 +5,8 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from session_resolution import resolve_session_plan
+from session_resolution import post_bust_redistribution_options, resolve_session_plan
+from simulate_player import choose_replacement_ef_greedy
 from session_selector import choose_sessions_weighted
 from sessions_catalog import QUALITY_CATEGORIES, SESSION_CATALOG
 
@@ -48,7 +49,9 @@ def selected(identifier, d99, names, energy, reason, rpe=9):
 
 def busted(identifier, d99, planned, bust, rpe=4):
     energy = sum(SESSION_CATALOG[n][1] for n in planned)
-    result = resolve_session_plan(planned, AVAILABLE, rpe, bust)
+    options = post_bust_redistribution_options(planned, AVAILABLE, rpe, bust)
+    replacements = choose_replacement_ef_greedy(options)
+    result = resolve_session_plan(planned, AVAILABLE, rpe, bust, replacements)
     return summarize(identifier, d99, planned, result, energy, bust)
 
 

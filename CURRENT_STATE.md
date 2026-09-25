@@ -34,8 +34,12 @@ This file is the fast-entry snapshot for the current prototype state. It does no
   - the session that busts counts toward the 7-session limit;
   - its energy is lost;
   - it produces no CTL/progression;
-  - later risky quality sessions are cancelled;
-  - their planned energy may be redistributed into EF work, subject to remaining session slots and RPE accessibility.
+  - later risky quality sessions are cancelled and each frees one replacement
+    place plus its planned energy;
+  - the rule engine exposes that budget and the accessible safe EF, then validates
+    an optional player choice (including a partial or empty choice) made once the
+    initially valid sessions have resolved;
+  - chosen replacement EF contribute their normal CTL and effective expenditure.
 - A risky quality session is identified relative to the turn's RPE Max:
   `session RPE > rpe_max`; safe sessions consume no risk roll.
 - CTL, progression and turn fatigue use effective realised load after post-bust resolution.
@@ -44,13 +48,15 @@ This file is the fast-entry snapshot for the current prototype state. It does no
 
 ## CURRENT LIMITATIONS / OPEN IMPLEMENTATION
 
-- `resolve_session_plan()` remains the sole post-bust consequence layer; the
-  production trigger only determines and supplies the first `bust_index`.
+- Automatic simulations use a separate, explicitly technical greedy EF fallback;
+  it is not a normative player rule.
 - Fatigue V1 remains experimental and is not yet the definitive production fatigue model.
 - The current session selector remains a technical weighted/greedy baseline, not a final human-player model.
 - The Standard Training Player remains experimental.
 - The race system is not implemented.
 - The future race role of SL is designed conceptually but not yet implemented as race access/success logic.
+- The selector's current hard priority for SL does not yet match that future race
+  role and is deliberately deferred to the race workstream.
 
 ## CURRENT DESIGN DECISIONS THAT AFFECT IMPLEMENTATION
 
@@ -63,7 +69,9 @@ This file is the fast-entry snapshot for the current prototype state. It does no
   - the busted session loses its energy;
   - later risky quality sessions are no longer tested as quality;
   - their quality slots remain lost;
-  - their energy may be reassigned to EF work within the 7-session cap.
+  - each cancelled risky quality frees one place and its planned energy for an
+    optional player-chosen accessible safe EF replacement within the 7-session cap;
+  - the busted quality frees neither energy nor a place.
 - SL is intended as a race-specific preparation dimension rather than an intrinsically superior generic training choice.
 
 ## HISTORICAL / NOT CURRENT BEHAVIOR
