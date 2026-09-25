@@ -40,7 +40,7 @@ from session_effects import session_outcome
 from patterns import pattern_name
 from sessions_catalog import SESSION_CATALOG
 from session_selector import choose_sessions_weighted, DEFAULT_SESSION_WEIGHTS
-from session_resolution import resolve_session_plan
+from session_resolution import post_bust_redistribution_options, resolve_session_plan
 from session_risk import first_bust_index
 from dice_progression import DEFAULT_UPGRADE_WEIGHTS
 from player_state import Player
@@ -48,6 +48,33 @@ from game_logger import write_csv
 # Poids par défaut du moteur de dés. Un w_rpe positif augmente l'utilité des
 # options à RPE max attendu plus élevé ; ce n'est donc pas un terme de pénalité.
 DEFAULT_WEIGHTS = {"w_energy": 1.0, "w_sessions": 1.0, "w_fatigue": 1.0, "w_rpe": 1.0}
+
+
+def choose_replacement_ef_greedy(options):
+    """Politique technique de simulation, distincte des règles de résolution.
+
+    Elle conserve l'ancien comportement déterministe : EF sûre la plus chère
+    encore abordable, répétée dans les limites fournies par le rule engine.
+    Elle n'est ni une obligation de jeu ni une politique joueur optimale.
+    """
+    candidates = sorted(
+        options.legal_ef,
+        key=lambda name: (-SESSION_CATALOG[name][1], name),
+    )
+    remaining = options.replacement_energy
+    chosen = []
+    while len(chosen) < options.replacement_slots:
+        affordable = next(
+            (name for name in candidates if SESSION_CATALOG[name][1] <= remaining),
+            None,
+        )
+        if affordable is None:
+            break
+        chosen.append(affordable)
+        remaining -= SESSION_CATALOG[affordable][1]
+    return tuple(chosen)
+
+
 def _split_active_reserve(dice_objects):
     """
     Sépare le pool en (dés actifs, dé de réserve) : le dé de réserve est
@@ -135,7 +162,15 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
         bust_index = first_bust_index(
             chosen, roll["rpe_max"], player.dice_pool.sizes, risk_roll_face,
         )
-    resolution = resolve_session_plan(chosen, available, roll["rpe_max"], bust_index)
+    replacements = ()
+    if bust_index is not None:
+        options = post_bust_redistribution_options(
+            chosen, available, roll["rpe_max"], bust_index,
+        )
+        replacements = choose_replacement_ef_greedy(options)
+    resolution = resolve_session_plan(
+        chosen, available, roll["rpe_max"], bust_index, replacements,
+    )
     ctl = resolution.energy_effective
     _, fatigue = energy_and_fatigue(ctl, roll["tn"])
     player.cumulative_ctl += ctl
