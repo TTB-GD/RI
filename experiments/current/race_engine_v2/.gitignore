@@ -1,0 +1,8 @@
+results/courses.csv
+results/turns.csv
+results/turns_r1a2.csv
+results/courses_r1b.csv
+results/turns_r1b.csv
+results/courses_r1b2_*.csv
+results/turns_r1b2_*.csv
+__pycache__/
