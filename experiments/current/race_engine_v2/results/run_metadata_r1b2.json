@@ -1,0 +1,96 @@
+{
+  "experiment": "EXP R1-B2 DIFFICULTY MAGNITUDE x FREQUENCY",
+  "status": "EXPERIMENTAL ONLY",
+  "phases": {
+    "magnitude": {
+      "experiment": "EXP R1-B2 DIFFICULTY MAGNITUDE x FREQUENCY",
+      "status": "EXPERIMENTAL ONLY",
+      "phase": "magnitude",
+      "seeds": 500,
+      "seed_range": "0..499",
+      "configuration_count": 80,
+      "course_count": 40000,
+      "length": 9,
+      "form_mode": "PATTERN",
+      "curve": "B",
+      "sl": false,
+      "freshness": 0,
+      "ctl": 100,
+      "pools": [
+        "6d6",
+        "4d8+1d6",
+        "2d10+4d6",
+        "1d8+3d6"
+      ],
+      "policies": [
+        "EFFICIENT",
+        "ADAPTIVE",
+        "AGGRESSIVE",
+        "GREEDY"
+      ],
+      "selected_magnitudes": null,
+      "flat_baseline_courses_checked": 8000,
+      "committed_r1b_flat_summary_rows_checked": 16,
+      "runtime_seconds": 88.35131020499921,
+      "plausible_efficiency_margin": 0.1,
+      "strict_choice_labels": "SLOW delta<0; MAINTAIN delta=0; ATTACK delta>0",
+      "baseline_git_head_at_run": "ae11e7d8bd351ff4ce30bee7220fa435bbaeb4d7",
+      "large_ignored_outputs": [
+        "courses_r1b2_magnitude.csv",
+        "turns_r1b2_magnitude.csv"
+      ]
+    },
+    "frequency_and_profiles": {
+      "experiment": "EXP R1-B2 DIFFICULTY MAGNITUDE x FREQUENCY",
+      "status": "EXPERIMENTAL ONLY",
+      "phase": "remaining",
+      "seeds": 500,
+      "seed_range": "0..499",
+      "configuration_count": 176,
+      "course_count": 80000,
+      "length": 9,
+      "executed_configuration_count": 160,
+      "form_mode": "PATTERN",
+      "curve": "B",
+      "sl": false,
+      "freshness": 0,
+      "ctl": 100,
+      "pools": [
+        "6d6",
+        "4d8+1d6",
+        "2d10+4d6",
+        "1d8+3d6"
+      ],
+      "policies": [
+        "EFFICIENT",
+        "ADAPTIVE",
+        "AGGRESSIVE",
+        "GREEDY"
+      ],
+      "selected_magnitudes": [
+        2,
+        3
+      ],
+      "flat_baseline_courses_checked": 16000,
+      "committed_r1b_flat_summary_rows_checked": 16,
+      "runtime_seconds": 180.3929686900001,
+      "plausible_efficiency_margin": 0.1,
+      "strict_choice_labels": "SLOW delta<0; MAINTAIN delta=0; ATTACK delta>0",
+      "baseline_git_head_at_run": "ae11e7d8bd351ff4ce30bee7220fa435bbaeb4d7",
+      "large_ignored_outputs": [
+        "courses_r1b2_frequency.csv",
+        "turns_r1b2_frequency.csv",
+        "courses_r1b2_profiles.csv",
+        "turns_r1b2_profiles.csv"
+      ]
+    }
+  },
+  "total_course_executions": 120000,
+  "technical_magnitude_selection": {
+    "selected": [
+      2,
+      3
+    ],
+    "rationale": "D2 and D3 preserved distinct policy responses and non-myopic DNF while D1 was milder and D4 caused material ADAPTIVE DNF."
+  }
+}

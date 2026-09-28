@@ -48,6 +48,24 @@ This file is the fast-entry snapshot for the current prototype state. It does no
 
 ## CURRENT LIMITATIONS / OPEN IMPLEMENTATION
 
+- EXP R1-A exists at `experiments/current/race_engine_v2/` with status
+  **EXPERIMENTAL ONLY**. It tests a new flat-terrain subset → Production →
+  convex-cost → progressive-reserve kernel in isolation. No `race_core` path is
+  present in this repository baseline, and none was removed or modified; no
+  production race rule, training behavior, Fatigue V1 rule, or CURRENT Game
+  Design rule is changed by this experiment.
+- EXP R1-A2 extends that isolated harness with a controlled Form comparison.
+  FORM_SUM remains the experimental R1-A baseline; FORM_PATTERN is a normalized
+  structural counterfactual. Neither mode changes CURRENT Game Design or any
+  production behavior.
+- EXP R1-B uses FORM_PATTERN as the Race Engine V2 experimental baseline and
+  retains FORM_SUM as its control. It tests local Difficulty through
+  `Charge = Production + Difficulty` and Curve B as a technical baseline only;
+  no production race rule or CURRENT Game Design rule is modified.
+- EXP R1-B2 calibrates only local Difficulty magnitude/frequency. Difficulty
+  remains experimental; FORM_PATTERN remains its baseline and Curve B remains a
+  technical baseline rather than a final decision. No production rule changes.
+
 - Automatic simulations use a separate, explicitly technical greedy EF fallback;
   it is not a normative player rule.
 - Fatigue V1 remains experimental and is not yet the definitive production fatigue model.

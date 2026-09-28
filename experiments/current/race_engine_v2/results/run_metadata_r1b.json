@@ -1,0 +1,132 @@
+{
+  "experiment": "EXP R1-B LOCAL DIFFICULTY",
+  "status": "EXPERIMENTAL ONLY",
+  "phase": "main",
+  "seeds": 500,
+  "seed_range": "0..499",
+  "configuration_count": 112,
+  "course_count": 56000,
+  "form_mode": "PATTERN",
+  "curve": "B",
+  "ctl": 100,
+  "freshness": 0,
+  "sl": false,
+  "pools": [
+    "6d6",
+    "4d8+1d6",
+    "2d10+4d6",
+    "1d8+3d6"
+  ],
+  "profiles": {
+    "6": {
+      "D0_FLAT": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "D1_EARLY": [
+        0,
+        3,
+        3,
+        0,
+        0,
+        0
+      ],
+      "D2_LATE": [
+        0,
+        0,
+        0,
+        0,
+        3,
+        3
+      ]
+    },
+    "9": {
+      "D0_FLAT": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "D1_EARLY": [
+        0,
+        3,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "D2_LATE": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        3,
+        0
+      ],
+      "D3_ROLLING": [
+        0,
+        2,
+        0,
+        3,
+        0,
+        2,
+        0,
+        3,
+        0
+      ]
+    }
+  },
+  "policies": [
+    "EFFICIENT",
+    "ADAPTIVE",
+    "AGGRESSIVE",
+    "GREEDY"
+  ],
+  "expected_form_control_from_r1a2": [
+    {
+      "pool": "6d6",
+      "expected_form_signal": 0.22999999999999998,
+      "expected_final_form": 0.69
+    },
+    {
+      "pool": "4d8+1d6",
+      "expected_form_signal": 0.14333333333333334,
+      "expected_final_form": 0.43
+    },
+    {
+      "pool": "2d10+4d6",
+      "expected_form_signal": 0.17866666666666667,
+      "expected_final_form": 0.536
+    },
+    {
+      "pool": "1d8+3d6",
+      "expected_form_signal": 0.12733333333333333,
+      "expected_final_form": 0.382
+    }
+  ],
+  "flat_baseline_courses_checked": 16000,
+  "committed_r1a2_summary_rows_checked": 24,
+  "runtime_seconds": 121.09228405300018,
+  "maintain_convention": "paired difficult-turn delta -1..+1; SLOW <= -2; ATTACK >= +2",
+  "plausible_efficiency_margin": 0.1,
+  "baseline_git_head_at_run": "8b67a6c6cf6aa668d504c34c6327dd9b5d9e2363",
+  "large_ignored_outputs": [
+    "courses_r1b.csv",
+    "turns_r1b.csv"
+  ]
+}
