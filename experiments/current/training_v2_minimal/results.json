@@ -1,0 +1,4028 @@
+{
+  "status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN",
+  "A": {
+    "raw_outcomes": 1296,
+    "d99_mode": "D99_BONUS_ONLY",
+    "nontrivial_partition_pct": 100.0,
+    "mean_legal_partitions": 3.946,
+    "multiple_relevant_partitions_pct": 100.0,
+    "multiple_distinct_programs_pct": 100.0,
+    "ef_milestone_access_pct": 55.633,
+    "seuil_access_pct": 99.614,
+    "vma_access_pct": 77.623,
+    "simultaneous_access_pct": 77.623,
+    "safe_quality_access_pct": 98.765,
+    "risky_quality_access_pct": 4.398,
+    "examples": [
+      {
+        "raw": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "final": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "partition_count": 10,
+        "programs": [
+          [
+            2,
+            2,
+            "NONE"
+          ],
+          [
+            3,
+            1,
+            "NONE"
+          ]
+        ]
+      },
+      {
+        "raw": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "final": [
+          4,
+          3,
+          2
+        ],
+        "partition_count": 3,
+        "programs": [
+          [
+            5,
+            4,
+            "SEUIL"
+          ],
+          [
+            6,
+            3,
+            "SEUIL"
+          ],
+          [
+            7,
+            2,
+            "NONE"
+          ]
+        ]
+      },
+      {
+        "raw": [
+          2,
+          2,
+          5,
+          5
+        ],
+        "final": [
+          5,
+          5,
+          2,
+          2
+        ],
+        "partition_count": 9,
+        "programs": [
+          [
+            7,
+            7,
+            "SEUIL/VMA"
+          ],
+          [
+            9,
+            5,
+            "SEUIL/VMA"
+          ],
+          [
+            10,
+            4,
+            "SEUIL"
+          ],
+          [
+            12,
+            2,
+            "NONE"
+          ]
+        ]
+      },
+      {
+        "raw": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "final": [
+          5,
+          4,
+          3
+        ],
+        "partition_count": 3,
+        "programs": [
+          [
+            7,
+            5,
+            "SEUIL/VMA"
+          ],
+          [
+            8,
+            4,
+            "SEUIL"
+          ],
+          [
+            9,
+            3,
+            "SEUIL"
+          ]
+        ]
+      },
+      {
+        "raw": [
+          3,
+          3,
+          3,
+          6
+        ],
+        "final": [
+          6,
+          3,
+          3,
+          3
+        ],
+        "partition_count": 7,
+        "programs": [
+          [
+            9,
+            6,
+            "SEUIL/VMA"
+          ],
+          [
+            12,
+            3,
+            "SEUIL"
+          ]
+        ]
+      },
+      {
+        "raw": [
+          4,
+          4,
+          5,
+          6
+        ],
+        "final": [
+          6,
+          5,
+          4
+        ],
+        "partition_count": 3,
+        "programs": [
+          [
+            9,
+            6,
+            "SEUIL/VMA"
+          ],
+          [
+            10,
+            5,
+            "SEUIL/VMA"
+          ],
+          [
+            11,
+            4,
+            "SEUIL"
+          ]
+        ]
+      },
+      {
+        "raw": [
+          5,
+          5,
+          6,
+          6
+        ],
+        "final": [
+          6,
+          6,
+          5,
+          5
+        ],
+        "partition_count": 9,
+        "programs": [
+          [
+            11,
+            11,
+            "SEUIL/VMA"
+          ],
+          [
+            12,
+            10,
+            "SEUIL/VMA"
+          ],
+          [
+            16,
+            6,
+            "SEUIL/VMA"
+          ],
+          [
+            17,
+            5,
+            "SEUIL/VMA"
+          ]
+        ]
+      },
+      {
+        "raw": [
+          6,
+          6,
+          6,
+          6
+        ],
+        "final": [
+          6,
+          6,
+          6,
+          6
+        ],
+        "partition_count": 10,
+        "programs": [
+          [
+            12,
+            12,
+            "SEUIL/VMA"
+          ],
+          [
+            18,
+            6,
+            "SEUIL/VMA"
+          ]
+        ]
+      }
+    ],
+    "criterion": "CHOIX REEL"
+  },
+  "A2": {
+    "raw_outcomes": 1296,
+    "d99_mode": "D99_BONUS_ONLY",
+    "any_quality_pct": 99.614,
+    "seuil_pct": 99.614,
+    "vma_pct": 77.623,
+    "seuil_plus_vma_same_partition_pct": 5.787,
+    "at_least_two_distinct_quality_programs_pct": 77.623,
+    "mean_distinct_quality_programs": 1.83,
+    "mean_remainder_after_program": {
+      "SEUIL": 1.935,
+      "VMA": 1.007,
+      "SEUIL+VMA": 1.125
+    },
+    "examples": [
+      {
+        "raw": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "final": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "programs": []
+      },
+      {
+        "raw": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "final": [
+          4,
+          3,
+          2
+        ],
+        "programs": [
+          [
+            5,
+            4,
+            "SEUIL",
+            3,
+            1
+          ],
+          [
+            6,
+            3,
+            "SEUIL",
+            3,
+            0
+          ]
+        ]
+      },
+      {
+        "raw": [
+          2,
+          2,
+          5,
+          5
+        ],
+        "final": [
+          5,
+          5,
+          2,
+          2
+        ],
+        "programs": [
+          [
+            7,
+            7,
+            "SEUIL",
+            3,
+            4
+          ],
+          [
+            7,
+            7,
+            "VMA",
+            5,
+            2
+          ],
+          [
+            9,
+            5,
+            "SEUIL",
+            3,
+            2
+          ],
+          [
+            9,
+            5,
+            "VMA",
+            5,
+            0
+          ],
+          [
+            10,
+            4,
+            "SEUIL",
+            3,
+            1
+          ]
+        ]
+      },
+      {
+        "raw": [
+          3,
+          3,
+          3,
+          6
+        ],
+        "final": [
+          6,
+          3,
+          3,
+          3
+        ],
+        "programs": [
+          [
+            9,
+            6,
+            "SEUIL",
+            3,
+            3
+          ],
+          [
+            9,
+            6,
+            "VMA",
+            5,
+            1
+          ],
+          [
+            12,
+            3,
+            "SEUIL",
+            3,
+            0
+          ]
+        ]
+      },
+      {
+        "raw": [
+          4,
+          4,
+          5,
+          6
+        ],
+        "final": [
+          6,
+          5,
+          4
+        ],
+        "programs": [
+          [
+            9,
+            6,
+            "SEUIL",
+            3,
+            3
+          ],
+          [
+            9,
+            6,
+            "VMA",
+            5,
+            1
+          ],
+          [
+            10,
+            5,
+            "SEUIL",
+            3,
+            2
+          ],
+          [
+            10,
+            5,
+            "VMA",
+            5,
+            0
+          ],
+          [
+            11,
+            4,
+            "SEUIL",
+            3,
+            1
+          ]
+        ]
+      },
+      {
+        "raw": [
+          5,
+          5,
+          6,
+          6
+        ],
+        "final": [
+          6,
+          6,
+          5,
+          5
+        ],
+        "programs": [
+          [
+            11,
+            11,
+            "SEUIL",
+            3,
+            8
+          ],
+          [
+            11,
+            11,
+            "SEUIL+VMA",
+            8,
+            3
+          ],
+          [
+            11,
+            11,
+            "VMA",
+            5,
+            6
+          ],
+          [
+            12,
+            10,
+            "SEUIL",
+            3,
+            7
+          ],
+          [
+            12,
+            10,
+            "SEUIL+VMA",
+            8,
+            2
+          ],
+          [
+            12,
+            10,
+            "VMA",
+            5,
+            5
+          ],
+          [
+            16,
+            6,
+            "SEUIL",
+            3,
+            3
+          ],
+          [
+            16,
+            6,
+            "VMA",
+            5,
+            1
+          ],
+          [
+            17,
+            5,
+            "SEUIL",
+            3,
+            2
+          ],
+          [
+            17,
+            5,
+            "VMA",
+            5,
+            0
+          ]
+        ]
+      },
+      {
+        "raw": [
+          6,
+          6,
+          6,
+          6
+        ],
+        "final": [
+          6,
+          6,
+          6,
+          6
+        ],
+        "programs": [
+          [
+            12,
+            12,
+            "SEUIL",
+            3,
+            9
+          ],
+          [
+            12,
+            12,
+            "SEUIL+VMA",
+            8,
+            4
+          ],
+          [
+            12,
+            12,
+            "VMA",
+            5,
+            7
+          ],
+          [
+            18,
+            6,
+            "SEUIL",
+            3,
+            3
+          ],
+          [
+            18,
+            6,
+            "VMA",
+            5,
+            1
+          ]
+        ]
+      }
+    ]
+  },
+  "B": {
+    "seeds": 200,
+    "turns": 16,
+    "d99_mode": "D99_BONUS_ONLY",
+    "policies": {
+      "P_EF": {
+        "EF": {
+          "mean": 11.705,
+          "p10": 11.0,
+          "median": 12.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 13.435,
+          "p10": 13.0,
+          "median": 13.0,
+          "p90": 14.0
+        },
+        "VMA": {
+          "mean": 14.685,
+          "p10": 14.0,
+          "median": 15.0,
+          "p90": 15.0
+        },
+        "progression_EF": {
+          "mean": 188.27,
+          "p10": 171.9,
+          "median": 185.0,
+          "p90": 209.3
+        },
+        "progression_Q": {
+          "mean": 84.52,
+          "p10": 68.0,
+          "median": 83.0,
+          "p90": 101.0
+        },
+        "dice_count": {
+          "mean": 6,
+          "p10": 6.0,
+          "median": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.07,
+          "p10": 3.0,
+          "median": 3.0,
+          "p90": 4.0
+        },
+        "risky_attempts": {
+          "mean": 0.065,
+          "p10": 0.0,
+          "median": 0.0,
+          "p90": 0.0
+        },
+        "busts": {
+          "mean": 0.01,
+          "p10": 0.0,
+          "median": 0.0,
+          "p90": 0.0
+        },
+        "final_pool_composition": {
+          "d8 + d8 + d6 + d6 + d6 + d6": 12,
+          "d8 + d8 + d8 + d6 + d6 + d6": 162,
+          "d8 + d8 + d8 + d8 + d6 + d6": 26
+        },
+        "timing_diagnostics": {
+          "six_dice_turn_median": 11.0,
+          "six_dice_by_turn_10_pct": 35.0,
+          "four_upgrades_by_turn_16_pct": 13.0,
+          "all_markers_advanced_pct": 100.0
+        },
+        "example_trajectories": {
+          "0": [
+            {
+              "turn": 1,
+              "ef": 6,
+              "seuil": 9,
+              "vma": 10,
+              "progression_ef": 7,
+              "progression_q": 4,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 2,
+              "ef": 7,
+              "seuil": 9,
+              "vma": 11,
+              "progression_ef": 15,
+              "progression_q": 9,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 3,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 11,
+              "progression_ef": 22,
+              "progression_q": 14,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 4,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 12,
+              "progression_ef": 27,
+              "progression_q": 19,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 5,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 12,
+              "progression_ef": 37,
+              "progression_q": 19,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 6,
+              "ef": 9,
+              "seuil": 10,
+              "vma": 12,
+              "progression_ef": 50,
+              "progression_q": 19,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 7,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 12,
+              "progression_ef": 59,
+              "progression_q": 28,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 8,
+              "ef": 10,
+              "seuil": 11,
+              "vma": 12,
+              "progression_ef": 77,
+              "progression_q": 28,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 9,
+              "ef": 10,
+              "seuil": 11,
+              "vma": 13,
+              "progression_ef": 88,
+              "progression_q": 37,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 10,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 13,
+              "progression_ef": 98,
+              "progression_q": 45,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 11,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 13,
+              "progression_ef": 115,
+              "progression_q": 45,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 12,
+              "ef": 11,
+              "seuil": 12,
+              "vma": 13,
+              "progression_ef": 132,
+              "progression_q": 45,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 13,
+              "ef": 11,
+              "seuil": 12,
+              "vma": 14,
+              "progression_ef": 143,
+              "progression_q": 55,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 14,
+              "ef": 12,
+              "seuil": 13,
+              "vma": 14,
+              "progression_ef": 156,
+              "progression_q": 67,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 15,
+              "ef": 12,
+              "seuil": 13,
+              "vma": 15,
+              "progression_ef": 170,
+              "progression_q": 80,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 16,
+              "ef": 12,
+              "seuil": 14,
+              "vma": 15,
+              "progression_ef": 183,
+              "progression_q": 92,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            }
+          ],
+          "73": [
+            {
+              "turn": 1,
+              "ef": 6,
+              "seuil": 9,
+              "vma": 10,
+              "progression_ef": 7,
+              "progression_q": 5,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 2,
+              "ef": 7,
+              "seuil": 9,
+              "vma": 11,
+              "progression_ef": 14,
+              "progression_q": 10,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 3,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 11,
+              "progression_ef": 22,
+              "progression_q": 15,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 4,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 12,
+              "progression_ef": 27,
+              "progression_q": 20,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 5,
+              "ef": 8,
+              "seuil": 11,
+              "vma": 12,
+              "progression_ef": 35,
+              "progression_q": 25,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 6,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 12,
+              "progression_ef": 55,
+              "progression_q": 25,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 7,
+              "ef": 10,
+              "seuil": 11,
+              "vma": 12,
+              "progression_ef": 70,
+              "progression_q": 25,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 8,
+              "ef": 10,
+              "seuil": 11,
+              "vma": 13,
+              "progression_ef": 81,
+              "progression_q": 35,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 9,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 13,
+              "progression_ef": 89,
+              "progression_q": 42,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 10,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 13,
+              "progression_ef": 104,
+              "progression_q": 42,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 11,
+              "ef": 11,
+              "seuil": 12,
+              "vma": 13,
+              "progression_ef": 121,
+              "progression_q": 42,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 12,
+              "ef": 11,
+              "seuil": 12,
+              "vma": 14,
+              "progression_ef": 131,
+              "progression_q": 51,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 13,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 14,
+              "progression_ef": 147,
+              "progression_q": 65,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 14,
+              "ef": 12,
+              "seuil": 13,
+              "vma": 14,
+              "progression_ef": 165,
+              "progression_q": 65,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 15,
+              "ef": 12,
+              "seuil": 13,
+              "vma": 15,
+              "progression_ef": 174,
+              "progression_q": 74,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 16,
+              "ef": 12,
+              "seuil": 14,
+              "vma": 15,
+              "progression_ef": 185,
+              "progression_q": 84,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            }
+          ],
+          "199": [
+            {
+              "turn": 1,
+              "ef": 7,
+              "seuil": 8,
+              "vma": 10,
+              "progression_ef": 10,
+              "progression_q": 0,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 2,
+              "ef": 7,
+              "seuil": 9,
+              "vma": 10,
+              "progression_ef": 19,
+              "progression_q": 6,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 3,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 10,
+              "progression_ef": 30,
+              "progression_q": 6,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 4,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 11,
+              "progression_ef": 36,
+              "progression_q": 11,
+              "pool": [
+                6,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 5,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 11,
+              "progression_ef": 46,
+              "progression_q": 21,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 6,
+              "ef": 9,
+              "seuil": 10,
+              "vma": 11,
+              "progression_ef": 62,
+              "progression_q": 21,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 7,
+              "ef": 9,
+              "seuil": 10,
+              "vma": 12,
+              "progression_ef": 73,
+              "progression_q": 32,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 8,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 12,
+              "progression_ef": 83,
+              "progression_q": 42,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 9,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 12,
+              "progression_ef": 96,
+              "progression_q": 42,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 10,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 12,
+              "progression_ef": 109,
+              "progression_q": 42,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 11,
+              "ef": 10,
+              "seuil": 11,
+              "vma": 12,
+              "progression_ef": 125,
+              "progression_q": 42,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 12,
+              "ef": 10,
+              "seuil": 11,
+              "vma": 13,
+              "progression_ef": 139,
+              "progression_q": 55,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 13,
+              "ef": 11,
+              "seuil": 12,
+              "vma": 13,
+              "progression_ef": 151,
+              "progression_q": 66,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 14,
+              "ef": 11,
+              "seuil": 12,
+              "vma": 14,
+              "progression_ef": 161,
+              "progression_q": 76,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 15,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 14,
+              "progression_ef": 175,
+              "progression_q": 90,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 16,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 14,
+              "progression_ef": 196,
+              "progression_q": 90,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            }
+          ]
+        }
+      },
+      "P_BALANCED": {
+        "EF": {
+          "mean": 11.79,
+          "p10": 11.0,
+          "median": 12.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 14.55,
+          "p10": 14.0,
+          "median": 15.0,
+          "p90": 15.0
+        },
+        "VMA": {
+          "mean": 17.83,
+          "p10": 17.0,
+          "median": 18.0,
+          "p90": 18.0
+        },
+        "progression_EF": {
+          "mean": 157.65,
+          "p10": 144.0,
+          "median": 157.0,
+          "p90": 172.0
+        },
+        "progression_Q": {
+          "mean": 123.89,
+          "p10": 103.9,
+          "median": 124.0,
+          "p90": 143.0
+        },
+        "dice_count": {
+          "mean": 6,
+          "p10": 6.0,
+          "median": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.94,
+          "p10": 4.0,
+          "median": 4.0,
+          "p90": 4.0
+        },
+        "risky_attempts": {
+          "mean": 2.355,
+          "p10": 1.0,
+          "median": 2.0,
+          "p90": 4.0
+        },
+        "busts": {
+          "mean": 0.46,
+          "p10": 0.0,
+          "median": 0.0,
+          "p90": 1.0
+        },
+        "final_pool_composition": {
+          "d8 + d8 + d8 + d6 + d6 + d6": 12,
+          "d8 + d8 + d8 + d8 + d6 + d6": 188
+        },
+        "timing_diagnostics": {
+          "six_dice_turn_median": 12.0,
+          "six_dice_by_turn_10_pct": 4.0,
+          "four_upgrades_by_turn_16_pct": 94.0,
+          "all_markers_advanced_pct": 100.0
+        },
+        "example_trajectories": {
+          "0": [
+            {
+              "turn": 1,
+              "ef": 6,
+              "seuil": 9,
+              "vma": 10,
+              "progression_ef": 7,
+              "progression_q": 4,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 2,
+              "ef": 7,
+              "seuil": 9,
+              "vma": 11,
+              "progression_ef": 15,
+              "progression_q": 9,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 3,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 12,
+              "progression_ef": 22,
+              "progression_q": 14,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 4,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 12,
+              "progression_ef": 27,
+              "progression_q": 19,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 5,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 13,
+              "progression_ef": 35,
+              "progression_q": 24,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 6,
+              "ef": 8,
+              "seuil": 11,
+              "vma": 13,
+              "progression_ef": 42,
+              "progression_q": 31,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 7,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 14,
+              "progression_ef": 51,
+              "progression_q": 40,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 8,
+              "ef": 9,
+              "seuil": 12,
+              "vma": 14,
+              "progression_ef": 63,
+              "progression_q": 51,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 9,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 14,
+              "progression_ef": 75,
+              "progression_q": 51,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 10,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 15,
+              "progression_ef": 85,
+              "progression_q": 60,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 11,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 15,
+              "progression_ef": 95,
+              "progression_q": 68,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 12,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 15,
+              "progression_ef": 106,
+              "progression_q": 68,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 13,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 16,
+              "progression_ef": 119,
+              "progression_q": 79,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 14,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 17,
+              "progression_ef": 132,
+              "progression_q": 91,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 15,
+              "ef": 11,
+              "seuil": 14,
+              "vma": 17,
+              "progression_ef": 145,
+              "progression_q": 103,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 1
+            },
+            {
+              "turn": 16,
+              "ef": 12,
+              "seuil": 14,
+              "vma": 18,
+              "progression_ef": 156,
+              "progression_q": 113,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            }
+          ],
+          "73": [
+            {
+              "turn": 1,
+              "ef": 6,
+              "seuil": 9,
+              "vma": 10,
+              "progression_ef": 7,
+              "progression_q": 5,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 2,
+              "ef": 7,
+              "seuil": 9,
+              "vma": 11,
+              "progression_ef": 14,
+              "progression_q": 10,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 3,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 12,
+              "progression_ef": 22,
+              "progression_q": 15,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 4,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 12,
+              "progression_ef": 27,
+              "progression_q": 20,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 5,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 13,
+              "progression_ef": 35,
+              "progression_q": 25,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 6,
+              "ef": 8,
+              "seuil": 11,
+              "vma": 13,
+              "progression_ef": 48,
+              "progression_q": 36,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 7,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 14,
+              "progression_ef": 58,
+              "progression_q": 44,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 8,
+              "ef": 9,
+              "seuil": 12,
+              "vma": 14,
+              "progression_ef": 67,
+              "progression_q": 52,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 9,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 14,
+              "progression_ef": 77,
+              "progression_q": 52,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 10,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 15,
+              "progression_ef": 87,
+              "progression_q": 60,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 11,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 15,
+              "progression_ef": 96,
+              "progression_q": 68,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 12,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 16,
+              "progression_ef": 103,
+              "progression_q": 75,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 13,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 17,
+              "progression_ef": 117,
+              "progression_q": 89,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 14,
+              "ef": 11,
+              "seuil": 14,
+              "vma": 17,
+              "progression_ef": 127,
+              "progression_q": 98,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 15,
+              "ef": 11,
+              "seuil": 14,
+              "vma": 18,
+              "progression_ef": 138,
+              "progression_q": 109,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 16,
+              "ef": 11,
+              "seuil": 15,
+              "vma": 18,
+              "progression_ef": 149,
+              "progression_q": 120,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            }
+          ],
+          "199": [
+            {
+              "turn": 1,
+              "ef": 7,
+              "seuil": 8,
+              "vma": 10,
+              "progression_ef": 10,
+              "progression_q": 0,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "EF",
+              "busts": 0
+            },
+            {
+              "turn": 2,
+              "ef": 7,
+              "seuil": 9,
+              "vma": 10,
+              "progression_ef": 19,
+              "progression_q": 6,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 3,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 11,
+              "progression_ef": 28,
+              "progression_q": 12,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 4,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 12,
+              "progression_ef": 34,
+              "progression_q": 17,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 5,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 12,
+              "progression_ef": 44,
+              "progression_q": 24,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 6,
+              "ef": 9,
+              "seuil": 10,
+              "vma": 13,
+              "progression_ef": 55,
+              "progression_q": 33,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 7,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 13,
+              "progression_ef": 66,
+              "progression_q": 44,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 8,
+              "ef": 10,
+              "seuil": 11,
+              "vma": 14,
+              "progression_ef": 76,
+              "progression_q": 54,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 9,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 14,
+              "progression_ef": 86,
+              "progression_q": 64,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 10,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 15,
+              "progression_ef": 93,
+              "progression_q": 71,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 11,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 15,
+              "progression_ef": 103,
+              "progression_q": 79,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 12,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 16,
+              "progression_ef": 114,
+              "progression_q": 90,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 13,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 16,
+              "progression_ef": 126,
+              "progression_q": 90,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 14,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 17,
+              "progression_ef": 138,
+              "progression_q": 101,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 15,
+              "ef": 12,
+              "seuil": 14,
+              "vma": 17,
+              "progression_ef": 153,
+              "progression_q": 116,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 1
+            },
+            {
+              "turn": 16,
+              "ef": 12,
+              "seuil": 14,
+              "vma": 18,
+              "progression_ef": 165,
+              "progression_q": 127,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            }
+          ]
+        }
+      },
+      "P_QUALITY": {
+        "EF": {
+          "mean": 10.91,
+          "p10": 10.0,
+          "median": 11.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 13.105,
+          "p10": 12.0,
+          "median": 13.0,
+          "p90": 14.0
+        },
+        "VMA": {
+          "mean": 18.88,
+          "p10": 18.0,
+          "median": 19.0,
+          "p90": 20.0
+        },
+        "progression_EF": {
+          "mean": 153.3,
+          "p10": 139.9,
+          "median": 152.0,
+          "p90": 169.0
+        },
+        "progression_Q": {
+          "mean": 112.665,
+          "p10": 90.0,
+          "median": 113.0,
+          "p90": 132.1
+        },
+        "dice_count": {
+          "mean": 6,
+          "p10": 6.0,
+          "median": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.815,
+          "p10": 3.0,
+          "median": 4.0,
+          "p90": 4.0
+        },
+        "risky_attempts": {
+          "mean": 6.58,
+          "p10": 5.0,
+          "median": 7.0,
+          "p90": 8.0
+        },
+        "busts": {
+          "mean": 1.905,
+          "p10": 0.0,
+          "median": 2.0,
+          "p90": 3.0
+        },
+        "final_pool_composition": {
+          "d8 + d8 + d8 + d6 + d6 + d6": 37,
+          "d8 + d8 + d8 + d8 + d6 + d6": 163
+        },
+        "timing_diagnostics": {
+          "six_dice_turn_median": 12.0,
+          "six_dice_by_turn_10_pct": 2.0,
+          "four_upgrades_by_turn_16_pct": 81.5,
+          "all_markers_advanced_pct": 100.0
+        },
+        "example_trajectories": {
+          "0": [
+            {
+              "turn": 1,
+              "ef": 6,
+              "seuil": 9,
+              "vma": 10,
+              "progression_ef": 7,
+              "progression_q": 4,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 2,
+              "ef": 7,
+              "seuil": 9,
+              "vma": 11,
+              "progression_ef": 15,
+              "progression_q": 9,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 3,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 12,
+              "progression_ef": 22,
+              "progression_q": 14,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 4,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 13,
+              "progression_ef": 27,
+              "progression_q": 19,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 5,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 13,
+              "progression_ef": 35,
+              "progression_q": 24,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 6,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 14,
+              "progression_ef": 42,
+              "progression_q": 31,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 7,
+              "ef": 9,
+              "seuil": 10,
+              "vma": 15,
+              "progression_ef": 53,
+              "progression_q": 40,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 8,
+              "ef": 9,
+              "seuil": 10,
+              "vma": 16,
+              "progression_ef": 65,
+              "progression_q": 51,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 9,
+              "ef": 10,
+              "seuil": 11,
+              "vma": 16,
+              "progression_ef": 72,
+              "progression_q": 57,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 10,
+              "ef": 10,
+              "seuil": 11,
+              "vma": 17,
+              "progression_ef": 82,
+              "progression_q": 66,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 11,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 17,
+              "progression_ef": 91,
+              "progression_q": 74,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 12,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 17,
+              "progression_ef": 99,
+              "progression_q": 82,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 13,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 18,
+              "progression_ef": 110,
+              "progression_q": 93,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 14,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 18,
+              "progression_ef": 124,
+              "progression_q": 93,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 15,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 19,
+              "progression_ef": 137,
+              "progression_q": 105,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 16,
+              "ef": 11,
+              "seuil": 14,
+              "vma": 19,
+              "progression_ef": 148,
+              "progression_q": 115,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 1
+            }
+          ],
+          "73": [
+            {
+              "turn": 1,
+              "ef": 6,
+              "seuil": 8,
+              "vma": 11,
+              "progression_ef": 7,
+              "progression_q": 5,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 2,
+              "ef": 7,
+              "seuil": 9,
+              "vma": 11,
+              "progression_ef": 14,
+              "progression_q": 10,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 3,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 12,
+              "progression_ef": 22,
+              "progression_q": 15,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 4,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 13,
+              "progression_ef": 27,
+              "progression_q": 20,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 5,
+              "ef": 8,
+              "seuil": 9,
+              "vma": 14,
+              "progression_ef": 34,
+              "progression_q": 27,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 6,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 14,
+              "progression_ef": 43,
+              "progression_q": 34,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 7,
+              "ef": 9,
+              "seuil": 10,
+              "vma": 15,
+              "progression_ef": 52,
+              "progression_q": 42,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 8,
+              "ef": 9,
+              "seuil": 10,
+              "vma": 16,
+              "progression_ef": 63,
+              "progression_q": 51,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 9,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 16,
+              "progression_ef": 69,
+              "progression_q": 57,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 10,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 16,
+              "progression_ef": 77,
+              "progression_q": 64,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 11,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 17,
+              "progression_ef": 85,
+              "progression_q": 72,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 12,
+              "ef": 10,
+              "seuil": 12,
+              "vma": 18,
+              "progression_ef": 96,
+              "progression_q": 83,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 13,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 18,
+              "progression_ef": 106,
+              "progression_q": 92,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 14,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 18,
+              "progression_ef": 121,
+              "progression_q": 92,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 15,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 18,
+              "progression_ef": 133,
+              "progression_q": 92,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 2
+            },
+            {
+              "turn": 16,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 19,
+              "progression_ef": 144,
+              "progression_q": 103,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 2
+            }
+          ],
+          "199": [
+            {
+              "turn": 1,
+              "ef": 6,
+              "seuil": 8,
+              "vma": 11,
+              "progression_ef": 7,
+              "progression_q": 6,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 2,
+              "ef": 7,
+              "seuil": 8,
+              "vma": 12,
+              "progression_ef": 16,
+              "progression_q": 12,
+              "pool": [
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 3,
+              "ef": 7,
+              "seuil": 8,
+              "vma": 13,
+              "progression_ef": 25,
+              "progression_q": 18,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 4,
+              "ef": 7,
+              "seuil": 9,
+              "vma": 13,
+              "progression_ef": 33,
+              "progression_q": 23,
+              "pool": [
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 5,
+              "ef": 7,
+              "seuil": 10,
+              "vma": 13,
+              "progression_ef": 43,
+              "progression_q": 30,
+              "pool": [
+                8,
+                6,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 6,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 14,
+              "progression_ef": 54,
+              "progression_q": 39,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 7,
+              "ef": 8,
+              "seuil": 10,
+              "vma": 15,
+              "progression_ef": 66,
+              "progression_q": 50,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 8,
+              "ef": 9,
+              "seuil": 11,
+              "vma": 15,
+              "progression_ef": 74,
+              "progression_q": 57,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 9,
+              "ef": 9,
+              "seuil": 12,
+              "vma": 15,
+              "progression_ef": 81,
+              "progression_q": 64,
+              "pool": [
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 10,
+              "ef": 9,
+              "seuil": 13,
+              "vma": 15,
+              "progression_ef": 89,
+              "progression_q": 71,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "SEUIL",
+              "busts": 0
+            },
+            {
+              "turn": 11,
+              "ef": 9,
+              "seuil": 13,
+              "vma": 16,
+              "progression_ef": 100,
+              "progression_q": 81,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 0
+            },
+            {
+              "turn": 12,
+              "ef": 9,
+              "seuil": 13,
+              "vma": 16,
+              "progression_ef": 110,
+              "progression_q": 81,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 13,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 17,
+              "progression_ef": 122,
+              "progression_q": 92,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 1
+            },
+            {
+              "turn": 14,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 17,
+              "progression_ef": 136,
+              "progression_q": 92,
+              "pool": [
+                8,
+                8,
+                8,
+                6,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 2
+            },
+            {
+              "turn": 15,
+              "ef": 10,
+              "seuil": 13,
+              "vma": 18,
+              "progression_ef": 148,
+              "progression_q": 104,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 2
+            },
+            {
+              "turn": 16,
+              "ef": 11,
+              "seuil": 13,
+              "vma": 19,
+              "progression_ef": 162,
+              "progression_q": 117,
+              "pool": [
+                8,
+                8,
+                8,
+                8,
+                6,
+                6
+              ],
+              "target": "VMA",
+              "busts": 2
+            }
+          ]
+        }
+      }
+    }
+  },
+  "B2": {
+    "seeds": 100,
+    "turns": 16,
+    "total_turns": 6400,
+    "d99_mode": "D99_BONUS_ONLY",
+    "cells": {
+      "P_BALANCED__Q_FULL": {
+        "EF": {
+          "mean": 11.99,
+          "median": 12.0,
+          "p10": 12.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 15.8,
+          "median": 16.0,
+          "p10": 15.0,
+          "p90": 16.1
+        },
+        "VMA": {
+          "mean": 18.96,
+          "median": 19.0,
+          "p10": 18.0,
+          "p90": 20.0
+        },
+        "progression_EF": {
+          "mean": 188.84,
+          "median": 187.0,
+          "p10": 175.0,
+          "p90": 208.0
+        },
+        "progression_Q": {
+          "mean": 88.43,
+          "median": 89.0,
+          "p10": 75.9,
+          "p90": 101.0
+        },
+        "progression_SPEC": {
+          "mean": 0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "dice_count": {
+          "mean": 6,
+          "median": 6.0,
+          "p10": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.15,
+          "median": 3.0,
+          "p10": 3.0,
+          "p90": 4.0
+        },
+        "quality_turns_0": {
+          "mean": 2.23,
+          "median": 2.0,
+          "p10": 1.0,
+          "p90": 4.0
+        },
+        "quality_turns_1": {
+          "mean": 10.78,
+          "median": 11.0,
+          "p10": 8.0,
+          "p90": 13.0
+        },
+        "quality_turns_2": {
+          "mean": 2.99,
+          "median": 3.0,
+          "p10": 1.0,
+          "p90": 5.0
+        },
+        "risky_attempts": {
+          "mean": 4.89,
+          "median": 5.0,
+          "p10": 3.0,
+          "p90": 7.0
+        },
+        "busts": {
+          "mean": 1.12,
+          "median": 1.0,
+          "p10": 0.0,
+          "p90": 3.0
+        },
+        "q_available": {
+          "mean": 99.95,
+          "median": 100.5,
+          "p10": 87.0,
+          "p90": 112.0
+        },
+        "q_consumed": {
+          "mean": 85.56,
+          "median": 86.0,
+          "p10": 73.0,
+          "p90": 98.0
+        },
+        "q_to_spec": {
+          "mean": 0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "q_lost_bust": {
+          "mean": 8.94,
+          "median": 8.0,
+          "p10": 0.0,
+          "p90": 21.1
+        },
+        "fifth_die_timing": {
+          "median_among_reached": 5.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "sixth_die_timing": {
+          "median_among_reached": 11.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "upgrade_timing": {
+          "1": {
+            "median_among_reached": 5.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "2": {
+            "median_among_reached": 8.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "3": {
+            "median_among_reached": 13.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "4": {
+            "median_among_reached": 16.0,
+            "reached_by_t16_pct": 15.0
+          }
+        },
+        "spec_share_pct": {
+          "mean": 0.0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        }
+      },
+      "P_BALANCED__Q_SPENT_SPEC": {
+        "EF": {
+          "mean": 11.99,
+          "median": 12.0,
+          "p10": 12.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 15.83,
+          "median": 16.0,
+          "p10": 15.0,
+          "p90": 17.0
+        },
+        "VMA": {
+          "mean": 18.99,
+          "median": 19.0,
+          "p10": 18.0,
+          "p90": 20.0
+        },
+        "progression_EF": {
+          "mean": 187.9,
+          "median": 187.0,
+          "p10": 174.0,
+          "p90": 206.1
+        },
+        "progression_Q": {
+          "mean": 86.13,
+          "median": 86.5,
+          "p10": 74.9,
+          "p90": 96.1
+        },
+        "progression_SPEC": {
+          "mean": 5.55,
+          "median": 5.0,
+          "p10": 3.0,
+          "p90": 8.1
+        },
+        "dice_count": {
+          "mean": 6,
+          "median": 6.0,
+          "p10": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.02,
+          "median": 3.0,
+          "p10": 3.0,
+          "p90": 3.0
+        },
+        "quality_turns_0": {
+          "mean": 2.22,
+          "median": 2.0,
+          "p10": 1.0,
+          "p90": 4.0
+        },
+        "quality_turns_1": {
+          "mean": 10.74,
+          "median": 11.0,
+          "p10": 8.0,
+          "p90": 13.0
+        },
+        "quality_turns_2": {
+          "mean": 3.04,
+          "median": 3.0,
+          "p10": 1.9,
+          "p90": 5.0
+        },
+        "risky_attempts": {
+          "mean": 4.9,
+          "median": 5.0,
+          "p10": 3.0,
+          "p90": 7.0
+        },
+        "busts": {
+          "mean": 1.02,
+          "median": 1.0,
+          "p10": 0.0,
+          "p90": 2.0
+        },
+        "q_available": {
+          "mean": 99.83,
+          "median": 100.0,
+          "p10": 88.9,
+          "p90": 109.2
+        },
+        "q_consumed": {
+          "mean": 86.13,
+          "median": 86.5,
+          "p10": 74.9,
+          "p90": 96.1
+        },
+        "q_to_spec": {
+          "mean": 5.55,
+          "median": 5.0,
+          "p10": 3.0,
+          "p90": 8.1
+        },
+        "q_lost_bust": {
+          "mean": 8.15,
+          "median": 8.0,
+          "p10": 0.0,
+          "p90": 19.1
+        },
+        "fifth_die_timing": {
+          "median_among_reached": 5.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "sixth_die_timing": {
+          "median_among_reached": 11.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "upgrade_timing": {
+          "1": {
+            "median_among_reached": 5.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "2": {
+            "median_among_reached": 8.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "3": {
+            "median_among_reached": 13.0,
+            "reached_by_t16_pct": 99.0
+          },
+          "4": {
+            "median_among_reached": 16.0,
+            "reached_by_t16_pct": 3.0
+          }
+        },
+        "spec_share_pct": {
+          "mean": 5.539,
+          "median": 5.465,
+          "p10": 2.752,
+          "p90": 8.421
+        }
+      },
+      "P_QUALITY__Q_FULL": {
+        "EF": {
+          "mean": 11.78,
+          "median": 12.0,
+          "p10": 11.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 14.63,
+          "median": 14.0,
+          "p10": 13.9,
+          "p90": 16.0
+        },
+        "VMA": {
+          "mean": 19.42,
+          "median": 19.0,
+          "p10": 18.0,
+          "p90": 21.0
+        },
+        "progression_EF": {
+          "mean": 175.98,
+          "median": 176.0,
+          "p10": 159.0,
+          "p90": 191.1
+        },
+        "progression_Q": {
+          "mean": 93.38,
+          "median": 94.5,
+          "p10": 77.9,
+          "p90": 107.1
+        },
+        "progression_SPEC": {
+          "mean": 0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "dice_count": {
+          "mean": 6,
+          "median": 6.0,
+          "p10": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.32,
+          "median": 3.0,
+          "p10": 3.0,
+          "p90": 4.0
+        },
+        "quality_turns_0": {
+          "mean": 1.79,
+          "median": 2.0,
+          "p10": 0.0,
+          "p90": 3.0
+        },
+        "quality_turns_1": {
+          "mean": 12.37,
+          "median": 13.0,
+          "p10": 10.0,
+          "p90": 15.0
+        },
+        "quality_turns_2": {
+          "mean": 1.84,
+          "median": 2.0,
+          "p10": 1.0,
+          "p90": 3.0
+        },
+        "risky_attempts": {
+          "mean": 6.99,
+          "median": 7.0,
+          "p10": 5.0,
+          "p90": 9.0
+        },
+        "busts": {
+          "mean": 1.96,
+          "median": 2.0,
+          "p10": 0.9,
+          "p90": 4.0
+        },
+        "q_available": {
+          "mean": 111.33,
+          "median": 111.0,
+          "p10": 97.9,
+          "p90": 126.1
+        },
+        "q_consumed": {
+          "mean": 90.3,
+          "median": 90.5,
+          "p10": 76.0,
+          "p90": 104.0
+        },
+        "q_to_spec": {
+          "mean": 0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "q_lost_bust": {
+          "mean": 17.63,
+          "median": 16.0,
+          "p10": 5.4,
+          "p90": 33.1
+        },
+        "fifth_die_timing": {
+          "median_among_reached": 5.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "sixth_die_timing": {
+          "median_among_reached": 11.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "upgrade_timing": {
+          "1": {
+            "median_among_reached": 4.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "2": {
+            "median_among_reached": 7.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "3": {
+            "median_among_reached": 12.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "4": {
+            "median_among_reached": 16.0,
+            "reached_by_t16_pct": 32.0
+          }
+        },
+        "spec_share_pct": {
+          "mean": 0.0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        }
+      },
+      "P_QUALITY__Q_SPENT_SPEC": {
+        "EF": {
+          "mean": 11.76,
+          "median": 12.0,
+          "p10": 11.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 14.65,
+          "median": 15.0,
+          "p10": 13.9,
+          "p90": 16.0
+        },
+        "VMA": {
+          "mean": 19.37,
+          "median": 19.0,
+          "p10": 18.0,
+          "p90": 20.0
+        },
+        "progression_EF": {
+          "mean": 175.44,
+          "median": 175.0,
+          "p10": 159.0,
+          "p90": 190.2
+        },
+        "progression_Q": {
+          "mean": 89.99,
+          "median": 90.0,
+          "p10": 74.9,
+          "p90": 104.1
+        },
+        "progression_SPEC": {
+          "mean": 3.42,
+          "median": 3.0,
+          "p10": 1.0,
+          "p90": 6.0
+        },
+        "dice_count": {
+          "mean": 6,
+          "median": 6.0,
+          "p10": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.23,
+          "median": 3.0,
+          "p10": 3.0,
+          "p90": 4.0
+        },
+        "quality_turns_0": {
+          "mean": 1.79,
+          "median": 2.0,
+          "p10": 0.0,
+          "p90": 3.1
+        },
+        "quality_turns_1": {
+          "mean": 12.4,
+          "median": 13.0,
+          "p10": 10.0,
+          "p90": 15.0
+        },
+        "quality_turns_2": {
+          "mean": 1.81,
+          "median": 2.0,
+          "p10": 0.9,
+          "p90": 3.0
+        },
+        "risky_attempts": {
+          "mean": 7.1,
+          "median": 7.0,
+          "p10": 5.0,
+          "p90": 9.0
+        },
+        "busts": {
+          "mean": 1.99,
+          "median": 2.0,
+          "p10": 0.0,
+          "p90": 4.0
+        },
+        "q_available": {
+          "mean": 111.21,
+          "median": 110.0,
+          "p10": 98.9,
+          "p90": 125.1
+        },
+        "q_consumed": {
+          "mean": 89.99,
+          "median": 90.0,
+          "p10": 74.9,
+          "p90": 104.1
+        },
+        "q_to_spec": {
+          "mean": 3.42,
+          "median": 3.0,
+          "p10": 1.0,
+          "p90": 6.0
+        },
+        "q_lost_bust": {
+          "mean": 17.8,
+          "median": 17.5,
+          "p10": 0.0,
+          "p90": 33.0
+        },
+        "fifth_die_timing": {
+          "median_among_reached": 5.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "sixth_die_timing": {
+          "median_among_reached": 11.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "upgrade_timing": {
+          "1": {
+            "median_among_reached": 4.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "2": {
+            "median_among_reached": 8.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "3": {
+            "median_among_reached": 13.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "4": {
+            "median_among_reached": 16.0,
+            "reached_by_t16_pct": 23.0
+          }
+        },
+        "spec_share_pct": {
+          "mean": 3.056,
+          "median": 2.885,
+          "p10": 0.999,
+          "p90": 5.273
+        }
+      }
+    }
+  },
+  "C": {
+    "curve": "Race Engine V2 Curve B",
+    "spec_points": 4,
+    "rows": [
+      {
+        "context": "AS42_LOW",
+        "profile": "FULL_SPEED",
+        "speed": 4,
+        "eco": 0,
+        "repetitions": 10,
+        "around_as": {
+          "-1": {
+            "production": 21,
+            "cost": 2,
+            "base_cost": 2,
+            "production_gain": 3
+          },
+          "0": {
+            "production": 22,
+            "cost": 3,
+            "base_cost": 3,
+            "production_gain": 4
+          },
+          "1": {
+            "production": 23,
+            "cost": 5,
+            "base_cost": 5,
+            "production_gain": 5
+          }
+        },
+        "reserve_cost_repeated_at_as": 30,
+        "reserve_saved_vs_no_eco": 0
+      },
+      {
+        "context": "AS42_LOW",
+        "profile": "BALANCED",
+        "speed": 2,
+        "eco": -2,
+        "repetitions": 10,
+        "around_as": {
+          "-1": {
+            "production": 19,
+            "cost": 0,
+            "base_cost": 2,
+            "production_gain": 1
+          },
+          "0": {
+            "production": 20,
+            "cost": 0,
+            "base_cost": 2,
+            "production_gain": 2
+          },
+          "1": {
+            "production": 21,
+            "cost": 0,
+            "base_cost": 2,
+            "production_gain": 3
+          }
+        },
+        "reserve_cost_repeated_at_as": 0,
+        "reserve_saved_vs_no_eco": 20
+      },
+      {
+        "context": "AS42_LOW",
+        "profile": "FULL_ECO",
+        "speed": 0,
+        "eco": -4,
+        "repetitions": 10,
+        "around_as": {
+          "-1": {
+            "production": 17,
+            "cost": 0,
+            "base_cost": 2,
+            "production_gain": -1
+          },
+          "0": {
+            "production": 18,
+            "cost": 0,
+            "base_cost": 2,
+            "production_gain": 0
+          },
+          "1": {
+            "production": 19,
+            "cost": 0,
+            "base_cost": 2,
+            "production_gain": 1
+          }
+        },
+        "reserve_cost_repeated_at_as": 0,
+        "reserve_saved_vs_no_eco": 20
+      },
+      {
+        "context": "AS10_HIGH",
+        "profile": "FULL_SPEED",
+        "speed": 4,
+        "eco": 0,
+        "repetitions": 4,
+        "around_as": {
+          "-1": {
+            "production": 26,
+            "cost": 13,
+            "base_cost": 13,
+            "production_gain": 3
+          },
+          "0": {
+            "production": 27,
+            "cost": 16,
+            "base_cost": 16,
+            "production_gain": 4
+          },
+          "1": {
+            "production": 28,
+            "cost": 16,
+            "base_cost": 16,
+            "production_gain": 5
+          }
+        },
+        "reserve_cost_repeated_at_as": 64,
+        "reserve_saved_vs_no_eco": 0
+      },
+      {
+        "context": "AS10_HIGH",
+        "profile": "BALANCED",
+        "speed": 2,
+        "eco": -2,
+        "repetitions": 4,
+        "around_as": {
+          "-1": {
+            "production": 24,
+            "cost": 5,
+            "base_cost": 7,
+            "production_gain": 1
+          },
+          "0": {
+            "production": 25,
+            "cost": 8,
+            "base_cost": 10,
+            "production_gain": 2
+          },
+          "1": {
+            "production": 26,
+            "cost": 11,
+            "base_cost": 13,
+            "production_gain": 3
+          }
+        },
+        "reserve_cost_repeated_at_as": 32,
+        "reserve_saved_vs_no_eco": 8
+      },
+      {
+        "context": "AS10_HIGH",
+        "profile": "FULL_ECO",
+        "speed": 0,
+        "eco": -4,
+        "repetitions": 4,
+        "around_as": {
+          "-1": {
+            "production": 22,
+            "cost": 0,
+            "base_cost": 3,
+            "production_gain": -1
+          },
+          "0": {
+            "production": 23,
+            "cost": 1,
+            "base_cost": 5,
+            "production_gain": 0
+          },
+          "1": {
+            "production": 24,
+            "cost": 3,
+            "base_cost": 7,
+            "production_gain": 1
+          }
+        },
+        "reserve_cost_repeated_at_as": 4,
+        "reserve_saved_vs_no_eco": 16
+      }
+    ]
+  }
+}
