@@ -1,0 +1,955 @@
+{
+  "status": "EXPERIMENTAL COUNTERFACTUALS \u2014 NOT CURRENT BEHAVIOR",
+  "method": "deterministic exhaustive analytical grid; no RNG; no race simulation",
+  "source_revision": "40fafdaf24419942e6347089218a7b62ad98e651",
+  "parameters": {
+    "profiles": {
+      "P1": {
+        "ef": 0,
+        "threshold": 5,
+        "vma": 10
+      },
+      "P2": {
+        "ef": 0,
+        "threshold": 6,
+        "vma": 10
+      },
+      "P3": {
+        "ef": 1,
+        "threshold": 6,
+        "vma": 11
+      }
+    },
+    "production_offsets_from_vma": [
+      -3,
+      -2,
+      -1,
+      0
+    ],
+    "difficulties": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "native_slopes": [
+      2,
+      3
+    ],
+    "overload_coefficients": [
+      2,
+      3,
+      4
+    ],
+    "configuration_count": 48
+  },
+  "configurations": [
+    {
+      "profile": "P1",
+      "production": 7,
+      "difficulty": 0,
+      "charge": 7,
+      "overload": 0,
+      "native_cost_to_vma": 16,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 16,
+      "variant_c2_cost": 16,
+      "variant_c3_cost": 16,
+      "variant_c4_cost": 16
+    },
+    {
+      "profile": "P1",
+      "production": 7,
+      "difficulty": 1,
+      "charge": 8,
+      "overload": 0,
+      "native_cost_to_vma": 19,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 19,
+      "variant_c2_cost": 19,
+      "variant_c3_cost": 19,
+      "variant_c4_cost": 19
+    },
+    {
+      "profile": "P1",
+      "production": 7,
+      "difficulty": 2,
+      "charge": 9,
+      "overload": 0,
+      "native_cost_to_vma": 22,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 22,
+      "variant_c2_cost": 22,
+      "variant_c3_cost": 22,
+      "variant_c4_cost": 22
+    },
+    {
+      "profile": "P1",
+      "production": 7,
+      "difficulty": 3,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 25,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 25,
+      "variant_c2_cost": 25,
+      "variant_c3_cost": 25,
+      "variant_c4_cost": 25
+    },
+    {
+      "profile": "P1",
+      "production": 8,
+      "difficulty": 0,
+      "charge": 8,
+      "overload": 0,
+      "native_cost_to_vma": 19,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 19,
+      "variant_c2_cost": 19,
+      "variant_c3_cost": 19,
+      "variant_c4_cost": 19
+    },
+    {
+      "profile": "P1",
+      "production": 8,
+      "difficulty": 1,
+      "charge": 9,
+      "overload": 0,
+      "native_cost_to_vma": 22,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 22,
+      "variant_c2_cost": 22,
+      "variant_c3_cost": 22,
+      "variant_c4_cost": 22
+    },
+    {
+      "profile": "P1",
+      "production": 8,
+      "difficulty": 2,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 25,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 25,
+      "variant_c2_cost": 25,
+      "variant_c3_cost": 25,
+      "variant_c4_cost": 25
+    },
+    {
+      "profile": "P1",
+      "production": 8,
+      "difficulty": 3,
+      "charge": 11,
+      "overload": 1,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 28,
+      "variant_c2_cost": 27,
+      "variant_c3_cost": 28,
+      "variant_c4_cost": 29
+    },
+    {
+      "profile": "P1",
+      "production": 9,
+      "difficulty": 0,
+      "charge": 9,
+      "overload": 0,
+      "native_cost_to_vma": 22,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 22,
+      "variant_c2_cost": 22,
+      "variant_c3_cost": 22,
+      "variant_c4_cost": 22
+    },
+    {
+      "profile": "P1",
+      "production": 9,
+      "difficulty": 1,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 25,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 25,
+      "variant_c2_cost": 25,
+      "variant_c3_cost": 25,
+      "variant_c4_cost": 25
+    },
+    {
+      "profile": "P1",
+      "production": 9,
+      "difficulty": 2,
+      "charge": 11,
+      "overload": 1,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 28,
+      "variant_c2_cost": 27,
+      "variant_c3_cost": 28,
+      "variant_c4_cost": 29
+    },
+    {
+      "profile": "P1",
+      "production": 9,
+      "difficulty": 3,
+      "charge": 12,
+      "overload": 2,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 31,
+      "variant_c2_cost": 29,
+      "variant_c3_cost": 31,
+      "variant_c4_cost": 33
+    },
+    {
+      "profile": "P1",
+      "production": 10,
+      "difficulty": 0,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 25,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 25,
+      "variant_c2_cost": 25,
+      "variant_c3_cost": 25,
+      "variant_c4_cost": 25
+    },
+    {
+      "profile": "P1",
+      "production": 10,
+      "difficulty": 1,
+      "charge": 11,
+      "overload": 1,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 28,
+      "variant_c2_cost": 27,
+      "variant_c3_cost": 28,
+      "variant_c4_cost": 29
+    },
+    {
+      "profile": "P1",
+      "production": 10,
+      "difficulty": 2,
+      "charge": 12,
+      "overload": 2,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 31,
+      "variant_c2_cost": 29,
+      "variant_c3_cost": 31,
+      "variant_c4_cost": 33
+    },
+    {
+      "profile": "P1",
+      "production": 10,
+      "difficulty": 3,
+      "charge": 13,
+      "overload": 3,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 34,
+      "variant_c2_cost": 31,
+      "variant_c3_cost": 34,
+      "variant_c4_cost": 37
+    },
+    {
+      "profile": "P2",
+      "production": 7,
+      "difficulty": 0,
+      "charge": 7,
+      "overload": 0,
+      "native_cost_to_vma": 15,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 15,
+      "variant_c2_cost": 15,
+      "variant_c3_cost": 15,
+      "variant_c4_cost": 15
+    },
+    {
+      "profile": "P2",
+      "production": 7,
+      "difficulty": 1,
+      "charge": 8,
+      "overload": 0,
+      "native_cost_to_vma": 18,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 18,
+      "variant_c2_cost": 18,
+      "variant_c3_cost": 18,
+      "variant_c4_cost": 18
+    },
+    {
+      "profile": "P2",
+      "production": 7,
+      "difficulty": 2,
+      "charge": 9,
+      "overload": 0,
+      "native_cost_to_vma": 21,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 21,
+      "variant_c2_cost": 21,
+      "variant_c3_cost": 21,
+      "variant_c4_cost": 21
+    },
+    {
+      "profile": "P2",
+      "production": 7,
+      "difficulty": 3,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 24,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 24,
+      "variant_c2_cost": 24,
+      "variant_c3_cost": 24,
+      "variant_c4_cost": 24
+    },
+    {
+      "profile": "P2",
+      "production": 8,
+      "difficulty": 0,
+      "charge": 8,
+      "overload": 0,
+      "native_cost_to_vma": 18,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 18,
+      "variant_c2_cost": 18,
+      "variant_c3_cost": 18,
+      "variant_c4_cost": 18
+    },
+    {
+      "profile": "P2",
+      "production": 8,
+      "difficulty": 1,
+      "charge": 9,
+      "overload": 0,
+      "native_cost_to_vma": 21,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 21,
+      "variant_c2_cost": 21,
+      "variant_c3_cost": 21,
+      "variant_c4_cost": 21
+    },
+    {
+      "profile": "P2",
+      "production": 8,
+      "difficulty": 2,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 24,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 24,
+      "variant_c2_cost": 24,
+      "variant_c3_cost": 24,
+      "variant_c4_cost": 24
+    },
+    {
+      "profile": "P2",
+      "production": 8,
+      "difficulty": 3,
+      "charge": 11,
+      "overload": 1,
+      "native_cost_to_vma": 24,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 27,
+      "variant_c2_cost": 26,
+      "variant_c3_cost": 27,
+      "variant_c4_cost": 28
+    },
+    {
+      "profile": "P2",
+      "production": 9,
+      "difficulty": 0,
+      "charge": 9,
+      "overload": 0,
+      "native_cost_to_vma": 21,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 21,
+      "variant_c2_cost": 21,
+      "variant_c3_cost": 21,
+      "variant_c4_cost": 21
+    },
+    {
+      "profile": "P2",
+      "production": 9,
+      "difficulty": 1,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 24,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 24,
+      "variant_c2_cost": 24,
+      "variant_c3_cost": 24,
+      "variant_c4_cost": 24
+    },
+    {
+      "profile": "P2",
+      "production": 9,
+      "difficulty": 2,
+      "charge": 11,
+      "overload": 1,
+      "native_cost_to_vma": 24,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 27,
+      "variant_c2_cost": 26,
+      "variant_c3_cost": 27,
+      "variant_c4_cost": 28
+    },
+    {
+      "profile": "P2",
+      "production": 9,
+      "difficulty": 3,
+      "charge": 12,
+      "overload": 2,
+      "native_cost_to_vma": 24,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 30,
+      "variant_c2_cost": 28,
+      "variant_c3_cost": 30,
+      "variant_c4_cost": 32
+    },
+    {
+      "profile": "P2",
+      "production": 10,
+      "difficulty": 0,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 24,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 24,
+      "variant_c2_cost": 24,
+      "variant_c3_cost": 24,
+      "variant_c4_cost": 24
+    },
+    {
+      "profile": "P2",
+      "production": 10,
+      "difficulty": 1,
+      "charge": 11,
+      "overload": 1,
+      "native_cost_to_vma": 24,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 27,
+      "variant_c2_cost": 26,
+      "variant_c3_cost": 27,
+      "variant_c4_cost": 28
+    },
+    {
+      "profile": "P2",
+      "production": 10,
+      "difficulty": 2,
+      "charge": 12,
+      "overload": 2,
+      "native_cost_to_vma": 24,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 30,
+      "variant_c2_cost": 28,
+      "variant_c3_cost": 30,
+      "variant_c4_cost": 32
+    },
+    {
+      "profile": "P2",
+      "production": 10,
+      "difficulty": 3,
+      "charge": 13,
+      "overload": 3,
+      "native_cost_to_vma": 24,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 33,
+      "variant_c2_cost": 30,
+      "variant_c3_cost": 33,
+      "variant_c4_cost": 36
+    },
+    {
+      "profile": "P3",
+      "production": 8,
+      "difficulty": 0,
+      "charge": 8,
+      "overload": 0,
+      "native_cost_to_vma": 16,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 16,
+      "variant_c2_cost": 16,
+      "variant_c3_cost": 16,
+      "variant_c4_cost": 16
+    },
+    {
+      "profile": "P3",
+      "production": 8,
+      "difficulty": 1,
+      "charge": 9,
+      "overload": 0,
+      "native_cost_to_vma": 19,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 19,
+      "variant_c2_cost": 19,
+      "variant_c3_cost": 19,
+      "variant_c4_cost": 19
+    },
+    {
+      "profile": "P3",
+      "production": 8,
+      "difficulty": 2,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 22,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 22,
+      "variant_c2_cost": 22,
+      "variant_c3_cost": 22,
+      "variant_c4_cost": 22
+    },
+    {
+      "profile": "P3",
+      "production": 8,
+      "difficulty": 3,
+      "charge": 11,
+      "overload": 0,
+      "native_cost_to_vma": 25,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 25,
+      "variant_c2_cost": 25,
+      "variant_c3_cost": 25,
+      "variant_c4_cost": 25
+    },
+    {
+      "profile": "P3",
+      "production": 9,
+      "difficulty": 0,
+      "charge": 9,
+      "overload": 0,
+      "native_cost_to_vma": 19,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 19,
+      "variant_c2_cost": 19,
+      "variant_c3_cost": 19,
+      "variant_c4_cost": 19
+    },
+    {
+      "profile": "P3",
+      "production": 9,
+      "difficulty": 1,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 22,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 22,
+      "variant_c2_cost": 22,
+      "variant_c3_cost": 22,
+      "variant_c4_cost": 22
+    },
+    {
+      "profile": "P3",
+      "production": 9,
+      "difficulty": 2,
+      "charge": 11,
+      "overload": 0,
+      "native_cost_to_vma": 25,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 25,
+      "variant_c2_cost": 25,
+      "variant_c3_cost": 25,
+      "variant_c4_cost": 25
+    },
+    {
+      "profile": "P3",
+      "production": 9,
+      "difficulty": 3,
+      "charge": 12,
+      "overload": 1,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 28,
+      "variant_c2_cost": 27,
+      "variant_c3_cost": 28,
+      "variant_c4_cost": 29
+    },
+    {
+      "profile": "P3",
+      "production": 10,
+      "difficulty": 0,
+      "charge": 10,
+      "overload": 0,
+      "native_cost_to_vma": 22,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 22,
+      "variant_c2_cost": 22,
+      "variant_c3_cost": 22,
+      "variant_c4_cost": 22
+    },
+    {
+      "profile": "P3",
+      "production": 10,
+      "difficulty": 1,
+      "charge": 11,
+      "overload": 0,
+      "native_cost_to_vma": 25,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 25,
+      "variant_c2_cost": 25,
+      "variant_c3_cost": 25,
+      "variant_c4_cost": 25
+    },
+    {
+      "profile": "P3",
+      "production": 10,
+      "difficulty": 2,
+      "charge": 12,
+      "overload": 1,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 28,
+      "variant_c2_cost": 27,
+      "variant_c3_cost": 28,
+      "variant_c4_cost": 29
+    },
+    {
+      "profile": "P3",
+      "production": 10,
+      "difficulty": 3,
+      "charge": 13,
+      "overload": 2,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 31,
+      "variant_c2_cost": 29,
+      "variant_c3_cost": 31,
+      "variant_c4_cost": 33
+    },
+    {
+      "profile": "P3",
+      "production": 11,
+      "difficulty": 0,
+      "charge": 11,
+      "overload": 0,
+      "native_cost_to_vma": 25,
+      "variant_a": "LEGAL",
+      "variant_b_cost": 25,
+      "variant_c2_cost": 25,
+      "variant_c3_cost": 25,
+      "variant_c4_cost": 25
+    },
+    {
+      "profile": "P3",
+      "production": 11,
+      "difficulty": 1,
+      "charge": 12,
+      "overload": 1,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 28,
+      "variant_c2_cost": 27,
+      "variant_c3_cost": 28,
+      "variant_c4_cost": 29
+    },
+    {
+      "profile": "P3",
+      "production": 11,
+      "difficulty": 2,
+      "charge": 13,
+      "overload": 2,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 31,
+      "variant_c2_cost": 29,
+      "variant_c3_cost": 31,
+      "variant_c4_cost": 33
+    },
+    {
+      "profile": "P3",
+      "production": 11,
+      "difficulty": 3,
+      "charge": 14,
+      "overload": 3,
+      "native_cost_to_vma": 25,
+      "variant_a": "ILLEGAL",
+      "variant_b_cost": 34,
+      "variant_c2_cost": 31,
+      "variant_c3_cost": 34,
+      "variant_c4_cost": 37
+    }
+  ],
+  "aggregate_a": [
+    {
+      "profile": "P1",
+      "difficulty": 0,
+      "maximum_legal_production": 10,
+      "production_loss_vs_d0": 0
+    },
+    {
+      "profile": "P1",
+      "difficulty": 1,
+      "maximum_legal_production": 9,
+      "production_loss_vs_d0": 1
+    },
+    {
+      "profile": "P1",
+      "difficulty": 2,
+      "maximum_legal_production": 8,
+      "production_loss_vs_d0": 2
+    },
+    {
+      "profile": "P1",
+      "difficulty": 3,
+      "maximum_legal_production": 7,
+      "production_loss_vs_d0": 3
+    },
+    {
+      "profile": "P2",
+      "difficulty": 0,
+      "maximum_legal_production": 10,
+      "production_loss_vs_d0": 0
+    },
+    {
+      "profile": "P2",
+      "difficulty": 1,
+      "maximum_legal_production": 9,
+      "production_loss_vs_d0": 1
+    },
+    {
+      "profile": "P2",
+      "difficulty": 2,
+      "maximum_legal_production": 8,
+      "production_loss_vs_d0": 2
+    },
+    {
+      "profile": "P2",
+      "difficulty": 3,
+      "maximum_legal_production": 7,
+      "production_loss_vs_d0": 3
+    },
+    {
+      "profile": "P3",
+      "difficulty": 0,
+      "maximum_legal_production": 11,
+      "production_loss_vs_d0": 0
+    },
+    {
+      "profile": "P3",
+      "difficulty": 1,
+      "maximum_legal_production": 10,
+      "production_loss_vs_d0": 1
+    },
+    {
+      "profile": "P3",
+      "difficulty": 2,
+      "maximum_legal_production": 9,
+      "production_loss_vs_d0": 2
+    },
+    {
+      "profile": "P3",
+      "difficulty": 3,
+      "maximum_legal_production": 8,
+      "production_loss_vs_d0": 3
+    }
+  ],
+  "aggregate_overload": [
+    {
+      "profile": "P1",
+      "overload": 1,
+      "cost_at_vma": 25,
+      "surcharges": {
+        "B": {
+          "absolute": 3,
+          "relative_to_cost_at_vma": 0.12
+        },
+        "C2": {
+          "absolute": 2,
+          "relative_to_cost_at_vma": 0.08
+        },
+        "C3": {
+          "absolute": 3,
+          "relative_to_cost_at_vma": 0.12
+        },
+        "C4": {
+          "absolute": 4,
+          "relative_to_cost_at_vma": 0.16
+        }
+      }
+    },
+    {
+      "profile": "P1",
+      "overload": 2,
+      "cost_at_vma": 25,
+      "surcharges": {
+        "B": {
+          "absolute": 6,
+          "relative_to_cost_at_vma": 0.24
+        },
+        "C2": {
+          "absolute": 4,
+          "relative_to_cost_at_vma": 0.16
+        },
+        "C3": {
+          "absolute": 6,
+          "relative_to_cost_at_vma": 0.24
+        },
+        "C4": {
+          "absolute": 8,
+          "relative_to_cost_at_vma": 0.32
+        }
+      }
+    },
+    {
+      "profile": "P1",
+      "overload": 3,
+      "cost_at_vma": 25,
+      "surcharges": {
+        "B": {
+          "absolute": 9,
+          "relative_to_cost_at_vma": 0.36
+        },
+        "C2": {
+          "absolute": 6,
+          "relative_to_cost_at_vma": 0.24
+        },
+        "C3": {
+          "absolute": 9,
+          "relative_to_cost_at_vma": 0.36
+        },
+        "C4": {
+          "absolute": 12,
+          "relative_to_cost_at_vma": 0.48
+        }
+      }
+    },
+    {
+      "profile": "P2",
+      "overload": 1,
+      "cost_at_vma": 24,
+      "surcharges": {
+        "B": {
+          "absolute": 3,
+          "relative_to_cost_at_vma": 0.125
+        },
+        "C2": {
+          "absolute": 2,
+          "relative_to_cost_at_vma": 0.08333333333333333
+        },
+        "C3": {
+          "absolute": 3,
+          "relative_to_cost_at_vma": 0.125
+        },
+        "C4": {
+          "absolute": 4,
+          "relative_to_cost_at_vma": 0.16666666666666666
+        }
+      }
+    },
+    {
+      "profile": "P2",
+      "overload": 2,
+      "cost_at_vma": 24,
+      "surcharges": {
+        "B": {
+          "absolute": 6,
+          "relative_to_cost_at_vma": 0.25
+        },
+        "C2": {
+          "absolute": 4,
+          "relative_to_cost_at_vma": 0.16666666666666666
+        },
+        "C3": {
+          "absolute": 6,
+          "relative_to_cost_at_vma": 0.25
+        },
+        "C4": {
+          "absolute": 8,
+          "relative_to_cost_at_vma": 0.3333333333333333
+        }
+      }
+    },
+    {
+      "profile": "P2",
+      "overload": 3,
+      "cost_at_vma": 24,
+      "surcharges": {
+        "B": {
+          "absolute": 9,
+          "relative_to_cost_at_vma": 0.375
+        },
+        "C2": {
+          "absolute": 6,
+          "relative_to_cost_at_vma": 0.25
+        },
+        "C3": {
+          "absolute": 9,
+          "relative_to_cost_at_vma": 0.375
+        },
+        "C4": {
+          "absolute": 12,
+          "relative_to_cost_at_vma": 0.5
+        }
+      }
+    },
+    {
+      "profile": "P3",
+      "overload": 1,
+      "cost_at_vma": 25,
+      "surcharges": {
+        "B": {
+          "absolute": 3,
+          "relative_to_cost_at_vma": 0.12
+        },
+        "C2": {
+          "absolute": 2,
+          "relative_to_cost_at_vma": 0.08
+        },
+        "C3": {
+          "absolute": 3,
+          "relative_to_cost_at_vma": 0.12
+        },
+        "C4": {
+          "absolute": 4,
+          "relative_to_cost_at_vma": 0.16
+        }
+      }
+    },
+    {
+      "profile": "P3",
+      "overload": 2,
+      "cost_at_vma": 25,
+      "surcharges": {
+        "B": {
+          "absolute": 6,
+          "relative_to_cost_at_vma": 0.24
+        },
+        "C2": {
+          "absolute": 4,
+          "relative_to_cost_at_vma": 0.16
+        },
+        "C3": {
+          "absolute": 6,
+          "relative_to_cost_at_vma": 0.24
+        },
+        "C4": {
+          "absolute": 8,
+          "relative_to_cost_at_vma": 0.32
+        }
+      }
+    },
+    {
+      "profile": "P3",
+      "overload": 3,
+      "cost_at_vma": 25,
+      "surcharges": {
+        "B": {
+          "absolute": 9,
+          "relative_to_cost_at_vma": 0.36
+        },
+        "C2": {
+          "absolute": 6,
+          "relative_to_cost_at_vma": 0.24
+        },
+        "C3": {
+          "absolute": 9,
+          "relative_to_cost_at_vma": 0.36
+        },
+        "C4": {
+          "absolute": 12,
+          "relative_to_cost_at_vma": 0.48
+        }
+      }
+    }
+  ]
+}
