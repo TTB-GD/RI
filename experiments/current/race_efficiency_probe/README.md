@@ -1,5 +1,10 @@
 # Course V2 — sonde Position / Efficacité
 
+
+> **HISTORICAL SPEC HYPOTHESIS — NOT THE INTEGRATED V2 BASELINE.** SPEC is
+> OPEN and not implemented in the active Race V2 path; Position, Efficacité and
+> AS42/AS21/AS10/AS5 below are preserved experimental conventions only.
+
 **EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN.**
 
 Cette expérience analytique isolée compare deux courbes natives dans le domaine

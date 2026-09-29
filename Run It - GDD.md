@@ -1,10 +1,10 @@
 # Run It — GDD V2 consolidé
 
-**24 septembre 2026 · référence technique : `main`, commit `e0c3680bb90a6276f907340acedf3091d7eb71bf`.** Le présent GDD décrit les décisions de design CURRENT, les mécanismes EXPERIMENTAL et les questions OPEN. `CURRENT_STATE.md` décrit l'état du prototype ; `DOCUMENTATION_AUDIT.md` explique les remplacements du GDD antérieur. Le code n'établit pas à lui seul une règle de design.
+**29 septembre 2026 · jalon technique : `Integrated V2 baseline` (commit/PR de référence consigné à la clôture).** Le présent GDD décrit les décisions de design CURRENT, les mécanismes EXPERIMENTAL et les questions OPEN. `CURRENT_STATE.md` décrit l'état du prototype ; `DOCUMENTATION_AUDIT.md` explique les remplacements du GDD antérieur. Le code n'établit pas à lui seul une règle de design.
 
 ## 1. Concept
 
-Run It est un jeu tactique de préparation à la course. Les joueurs construisent leur pool de dés, composent des séances sous contraintes d'énergie et de risque, développent leur forme et gèrent leur fatigue. La course finale doit donner un sens aux décisions de préparation ; son système exact reste OPEN.
+Run It est un jeu tactique de préparation à la course. Les joueurs construisent leur pool de dés, composent des séances sous contraintes d'énergie et de risque, développent leur forme et gèrent leur fatigue. La course finale donne un sens aux décisions de préparation. Son noyau physiologique Race V2 est intégré ; son orchestration complète et son équilibrage restent partiellement OPEN ou EXPERIMENTAL selon les éléments ci-dessous.
 
 ## 2. Dés et tour — CURRENT
 
@@ -53,7 +53,7 @@ Un slot D99 est consommé dès qu'une qualité est planifiée, même si elle bus
 
 ### S0. Catalogue
 
-Le catalogue contient EF, Seuil, VMA, Force, Spec et SL. Le RPE est le coût en énergie de la séance. Seuil, VMA, Force, Spec et SL sont des qualités ; EF ne l'est pas. Les prérequis forment un graphe explicite, y compris ses embranchements : aucune progression n'est inférée du nom d'une séance.
+Le catalogue d'entraînement actuellement codé contient EF, Seuil, VMA, Force, des entrées historiques Spec et SL. Le RPE est le coût en énergie de la séance. **IMPLEMENTATION GAP :** ces entrées Spec du prototype ne définissent pas le mécanisme SPEC V2, qui reste OPEN et absent de Race V2. Seuil, VMA, Force, Spec et SL sont des qualités ; EF ne l'est pas. Les prérequis forment un graphe explicite, y compris ses embranchements : aucune progression n'est inférée du nom d'une séance.
 
 Une séance **débloquée** satisfait son seuil normal de prérequis. Une qualité verrouillée devient **tentable** si l'un de ses prédécesseurs directs est normalement débloqué et a été réussi au moins une fois. Ce droit de tentative ne modifie pas le seuil normal. Exemple : Spec6 disponible et réussie zéro fois ne permet pas Spec7 ; une réussite rend Spec7 tentable ; deux la débloquent normalement. Spec8 ne devient pas tentable par ce seul fait. L'anticipation ne concerne pas les EF.
 
@@ -104,9 +104,43 @@ SL est une préparation spécifique à la course ; elle n'est pas intrinsèqueme
 
 Les anciennes campagnes Fatigue V1, Overtraining Capacity, P0 et Standard Player antérieures aux corrections de D99, répétitions, bust, accès au risque et rôle de SL sont **HISTORICAL ONLY** pour leurs chiffres. Leurs observations gardent une valeur de traçabilité ; elles ne constituent pas une baseline d'équilibrage CURRENT.
 
-## 7. Course et personnages — OPEN / FUTURE
+## 7. Course V2 — noyau intégré, calibration expérimentale, questions OPEN
 
-La boucle minimale à définir est **entraînement → progression, fatigue et SL → course → résultat**. Les anciennes esquisses de mental, pacing, physique, plan d'entraînement, objectifs secrets, personnages, manipulations et nombre de phases ne spécifient pas un système CURRENT complet. Elles restent des pistes historiques consultables dans la version antérieure du GDD ; leurs seuils, formules et conséquences exigent un arbitrage. Aucun système de course n'est décidé dans cette consolidation.
+### 7.1 Profil physiologique — BASE V2 INTÉGRÉE
+
+Le passage futur du Training vers la course utilise un `PhysiologyProfile(EF, Seuil, VMA)` avec l'invariant strict `EF < Seuil < VMA` :
+
+- **EF** est l'origine de coût : `C(EF) = 0` ;
+- **Seuil** est le changement de régime de la courbe énergétique ;
+- **VMA** est la borne haute physiologique du domaine intégré.
+
+Aucune contrainte supplémentaire sur `VMA − EF` n'est posée et `C(VMA)` n'est pas normalisé dans une enveloppe fixe. Une Charge sous EF est explicitement hors domaine, sans clamp silencieux. La légalité et le coût d'une Charge supérieure à VMA sont **OPEN** : l'implémentation signale ce cas et ne transforme pas VMA en plafond de Production.
+
+La courbe native intégrée est :
+
+```text
+C(x) = 2 × (x − EF)                                si x ≤ Seuil
+C(x) = 2 × (Seuil − EF) + 3 × (x − Seuil)         si x > Seuil
+```
+
+Sa structure (origine EF, rupture Seuil, borne VMA) est intégrée. Les pentes `2 / 3` sont une **CALIBRATION EXPERIMENTAL**, pas un équilibrage CURRENT définitif.
+
+### 7.2 Résolution locale Race V2 — CURRENT / INTÉGRÉ
+
+Pour un segment dans le domaine physiologique :
+
+```text
+Charge = Production + Difficulty
+Cost = C(Charge)
+Score += Production
+Reserve -= Cost
+```
+
+Difficulty ne donne aucun score, ne retire jamais directement de Réserve et ne possède aucun état persistant propre. Le noyau intégré expose cette résolution pure. La construction de la Réserve, Form, les politiques de choix, les longueurs et objectifs de course, la conversion complète du Training et le rôle concret de SL restent **EXPERIMENTAL** ou **OPEN** ; les tables Curve A/B/C sont conservées uniquement pour reproduire les expériences historiques.
+
+### 7.3 SPEC et anciens concepts — OPEN / HISTORICAL
+
+**SPEC = OPEN — NOT IMPLEMENTED** dans le chemin V2 intégré. SPEC Position, SPEC Efficacité et AS42/AS21/AS10/AS5 ne sont pas des règles actives de coût. Les expériences qui les étudient demeurent des preuves expérimentales, pas la baseline. Les anciennes esquisses Mental / Pacing / Physique, objectifs secrets, personnages et manipulations sont **HISTORICAL** et ne spécifient pas Race V2.
 
 ## 8. Fatigue V1 — EXPERIMENTAL
 
