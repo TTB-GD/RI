@@ -1,0 +1,1979 @@
+{
+  "status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN",
+  "method": "deterministic exhaustive micro-enumeration; no RNG; no Monte Carlo",
+  "parameters": {
+    "ef": 0,
+    "threshold": 5,
+    "vma": 10,
+    "as_fixtures": {
+      "AS42": 2,
+      "AS21": 4,
+      "AS10": 6,
+      "AS5": 8
+    },
+    "budgets": [
+      2,
+      3,
+      4
+    ],
+    "native_increments": {
+      "ef_through_threshold": 2,
+      "after_threshold": 3
+    },
+    "footprints": {
+      "E0": {
+        "0": -1
+      },
+      "E1": {
+        "-1": -1,
+        "0": -2,
+        "1": -1
+      },
+      "E2": {
+        "-1": -1,
+        "0": -2,
+        "1": -2
+      }
+    }
+  },
+  "native_curve": [
+    {
+      "position": 0,
+      "native_cost": 0,
+      "zone": "EF→Seuil"
+    },
+    {
+      "position": 1,
+      "native_cost": 2,
+      "zone": "EF→Seuil"
+    },
+    {
+      "position": 2,
+      "native_cost": 4,
+      "zone": "EF→Seuil"
+    },
+    {
+      "position": 3,
+      "native_cost": 6,
+      "zone": "EF→Seuil"
+    },
+    {
+      "position": 4,
+      "native_cost": 8,
+      "zone": "EF→Seuil"
+    },
+    {
+      "position": 5,
+      "native_cost": 10,
+      "zone": "EF→Seuil"
+    },
+    {
+      "position": 6,
+      "native_cost": 13,
+      "zone": "Seuil→VMA"
+    },
+    {
+      "position": 7,
+      "native_cost": 16,
+      "zone": "Seuil→VMA"
+    },
+    {
+      "position": 8,
+      "native_cost": 19,
+      "zone": "Seuil→VMA"
+    },
+    {
+      "position": 9,
+      "native_cost": 22,
+      "zone": "Seuil→VMA"
+    },
+    {
+      "position": 10,
+      "native_cost": 25,
+      "zone": "Seuil→VMA"
+    }
+  ],
+  "footprint_tables": {
+    "E0": {
+      "AS42": [
+        {
+          "position": 2,
+          "native_cost": 4,
+          "cost_after_one_efficiency": 3,
+          "delta": -1
+        }
+      ],
+      "AS21": [
+        {
+          "position": 4,
+          "native_cost": 8,
+          "cost_after_one_efficiency": 7,
+          "delta": -1
+        }
+      ],
+      "AS10": [
+        {
+          "position": 6,
+          "native_cost": 13,
+          "cost_after_one_efficiency": 12,
+          "delta": -1
+        }
+      ],
+      "AS5": [
+        {
+          "position": 8,
+          "native_cost": 19,
+          "cost_after_one_efficiency": 18,
+          "delta": -1
+        }
+      ]
+    },
+    "E1": {
+      "AS42": [
+        {
+          "position": 1,
+          "native_cost": 2,
+          "cost_after_one_efficiency": 1,
+          "delta": -1
+        },
+        {
+          "position": 2,
+          "native_cost": 4,
+          "cost_after_one_efficiency": 2,
+          "delta": -2
+        },
+        {
+          "position": 3,
+          "native_cost": 6,
+          "cost_after_one_efficiency": 5,
+          "delta": -1
+        }
+      ],
+      "AS21": [
+        {
+          "position": 3,
+          "native_cost": 6,
+          "cost_after_one_efficiency": 5,
+          "delta": -1
+        },
+        {
+          "position": 4,
+          "native_cost": 8,
+          "cost_after_one_efficiency": 6,
+          "delta": -2
+        },
+        {
+          "position": 5,
+          "native_cost": 10,
+          "cost_after_one_efficiency": 9,
+          "delta": -1
+        }
+      ],
+      "AS10": [
+        {
+          "position": 5,
+          "native_cost": 10,
+          "cost_after_one_efficiency": 9,
+          "delta": -1
+        },
+        {
+          "position": 6,
+          "native_cost": 13,
+          "cost_after_one_efficiency": 11,
+          "delta": -2
+        },
+        {
+          "position": 7,
+          "native_cost": 16,
+          "cost_after_one_efficiency": 15,
+          "delta": -1
+        }
+      ],
+      "AS5": [
+        {
+          "position": 7,
+          "native_cost": 16,
+          "cost_after_one_efficiency": 15,
+          "delta": -1
+        },
+        {
+          "position": 8,
+          "native_cost": 19,
+          "cost_after_one_efficiency": 17,
+          "delta": -2
+        },
+        {
+          "position": 9,
+          "native_cost": 22,
+          "cost_after_one_efficiency": 21,
+          "delta": -1
+        }
+      ]
+    },
+    "E2": {
+      "AS42": [
+        {
+          "position": 1,
+          "native_cost": 2,
+          "cost_after_one_efficiency": 1,
+          "delta": -1
+        },
+        {
+          "position": 2,
+          "native_cost": 4,
+          "cost_after_one_efficiency": 2,
+          "delta": -2
+        },
+        {
+          "position": 3,
+          "native_cost": 6,
+          "cost_after_one_efficiency": 4,
+          "delta": -2
+        }
+      ],
+      "AS21": [
+        {
+          "position": 3,
+          "native_cost": 6,
+          "cost_after_one_efficiency": 5,
+          "delta": -1
+        },
+        {
+          "position": 4,
+          "native_cost": 8,
+          "cost_after_one_efficiency": 6,
+          "delta": -2
+        },
+        {
+          "position": 5,
+          "native_cost": 10,
+          "cost_after_one_efficiency": 8,
+          "delta": -2
+        }
+      ],
+      "AS10": [
+        {
+          "position": 5,
+          "native_cost": 10,
+          "cost_after_one_efficiency": 9,
+          "delta": -1
+        },
+        {
+          "position": 6,
+          "native_cost": 13,
+          "cost_after_one_efficiency": 11,
+          "delta": -2
+        },
+        {
+          "position": 7,
+          "native_cost": 16,
+          "cost_after_one_efficiency": 14,
+          "delta": -2
+        }
+      ],
+      "AS5": [
+        {
+          "position": 7,
+          "native_cost": 16,
+          "cost_after_one_efficiency": 15,
+          "delta": -1
+        },
+        {
+          "position": 8,
+          "native_cost": 19,
+          "cost_after_one_efficiency": 17,
+          "delta": -2
+        },
+        {
+          "position": 9,
+          "native_cost": 22,
+          "cost_after_one_efficiency": 20,
+          "delta": -2
+        }
+      ]
+    }
+  },
+  "spaces": {
+    "E0": {
+      "AS42": {
+        "2": [
+          {
+            "id": "AS42:AS2:P0:E2",
+            "final_as": 2,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              2,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS42:AS3:P1:E1",
+            "final_as": 3,
+            "position_levels": 1,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              5,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS42:AS4:P2:E0",
+            "final_as": 4,
+            "position_levels": 2,
+            "efficiency_levels": 0,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "3": [
+          {
+            "id": "AS42:AS3:P1:E2",
+            "final_as": 3,
+            "position_levels": 1,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              4,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS42:AS4:P2:E1",
+            "final_as": 4,
+            "position_levels": 2,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              7,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "4": [
+          {
+            "id": "AS42:AS4:P2:E2",
+            "final_as": 4,
+            "position_levels": 2,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              6,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": false,
+            "spec_saturated": true
+          }
+        ]
+      },
+      "AS21": {
+        "2": [
+          {
+            "id": "AS21:AS4:P0:E2",
+            "final_as": 4,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              6,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": false,
+            "spec_saturated": true
+          }
+        ],
+        "3": [],
+        "4": []
+      },
+      "AS10": {
+        "2": [
+          {
+            "id": "AS10:AS6:P0:E2",
+            "final_as": 6,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              11,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS7:P1:E1",
+            "final_as": 7,
+            "position_levels": 1,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              15,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS8:P2:E0",
+            "final_as": 8,
+            "position_levels": 2,
+            "efficiency_levels": 0,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "3": [
+          {
+            "id": "AS10:AS6:P0:E3",
+            "final_as": 6,
+            "position_levels": 0,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              10,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS7:P1:E2",
+            "final_as": 7,
+            "position_levels": 1,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              14,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS8:P2:E1",
+            "final_as": 8,
+            "position_levels": 2,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              18,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS9:P3:E0",
+            "final_as": 9,
+            "position_levels": 3,
+            "efficiency_levels": 0,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "4": [
+          {
+            "id": "AS10:AS7:P1:E3",
+            "final_as": 7,
+            "position_levels": 1,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              13,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS8:P2:E2",
+            "final_as": 8,
+            "position_levels": 2,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              17,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS9:P3:E1",
+            "final_as": 9,
+            "position_levels": 3,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              21,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ]
+      },
+      "AS5": {
+        "2": [
+          {
+            "id": "AS5:AS8:P0:E2",
+            "final_as": 8,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              17,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS5:AS9:P1:E1",
+            "final_as": 9,
+            "position_levels": 1,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              21,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "3": [
+          {
+            "id": "AS5:AS8:P0:E3",
+            "final_as": 8,
+            "position_levels": 0,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              16,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS5:AS9:P1:E2",
+            "final_as": 9,
+            "position_levels": 1,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              20,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "4": [
+          {
+            "id": "AS5:AS9:P1:E3",
+            "final_as": 9,
+            "position_levels": 1,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              19,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": false,
+            "spec_saturated": true
+          }
+        ]
+      }
+    },
+    "E1": {
+      "AS42": {
+        "2": [
+          {
+            "id": "AS42:AS2:P0:E2",
+            "final_as": 2,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              0,
+              0,
+              4,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS42:AS3:P1:E1",
+            "final_as": 3,
+            "position_levels": 1,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              3,
+              4,
+              7,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS42:AS4:P2:E0",
+            "final_as": 4,
+            "position_levels": 2,
+            "efficiency_levels": 0,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "3": [
+          {
+            "id": "AS42:AS3:P1:E2",
+            "final_as": 3,
+            "position_levels": 1,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              2,
+              2,
+              6,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS42:AS4:P2:E1",
+            "final_as": 4,
+            "position_levels": 2,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              5,
+              6,
+              9,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "4": [
+          {
+            "id": "AS42:AS4:P2:E2",
+            "final_as": 4,
+            "position_levels": 2,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              4,
+              4,
+              8,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": false,
+            "spec_saturated": true
+          }
+        ]
+      },
+      "AS21": {
+        "2": [
+          {
+            "id": "AS21:AS4:P0:E2",
+            "final_as": 4,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              4,
+              4,
+              8,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": false,
+            "spec_saturated": true
+          }
+        ],
+        "3": [],
+        "4": []
+      },
+      "AS10": {
+        "2": [
+          {
+            "id": "AS10:AS6:P0:E2",
+            "final_as": 6,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              8,
+              9,
+              14,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS7:P1:E1",
+            "final_as": 7,
+            "position_levels": 1,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              12,
+              14,
+              18,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS8:P2:E0",
+            "final_as": 8,
+            "position_levels": 2,
+            "efficiency_levels": 0,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "3": [
+          {
+            "id": "AS10:AS7:P1:E2",
+            "final_as": 7,
+            "position_levels": 1,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              11,
+              12,
+              17,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS8:P2:E1",
+            "final_as": 8,
+            "position_levels": 2,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              15,
+              17,
+              21,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS9:P3:E0",
+            "final_as": 9,
+            "position_levels": 3,
+            "efficiency_levels": 0,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "4": [
+          {
+            "id": "AS10:AS7:P1:E3",
+            "final_as": 7,
+            "position_levels": 1,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              10,
+              10,
+              16,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS8:P2:E2",
+            "final_as": 8,
+            "position_levels": 2,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              14,
+              15,
+              20,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS9:P3:E1",
+            "final_as": 9,
+            "position_levels": 3,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              18,
+              20,
+              24
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ]
+      },
+      "AS5": {
+        "2": [
+          {
+            "id": "AS5:AS8:P0:E2",
+            "final_as": 8,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              14,
+              15,
+              20,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS5:AS9:P1:E1",
+            "final_as": 9,
+            "position_levels": 1,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              18,
+              20,
+              24
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "3": [
+          {
+            "id": "AS5:AS8:P0:E3",
+            "final_as": 8,
+            "position_levels": 0,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              13,
+              13,
+              19,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS5:AS9:P1:E2",
+            "final_as": 9,
+            "position_levels": 1,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              17,
+              18,
+              23
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "4": [
+          {
+            "id": "AS5:AS9:P1:E3",
+            "final_as": 9,
+            "position_levels": 1,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              16,
+              16,
+              22
+            ],
+            "position_legal": false,
+            "efficiency_legal": false,
+            "spec_saturated": true
+          }
+        ]
+      }
+    },
+    "E2": {
+      "AS42": {
+        "2": [
+          {
+            "id": "AS42:AS2:P0:E2",
+            "final_as": 2,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              0,
+              0,
+              2,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS42:AS3:P1:E1",
+            "final_as": 3,
+            "position_levels": 1,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              3,
+              4,
+              6,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS42:AS4:P2:E0",
+            "final_as": 4,
+            "position_levels": 2,
+            "efficiency_levels": 0,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "3": [
+          {
+            "id": "AS42:AS3:P1:E2",
+            "final_as": 3,
+            "position_levels": 1,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              2,
+              2,
+              4,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS42:AS4:P2:E1",
+            "final_as": 4,
+            "position_levels": 2,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              5,
+              6,
+              8,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "4": [
+          {
+            "id": "AS42:AS4:P2:E2",
+            "final_as": 4,
+            "position_levels": 2,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              4,
+              4,
+              6,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": false,
+            "spec_saturated": true
+          }
+        ]
+      },
+      "AS21": {
+        "2": [
+          {
+            "id": "AS21:AS4:P0:E2",
+            "final_as": 4,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              4,
+              4,
+              6,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": false,
+            "spec_saturated": true
+          }
+        ],
+        "3": [],
+        "4": []
+      },
+      "AS10": {
+        "2": [
+          {
+            "id": "AS10:AS6:P0:E2",
+            "final_as": 6,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              8,
+              9,
+              12,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS7:P1:E1",
+            "final_as": 7,
+            "position_levels": 1,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              12,
+              14,
+              17,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS8:P2:E0",
+            "final_as": 8,
+            "position_levels": 2,
+            "efficiency_levels": 0,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "3": [
+          {
+            "id": "AS10:AS7:P1:E2",
+            "final_as": 7,
+            "position_levels": 1,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              11,
+              12,
+              15,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS8:P2:E1",
+            "final_as": 8,
+            "position_levels": 2,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              15,
+              17,
+              20,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS9:P3:E0",
+            "final_as": 9,
+            "position_levels": 3,
+            "efficiency_levels": 0,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              19,
+              22,
+              25
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "4": [
+          {
+            "id": "AS10:AS7:P1:E3",
+            "final_as": 7,
+            "position_levels": 1,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              10,
+              10,
+              13,
+              22,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS8:P2:E2",
+            "final_as": 8,
+            "position_levels": 2,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              14,
+              15,
+              18,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS10:AS9:P3:E1",
+            "final_as": 9,
+            "position_levels": 3,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              18,
+              20,
+              23
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ]
+      },
+      "AS5": {
+        "2": [
+          {
+            "id": "AS5:AS8:P0:E2",
+            "final_as": 8,
+            "position_levels": 0,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              14,
+              15,
+              18,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS5:AS9:P1:E1",
+            "final_as": 9,
+            "position_levels": 1,
+            "efficiency_levels": 1,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              18,
+              20,
+              23
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "3": [
+          {
+            "id": "AS5:AS8:P0:E3",
+            "final_as": 8,
+            "position_levels": 0,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              13,
+              13,
+              16,
+              25
+            ],
+            "position_legal": true,
+            "efficiency_legal": false,
+            "spec_saturated": false
+          },
+          {
+            "id": "AS5:AS9:P1:E2",
+            "final_as": 9,
+            "position_levels": 1,
+            "efficiency_levels": 2,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              17,
+              18,
+              21
+            ],
+            "position_legal": false,
+            "efficiency_legal": true,
+            "spec_saturated": false
+          }
+        ],
+        "4": [
+          {
+            "id": "AS5:AS9:P1:E3",
+            "final_as": 9,
+            "position_levels": 1,
+            "efficiency_levels": 3,
+            "curve": [
+              0,
+              2,
+              4,
+              6,
+              8,
+              10,
+              13,
+              16,
+              16,
+              16,
+              19
+            ],
+            "position_legal": false,
+            "efficiency_legal": false,
+            "spec_saturated": true
+          }
+        ]
+      }
+    }
+  },
+  "saturated_state_ids": {
+    "E0/AS42": [
+      "AS42:AS4:P2:E2"
+    ],
+    "E0/AS21": [
+      "AS21:AS4:P0:E2"
+    ],
+    "E0/AS10": [],
+    "E0/AS5": [
+      "AS5:AS9:P1:E3"
+    ],
+    "E1/AS42": [
+      "AS42:AS4:P2:E2"
+    ],
+    "E1/AS21": [
+      "AS21:AS4:P0:E2"
+    ],
+    "E1/AS10": [],
+    "E1/AS5": [
+      "AS5:AS9:P1:E3"
+    ],
+    "E2/AS42": [
+      "AS42:AS4:P2:E2"
+    ],
+    "E2/AS21": [
+      "AS21:AS4:P0:E2"
+    ],
+    "E2/AS10": [],
+    "E2/AS5": [
+      "AS5:AS9:P1:E3"
+    ]
+  },
+  "reopenings": [
+    {
+      "footprint": "E0",
+      "state": "AS42:AS4:P2:E2",
+      "boundary": "threshold",
+      "before": 5,
+      "after": 6,
+      "position_reopened": true,
+      "efficiency_reopened": false
+    },
+    {
+      "footprint": "E0",
+      "state": "AS21:AS4:P0:E2",
+      "boundary": "threshold",
+      "before": 5,
+      "after": 6,
+      "position_reopened": true,
+      "efficiency_reopened": false
+    },
+    {
+      "footprint": "E0",
+      "state": "AS5:AS9:P1:E3",
+      "boundary": "vma",
+      "before": 10,
+      "after": 11,
+      "position_reopened": true,
+      "efficiency_reopened": false
+    },
+    {
+      "footprint": "E1",
+      "state": "AS42:AS4:P2:E2",
+      "boundary": "threshold",
+      "before": 5,
+      "after": 6,
+      "position_reopened": true,
+      "efficiency_reopened": false
+    },
+    {
+      "footprint": "E1",
+      "state": "AS21:AS4:P0:E2",
+      "boundary": "threshold",
+      "before": 5,
+      "after": 6,
+      "position_reopened": true,
+      "efficiency_reopened": false
+    },
+    {
+      "footprint": "E1",
+      "state": "AS5:AS9:P1:E3",
+      "boundary": "vma",
+      "before": 10,
+      "after": 11,
+      "position_reopened": true,
+      "efficiency_reopened": false
+    },
+    {
+      "footprint": "E2",
+      "state": "AS42:AS4:P2:E2",
+      "boundary": "threshold",
+      "before": 5,
+      "after": 6,
+      "position_reopened": true,
+      "efficiency_reopened": false
+    },
+    {
+      "footprint": "E2",
+      "state": "AS21:AS4:P0:E2",
+      "boundary": "threshold",
+      "before": 5,
+      "after": 6,
+      "position_reopened": true,
+      "efficiency_reopened": false
+    },
+    {
+      "footprint": "E2",
+      "state": "AS5:AS9:P1:E3",
+      "boundary": "vma",
+      "before": 10,
+      "after": 11,
+      "position_reopened": true,
+      "efficiency_reopened": false
+    }
+  ],
+  "unbounded_vma_checks": [
+    {
+      "vma": 10,
+      "native_curve": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        13,
+        16,
+        19,
+        22,
+        25
+      ],
+      "native_monotone": true,
+      "local_states_checked": 81,
+      "invalid_local_states": 4
+    },
+    {
+      "vma": 11,
+      "native_curve": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        13,
+        16,
+        19,
+        22,
+        25,
+        28
+      ],
+      "native_monotone": true,
+      "local_states_checked": 90,
+      "invalid_local_states": 4
+    },
+    {
+      "vma": 12,
+      "native_curve": [
+        0,
+        2,
+        4,
+        6,
+        8,
+        10,
+        13,
+        16,
+        19,
+        22,
+        25,
+        28,
+        31
+      ],
+      "native_monotone": true,
+      "local_states_checked": 99,
+      "invalid_local_states": 4
+    }
+  ]
+}
