@@ -1,5 +1,11 @@
 # Training V2 — rôle du Spécifique
 
+
+> **EXPERIMENTAL SPEC PROBE — SPEC IS OPEN / NOT IMPLEMENTED.** This is not
+> the integrated V2 baseline. SPEC is
+> OPEN and not implemented in the active Race V2 path; Position, Efficacité and
+> AS42/AS21/AS10/AS5 below are preserved experimental conventions only.
+
 **EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN.**
 
 Expérience isolée D1–D4 sur une chaîne où EF/Seuil/VMA ouvrent seulement les

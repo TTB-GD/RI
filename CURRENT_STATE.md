@@ -1,142 +1,80 @@
 # Run It — Current State
 
-Last consolidated: 2026-09-24  
-Canonical branch: `main`  
-Implementation baseline: `231d49e729431c48ce24ebcdd55871b9f9f76302`
+Last consolidated: 2026-09-29
+Canonical branch: `main`
+Integration milestone: `Integrated V2 baseline` (reference commit/PR recorded at task closure)
 
-This file is the fast-entry snapshot for the current prototype state. It does not replace the GDD. When this file, the GDD and the code disagree, follow the authority hierarchy in `AGENTS.md` and report the divergence explicitly.
+This file is the fast-entry snapshot for the current prototype state. It does
+not replace the GDD; the authority hierarchy in `AGENTS.md` applies.
 
-## CURRENT IMPLEMENTATION
+## CURRENT / INTEGRATED
 
-- `Player` keeps a persistent `PlayerDicePool` across turns.
-- Initial pool: 4d6.
-- +1 d6 at cumulative CTL 50 and 100, available from the following turn.
-- Die upgrades use the current d6 → d8 → d10 → d12 progression, with a global maximum of 4 upgrades.
-- D99 defines the maximum number of quality sessions that may be planned for the turn.
-- SL counts against the D99 quality cap.
-- EF sessions are repeatable within the turn.
-- Each quality catalogue entry may appear at most once per turn.
-- SL remains limited to at most one session per turn.
-- Quality sessions must not outnumber EF sessions in the same turn.
-- Maximum 7 counted sessions per turn.
-- RPE Max is the turn's safe-quality boundary, not a hard access ceiling for
-  quality sessions. Catalogue-unlocked qualities are tentable; after one
-  successful completion of a quality level, its immediately following explicit
-  catalogue step also becomes tentable. Later steps cannot be skipped, and the
-  normal prerequisite threshold still governs normal unlocks.
-- A risky quality (`session RPE > RPE Max`) is excluded when its overshoot
-  `k = session RPE - RPE Max` is greater than or equal to the largest die in
-  the complete persistent pool, avoiding a choice with certain bust.
-- The production turn flow now tests tentable risky qualities in planned order
-  with the largest persistent die and its raw face. It busts on `raw face <= k`,
-  stops at the first bust, and passes that exact plan index to the resolver.
-- Post-bust session resolution is implemented:
-  - the session that busts counts toward the 7-session limit;
-  - its energy is lost;
-  - it produces no CTL/progression;
-  - later risky quality sessions are cancelled and each frees one replacement
-    place plus its planned energy;
-  - the rule engine exposes that budget and the accessible safe EF, then validates
-    an optional player choice (including a partial or empty choice) made once the
-    initially valid sessions have resolved;
-  - chosen replacement EF contribute their normal CTL and effective expenditure.
-- A risky quality session is identified relative to the turn's RPE Max:
-  `session RPE > rpe_max`; safe sessions consume no risk roll.
-- CTL, progression and turn fatigue use effective realised load after post-bust resolution.
-- Targeted production tests cover D99, repetition, SL, the 7-session cap and post-bust resolution.
-- A deterministic current harness exists at `experiments/d99_bust_resolution/run.py`.
+The existing Training prototype still provides the persistent pool, CTL and die
+progression, D99 planning constraints, risk/bust resolution and optional
+player-chosen post-bust EF replacement described by the GDD and production tests.
 
-## CURRENT LIMITATIONS / OPEN IMPLEMENTATION
+Race V2 now has a deliberately small production boundary:
 
-- EXP R1-A exists at `experiments/current/race_engine_v2/` with status
-  **EXPERIMENTAL ONLY**. It tests a new flat-terrain subset → Production →
-  convex-cost → progressive-reserve kernel in isolation. No `race_core` path is
-  present in this repository baseline, and none was removed or modified; no
-  production race rule, training behavior, Fatigue V1 rule, or CURRENT Game
-  Design rule is changed by this experiment.
-- EXP R1-A2 extends that isolated harness with a controlled Form comparison.
-  FORM_SUM remains the experimental R1-A baseline; FORM_PATTERN is a normalized
-  structural counterfactual. Neither mode changes CURRENT Game Design or any
-  production behavior.
-- EXP R1-B uses FORM_PATTERN as the Race Engine V2 experimental baseline and
-  retains FORM_SUM as its control. It tests local Difficulty through
-  `Charge = Production + Difficulty` and Curve B as a technical baseline only;
-  no production race rule or CURRENT Game Design rule is modified.
-- EXP R1-B2 calibrates only local Difficulty magnitude/frequency. Difficulty
-  remains experimental; FORM_PATTERN remains its baseline and Curve B remains a
-  technical baseline rather than a final decision. No production rule changes.
+- `PhysiologyProfile(ef, threshold, vma)` validates `EF < Seuil < VMA`;
+- `physiological_cost` is pure, has `C(EF) = 0`, is continuous at Seuil and
+  explicitly rejects loads outside the integrated `EF..VMA` domain;
+- a race segment resolves `Charge = Production + Difficulty`, applies the
+  physiological cost, scores only Production and gives Difficulty no persistent
+  state;
+- SPEC, Position, Efficacité and AS42/AS21/AS10/AS5 have no active dependency in
+  this integrated path.
 
-- Automatic simulations use a separate, explicitly technical greedy EF fallback;
-  it is not a normative player rule.
-- Fatigue V1 remains experimental and is not yet the definitive production fatigue model.
-- The current session selector remains a technical weighted/greedy baseline, not a final human-player model.
-- The Standard Training Player remains experimental.
-- The race system is not implemented.
-- The future race role of SL is designed conceptually but not yet implemented as race access/success logic.
-- The selector's current hard priority for SL does not yet match that future race
-  role and is deliberately deferred to the race workstream.
+This is the current integration frontier: future Training can produce a profile,
+and Race V2 can consume it directly. The full experimental Training V2 harness
+has not been promoted.
 
-## CURRENT DESIGN DECISIONS THAT AFFECT IMPLEMENTATION
+## EXPERIMENTAL
 
-- D99 is a hard cap on quality opportunities for the turn, including SL.
-- A quality slot consumed by a busted or cancelled quality session is not refunded.
-- EF is repeatable.
-- Quality catalogue entries are unique per turn.
-- SL is unique per turn and also limited to 1 maximum.
-- After the first bust:
-  - the busted session loses its energy;
-  - later risky quality sessions are no longer tested as quality;
-  - their quality slots remain lost;
-  - each cancelled risky quality frees one place and its planned energy for an
-    optional player-chosen accessible safe EF replacement within the 7-session cap;
-  - the busted quality frees neither energy nor a place.
-- SL is intended as a race-specific preparation dimension rather than an intrinsically superior generic training choice.
+- The physiological slopes `2 / 3` are calibration parameters, not final balance.
+- Race reserve construction, Form, policies, lengths, objectives and DNF flow
+  remain experimental harness material under `experiments/current/race_engine_v2/`.
+- Curve A/B/C remain unchanged there solely for reproducibility; they are not the
+  native integrated physiological curve.
+- Fatigue V1, Standard Training Player and automatic selection policies remain
+  experimental and are not normative player behavior.
+- Training V2 conventions such as D99_BONUS_ONLY, mandatory Q partition, one
+  physiological gain per turn, milestones, quality costs and P_EF/P_BALANCED/
+  P_QUALITY have not been promoted.
 
-## HISTORICAL / NOT CURRENT BEHAVIOR
+## OPEN / IMPLEMENTATION GAPS
 
-The following experimental families are historical evidence only and must not be used as the current prototype reference unless explicitly re-run against the current rules:
+- **SPEC is OPEN — NOT IMPLEMENTED** in Race V2. Training's existing `Spec*`
+  catalogue entries are an explicit implementation/design gap, not a V2 rule.
+- Legality and cost for `Charge > VMA` need a design decision. The integrated
+  function reports the case as outside its domain; VMA is not silently made a
+  Production cap because Difficulty also contributes to Charge.
+- The complete Training → EF/Seuil/VMA progression mapping is not implemented.
+- Reserve, Form, race objectives, the race role of SL and full multi-segment
+  orchestration are not integrated design rules.
+- The selector's technical SL priority remains an implementation/policy gap.
+  The post-bust rule boundary already exposes and validates the player's EF
+  choice; only a future user-facing interface is outside the current engine.
 
-- Fatigue V1 large campaigns;
-- Overtraining Capacity experiments;
-- P0 selector audit;
-- Standard Player / bundle-risk experiments run before the consolidated D99, repetition, SL and post-bust corrections.
+## HISTORICAL / TRACEABILITY
 
-Their principal conclusions remain useful for design traceability, but their numeric outputs are not current baseline metrics.
+SPEC experiments (`training_v2_specific`, `race_efficiency_probe`,
+`training_race_bridge`, `spec_local_curve_probe`) are retained without changing
+their results and are marked as experimental probes of an OPEN question rather
+than baseline or abandoned work.
+Curve A/B/C and prior large Race/Fatigue/Training campaigns remain reproducible
+experimental evidence; their figures are not CURRENT balance.
 
-## CURRENT REPOSITORY CONVENTION
+## REPOSITORY CONVENTION
 
-- `tests/` = tests of current prototype behavior.
-- `experiments/current/` = optional location for experiments that still describe the current rules.
-- `experiments/archive/` = historical experiments retained only for traceability.
-- Historical experiment tests belong with their experiment, not in production `tests/`.
-- Historical experiments should be marked: `HISTORICAL — NOT CURRENT BEHAVIOR`.
+- `tests/` contains tests of current prototype behavior.
+- `experiments/current/` contains isolated work that still informs current open
+  questions; explicit status labels prevent promotion into rules.
+- `experiments/archive/` contains historical experiments when archived.
 
-The existing `experiments/d99_bust_resolution/` harness is current and predates this directory convention; it may remain where it is until a future cleanup requires moving it.
+## NEXT TARGETS
 
-## NEXT DEVELOPMENT TARGETS
-
-Priority technical questions currently open:
-
-1. observe the production risk/bust trigger and selector policy; the current
-   deterministic analysis remains at `experiments/current/bust_trigger/`;
-2. continue Fatigue V1 design work without silently replacing the current model;
-3. re-evaluate the Standard Training Player only against the corrected D99/repetition/SL/bust rules;
-4. implement race objectives and the concrete role of SL when their design thresholds are validated.
-
-## TASK CLOSURE SNAPSHOT
-
-For any significant production change, the final report should include:
-
-```text
-CURRENT:
-- what changed in current behavior
-
-OPEN:
-- unresolved limitations or design questions
-
-GITHUB:
-- main up to date: yes/no
-- reference commit / PR: ...
-```
-
-If the task created a local commit that is not on GitHub, the Git status rules in `AGENTS.md` take precedence.
+1. Decide the domain behavior for Charge above VMA.
+2. Define the minimal Training-to-profile mapping without promoting harness policy.
+3. Decide Reserve/Form/SL boundaries before integrating full race orchestration.
+4. Resolve the SL selector gap; treat any future post-bust UI separately from
+   the already implemented choice-validation boundary.
