@@ -5,7 +5,25 @@ Canonical branch: `main`
 
 This snapshot does not replace the GDD; the authority hierarchy in `AGENTS.md` applies.
 
-## CURRENT / INTEGRATED
+## TRAINING CURRENT
+
+- The persistent pool starts at `4d6`; cumulative CTL adds one d6 at 50 and
+  another at 100, with gains becoming available on the following turn.
+- Four successful Quality sessions upgrade one die along
+  `d6 → d8 → d10 → d12`; these dice have no permanent face bonus
+  (`0 / 0 / 0`).
+- D99 caps Quality sessions (including SL), EF can repeat, each Quality entry is
+  unique, Qualities cannot outnumber EF sessions, and a turn counts at most
+  seven sessions.
+- RPE Max marks the safe zone. Eligible Qualities above it may be chosen
+  voluntarily and tested for risk; EF above RPE Max remains unavailable.
+- Bust resolution preserves safe sessions, cancels later risky Qualities, and
+  exposes an explicit player choice to redistribute eligible energy into
+  accessible EF sessions, including an empty or partial choice.
+- CTL, prerequisites and die progression use only sessions actually completed
+  successfully after bust resolution and any EF redistribution.
+
+## RACE V2 CURRENT / INTEGRATED
 
 - `PhysiologyProfile(ef, threshold, vma)` validates `EF < Seuil < VMA`.
 - `physiological_cost` gives the floor `C(x) = EF` for every `x <= EF`, then
