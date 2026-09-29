@@ -1,0 +1,4239 @@
+{
+  "status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN",
+  "protocol": {
+    "source_baseline": "f9f94bd75fd46fd8ee5cecf5a70fa8564150eb7b",
+    "seed_count": 50,
+    "seed_range": [
+      0,
+      49
+    ]
+  },
+  "D1": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49
+    ],
+    "turns": 16,
+    "total_turns": 14400,
+    "build": "BALANCED",
+    "cells": {
+      "AS42__S1__G_GENERAL": {
+        "metrics": {
+          "EF": {
+            "mean": 11.3,
+            "median": 11.0,
+            "min": 10,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 14.4,
+            "median": 14.0,
+            "min": 13,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 18.84,
+            "median": 19.0,
+            "min": 17,
+            "max": 22,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 9.58,
+            "median": 10.0,
+            "min": 9,
+            "max": 10,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 1.84,
+            "median": 2.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 23.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 29,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 4.42,
+            "median": 5.0,
+            "min": 3,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 129.64,
+            "median": 128.5,
+            "min": 106,
+            "max": 155,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 103.76,
+            "median": 102.0,
+            "min": 85,
+            "max": 132,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 23.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 29,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.185,
+            "median": 0.19047619047619047,
+            "min": 0.12213740458015267,
+            "max": 0.23684210526315788,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.175,
+            "median": 0.17786561264822134,
+            "min": 0.05,
+            "max": 0.375,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.222,
+            "median": 0.21875,
+            "min": 0.07407407407407407,
+            "max": 0.4074074074074074,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.19,
+            "median": 0.1888794567062818,
+            "min": 0.02564102564102564,
+            "max": 0.3870967741935484,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.164,
+            "median": 0.16019061583577712,
+            "min": 0.0,
+            "max": 0.3333333333333333,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 8.714,
+            "median": 10,
+            "min": 2,
+            "max": 13,
+            "reached_pct": 14.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 4.739,
+            "median": 5,
+            "min": 1,
+            "max": 14,
+            "reached_pct": 46.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 6.22,
+            "median": 5,
+            "min": 2,
+            "max": 15,
+            "reached_pct": 82.0
+          }
+        }
+      },
+      "AS42__S1__G_SWITCH": {
+        "metrics": {
+          "EF": {
+            "mean": 11.4,
+            "median": 11.0,
+            "min": 11,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 15.28,
+            "median": 15.0,
+            "min": 14,
+            "max": 17,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.82,
+            "median": 17.0,
+            "min": 16,
+            "max": 18,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 10,
+            "median": 10.0,
+            "min": 10,
+            "max": 10,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2,
+            "median": 2.0,
+            "min": 2,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 25,
+            "median": 25.0,
+            "min": 25,
+            "max": 25,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 5,
+            "median": 5.0,
+            "min": 5,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 126.58,
+            "median": 126.5,
+            "min": 109,
+            "max": 156,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 63.2,
+            "median": 62.5,
+            "min": 48,
+            "max": 88,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 25,
+            "median": 25.0,
+            "min": 25,
+            "max": 25,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.199,
+            "median": 0.1976315460567429,
+            "min": 0.16025641025641027,
+            "max": 0.22935779816513763,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.405,
+            "median": 0.42105263157894735,
+            "min": 0.2,
+            "max": 0.625,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.361,
+            "median": 0.3637566137566137,
+            "min": 0.20689655172413793,
+            "max": 0.5217391304347826,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.178,
+            "median": 0.16145833333333331,
+            "min": 0.0,
+            "max": 0.3448275862068966,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.003,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.14705882352941177,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1.08,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1.5,
+            "median": 1.0,
+            "min": 1,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 2.1,
+            "median": 2.0,
+            "min": 1,
+            "max": 4,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS42__S1__G_SPEC": {
+        "metrics": {
+          "EF": {
+            "mean": 10.5,
+            "median": 10.0,
+            "min": 9,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 13.58,
+            "median": 14.0,
+            "min": 11,
+            "max": 15,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 17.8,
+            "median": 18.0,
+            "min": 15,
+            "max": 21,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 8.84,
+            "median": 9.0,
+            "min": 8,
+            "max": 10,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 3.16,
+            "median": 3.0,
+            "min": 2,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 25,
+            "median": 25.0,
+            "min": 25,
+            "max": 25,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 5,
+            "median": 5.0,
+            "min": 5,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 126.16,
+            "median": 124.5,
+            "min": 105,
+            "max": 151,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 79.6,
+            "median": 80.0,
+            "min": 56,
+            "max": 108,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 25,
+            "median": 25.0,
+            "min": 25,
+            "max": 25,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.199,
+            "median": 0.20080645161290323,
+            "min": 0.16556291390728478,
+            "max": 0.23809523809523808,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.779,
+            "median": 0.7777777777777778,
+            "min": 0.5555555555555556,
+            "max": 0.9523809523809523,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.308,
+            "median": 0.3125,
+            "min": 0.13157894736842105,
+            "max": 0.6521739130434783,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 1.02,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS42__S2__G_GENERAL": {
+        "metrics": {
+          "EF": {
+            "mean": 11.3,
+            "median": 11.0,
+            "min": 10,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 14.4,
+            "median": 14.0,
+            "min": 13,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 18.84,
+            "median": 19.0,
+            "min": 17,
+            "max": 22,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 8.84,
+            "median": 9.0,
+            "min": 8,
+            "max": 9,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 1.12,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 25.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 41,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 2.96,
+            "median": 3.0,
+            "min": 2,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 129.64,
+            "median": 128.5,
+            "min": 106,
+            "max": 155,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 103.76,
+            "median": 102.0,
+            "min": 85,
+            "max": 132,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 25.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 41,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.2,
+            "median": 0.1999876968503937,
+            "min": 0.12213740458015267,
+            "max": 0.2847222222222222,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.175,
+            "median": 0.17786561264822134,
+            "min": 0.05,
+            "max": 0.375,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.222,
+            "median": 0.21875,
+            "min": 0.07407407407407407,
+            "max": 0.4074074074074074,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.191,
+            "median": 0.1967741935483871,
+            "min": 0.02564102564102564,
+            "max": 0.3870967741935484,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.208,
+            "median": 0.21008403361344535,
+            "min": 0.06382978723404255,
+            "max": 0.47619047619047616,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 8.714,
+            "median": 10,
+            "min": 2,
+            "max": 13,
+            "reached_pct": 14.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 5.208,
+            "median": 5.0,
+            "min": 1,
+            "max": 16,
+            "reached_pct": 48.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 6.22,
+            "median": 5,
+            "min": 2,
+            "max": 15,
+            "reached_pct": 82.0
+          }
+        }
+      },
+      "AS42__S2__G_SWITCH": {
+        "metrics": {
+          "EF": {
+            "mean": 11.4,
+            "median": 11.0,
+            "min": 11,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 15.04,
+            "median": 15.0,
+            "min": 14,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.64,
+            "median": 17.0,
+            "min": 15,
+            "max": 18,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 9.72,
+            "median": 10.0,
+            "min": 9,
+            "max": 10,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2,
+            "median": 2.0,
+            "min": 2,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 43.34,
+            "median": 45.0,
+            "min": 35,
+            "max": 45,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 4.72,
+            "median": 5.0,
+            "min": 4,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 127.54,
+            "median": 127.5,
+            "min": 107,
+            "max": 155,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 61.72,
+            "median": 62.0,
+            "min": 44,
+            "max": 81,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 43.34,
+            "median": 45.0,
+            "min": 35,
+            "max": 45,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.341,
+            "median": 0.3448326482677628,
+            "min": 0.26277372262773724,
+            "max": 0.4017857142857143,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.384,
+            "median": 0.4,
+            "min": 0.2,
+            "max": 0.6875,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.382,
+            "median": 0.39289289289289286,
+            "min": 0.1724137931034483,
+            "max": 0.5652173913043478,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.336,
+            "median": 0.3530950305143854,
+            "min": 0.11428571428571428,
+            "max": 0.5,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.303,
+            "median": 0.29545454545454547,
+            "min": 0.09523809523809523,
+            "max": 0.5116279069767442,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1.08,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1.5,
+            "median": 1.0,
+            "min": 1,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 2.12,
+            "median": 2.0,
+            "min": 1,
+            "max": 5,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS42__S2__G_SPEC": {
+        "metrics": {
+          "EF": {
+            "mean": 9.68,
+            "median": 10.0,
+            "min": 8,
+            "max": 11,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 12.78,
+            "median": 13.0,
+            "min": 11,
+            "max": 15,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.74,
+            "median": 17.0,
+            "min": 15,
+            "max": 19,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 9.4,
+            "median": 9.0,
+            "min": 8,
+            "max": 10,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2.6,
+            "median": 3.0,
+            "min": 2,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 45,
+            "median": 45.0,
+            "min": 45,
+            "max": 45,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 5,
+            "median": 5.0,
+            "min": 5,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 124.24,
+            "median": 123.5,
+            "min": 105,
+            "max": 149,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 62.72,
+            "median": 62.5,
+            "min": 39,
+            "max": 81,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 45,
+            "median": 45.0,
+            "min": 45,
+            "max": 45,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.364,
+            "median": 0.3643784421715185,
+            "min": 0.30201342281879195,
+            "max": 0.42857142857142855,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.76,
+            "median": 0.7722567287784678,
+            "min": 0.5454545454545454,
+            "max": 0.9444444444444444,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.777,
+            "median": 0.767948717948718,
+            "min": 0.6060606060606061,
+            "max": 1.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.216,
+            "median": 0.16666666666666666,
+            "min": 0.0,
+            "max": 0.5,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 1.02,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS42__S3__G_GENERAL": {
+        "metrics": {
+          "EF": {
+            "mean": 11.3,
+            "median": 11.0,
+            "min": 10,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 14.4,
+            "median": 14.0,
+            "min": 13,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 18.84,
+            "median": 19.0,
+            "min": 17,
+            "max": 22,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 8.24,
+            "median": 8.0,
+            "min": 8,
+            "max": 9,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 25.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 41,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 2.24,
+            "median": 2.0,
+            "min": 2,
+            "max": 3,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 129.64,
+            "median": 128.5,
+            "min": 106,
+            "max": 155,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 103.76,
+            "median": 102.0,
+            "min": 85,
+            "max": 132,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 25.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 41,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.2,
+            "median": 0.1999876968503937,
+            "min": 0.12213740458015267,
+            "max": 0.2847222222222222,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.175,
+            "median": 0.17786561264822134,
+            "min": 0.05,
+            "max": 0.375,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.222,
+            "median": 0.21875,
+            "min": 0.07407407407407407,
+            "max": 0.4074074074074074,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.191,
+            "median": 0.1967741935483871,
+            "min": 0.02564102564102564,
+            "max": 0.3870967741935484,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.208,
+            "median": 0.21008403361344535,
+            "min": 0.06382978723404255,
+            "max": 0.47619047619047616,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 8.714,
+            "median": 10,
+            "min": 2,
+            "max": 13,
+            "reached_pct": 14.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 5.208,
+            "median": 5.0,
+            "min": 1,
+            "max": 16,
+            "reached_pct": 48.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 6.22,
+            "median": 5,
+            "min": 2,
+            "max": 15,
+            "reached_pct": 82.0
+          }
+        }
+      },
+      "AS42__S3__G_SWITCH": {
+        "metrics": {
+          "EF": {
+            "mean": 11.38,
+            "median": 11.0,
+            "min": 11,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 15.36,
+            "median": 15.0,
+            "min": 14,
+            "max": 17,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.84,
+            "median": 17.0,
+            "min": 16,
+            "max": 19,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 9,
+            "median": 9.0,
+            "min": 9,
+            "max": 9,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 1.34,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 45.66,
+            "median": 45.5,
+            "min": 33,
+            "max": 59,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 3.34,
+            "median": 3.0,
+            "min": 3,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 127.76,
+            "median": 127.0,
+            "min": 108,
+            "max": 150,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 67.28,
+            "median": 65.0,
+            "min": 51,
+            "max": 96,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 45.66,
+            "median": 45.5,
+            "min": 33,
+            "max": 59,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.358,
+            "median": 0.35941734417344173,
+            "min": 0.25333333333333335,
+            "max": 0.4573643410852713,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.385,
+            "median": 0.4,
+            "min": 0.2,
+            "max": 0.6875,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.366,
+            "median": 0.35599078341013823,
+            "min": 0.2413793103448276,
+            "max": 0.5333333333333333,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.34,
+            "median": 0.34330357142857143,
+            "min": 0.15384615384615385,
+            "max": 0.5172413793103449,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.356,
+            "median": 0.36561913696060033,
+            "min": 0.07317073170731707,
+            "max": 0.5714285714285714,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1.08,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1.5,
+            "median": 1.0,
+            "min": 1,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 2.24,
+            "median": 2.0,
+            "min": 1,
+            "max": 11,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS42__S3__G_SPEC": {
+        "metrics": {
+          "EF": {
+            "mean": 9.18,
+            "median": 9.0,
+            "min": 8,
+            "max": 11,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 11.78,
+            "median": 12.0,
+            "min": 9,
+            "max": 13,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 14.5,
+            "median": 15.0,
+            "min": 13,
+            "max": 17,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 9.48,
+            "median": 10.0,
+            "min": 8,
+            "max": 10,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2.52,
+            "median": 2.0,
+            "min": 2,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 75,
+            "median": 75.0,
+            "min": 75,
+            "max": 75,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 5,
+            "median": 5.0,
+            "min": 5,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 121.08,
+            "median": 121.0,
+            "min": 103,
+            "max": 141,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 33.68,
+            "median": 33.0,
+            "min": 17,
+            "max": 52,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 75,
+            "median": 75.0,
+            "min": 75,
+            "max": 75,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.622,
+            "median": 0.6198347107438017,
+            "min": 0.5319148936170213,
+            "max": 0.7281553398058253,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.844,
+            "median": 0.8518181818181818,
+            "min": 0.6,
+            "max": 1.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.846,
+            "median": 0.8424317617866005,
+            "min": 0.6521739130434783,
+            "max": 1.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.863,
+            "median": 0.8615900383141762,
+            "min": 0.7142857142857143,
+            "max": 1.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.158,
+            "median": 0.15211810012836968,
+            "min": 0.0,
+            "max": 0.7352941176470589,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 1.02,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS10__S1__G_GENERAL": {
+        "metrics": {
+          "EF": {
+            "mean": 11.3,
+            "median": 11.0,
+            "min": 10,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 14.4,
+            "median": 14.0,
+            "min": 13,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 18.84,
+            "median": 19.0,
+            "min": 17,
+            "max": 22,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 11.58,
+            "median": 12.0,
+            "min": 11,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 1.84,
+            "median": 2.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 23.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 29,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 4.42,
+            "median": 5.0,
+            "min": 3,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 129.64,
+            "median": 128.5,
+            "min": 106,
+            "max": 155,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 103.76,
+            "median": 102.0,
+            "min": 85,
+            "max": 132,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 23.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 29,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.185,
+            "median": 0.19047619047619047,
+            "min": 0.12213740458015267,
+            "max": 0.23684210526315788,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.175,
+            "median": 0.17786561264822134,
+            "min": 0.05,
+            "max": 0.375,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.222,
+            "median": 0.21875,
+            "min": 0.07407407407407407,
+            "max": 0.4074074074074074,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.19,
+            "median": 0.1888794567062818,
+            "min": 0.02564102564102564,
+            "max": 0.3870967741935484,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.164,
+            "median": 0.16019061583577712,
+            "min": 0.0,
+            "max": 0.3333333333333333,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 8.714,
+            "median": 10,
+            "min": 2,
+            "max": 13,
+            "reached_pct": 14.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 4.739,
+            "median": 5,
+            "min": 1,
+            "max": 14,
+            "reached_pct": 46.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 6.22,
+            "median": 5,
+            "min": 2,
+            "max": 15,
+            "reached_pct": 82.0
+          }
+        }
+      },
+      "AS10__S1__G_SWITCH": {
+        "metrics": {
+          "EF": {
+            "mean": 11.4,
+            "median": 11.0,
+            "min": 11,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 15.28,
+            "median": 15.0,
+            "min": 14,
+            "max": 17,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.82,
+            "median": 17.0,
+            "min": 16,
+            "max": 18,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 12,
+            "median": 12.0,
+            "min": 12,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2,
+            "median": 2.0,
+            "min": 2,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 25,
+            "median": 25.0,
+            "min": 25,
+            "max": 25,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 5,
+            "median": 5.0,
+            "min": 5,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 126.58,
+            "median": 126.5,
+            "min": 109,
+            "max": 156,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 63.2,
+            "median": 62.5,
+            "min": 48,
+            "max": 88,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 25,
+            "median": 25.0,
+            "min": 25,
+            "max": 25,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.199,
+            "median": 0.1976315460567429,
+            "min": 0.16025641025641027,
+            "max": 0.22935779816513763,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.405,
+            "median": 0.42105263157894735,
+            "min": 0.2,
+            "max": 0.625,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.361,
+            "median": 0.3637566137566137,
+            "min": 0.20689655172413793,
+            "max": 0.5217391304347826,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.178,
+            "median": 0.16145833333333331,
+            "min": 0.0,
+            "max": 0.3448275862068966,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.003,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.14705882352941177,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1.08,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1.5,
+            "median": 1.0,
+            "min": 1,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 2.1,
+            "median": 2.0,
+            "min": 1,
+            "max": 4,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS10__S1__G_SPEC": {
+        "metrics": {
+          "EF": {
+            "mean": 10.5,
+            "median": 10.0,
+            "min": 9,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 13.58,
+            "median": 14.0,
+            "min": 11,
+            "max": 15,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 17.8,
+            "median": 18.0,
+            "min": 15,
+            "max": 21,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 10.98,
+            "median": 11.0,
+            "min": 10,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 3.02,
+            "median": 3.0,
+            "min": 2,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 25,
+            "median": 25.0,
+            "min": 25,
+            "max": 25,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 5,
+            "median": 5.0,
+            "min": 5,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 126.16,
+            "median": 124.5,
+            "min": 105,
+            "max": 151,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 79.6,
+            "median": 80.0,
+            "min": 56,
+            "max": 108,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 25,
+            "median": 25.0,
+            "min": 25,
+            "max": 25,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.199,
+            "median": 0.20080645161290323,
+            "min": 0.16556291390728478,
+            "max": 0.23809523809523808,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.779,
+            "median": 0.7777777777777778,
+            "min": 0.5555555555555556,
+            "max": 0.9523809523809523,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.308,
+            "median": 0.3125,
+            "min": 0.13157894736842105,
+            "max": 0.6521739130434783,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 1.02,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS10__S2__G_GENERAL": {
+        "metrics": {
+          "EF": {
+            "mean": 11.3,
+            "median": 11.0,
+            "min": 10,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 14.4,
+            "median": 14.0,
+            "min": 13,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 18.84,
+            "median": 19.0,
+            "min": 17,
+            "max": 22,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 10.84,
+            "median": 11.0,
+            "min": 10,
+            "max": 11,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 1.12,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 25.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 41,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 2.96,
+            "median": 3.0,
+            "min": 2,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 129.64,
+            "median": 128.5,
+            "min": 106,
+            "max": 155,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 103.76,
+            "median": 102.0,
+            "min": 85,
+            "max": 132,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 25.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 41,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.2,
+            "median": 0.1999876968503937,
+            "min": 0.12213740458015267,
+            "max": 0.2847222222222222,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.175,
+            "median": 0.17786561264822134,
+            "min": 0.05,
+            "max": 0.375,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.222,
+            "median": 0.21875,
+            "min": 0.07407407407407407,
+            "max": 0.4074074074074074,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.191,
+            "median": 0.1967741935483871,
+            "min": 0.02564102564102564,
+            "max": 0.3870967741935484,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.208,
+            "median": 0.21008403361344535,
+            "min": 0.06382978723404255,
+            "max": 0.47619047619047616,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 8.714,
+            "median": 10,
+            "min": 2,
+            "max": 13,
+            "reached_pct": 14.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 5.208,
+            "median": 5.0,
+            "min": 1,
+            "max": 16,
+            "reached_pct": 48.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 6.22,
+            "median": 5,
+            "min": 2,
+            "max": 15,
+            "reached_pct": 82.0
+          }
+        }
+      },
+      "AS10__S2__G_SWITCH": {
+        "metrics": {
+          "EF": {
+            "mean": 11.4,
+            "median": 11.0,
+            "min": 11,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 15.04,
+            "median": 15.0,
+            "min": 14,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.64,
+            "median": 17.0,
+            "min": 15,
+            "max": 18,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 11.72,
+            "median": 12.0,
+            "min": 11,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2,
+            "median": 2.0,
+            "min": 2,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 43.34,
+            "median": 45.0,
+            "min": 35,
+            "max": 45,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 4.72,
+            "median": 5.0,
+            "min": 4,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 127.54,
+            "median": 127.5,
+            "min": 107,
+            "max": 155,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 61.72,
+            "median": 62.0,
+            "min": 44,
+            "max": 81,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 43.34,
+            "median": 45.0,
+            "min": 35,
+            "max": 45,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.341,
+            "median": 0.3448326482677628,
+            "min": 0.26277372262773724,
+            "max": 0.4017857142857143,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.384,
+            "median": 0.4,
+            "min": 0.2,
+            "max": 0.6875,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.382,
+            "median": 0.39289289289289286,
+            "min": 0.1724137931034483,
+            "max": 0.5652173913043478,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.336,
+            "median": 0.3530950305143854,
+            "min": 0.11428571428571428,
+            "max": 0.5,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.303,
+            "median": 0.29545454545454547,
+            "min": 0.09523809523809523,
+            "max": 0.5116279069767442,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1.08,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1.5,
+            "median": 1.0,
+            "min": 1,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 2.12,
+            "median": 2.0,
+            "min": 1,
+            "max": 5,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS10__S2__G_SPEC": {
+        "metrics": {
+          "EF": {
+            "mean": 9.68,
+            "median": 10.0,
+            "min": 8,
+            "max": 11,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 12.78,
+            "median": 13.0,
+            "min": 11,
+            "max": 15,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.74,
+            "median": 17.0,
+            "min": 15,
+            "max": 19,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 11.48,
+            "median": 12.0,
+            "min": 10,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2.52,
+            "median": 2.0,
+            "min": 2,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 45,
+            "median": 45.0,
+            "min": 45,
+            "max": 45,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 5,
+            "median": 5.0,
+            "min": 5,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 124.24,
+            "median": 123.5,
+            "min": 105,
+            "max": 149,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 62.72,
+            "median": 62.5,
+            "min": 39,
+            "max": 81,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 45,
+            "median": 45.0,
+            "min": 45,
+            "max": 45,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.364,
+            "median": 0.3643784421715185,
+            "min": 0.30201342281879195,
+            "max": 0.42857142857142855,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.76,
+            "median": 0.7722567287784678,
+            "min": 0.5454545454545454,
+            "max": 0.9444444444444444,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.777,
+            "median": 0.767948717948718,
+            "min": 0.6060606060606061,
+            "max": 1.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.216,
+            "median": 0.16666666666666666,
+            "min": 0.0,
+            "max": 0.5,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.0,
+            "median": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 1.02,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS10__S3__G_GENERAL": {
+        "metrics": {
+          "EF": {
+            "mean": 11.3,
+            "median": 11.0,
+            "min": 10,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 14.4,
+            "median": 14.0,
+            "min": 13,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 18.84,
+            "median": 19.0,
+            "min": 17,
+            "max": 22,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 10.24,
+            "median": 10.0,
+            "min": 10,
+            "max": 11,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 25.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 41,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 2.24,
+            "median": 2.0,
+            "min": 2,
+            "max": 3,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 129.64,
+            "median": 128.5,
+            "min": 106,
+            "max": 155,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 103.76,
+            "median": 102.0,
+            "min": 85,
+            "max": 132,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 25.88,
+            "median": 25.0,
+            "min": 16,
+            "max": 41,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.2,
+            "median": 0.1999876968503937,
+            "min": 0.12213740458015267,
+            "max": 0.2847222222222222,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.175,
+            "median": 0.17786561264822134,
+            "min": 0.05,
+            "max": 0.375,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.222,
+            "median": 0.21875,
+            "min": 0.07407407407407407,
+            "max": 0.4074074074074074,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.191,
+            "median": 0.1967741935483871,
+            "min": 0.02564102564102564,
+            "max": 0.3870967741935484,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.208,
+            "median": 0.21008403361344535,
+            "min": 0.06382978723404255,
+            "max": 0.47619047619047616,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 8.714,
+            "median": 10,
+            "min": 2,
+            "max": 13,
+            "reached_pct": 14.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 5.208,
+            "median": 5.0,
+            "min": 1,
+            "max": 16,
+            "reached_pct": 48.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 6.22,
+            "median": 5,
+            "min": 2,
+            "max": 15,
+            "reached_pct": 82.0
+          }
+        }
+      },
+      "AS10__S3__G_SWITCH": {
+        "metrics": {
+          "EF": {
+            "mean": 11.38,
+            "median": 11.0,
+            "min": 11,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 15.36,
+            "median": 15.0,
+            "min": 14,
+            "max": 17,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.84,
+            "median": 17.0,
+            "min": 16,
+            "max": 19,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 11,
+            "median": 11.0,
+            "min": 11,
+            "max": 11,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 1.34,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 45.66,
+            "median": 45.5,
+            "min": 33,
+            "max": 59,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 3.34,
+            "median": 3.0,
+            "min": 3,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 127.76,
+            "median": 127.0,
+            "min": 108,
+            "max": 150,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 67.28,
+            "median": 65.0,
+            "min": 51,
+            "max": 96,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 45.66,
+            "median": 45.5,
+            "min": 33,
+            "max": 59,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.358,
+            "median": 0.35941734417344173,
+            "min": 0.25333333333333335,
+            "max": 0.4573643410852713,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.385,
+            "median": 0.4,
+            "min": 0.2,
+            "max": 0.6875,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.366,
+            "median": 0.35599078341013823,
+            "min": 0.2413793103448276,
+            "max": 0.5333333333333333,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.34,
+            "median": 0.34330357142857143,
+            "min": 0.15384615384615385,
+            "max": 0.5172413793103449,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.356,
+            "median": 0.36561913696060033,
+            "min": 0.07317073170731707,
+            "max": 0.5714285714285714,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1.08,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1.5,
+            "median": 1.0,
+            "min": 1,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 2.24,
+            "median": 2.0,
+            "min": 1,
+            "max": 11,
+            "reached_pct": 100.0
+          }
+        }
+      },
+      "AS10__S3__G_SPEC": {
+        "metrics": {
+          "EF": {
+            "mean": 9.18,
+            "median": 9.0,
+            "min": 8,
+            "max": 11,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 11.78,
+            "median": 12.0,
+            "min": 9,
+            "max": 13,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 14.5,
+            "median": 15.0,
+            "min": 13,
+            "max": 17,
+            "reached_pct": 100.0
+          },
+          "AS": {
+            "mean": 11.58,
+            "median": 12.0,
+            "min": 10,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2.42,
+            "median": 2.0,
+            "min": 2,
+            "max": 4,
+            "reached_pct": 100.0
+          },
+          "progression_SPEC": {
+            "mean": 75,
+            "median": 75.0,
+            "min": 75,
+            "max": 75,
+            "reached_pct": 100.0
+          },
+          "spec_tiers": {
+            "mean": 5,
+            "median": 5.0,
+            "min": 5,
+            "max": 5,
+            "reached_pct": 100.0
+          },
+          "q_total": {
+            "mean": 121.08,
+            "median": 121.0,
+            "min": 103,
+            "max": 141,
+            "reached_pct": 100.0
+          },
+          "q_phys": {
+            "mean": 33.68,
+            "median": 33.0,
+            "min": 17,
+            "max": 52,
+            "reached_pct": 100.0
+          },
+          "q_spec": {
+            "mean": 75,
+            "median": 75.0,
+            "min": 75,
+            "max": 75,
+            "reached_pct": 100.0
+          },
+          "spec_share": {
+            "mean": 0.622,
+            "median": 0.6198347107438017,
+            "min": 0.5319148936170213,
+            "max": 0.7281553398058253,
+            "reached_pct": 100.0
+          },
+          "spec_share_t1_4": {
+            "mean": 0.844,
+            "median": 0.8518181818181818,
+            "min": 0.6,
+            "max": 1.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t5_8": {
+            "mean": 0.846,
+            "median": 0.8424317617866005,
+            "min": 0.6521739130434783,
+            "max": 1.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t9_12": {
+            "mean": 0.863,
+            "median": 0.8615900383141762,
+            "min": 0.7142857142857143,
+            "max": 1.0,
+            "reached_pct": 100.0
+          },
+          "spec_share_t13_16": {
+            "mean": 0.158,
+            "median": 0.15211810012836968,
+            "min": 0.0,
+            "max": 0.7352941176470589,
+            "reached_pct": 100.0
+          }
+        },
+        "timing": {
+          "first_voluntary_spec": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_25_cumulative": {
+            "mean": 1,
+            "median": 1.0,
+            "min": 1,
+            "max": 1,
+            "reached_pct": 100.0
+          },
+          "first_spec_over_phys_turn": {
+            "mean": 1.02,
+            "median": 1.0,
+            "min": 1,
+            "max": 2,
+            "reached_pct": 100.0
+          }
+        }
+      }
+    }
+  },
+  "D2": {
+    "states": [
+      {
+        "label": "high_potential_low_spec",
+        "seed": 0,
+        "context": "AS42",
+        "table": "S2",
+        "policy": "G_GENERAL",
+        "EF": 11,
+        "SEUIL": 16,
+        "VMA": 18,
+        "AS": 9,
+        "ECO": 1,
+        "progression_SPEC": 29,
+        "spec_tiers": 3,
+        "curves": {
+          "C1": [
+            {
+              "offset": -2,
+              "production": 7,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 8,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 9,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ],
+          "C2": [
+            {
+              "offset": -2,
+              "production": 7,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 8,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 9,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ]
+        }
+      },
+      {
+        "label": "balanced",
+        "seed": 0,
+        "context": "AS42",
+        "table": "S2",
+        "policy": "G_SWITCH",
+        "EF": 11,
+        "SEUIL": 15,
+        "VMA": 17,
+        "AS": 10,
+        "ECO": 2,
+        "progression_SPEC": 45,
+        "spec_tiers": 5,
+        "curves": {
+          "C1": [
+            {
+              "offset": -2,
+              "production": 8,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 9,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ],
+          "C2": [
+            {
+              "offset": -2,
+              "production": 8,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 9,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ]
+        }
+      },
+      {
+        "label": "high_spec_low_potential",
+        "seed": 0,
+        "context": "AS42",
+        "table": "S2",
+        "policy": "G_SPEC",
+        "EF": 10,
+        "SEUIL": 12,
+        "VMA": 18,
+        "AS": 10,
+        "ECO": 2,
+        "progression_SPEC": 45,
+        "spec_tiers": 5,
+        "curves": {
+          "C1": [
+            {
+              "offset": -2,
+              "production": 8,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 9,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ],
+          "C2": [
+            {
+              "offset": -2,
+              "production": 8,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 9,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ]
+        }
+      },
+      {
+        "label": "high_potential_low_spec",
+        "seed": 0,
+        "context": "AS10",
+        "table": "S2",
+        "policy": "G_GENERAL",
+        "EF": 11,
+        "SEUIL": 16,
+        "VMA": 18,
+        "AS": 11,
+        "ECO": 1,
+        "progression_SPEC": 29,
+        "spec_tiers": 3,
+        "curves": {
+          "C1": [
+            {
+              "offset": -2,
+              "production": 9,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 13,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ],
+          "C2": [
+            {
+              "offset": -2,
+              "production": 9,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 13,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ]
+        }
+      },
+      {
+        "label": "balanced",
+        "seed": 0,
+        "context": "AS10",
+        "table": "S2",
+        "policy": "G_SWITCH",
+        "EF": 11,
+        "SEUIL": 15,
+        "VMA": 17,
+        "AS": 12,
+        "ECO": 2,
+        "progression_SPEC": 45,
+        "spec_tiers": 5,
+        "curves": {
+          "C1": [
+            {
+              "offset": -2,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 13,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 14,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ],
+          "C2": [
+            {
+              "offset": -2,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 13,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 14,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ]
+        }
+      },
+      {
+        "label": "high_spec_low_potential",
+        "seed": 0,
+        "context": "AS10",
+        "table": "S2",
+        "policy": "G_SPEC",
+        "EF": 10,
+        "SEUIL": 12,
+        "VMA": 18,
+        "AS": 12,
+        "ECO": 2,
+        "progression_SPEC": 45,
+        "spec_tiers": 5,
+        "curves": {
+          "C1": [
+            {
+              "offset": -2,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 13,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 14,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ],
+          "C2": [
+            {
+              "offset": -2,
+              "production": 10,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            },
+            {
+              "offset": -1,
+              "production": 11,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 0,
+              "production": 12,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 1,
+              "production": 13,
+              "base_cost": 1,
+              "cost": 0,
+              "cost_x4": 0,
+              "cost_x10": 0
+            },
+            {
+              "offset": 2,
+              "production": 14,
+              "base_cost": 1,
+              "cost": 1,
+              "cost_x4": 4,
+              "cost_x10": 10
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "D3": {
+    "curve_variant": "C1",
+    "rows": [
+      {
+        "context": "AS42",
+        "build": "SPEED",
+        "spec_tiers": 4,
+        "AS": 11,
+        "ECO": 0,
+        "cost_at_as": 1,
+        "cost_x4": 4,
+        "cost_x10": 10,
+        "production_at_specific_point": 11
+      },
+      {
+        "context": "AS42",
+        "build": "BALANCED",
+        "spec_tiers": 4,
+        "AS": 9,
+        "ECO": 2,
+        "cost_at_as": 0,
+        "cost_x4": 0,
+        "cost_x10": 0,
+        "production_at_specific_point": 9
+      },
+      {
+        "context": "AS42",
+        "build": "ECO",
+        "spec_tiers": 4,
+        "AS": 7,
+        "ECO": 4,
+        "cost_at_as": 0,
+        "cost_x4": 0,
+        "cost_x10": 0,
+        "production_at_specific_point": 7
+      },
+      {
+        "context": "AS10",
+        "build": "SPEED",
+        "spec_tiers": 4,
+        "AS": 13,
+        "ECO": 0,
+        "cost_at_as": 1,
+        "cost_x4": 4,
+        "cost_x10": 10,
+        "production_at_specific_point": 13
+      },
+      {
+        "context": "AS10",
+        "build": "BALANCED",
+        "spec_tiers": 4,
+        "AS": 11,
+        "ECO": 2,
+        "cost_at_as": 0,
+        "cost_x4": 0,
+        "cost_x10": 0,
+        "production_at_specific_point": 11
+      },
+      {
+        "context": "AS10",
+        "build": "ECO",
+        "spec_tiers": 4,
+        "AS": 9,
+        "ECO": 4,
+        "cost_at_as": 0,
+        "cost_x4": 0,
+        "cost_x10": 0,
+        "production_at_specific_point": 9
+      }
+    ]
+  },
+  "D4": {
+    "status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN",
+    "formula": "used_spec_capacity = (AS - zone_low) + ECO",
+    "D4-A": {
+      "method": "ANALYTICAL_ENUMERATION",
+      "rows": [
+        {
+          "context": "AS42",
+          "zone_low": 6,
+          "zone_high": 8,
+          "headroom": 2,
+          "build_count": 6,
+          "speed_oriented": 2,
+          "economy_oriented": 2,
+          "mixed": 1,
+          "neutral": 1,
+          "legal_builds": [
+            {
+              "as_relative": 0,
+              "eco": 0
+            },
+            {
+              "as_relative": 0,
+              "eco": 1
+            },
+            {
+              "as_relative": 0,
+              "eco": 2
+            },
+            {
+              "as_relative": 1,
+              "eco": 0
+            },
+            {
+              "as_relative": 1,
+              "eco": 1
+            },
+            {
+              "as_relative": 2,
+              "eco": 0
+            }
+          ],
+          "after_zone_high_plus_one_count": 10,
+          "new_build_count": 4,
+          "new_builds": [
+            {
+              "as_relative": 0,
+              "eco": 3
+            },
+            {
+              "as_relative": 1,
+              "eco": 2
+            },
+            {
+              "as_relative": 2,
+              "eco": 1
+            },
+            {
+              "as_relative": 3,
+              "eco": 0
+            }
+          ]
+        },
+        {
+          "context": "AS42",
+          "zone_low": 8,
+          "zone_high": 12,
+          "headroom": 4,
+          "build_count": 15,
+          "speed_oriented": 4,
+          "economy_oriented": 4,
+          "mixed": 6,
+          "neutral": 1,
+          "legal_builds": [
+            {
+              "as_relative": 0,
+              "eco": 0
+            },
+            {
+              "as_relative": 0,
+              "eco": 1
+            },
+            {
+              "as_relative": 0,
+              "eco": 2
+            },
+            {
+              "as_relative": 0,
+              "eco": 3
+            },
+            {
+              "as_relative": 0,
+              "eco": 4
+            },
+            {
+              "as_relative": 1,
+              "eco": 0
+            },
+            {
+              "as_relative": 1,
+              "eco": 1
+            },
+            {
+              "as_relative": 1,
+              "eco": 2
+            },
+            {
+              "as_relative": 1,
+              "eco": 3
+            },
+            {
+              "as_relative": 2,
+              "eco": 0
+            },
+            {
+              "as_relative": 2,
+              "eco": 1
+            },
+            {
+              "as_relative": 2,
+              "eco": 2
+            },
+            {
+              "as_relative": 3,
+              "eco": 0
+            },
+            {
+              "as_relative": 3,
+              "eco": 1
+            },
+            {
+              "as_relative": 4,
+              "eco": 0
+            }
+          ],
+          "after_zone_high_plus_one_count": 21,
+          "new_build_count": 6,
+          "new_builds": [
+            {
+              "as_relative": 0,
+              "eco": 5
+            },
+            {
+              "as_relative": 1,
+              "eco": 4
+            },
+            {
+              "as_relative": 2,
+              "eco": 3
+            },
+            {
+              "as_relative": 3,
+              "eco": 2
+            },
+            {
+              "as_relative": 4,
+              "eco": 1
+            },
+            {
+              "as_relative": 5,
+              "eco": 0
+            }
+          ]
+        },
+        {
+          "context": "AS42",
+          "zone_low": 10,
+          "zone_high": 15,
+          "headroom": 5,
+          "build_count": 21,
+          "speed_oriented": 5,
+          "economy_oriented": 5,
+          "mixed": 10,
+          "neutral": 1,
+          "legal_builds": [
+            {
+              "as_relative": 0,
+              "eco": 0
+            },
+            {
+              "as_relative": 0,
+              "eco": 1
+            },
+            {
+              "as_relative": 0,
+              "eco": 2
+            },
+            {
+              "as_relative": 0,
+              "eco": 3
+            },
+            {
+              "as_relative": 0,
+              "eco": 4
+            },
+            {
+              "as_relative": 0,
+              "eco": 5
+            },
+            {
+              "as_relative": 1,
+              "eco": 0
+            },
+            {
+              "as_relative": 1,
+              "eco": 1
+            },
+            {
+              "as_relative": 1,
+              "eco": 2
+            },
+            {
+              "as_relative": 1,
+              "eco": 3
+            },
+            {
+              "as_relative": 1,
+              "eco": 4
+            },
+            {
+              "as_relative": 2,
+              "eco": 0
+            },
+            {
+              "as_relative": 2,
+              "eco": 1
+            },
+            {
+              "as_relative": 2,
+              "eco": 2
+            },
+            {
+              "as_relative": 2,
+              "eco": 3
+            },
+            {
+              "as_relative": 3,
+              "eco": 0
+            },
+            {
+              "as_relative": 3,
+              "eco": 1
+            },
+            {
+              "as_relative": 3,
+              "eco": 2
+            },
+            {
+              "as_relative": 4,
+              "eco": 0
+            },
+            {
+              "as_relative": 4,
+              "eco": 1
+            },
+            {
+              "as_relative": 5,
+              "eco": 0
+            }
+          ],
+          "after_zone_high_plus_one_count": 28,
+          "new_build_count": 7,
+          "new_builds": [
+            {
+              "as_relative": 0,
+              "eco": 6
+            },
+            {
+              "as_relative": 1,
+              "eco": 5
+            },
+            {
+              "as_relative": 2,
+              "eco": 4
+            },
+            {
+              "as_relative": 3,
+              "eco": 3
+            },
+            {
+              "as_relative": 4,
+              "eco": 2
+            },
+            {
+              "as_relative": 5,
+              "eco": 1
+            },
+            {
+              "as_relative": 6,
+              "eco": 0
+            }
+          ]
+        },
+        {
+          "context": "AS42",
+          "zone_low": 12,
+          "zone_high": 18,
+          "headroom": 6,
+          "build_count": 28,
+          "speed_oriented": 6,
+          "economy_oriented": 6,
+          "mixed": 15,
+          "neutral": 1,
+          "legal_builds": [
+            {
+              "as_relative": 0,
+              "eco": 0
+            },
+            {
+              "as_relative": 0,
+              "eco": 1
+            },
+            {
+              "as_relative": 0,
+              "eco": 2
+            },
+            {
+              "as_relative": 0,
+              "eco": 3
+            },
+            {
+              "as_relative": 0,
+              "eco": 4
+            },
+            {
+              "as_relative": 0,
+              "eco": 5
+            },
+            {
+              "as_relative": 0,
+              "eco": 6
+            },
+            {
+              "as_relative": 1,
+              "eco": 0
+            },
+            {
+              "as_relative": 1,
+              "eco": 1
+            },
+            {
+              "as_relative": 1,
+              "eco": 2
+            },
+            {
+              "as_relative": 1,
+              "eco": 3
+            },
+            {
+              "as_relative": 1,
+              "eco": 4
+            },
+            {
+              "as_relative": 1,
+              "eco": 5
+            },
+            {
+              "as_relative": 2,
+              "eco": 0
+            },
+            {
+              "as_relative": 2,
+              "eco": 1
+            },
+            {
+              "as_relative": 2,
+              "eco": 2
+            },
+            {
+              "as_relative": 2,
+              "eco": 3
+            },
+            {
+              "as_relative": 2,
+              "eco": 4
+            },
+            {
+              "as_relative": 3,
+              "eco": 0
+            },
+            {
+              "as_relative": 3,
+              "eco": 1
+            },
+            {
+              "as_relative": 3,
+              "eco": 2
+            },
+            {
+              "as_relative": 3,
+              "eco": 3
+            },
+            {
+              "as_relative": 4,
+              "eco": 0
+            },
+            {
+              "as_relative": 4,
+              "eco": 1
+            },
+            {
+              "as_relative": 4,
+              "eco": 2
+            },
+            {
+              "as_relative": 5,
+              "eco": 0
+            },
+            {
+              "as_relative": 5,
+              "eco": 1
+            },
+            {
+              "as_relative": 6,
+              "eco": 0
+            }
+          ],
+          "after_zone_high_plus_one_count": 36,
+          "new_build_count": 8,
+          "new_builds": [
+            {
+              "as_relative": 0,
+              "eco": 7
+            },
+            {
+              "as_relative": 1,
+              "eco": 6
+            },
+            {
+              "as_relative": 2,
+              "eco": 5
+            },
+            {
+              "as_relative": 3,
+              "eco": 4
+            },
+            {
+              "as_relative": 4,
+              "eco": 3
+            },
+            {
+              "as_relative": 5,
+              "eco": 2
+            },
+            {
+              "as_relative": 6,
+              "eco": 1
+            },
+            {
+              "as_relative": 7,
+              "eco": 0
+            }
+          ]
+        },
+        {
+          "context": "AS10",
+          "zone_low": 8,
+          "zone_high": 10,
+          "headroom": 2,
+          "build_count": 6,
+          "speed_oriented": 2,
+          "economy_oriented": 2,
+          "mixed": 1,
+          "neutral": 1,
+          "legal_builds": [
+            {
+              "as_relative": 0,
+              "eco": 0
+            },
+            {
+              "as_relative": 0,
+              "eco": 1
+            },
+            {
+              "as_relative": 0,
+              "eco": 2
+            },
+            {
+              "as_relative": 1,
+              "eco": 0
+            },
+            {
+              "as_relative": 1,
+              "eco": 1
+            },
+            {
+              "as_relative": 2,
+              "eco": 0
+            }
+          ],
+          "after_zone_high_plus_one_count": 10,
+          "new_build_count": 4,
+          "new_builds": [
+            {
+              "as_relative": 0,
+              "eco": 3
+            },
+            {
+              "as_relative": 1,
+              "eco": 2
+            },
+            {
+              "as_relative": 2,
+              "eco": 1
+            },
+            {
+              "as_relative": 3,
+              "eco": 0
+            }
+          ]
+        },
+        {
+          "context": "AS10",
+          "zone_low": 12,
+          "zone_high": 16,
+          "headroom": 4,
+          "build_count": 15,
+          "speed_oriented": 4,
+          "economy_oriented": 4,
+          "mixed": 6,
+          "neutral": 1,
+          "legal_builds": [
+            {
+              "as_relative": 0,
+              "eco": 0
+            },
+            {
+              "as_relative": 0,
+              "eco": 1
+            },
+            {
+              "as_relative": 0,
+              "eco": 2
+            },
+            {
+              "as_relative": 0,
+              "eco": 3
+            },
+            {
+              "as_relative": 0,
+              "eco": 4
+            },
+            {
+              "as_relative": 1,
+              "eco": 0
+            },
+            {
+              "as_relative": 1,
+              "eco": 1
+            },
+            {
+              "as_relative": 1,
+              "eco": 2
+            },
+            {
+              "as_relative": 1,
+              "eco": 3
+            },
+            {
+              "as_relative": 2,
+              "eco": 0
+            },
+            {
+              "as_relative": 2,
+              "eco": 1
+            },
+            {
+              "as_relative": 2,
+              "eco": 2
+            },
+            {
+              "as_relative": 3,
+              "eco": 0
+            },
+            {
+              "as_relative": 3,
+              "eco": 1
+            },
+            {
+              "as_relative": 4,
+              "eco": 0
+            }
+          ],
+          "after_zone_high_plus_one_count": 21,
+          "new_build_count": 6,
+          "new_builds": [
+            {
+              "as_relative": 0,
+              "eco": 5
+            },
+            {
+              "as_relative": 1,
+              "eco": 4
+            },
+            {
+              "as_relative": 2,
+              "eco": 3
+            },
+            {
+              "as_relative": 3,
+              "eco": 2
+            },
+            {
+              "as_relative": 4,
+              "eco": 1
+            },
+            {
+              "as_relative": 5,
+              "eco": 0
+            }
+          ]
+        },
+        {
+          "context": "AS10",
+          "zone_low": 15,
+          "zone_high": 20,
+          "headroom": 5,
+          "build_count": 21,
+          "speed_oriented": 5,
+          "economy_oriented": 5,
+          "mixed": 10,
+          "neutral": 1,
+          "legal_builds": [
+            {
+              "as_relative": 0,
+              "eco": 0
+            },
+            {
+              "as_relative": 0,
+              "eco": 1
+            },
+            {
+              "as_relative": 0,
+              "eco": 2
+            },
+            {
+              "as_relative": 0,
+              "eco": 3
+            },
+            {
+              "as_relative": 0,
+              "eco": 4
+            },
+            {
+              "as_relative": 0,
+              "eco": 5
+            },
+            {
+              "as_relative": 1,
+              "eco": 0
+            },
+            {
+              "as_relative": 1,
+              "eco": 1
+            },
+            {
+              "as_relative": 1,
+              "eco": 2
+            },
+            {
+              "as_relative": 1,
+              "eco": 3
+            },
+            {
+              "as_relative": 1,
+              "eco": 4
+            },
+            {
+              "as_relative": 2,
+              "eco": 0
+            },
+            {
+              "as_relative": 2,
+              "eco": 1
+            },
+            {
+              "as_relative": 2,
+              "eco": 2
+            },
+            {
+              "as_relative": 2,
+              "eco": 3
+            },
+            {
+              "as_relative": 3,
+              "eco": 0
+            },
+            {
+              "as_relative": 3,
+              "eco": 1
+            },
+            {
+              "as_relative": 3,
+              "eco": 2
+            },
+            {
+              "as_relative": 4,
+              "eco": 0
+            },
+            {
+              "as_relative": 4,
+              "eco": 1
+            },
+            {
+              "as_relative": 5,
+              "eco": 0
+            }
+          ],
+          "after_zone_high_plus_one_count": 28,
+          "new_build_count": 7,
+          "new_builds": [
+            {
+              "as_relative": 0,
+              "eco": 6
+            },
+            {
+              "as_relative": 1,
+              "eco": 5
+            },
+            {
+              "as_relative": 2,
+              "eco": 4
+            },
+            {
+              "as_relative": 3,
+              "eco": 3
+            },
+            {
+              "as_relative": 4,
+              "eco": 2
+            },
+            {
+              "as_relative": 5,
+              "eco": 1
+            },
+            {
+              "as_relative": 6,
+              "eco": 0
+            }
+          ]
+        },
+        {
+          "context": "AS10",
+          "zone_low": 18,
+          "zone_high": 24,
+          "headroom": 6,
+          "build_count": 28,
+          "speed_oriented": 6,
+          "economy_oriented": 6,
+          "mixed": 15,
+          "neutral": 1,
+          "legal_builds": [
+            {
+              "as_relative": 0,
+              "eco": 0
+            },
+            {
+              "as_relative": 0,
+              "eco": 1
+            },
+            {
+              "as_relative": 0,
+              "eco": 2
+            },
+            {
+              "as_relative": 0,
+              "eco": 3
+            },
+            {
+              "as_relative": 0,
+              "eco": 4
+            },
+            {
+              "as_relative": 0,
+              "eco": 5
+            },
+            {
+              "as_relative": 0,
+              "eco": 6
+            },
+            {
+              "as_relative": 1,
+              "eco": 0
+            },
+            {
+              "as_relative": 1,
+              "eco": 1
+            },
+            {
+              "as_relative": 1,
+              "eco": 2
+            },
+            {
+              "as_relative": 1,
+              "eco": 3
+            },
+            {
+              "as_relative": 1,
+              "eco": 4
+            },
+            {
+              "as_relative": 1,
+              "eco": 5
+            },
+            {
+              "as_relative": 2,
+              "eco": 0
+            },
+            {
+              "as_relative": 2,
+              "eco": 1
+            },
+            {
+              "as_relative": 2,
+              "eco": 2
+            },
+            {
+              "as_relative": 2,
+              "eco": 3
+            },
+            {
+              "as_relative": 2,
+              "eco": 4
+            },
+            {
+              "as_relative": 3,
+              "eco": 0
+            },
+            {
+              "as_relative": 3,
+              "eco": 1
+            },
+            {
+              "as_relative": 3,
+              "eco": 2
+            },
+            {
+              "as_relative": 3,
+              "eco": 3
+            },
+            {
+              "as_relative": 4,
+              "eco": 0
+            },
+            {
+              "as_relative": 4,
+              "eco": 1
+            },
+            {
+              "as_relative": 4,
+              "eco": 2
+            },
+            {
+              "as_relative": 5,
+              "eco": 0
+            },
+            {
+              "as_relative": 5,
+              "eco": 1
+            },
+            {
+              "as_relative": 6,
+              "eco": 0
+            }
+          ],
+          "after_zone_high_plus_one_count": 36,
+          "new_build_count": 8,
+          "new_builds": [
+            {
+              "as_relative": 0,
+              "eco": 7
+            },
+            {
+              "as_relative": 1,
+              "eco": 6
+            },
+            {
+              "as_relative": 2,
+              "eco": 5
+            },
+            {
+              "as_relative": 3,
+              "eco": 4
+            },
+            {
+              "as_relative": 4,
+              "eco": 3
+            },
+            {
+              "as_relative": 5,
+              "eco": 2
+            },
+            {
+              "as_relative": 6,
+              "eco": 1
+            },
+            {
+              "as_relative": 7,
+              "eco": 0
+            }
+          ]
+        }
+      ],
+      "headroom_reopens_useful_nontrivial_capacity": true
+    },
+    "D4-B": {
+      "policy": "G_SWITCH_HEADROOM",
+      "spec_table": "S2",
+      "build": "BALANCED",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "turns": 16,
+      "total_turns": 960,
+      "classification": "ALTERNANCE RARE",
+      "cells": {
+        "AS42": {
+          "AS": {
+            "mean": 9.733,
+            "median": 10.0,
+            "min": 9,
+            "max": 10,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2,
+            "median": 2.0,
+            "min": 2,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 15.133,
+            "median": 15.0,
+            "min": 14,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.733,
+            "median": 17.0,
+            "min": 16,
+            "max": 18,
+            "reached_pct": 100.0
+          },
+          "saturated_turns": {
+            "mean": 0,
+            "median": 0.0,
+            "min": 0,
+            "max": 0,
+            "reached_pct": 100.0
+          },
+          "saturation_episodes": {
+            "mean": 0,
+            "median": 0.0,
+            "min": 0,
+            "max": 0,
+            "reached_pct": 100.0
+          },
+          "reopenings": {
+            "mean": 0,
+            "median": 0.0,
+            "min": 0,
+            "max": 0,
+            "reached_pct": 100.0
+          },
+          "alternation_count": {
+            "mean": 0,
+            "median": 0.0,
+            "min": 0,
+            "max": 0,
+            "reached_pct": 100.0
+          },
+          "first_saturation_turn": {
+            "mean": null,
+            "median": null,
+            "min": null,
+            "max": null,
+            "reached_pct": 0.0
+          },
+          "mean_reopen_to_saturation_duration": null,
+          "runs_with_alternation_pct": 0.0,
+          "block_shares": {
+            "T1-4": {
+              "phys_pct": 49.712,
+              "spec_pct": 38.198
+            },
+            "T5-8": {
+              "phys_pct": 39.735,
+              "spec_pct": 39.822
+            },
+            "T9-12": {
+              "phys_pct": 55.173,
+              "spec_pct": 32.984
+            },
+            "T13-16": {
+              "phys_pct": 50.207,
+              "spec_pct": 30.238
+            }
+          }
+        },
+        "AS10": {
+          "AS": {
+            "mean": 11.7,
+            "median": 12.0,
+            "min": 11,
+            "max": 12,
+            "reached_pct": 100.0
+          },
+          "ECO": {
+            "mean": 2,
+            "median": 2.0,
+            "min": 2,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "SEUIL": {
+            "mean": 15.1,
+            "median": 15.0,
+            "min": 14,
+            "max": 16,
+            "reached_pct": 100.0
+          },
+          "VMA": {
+            "mean": 16.6,
+            "median": 16.0,
+            "min": 16,
+            "max": 18,
+            "reached_pct": 100.0
+          },
+          "saturated_turns": {
+            "mean": 0.9,
+            "median": 1.0,
+            "min": 0,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "saturation_episodes": {
+            "mean": 0.9,
+            "median": 1.0,
+            "min": 0,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "reopenings": {
+            "mean": 0.9,
+            "median": 1.0,
+            "min": 0,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "alternation_count": {
+            "mean": 0.9,
+            "median": 1.0,
+            "min": 0,
+            "max": 2,
+            "reached_pct": 100.0
+          },
+          "first_saturation_turn": {
+            "mean": 3.038,
+            "median": 3.0,
+            "min": 3,
+            "max": 4,
+            "reached_pct": 86.667
+          },
+          "mean_reopen_to_saturation_duration": 4,
+          "runs_with_alternation_pct": 86.667,
+          "block_shares": {
+            "T1-4": {
+              "phys_pct": 49.712,
+              "spec_pct": 31.573
+            },
+            "T5-8": {
+              "phys_pct": 42.396,
+              "spec_pct": 38.151
+            },
+            "T9-12": {
+              "phys_pct": 53.92,
+              "spec_pct": 33.957
+            },
+            "T13-16": {
+              "phys_pct": 45.852,
+              "spec_pct": 31.269
+            }
+          }
+        }
+      }
+    }
+  }
+}
