@@ -10,23 +10,23 @@ class PhysiologyProfileTests(unittest.TestCase):
                 PhysiologyProfile(*values)
 
     def test_reference_curve_and_invariants(self):
-        profile = PhysiologyProfile(ef=0, threshold=5, vma=10)
+        profile = PhysiologyProfile(ef=3, threshold=6, vma=10)
         costs = [physiological_cost(profile, load) for load in range(11)]
-        self.assertEqual(costs, [0, 2, 4, 6, 8, 10, 13, 16, 19, 22, 25])
-        self.assertEqual(costs[0], 0)
+        self.assertEqual(costs, [3, 3, 3, 3, 5, 7, 9, 12, 15, 18, 21])
+        self.assertEqual(costs[profile.ef], profile.ef)
         self.assertTrue(all(cost >= 0 for cost in costs))
-        self.assertTrue(all(left < right for left, right in zip(costs, costs[1:])))
-        self.assertEqual([b - a for a, b in zip(costs[:5], costs[1:6])], [2] * 5)
-        self.assertEqual([b - a for a, b in zip(costs[5:], costs[6:])], [3] * 5)
-        self.assertEqual(physiological_cost(profile, 5), 2 * (5 - profile.ef))
+        self.assertEqual([b - a for a, b in zip(costs[:3], costs[1:4])], [0] * 3)
+        self.assertEqual([b - a for a, b in zip(costs[3:6], costs[4:7])], [2] * 3)
+        self.assertEqual([b - a for a, b in zip(costs[6:], costs[7:])], [3] * 4)
+        self.assertEqual(physiological_cost(profile, 6), 9)
 
     def test_ef_plus_one_reduces_common_domain_by_two(self):
         original = PhysiologyProfile(0, 5, 10)
         shifted = PhysiologyProfile(1, 5, 10)
         for load in range(1, 11):
             self.assertEqual(
-                physiological_cost(shifted, load),
-                physiological_cost(original, load) - 2,
+                physiological_cost(shifted, load) - physiological_cost(original, load),
+                -1,
             )
 
     def test_threshold_plus_one_changes_only_post_old_threshold_points(self):
@@ -47,9 +47,8 @@ class PhysiologyProfileTests(unittest.TestCase):
 
     def test_load_outside_integrated_domain_is_explicit(self):
         profile = PhysiologyProfile(2, 5, 10)
-        with self.assertRaisesRegex(ValueError, "greater than or equal to ef"):
-            physiological_cost(profile, 1)
-        with self.assertRaisesRegex(ValueError, "OPEN"):
+        self.assertEqual(physiological_cost(profile, 1), 2)
+        with self.assertRaisesRegex(ValueError, "above vma"):
             physiological_cost(profile, 11)
 
 

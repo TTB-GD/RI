@@ -1,7 +1,7 @@
 import unittest
 
 from physiology import PhysiologyProfile
-from race_v2 import resolve_segment
+from race_v2 import is_production_physiologically_legal, resolve_segment
 
 
 class RaceV2IntegrationTests(unittest.TestCase):
@@ -28,6 +28,15 @@ class RaceV2IntegrationTests(unittest.TestCase):
         second = resolve_segment(self.profile, production=7, difficulty=0)
         self.assertEqual(second, resolve_segment(self.profile, production=7, difficulty=0))
         self.assertNotEqual(first.cost, second.cost)
+
+    def test_legality_is_a_load_boundary_not_a_production_cap(self):
+        profile = PhysiologyProfile(3, 6, 10)
+        self.assertTrue(is_production_physiologically_legal(profile, 1, 0))
+        self.assertEqual(resolve_segment(profile, 1, 0).cost, 3)
+        self.assertTrue(is_production_physiologically_legal(profile, 8, 2))
+        self.assertFalse(is_production_physiologically_legal(profile, 9, 2))
+        with self.assertRaisesRegex(ValueError, "above vma"):
+            resolve_segment(profile, 9, 2)
 
 
 if __name__ == "__main__":

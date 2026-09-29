@@ -2,79 +2,53 @@
 
 Last consolidated: 2026-09-29
 Canonical branch: `main`
-Integration milestone: `Integrated V2 baseline` (reference commit/PR recorded at task closure)
 
-This file is the fast-entry snapshot for the current prototype state. It does
-not replace the GDD; the authority hierarchy in `AGENTS.md` applies.
+This snapshot does not replace the GDD; the authority hierarchy in `AGENTS.md` applies.
 
 ## CURRENT / INTEGRATED
 
-The existing Training prototype still provides the persistent pool, CTL and die
-progression, D99 planning constraints, risk/bust resolution and optional
-player-chosen post-bust EF replacement described by the GDD and production tests.
+- `PhysiologyProfile(ef, threshold, vma)` validates `EF < Seuil < VMA`.
+- `physiological_cost` gives the floor `C(x) = EF` for every `x <= EF`, then
+  uses the continuous experimental slopes 2 and 3, and rejects `x > VMA`.
+- Race V2 resolves local `Charge = Production + Difficulty`, scores Production
+  only, and treats `Charge <= VMA` as its hard physiological legality boundary.
+- The existing longitudinal engine now consumes a profile directly: generated
+  subset sums are filtered by Charge before the separate Reserve affordability
+  filter. SPEC and the complete Training-to-profile conversion remain absent.
 
-Race V2 now has a deliberately small production boundary:
+## EXPERIMENTAL CONSERVED
 
-- `PhysiologyProfile(ef, threshold, vma)` validates `EF < Seuil < VMA`;
-- `physiological_cost` is pure, has `C(EF) = 0`, is continuous at Seuil and
-  explicitly rejects loads outside the integrated `EF..VMA` domain;
-- a race segment resolves `Charge = Production + Difficulty`, applies the
-  physiological cost, scores only Production and gives Difficulty no persistent
-  state;
-- SPEC, Position, Efficacité and AS42/AS21/AS10/AS5 have no active dependency in
-  this integrated path.
-
-This is the current integration frontier: future Training can produce a profile,
-and Race V2 can consume it directly. The full experimental Training V2 harness
-has not been promoted.
-
-## EXPERIMENTAL
-
-- The physiological slopes `2 / 3` are calibration parameters, not final balance.
-- Race reserve construction, Form, policies, lengths, objectives and DNF flow
-  remain experimental harness material under `experiments/current/race_engine_v2/`.
-- Curve A/B/C remain unchanged there solely for reproducibility; they are not the
-  native integrated physiological curve.
-- Fatigue V1, Standard Training Player and automatic selection policies remain
-  experimental and are not normative player behavior.
-- Training V2 conventions such as D99_BONUS_ONLY, mandatory Q partition, one
-  physiological gain per turn, milestones, quality costs and P_EF/P_BALANCED/
-  P_QUALITY have not been promoted.
+- The 2/3 slopes remain calibration, not final balance.
+- The reused S1–S3 progressive Form reveal, S3 post-choice Reserve clamp, S4+
+  payable filter and DNF flow remain an experimental baseline.
+- `base_reserve = race_length × 2 + floor(CTL / 50)`, FORM_SUM/FORM_PATTERN
+  (with FORM_PATTERN as the migration reference), direct Freshness fixtures,
+  LOW protection by SL, and EFFICIENT/AGGRESSIVE/ADAPTIVE/GREEDY are experimental.
+- Curve A/B/C remain available through the explicit legacy path, preserving the
+  R1-A, R1-A2, R1-B and R1-B2 harnesses and historical results.
 
 ## OPEN / IMPLEMENTATION GAPS
 
-- **SPEC is OPEN — NOT IMPLEMENTED** in Race V2. Training's existing `Spec*`
-  catalogue entries are an explicit implementation/design gap, not a V2 rule.
-- Legality and cost for `Charge > VMA` need a design decision. The integrated
-  function reports the case as outside its domain; VMA is not silently made a
-  Production cap because Difficulty also contributes to Charge.
-- The complete Training → EF/Seuil/VMA progression mapping is not implemented.
-- Reserve, Form, race objectives, the race role of SL and full multi-segment
-  orchestration are not integrated design rules.
-- The selector's technical SL priority remains an implementation/policy gap.
-  The post-bust rule boundary already exposes and validates the player's EF
-  choice; only a future user-facing interface is outside the current engine.
+- The complete Training → EF/Seuil/VMA mapping is not implemented.
+- Final calibration of slopes 2/3 and of Reserve, Form, Freshness and SL is open.
+- SPEC remains OPEN and unimplemented in Race V2; Training's `Spec*` catalogue
+  entries are still an explicit design/implementation gap.
+- The selector's technical SL priority and D99 three-die convention remain open.
 
 ## HISTORICAL / TRACEABILITY
 
-SPEC experiments (`training_v2_specific`, `race_efficiency_probe`,
-`training_race_bridge`, `spec_local_curve_probe`) are retained without changing
-their results and are marked as experimental probes of an OPEN question rather
-than baseline or abandoned work.
-Curve A/B/C and prior large Race/Fatigue/Training campaigns remain reproducible
-experimental evidence; their figures are not CURRENT balance.
+Prior Race, Fatigue, Training and SPEC campaigns keep their recorded status and
+results. No historical campaign is retroactively described as using the native
+profile path.
 
 ## REPOSITORY CONVENTION
 
-- `tests/` contains tests of current prototype behavior.
-- `experiments/current/` contains isolated work that still informs current open
-  questions; explicit status labels prevent promotion into rules.
-- `experiments/archive/` contains historical experiments when archived.
+- `tests/` contains current behavior tests.
+- `experiments/current/` contains experimental harnesses still informing open questions.
+- `experiments/archive/` contains retained historical experiments.
 
 ## NEXT TARGETS
 
-1. Decide the domain behavior for Charge above VMA.
-2. Define the minimal Training-to-profile mapping without promoting harness policy.
-3. Decide Reserve/Form/SL boundaries before integrating full race orchestration.
-4. Resolve the SL selector gap; treat any future post-bust UI separately from
-   the already implemented choice-validation boundary.
+1. Define the minimal Training-to-profile mapping.
+2. Calibrate Reserve/Form/Freshness/SL and the physiological slopes.
+3. Resolve the remaining SPEC, SL selector and D99 convention questions.

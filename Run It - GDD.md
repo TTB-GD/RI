@@ -110,17 +110,18 @@ Les anciennes campagnes Fatigue V1, Overtraining Capacity, P0 et Standard Player
 
 Le passage futur du Training vers la course utilise un `PhysiologyProfile(EF, Seuil, VMA)` avec l'invariant strict `EF < Seuil < VMA` :
 
-- **EF** est l'origine de coût : `C(EF) = 0` ;
+- **EF** est le plancher de coût : toute Charge `≤ EF` est légale et coûte `EF` ;
 - **Seuil** est le changement de régime de la courbe énergétique ;
-- **VMA** est la borne haute physiologique du domaine intégré.
+- **VMA** est la borne dure de Charge du domaine intégré.
 
-Aucune contrainte supplémentaire sur `VMA − EF` n'est posée et `C(VMA)` n'est pas normalisé dans une enveloppe fixe. Une Charge sous EF est explicitement hors domaine, sans clamp silencieux. La légalité et le coût d'une Charge supérieure à VMA sont **OPEN** : l'implémentation signale ce cas et ne transforme pas VMA en plafond de Production.
+Aucune contrainte supplémentaire sur `VMA − EF` n'est posée et `C(VMA)` n'est pas normalisé dans une enveloppe fixe. La légalité supérieure porte sur `Charge = Production + Difficulty ≤ VMA`, et non sur un plafond autonome de Production. Une option au-dessus de VMA est retirée avant le filtrage de Réserve.
 
 La courbe native intégrée est :
 
 ```text
-C(x) = 2 × (x − EF)                                si x ≤ Seuil
-C(x) = 2 × (Seuil − EF) + 3 × (x − Seuil)         si x > Seuil
+C(x) = EF                                               si x ≤ EF
+C(x) = EF + 2 × (x − EF)                               si EF < x ≤ Seuil
+C(x) = EF + 2 × (Seuil − EF) + 3 × (x − Seuil)        si Seuil < x ≤ VMA
 ```
 
 Sa structure (origine EF, rupture Seuil, borne VMA) est intégrée. Les pentes `2 / 3` sont une **CALIBRATION EXPERIMENTAL**, pas un équilibrage CURRENT définitif.
@@ -136,7 +137,9 @@ Score += Production
 Reserve -= Cost
 ```
 
-Difficulty ne donne aucun score, ne retire jamais directement de Réserve et ne possède aucun état persistant propre. Le noyau intégré expose cette résolution pure. La construction de la Réserve, Form, les politiques de choix, les longueurs et objectifs de course, la conversion complète du Training et le rôle concret de SL restent **EXPERIMENTAL** ou **OPEN** ; les tables Curve A/B/C sont conservées uniquement pour reproduire les expériences historiques.
+Difficulty ne donne aucun score, ne retire jamais directement de Réserve et ne possède aucun état persistant propre. Le noyau intégré expose cette résolution pure.
+
+L'orchestration longitudinale conservée comme baseline **EXPERIMENTAL** révèle Form avant chaque choix S1–S3. La Réserve brute finale est connue avant le choix S3, puis son plancher `max(raw_final_reserve, spent_after_S3)` est fixé après ce choix. À partir de S4, le menu payable applique le filtre de Réserve après le filtre physiologique. Sa formule de Réserve, Form, Freshness, SL, ses politiques, longueurs et objectifs ne deviennent pas CURRENT pour autant. La conversion complète du Training reste **OPEN** ; les tables Curve A/B/C sont conservées uniquement pour reproduire les expériences historiques.
 
 ### 7.3 SPEC et anciens concepts — OPEN / EXPERIMENTAL / HISTORICAL
 
