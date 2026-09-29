@@ -18,7 +18,7 @@ Run It est un jeu tactique de préparation à la course. Les joueurs construisen
 
 Une amélioration après chaque tranche de quatre qualités réussies, au maximum quatre améliorations sur tout le pool. Chaque amélioration fait avancer un dé d'un cran : `d6 → d8 → d10 → d12`. Le choix du dé est, en design, celui du joueur ; le prototype utilise une politique automatique.
 
-**OPEN — DOCUMENTATION CONFLICT :** le GDD précédent attribuait aux d8/d10/d12 des bonus permanents `+1/+2/+3` ; le prototype configure `0/0/0`. La décision définitive sur ces bonus n'est pas déduite du code. Les anciennes moyennes calculées avec bonus ne sont pas des références CURRENT.
+**CURRENT :** les d8/d10/d12 n'ajoutent aucun bonus permanent (`0/0/0`). Les anciens bonus `+1/+2/+3` sont **HISTORICAL** ; les moyennes calculées avec ces bonus ne sont pas des références CURRENT.
 
 ### D5–D6. Récupération et dé conservé
 
@@ -53,7 +53,7 @@ Un slot D99 est consommé dès qu'une qualité est planifiée, même si elle bus
 
 ### S0. Catalogue
 
-Le catalogue d'entraînement actuellement codé contient EF, Seuil, VMA, Force, des entrées historiques Spec et SL. Le RPE est le coût en énergie de la séance. **IMPLEMENTATION GAP :** ces entrées Spec du prototype ne définissent pas le mécanisme SPEC V2, qui reste OPEN et absent de Race V2. Seuil, VMA, Force, Spec et SL sont des qualités ; EF ne l'est pas. Les prérequis forment un graphe explicite, y compris ses embranchements : aucune progression n'est inférée du nom d'une séance.
+Le catalogue d'entraînement actuellement codé contient EF, Seuil, VMA, Force, des entrées Spec existantes et SL. Le RPE est le coût en énergie de la séance. **IMPLEMENTATION GAP :** ces entrées Spec du prototype ne définissent pas le mécanisme SPEC V2, qui reste OPEN et absent de Race V2. Seuil, VMA, Force, Spec et SL sont des qualités ; EF ne l'est pas. Les prérequis forment un graphe explicite, y compris ses embranchements : aucune progression n'est inférée du nom d'une séance.
 
 Une séance **débloquée** satisfait son seuil normal de prérequis. Une qualité verrouillée devient **tentable** si l'un de ses prédécesseurs directs est normalement débloqué et a été réussi au moins une fois. Ce droit de tentative ne modifie pas le seuil normal. Exemple : Spec6 disponible et réussie zéro fois ne permet pas Spec7 ; une réussite rend Spec7 tentable ; deux la débloquent normalement. Spec8 ne devient pas tentable par ce seul fait. L'anticipation ne concerne pas les EF.
 
@@ -86,7 +86,7 @@ La qualité busted compte parmi les sept séances et consomme son slot D99. Son 
 
 **DESIGN CURRENT :** le joueur choisit comment réaffecter cette énergie en EF accessibles, dans la limite de l'énergie récupérable, de l'accès RPE et des places disponibles jusqu'à sept séances comptées. Une qualité annulée ne réserve pas une place. Les séances sûres prévues restent réalisées, même après le bust. Aucune nouvelle qualité ne remplace celles annulées.
 
-**IMPLEMENTATION GAP :** le prototype redistribue aujourd'hui automatiquement et de façon gloutonne vers les EF. L'interface du choix joueur reste à spécifier et à implémenter ; le présent GDD n'en décide pas l'algorithme.
+**IMPLEMENTATION :** le moteur expose les options de redistribution puis valide le choix explicite du joueur, y compris un choix vide, partiel, multiple ou répétant une EF autorisée. Il ne sélectionne pas lui-même les EF. Une éventuelle interface utilisateur reste un chantier distinct de cette frontière de règle, qui est implémentée.
 
 La **dépense réellement réalisée** est la somme des coûts des séances réussies après bust et éventuelle redistribution. L'énergie de la séance busted est perdue mais ne devient ni CTL ni charge réalisée pour Fatigue V1 ; l'énergie simplement non dépensée n'est pas réalisée non plus.
 
@@ -138,9 +138,9 @@ Reserve -= Cost
 
 Difficulty ne donne aucun score, ne retire jamais directement de Réserve et ne possède aucun état persistant propre. Le noyau intégré expose cette résolution pure. La construction de la Réserve, Form, les politiques de choix, les longueurs et objectifs de course, la conversion complète du Training et le rôle concret de SL restent **EXPERIMENTAL** ou **OPEN** ; les tables Curve A/B/C sont conservées uniquement pour reproduire les expériences historiques.
 
-### 7.3 SPEC et anciens concepts — OPEN / HISTORICAL
+### 7.3 SPEC et anciens concepts — OPEN / EXPERIMENTAL / HISTORICAL
 
-**SPEC = OPEN — NOT IMPLEMENTED** dans le chemin V2 intégré. SPEC Position, SPEC Efficacité et AS42/AS21/AS10/AS5 ne sont pas des règles actives de coût. Les expériences qui les étudient demeurent des preuves expérimentales, pas la baseline. Les anciennes esquisses Mental / Pacing / Physique, objectifs secrets, personnages et manipulations sont **HISTORICAL** et ne spécifient pas Race V2.
+**SPEC = OPEN — NOT IMPLEMENTED** dans le chemin V2 intégré. SPEC Position, SPEC Efficacité et AS42/AS21/AS10/AS5 ne sont pas des règles actives de coût. Les expériences qui les étudient demeurent des sondes **EXPERIMENTAL** relatives à une question OPEN, pas la baseline et pas une piste déclarée abandonnée. Les anciennes esquisses Mental / Pacing / Physique, objectifs secrets, personnages et manipulations sont **HISTORICAL** et ne spécifient pas Race V2.
 
 ## 8. Fatigue V1 — EXPERIMENTAL
 

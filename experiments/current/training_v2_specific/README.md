@@ -1,7 +1,8 @@
 # Training V2 — rôle du Spécifique
 
 
-> **HISTORICAL SPEC HYPOTHESIS — NOT THE INTEGRATED V2 BASELINE.** SPEC is
+> **EXPERIMENTAL SPEC PROBE — SPEC IS OPEN / NOT IMPLEMENTED.** This is not
+> the integrated V2 baseline. SPEC is
 > OPEN and not implemented in the active Race V2 path; Position, Efficacité and
 > AS42/AS21/AS10/AS5 below are preserved experimental conventions only.
 

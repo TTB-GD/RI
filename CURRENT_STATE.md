@@ -51,14 +51,16 @@ has not been promoted.
 - The complete Training → EF/Seuil/VMA progression mapping is not implemented.
 - Reserve, Form, race objectives, the race role of SL and full multi-segment
   orchestration are not integrated design rules.
-- The selector's technical SL priority and the exact player interface for
-  post-bust EF choice remain implementation/policy gaps documented in the GDD.
+- The selector's technical SL priority remains an implementation/policy gap.
+  The post-bust rule boundary already exposes and validates the player's EF
+  choice; only a future user-facing interface is outside the current engine.
 
 ## HISTORICAL / TRACEABILITY
 
 SPEC experiments (`training_v2_specific`, `race_efficiency_probe`,
 `training_race_bridge`, `spec_local_curve_probe`) are retained without changing
-their results and are marked as historical hypotheses rather than baseline.
+their results and are marked as experimental probes of an OPEN question rather
+than baseline or abandoned work.
 Curve A/B/C and prior large Race/Fatigue/Training campaigns remain reproducible
 experimental evidence; their figures are not CURRENT balance.
 
@@ -74,4 +76,5 @@ experimental evidence; their figures are not CURRENT balance.
 1. Decide the domain behavior for Charge above VMA.
 2. Define the minimal Training-to-profile mapping without promoting harness policy.
 3. Decide Reserve/Form/SL boundaries before integrating full race orchestration.
-4. Resolve the remaining post-bust player-interface and SL selector gaps.
+4. Resolve the SL selector gap; treat any future post-bust UI separately from
+   the already implemented choice-validation boundary.
