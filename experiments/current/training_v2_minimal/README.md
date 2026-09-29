@@ -5,6 +5,8 @@
 This isolated harness probes the proposed EF/Quality dice partition, true
 multi-quality composition, Q-spent/SPEC accounting, 16-turn progression, and
 Speed/Economy SPEC profiles. It imports only the existing D99
+This isolated harness probes the proposed EF/Quality dice partition, 16-turn
+progression, and Speed/Economy SPEC profiles. It imports only the existing D99
 pattern signature and Race Engine V2 Curve B cost boundary; it does not call or
 change the production decision engine, Fatigue V1, or a complete race.
 
@@ -22,3 +24,6 @@ an explicit full regeneration.
 Modelling conventions and measured results are recorded in `REPORT.md`;
 machine-readable aggregate results are in `results.json`; the three first-pass
 representative trajectories per policy remain preserved there.
+Modelling conventions and measured results are recorded in `REPORT.md`;
+machine-readable aggregate results and three representative trajectories per
+policy are in `results.json`.

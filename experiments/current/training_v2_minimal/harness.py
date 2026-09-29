@@ -530,6 +530,9 @@ def run_all() -> dict:
     if a["criterion"] != "CHOIX QUASI AUTOMATIQUE":
         results["B"] = experiment_b()
         results["B2"] = experiment_b2()
+    results = {"status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN", "A": a}
+    if a["criterion"] != "CHOIX QUASI AUTOMATIQUE":
+        results["B"] = experiment_b()
         results["C"] = experiment_c()
     return results
 
@@ -547,4 +550,7 @@ if __name__ == "__main__":
     }
     results.update(run_a2_b2())
     destination.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+if __name__ == "__main__":
+    destination = Path(__file__).with_name("results.json")
+    destination.write_text(json.dumps(run_all(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(destination)

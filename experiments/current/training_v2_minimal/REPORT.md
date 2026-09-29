@@ -304,3 +304,13 @@ Réponses prioritaires :
    résultat minoritaire ?
 5. Les politiques doivent-elles pouvoir renoncer à une qualité finançable pour
    préserver davantage de SPEC ?
+## DESIGN QUESTIONS
+
+1. Une énergie Q doit-elle être entièrement créditée lorsqu'une seule qualité
+   progresse, ou seulement son coût effectif ?
+2. Plusieurs marqueurs physiologiques peuvent-ils progresser dans un même tour ?
+3. Un gain `EF +1` bloqué par `EF < Seuil` est-il perdu, différé, ou converti ?
+4. Quel effet de règle relie exactement `ECO -1` au coût Race Engine V2, et un
+   coût nul est-il admissible ?
+5. Les fixtures d'intensité/durée AS42 et AS10 doivent-elles être remplacées par
+   des valeurs canoniques avant toute comparaison d'équilibrage ?

@@ -604,6 +604,9 @@
   "B": {
     "seeds": 200,
     "turns": 16,
+  "B": {
+    "seeds": 200,
+    "turns": 16,
     "d99_mode": "D99_BONUS_ONLY",
     "policies": {
       "P_EF": {

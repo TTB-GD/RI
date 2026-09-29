@@ -5,6 +5,7 @@ import unittest
 from experiments.current.training_v2_minimal.harness import (
     affordable_programs, experiment_a, experiment_a2, experiment_c,
     legal_partitions, quality_cost, resolve_roll, simulate, simulate_b2,
+    experiment_a, experiment_c, legal_partitions, quality_cost, resolve_roll, simulate,
 )
 
 
