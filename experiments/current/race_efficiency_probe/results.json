@@ -1,0 +1,1536 @@
+{
+  "status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN",
+  "protocol": {
+    "source_baseline": "4f7fb9d",
+    "deterministic": true,
+    "seeds": [],
+    "games": 0,
+    "turns": 0,
+    "EF": 0,
+    "VMA": 10,
+    "curves": {
+      "LINEAR": {
+        "base": 5.0,
+        "linear": 1.0,
+        "quadratic": 0.0
+      },
+      "CONVEX": {
+        "base": 5.0,
+        "linear": 0.8,
+        "quadratic": 0.05
+      }
+    },
+    "starts": {
+      "LOW": 2,
+      "MID": 5,
+      "HIGH": 8
+    },
+    "builds": {
+      "FULL_POSITION": [
+        4,
+        0
+      ],
+      "BALANCED": [
+        2,
+        2
+      ],
+      "FULL_EFFICIENCY": [
+        0,
+        4
+      ]
+    },
+    "segments": [
+      4,
+      8,
+      12
+    ],
+    "E4_ECO_scope": "active AS only; adjacent tested paces use C0"
+  },
+  "E1_E2": {
+    "LINEAR": [
+      {
+        "position": 0,
+        "C0": 5.0,
+        "distance_to_EF_cost": 0.0,
+        "distance_to_VMA_cost": 10.0,
+        "ECO_MAX": 0.0,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 1,
+        "C0": 6.0,
+        "distance_to_EF_cost": 1.0,
+        "distance_to_VMA_cost": 9.0,
+        "ECO_MAX": 1.0,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 2,
+        "C0": 7.0,
+        "distance_to_EF_cost": 2.0,
+        "distance_to_VMA_cost": 8.0,
+        "ECO_MAX": 2.0,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 3,
+        "C0": 8.0,
+        "distance_to_EF_cost": 3.0,
+        "distance_to_VMA_cost": 7.0,
+        "ECO_MAX": 3.0,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 4,
+        "C0": 9.0,
+        "distance_to_EF_cost": 4.0,
+        "distance_to_VMA_cost": 6.0,
+        "ECO_MAX": 4.0,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 5,
+        "C0": 10.0,
+        "distance_to_EF_cost": 5.0,
+        "distance_to_VMA_cost": 5.0,
+        "ECO_MAX": 5.0,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 6,
+        "C0": 11.0,
+        "distance_to_EF_cost": 6.0,
+        "distance_to_VMA_cost": 4.0,
+        "ECO_MAX": 4.0,
+        "minimum_reachable_cost": 7.0
+      },
+      {
+        "position": 7,
+        "C0": 12.0,
+        "distance_to_EF_cost": 7.0,
+        "distance_to_VMA_cost": 3.0,
+        "ECO_MAX": 3.0,
+        "minimum_reachable_cost": 9.0
+      },
+      {
+        "position": 8,
+        "C0": 13.0,
+        "distance_to_EF_cost": 8.0,
+        "distance_to_VMA_cost": 2.0,
+        "ECO_MAX": 2.0,
+        "minimum_reachable_cost": 11.0
+      },
+      {
+        "position": 9,
+        "C0": 14.0,
+        "distance_to_EF_cost": 9.0,
+        "distance_to_VMA_cost": 1.0,
+        "ECO_MAX": 1.0,
+        "minimum_reachable_cost": 13.0
+      },
+      {
+        "position": 10,
+        "C0": 15.0,
+        "distance_to_EF_cost": 10.0,
+        "distance_to_VMA_cost": 0.0,
+        "ECO_MAX": 0.0,
+        "minimum_reachable_cost": 15.0
+      }
+    ],
+    "CONVEX": [
+      {
+        "position": 0,
+        "C0": 5.0,
+        "distance_to_EF_cost": 0.0,
+        "distance_to_VMA_cost": 13.0,
+        "ECO_MAX": 0.0,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 1,
+        "C0": 5.85,
+        "distance_to_EF_cost": 0.85,
+        "distance_to_VMA_cost": 12.15,
+        "ECO_MAX": 0.85,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 2,
+        "C0": 6.8,
+        "distance_to_EF_cost": 1.8,
+        "distance_to_VMA_cost": 11.2,
+        "ECO_MAX": 1.8,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 3,
+        "C0": 7.85,
+        "distance_to_EF_cost": 2.85,
+        "distance_to_VMA_cost": 10.15,
+        "ECO_MAX": 2.85,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 4,
+        "C0": 9.0,
+        "distance_to_EF_cost": 4.0,
+        "distance_to_VMA_cost": 9.0,
+        "ECO_MAX": 4.0,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 5,
+        "C0": 10.25,
+        "distance_to_EF_cost": 5.25,
+        "distance_to_VMA_cost": 7.75,
+        "ECO_MAX": 5.25,
+        "minimum_reachable_cost": 5.0
+      },
+      {
+        "position": 6,
+        "C0": 11.6,
+        "distance_to_EF_cost": 6.6,
+        "distance_to_VMA_cost": 6.4,
+        "ECO_MAX": 6.4,
+        "minimum_reachable_cost": 5.2
+      },
+      {
+        "position": 7,
+        "C0": 13.05,
+        "distance_to_EF_cost": 8.05,
+        "distance_to_VMA_cost": 4.95,
+        "ECO_MAX": 4.95,
+        "minimum_reachable_cost": 8.1
+      },
+      {
+        "position": 8,
+        "C0": 14.6,
+        "distance_to_EF_cost": 9.6,
+        "distance_to_VMA_cost": 3.4,
+        "ECO_MAX": 3.4,
+        "minimum_reachable_cost": 11.2
+      },
+      {
+        "position": 9,
+        "C0": 16.25,
+        "distance_to_EF_cost": 11.25,
+        "distance_to_VMA_cost": 1.75,
+        "ECO_MAX": 1.75,
+        "minimum_reachable_cost": 14.5
+      },
+      {
+        "position": 10,
+        "C0": 18.0,
+        "distance_to_EF_cost": 13.0,
+        "distance_to_VMA_cost": 0.0,
+        "ECO_MAX": 0.0,
+        "minimum_reachable_cost": 18.0
+      }
+    ]
+  },
+  "E3": [
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 6,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 11.0,
+      "adjusted_cost_at_AS": 11.0,
+      "next_POSITION": {
+        "new_AS": 7,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 4,
+      "raw_ECO": 2,
+      "effective_ECO": 2,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 9.0,
+      "adjusted_cost_at_AS": 7.0,
+      "next_POSITION": {
+        "new_AS": 5,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": 1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 2,
+      "raw_ECO": 4,
+      "effective_ECO": 2.0,
+      "wasted_ECO": 2.0,
+      "native_cost_at_AS": 7.0,
+      "adjusted_cost_at_AS": 5.0,
+      "next_POSITION": {
+        "new_AS": 3,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": 1.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 1.0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 9,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 14.0,
+      "adjusted_cost_at_AS": 14.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 7,
+      "raw_ECO": 2,
+      "effective_ECO": 2,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 12.0,
+      "adjusted_cost_at_AS": 10.0,
+      "next_POSITION": {
+        "new_AS": 8,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 5,
+      "raw_ECO": 4,
+      "effective_ECO": 4,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 10.0,
+      "adjusted_cost_at_AS": 6.0,
+      "next_POSITION": {
+        "new_AS": 6,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 10,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 15.0,
+      "adjusted_cost_at_AS": 15.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 0.0,
+        "delta_ECO_MAX": 0.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 10,
+      "raw_ECO": 2,
+      "effective_ECO": 0.0,
+      "wasted_ECO": 2.0,
+      "native_cost_at_AS": 15.0,
+      "adjusted_cost_at_AS": 15.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 0.0,
+        "delta_ECO_MAX": 0.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 0.0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 8,
+      "raw_ECO": 4,
+      "effective_ECO": 2.0,
+      "wasted_ECO": 2.0,
+      "native_cost_at_AS": 13.0,
+      "adjusted_cost_at_AS": 11.0,
+      "next_POSITION": {
+        "new_AS": 9,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 2.0,
+        "effective_ECO_change": -1.0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 6,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 11.6,
+      "adjusted_cost_at_AS": 11.6,
+      "next_POSITION": {
+        "new_AS": 7,
+        "delta_C0": 1.45,
+        "delta_ECO_MAX": -1.45,
+        "adjusted_cost_change": 1.45,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 4,
+      "raw_ECO": 2,
+      "effective_ECO": 2,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 9.0,
+      "adjusted_cost_at_AS": 7.0,
+      "next_POSITION": {
+        "new_AS": 5,
+        "delta_C0": 1.25,
+        "delta_ECO_MAX": 1.25,
+        "adjusted_cost_change": 1.25,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 2,
+      "raw_ECO": 4,
+      "effective_ECO": 1.8,
+      "wasted_ECO": 2.2,
+      "native_cost_at_AS": 6.8,
+      "adjusted_cost_at_AS": 5.0,
+      "next_POSITION": {
+        "new_AS": 3,
+        "delta_C0": 1.05,
+        "delta_ECO_MAX": 1.05,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 1.05
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 9,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 16.25,
+      "adjusted_cost_at_AS": 16.25,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 1.75,
+        "delta_ECO_MAX": -1.75,
+        "adjusted_cost_change": 1.75,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 7,
+      "raw_ECO": 2,
+      "effective_ECO": 2,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 13.05,
+      "adjusted_cost_at_AS": 11.05,
+      "next_POSITION": {
+        "new_AS": 8,
+        "delta_C0": 1.55,
+        "delta_ECO_MAX": -1.55,
+        "adjusted_cost_change": 1.55,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 5,
+      "raw_ECO": 4,
+      "effective_ECO": 4,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 10.25,
+      "adjusted_cost_at_AS": 6.25,
+      "next_POSITION": {
+        "new_AS": 6,
+        "delta_C0": 1.35,
+        "delta_ECO_MAX": 1.15,
+        "adjusted_cost_change": 1.35,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 10,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 18.0,
+      "adjusted_cost_at_AS": 18.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 0.0,
+        "delta_ECO_MAX": 0.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 10,
+      "raw_ECO": 2,
+      "effective_ECO": 0.0,
+      "wasted_ECO": 2.0,
+      "native_cost_at_AS": 18.0,
+      "adjusted_cost_at_AS": 18.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 0.0,
+        "delta_ECO_MAX": 0.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 0.0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 8,
+      "raw_ECO": 4,
+      "effective_ECO": 3.4,
+      "wasted_ECO": 0.6,
+      "native_cost_at_AS": 14.6,
+      "adjusted_cost_at_AS": 11.2,
+      "next_POSITION": {
+        "new_AS": 9,
+        "delta_C0": 1.65,
+        "delta_ECO_MAX": -1.65,
+        "adjusted_cost_change": 3.3,
+        "effective_ECO_change": -1.65
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    }
+  ],
+  "marginals": [
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 6,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 11.0,
+      "adjusted_cost_at_AS": 11.0,
+      "next_POSITION": {
+        "new_AS": 7,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 4,
+      "raw_ECO": 2,
+      "effective_ECO": 2,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 9.0,
+      "adjusted_cost_at_AS": 7.0,
+      "next_POSITION": {
+        "new_AS": 5,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": 1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 2,
+      "raw_ECO": 4,
+      "effective_ECO": 2.0,
+      "wasted_ECO": 2.0,
+      "native_cost_at_AS": 7.0,
+      "adjusted_cost_at_AS": 5.0,
+      "next_POSITION": {
+        "new_AS": 3,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": 1.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 1.0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 9,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 14.0,
+      "adjusted_cost_at_AS": 14.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 7,
+      "raw_ECO": 2,
+      "effective_ECO": 2,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 12.0,
+      "adjusted_cost_at_AS": 10.0,
+      "next_POSITION": {
+        "new_AS": 8,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 5,
+      "raw_ECO": 4,
+      "effective_ECO": 4,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 10.0,
+      "adjusted_cost_at_AS": 6.0,
+      "next_POSITION": {
+        "new_AS": 6,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 1.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 10,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 15.0,
+      "adjusted_cost_at_AS": 15.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 0.0,
+        "delta_ECO_MAX": 0.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 10,
+      "raw_ECO": 2,
+      "effective_ECO": 0.0,
+      "wasted_ECO": 2.0,
+      "native_cost_at_AS": 15.0,
+      "adjusted_cost_at_AS": 15.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 0.0,
+        "delta_ECO_MAX": 0.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 0.0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 8,
+      "raw_ECO": 4,
+      "effective_ECO": 2.0,
+      "wasted_ECO": 2.0,
+      "native_cost_at_AS": 13.0,
+      "adjusted_cost_at_AS": 11.0,
+      "next_POSITION": {
+        "new_AS": 9,
+        "delta_C0": 1.0,
+        "delta_ECO_MAX": -1.0,
+        "adjusted_cost_change": 2.0,
+        "effective_ECO_change": -1.0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 6,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 11.6,
+      "adjusted_cost_at_AS": 11.6,
+      "next_POSITION": {
+        "new_AS": 7,
+        "delta_C0": 1.45,
+        "delta_ECO_MAX": -1.45,
+        "adjusted_cost_change": 1.45,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 4,
+      "raw_ECO": 2,
+      "effective_ECO": 2,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 9.0,
+      "adjusted_cost_at_AS": 7.0,
+      "next_POSITION": {
+        "new_AS": 5,
+        "delta_C0": 1.25,
+        "delta_ECO_MAX": 1.25,
+        "adjusted_cost_change": 1.25,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 2,
+      "raw_ECO": 4,
+      "effective_ECO": 1.8,
+      "wasted_ECO": 2.2,
+      "native_cost_at_AS": 6.8,
+      "adjusted_cost_at_AS": 5.0,
+      "next_POSITION": {
+        "new_AS": 3,
+        "delta_C0": 1.05,
+        "delta_ECO_MAX": 1.05,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 1.05
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 9,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 16.25,
+      "adjusted_cost_at_AS": 16.25,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 1.75,
+        "delta_ECO_MAX": -1.75,
+        "adjusted_cost_change": 1.75,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 7,
+      "raw_ECO": 2,
+      "effective_ECO": 2,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 13.05,
+      "adjusted_cost_at_AS": 11.05,
+      "next_POSITION": {
+        "new_AS": 8,
+        "delta_C0": 1.55,
+        "delta_ECO_MAX": -1.55,
+        "adjusted_cost_change": 1.55,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 5,
+      "raw_ECO": 4,
+      "effective_ECO": 4,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 10.25,
+      "adjusted_cost_at_AS": 6.25,
+      "next_POSITION": {
+        "new_AS": 6,
+        "delta_C0": 1.35,
+        "delta_ECO_MAX": 1.15,
+        "adjusted_cost_change": 1.35,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 1.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "FULL_POSITION",
+      "position_tiers": 4,
+      "final_AS": 10,
+      "raw_ECO": 0,
+      "effective_ECO": 0,
+      "wasted_ECO": 0,
+      "native_cost_at_AS": 18.0,
+      "adjusted_cost_at_AS": 18.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 0.0,
+        "delta_ECO_MAX": 0.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "BALANCED",
+      "position_tiers": 2,
+      "final_AS": 10,
+      "raw_ECO": 2,
+      "effective_ECO": 0.0,
+      "wasted_ECO": 2.0,
+      "native_cost_at_AS": 18.0,
+      "adjusted_cost_at_AS": 18.0,
+      "next_POSITION": {
+        "new_AS": 10,
+        "delta_C0": 0.0,
+        "delta_ECO_MAX": 0.0,
+        "adjusted_cost_change": 0.0,
+        "effective_ECO_change": 0.0
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "position_tiers": 0,
+      "final_AS": 8,
+      "raw_ECO": 4,
+      "effective_ECO": 3.4,
+      "wasted_ECO": 0.6,
+      "native_cost_at_AS": 14.6,
+      "adjusted_cost_at_AS": 11.2,
+      "next_POSITION": {
+        "new_AS": 9,
+        "delta_C0": 1.65,
+        "delta_ECO_MAX": -1.65,
+        "adjusted_cost_change": 3.3,
+        "effective_ECO_change": -1.65
+      },
+      "next_EFFICIENCY": {
+        "real_cost_reduction": 0.0
+      }
+    }
+  ],
+  "E4": [
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "tested_pace": 5,
+      "cost_per_segment": 10.0,
+      "cost_x4": 40.0,
+      "cost_x8": 80.0,
+      "cost_x12": 120.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "tested_pace": 6,
+      "cost_per_segment": 11.0,
+      "cost_x4": 44.0,
+      "cost_x8": 88.0,
+      "cost_x12": 132.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "tested_pace": 7,
+      "cost_per_segment": 12.0,
+      "cost_x4": 48.0,
+      "cost_x8": 96.0,
+      "cost_x12": 144.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "BALANCED",
+      "tested_pace": 3,
+      "cost_per_segment": 8.0,
+      "cost_x4": 32.0,
+      "cost_x8": 64.0,
+      "cost_x12": 96.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "BALANCED",
+      "tested_pace": 4,
+      "cost_per_segment": 7.0,
+      "cost_x4": 28.0,
+      "cost_x8": 56.0,
+      "cost_x12": 84.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "BALANCED",
+      "tested_pace": 5,
+      "cost_per_segment": 10.0,
+      "cost_x4": 40.0,
+      "cost_x8": 80.0,
+      "cost_x12": 120.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 1,
+      "cost_per_segment": 6.0,
+      "cost_x4": 24.0,
+      "cost_x8": 48.0,
+      "cost_x12": 72.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 2,
+      "cost_per_segment": 5.0,
+      "cost_x4": 20.0,
+      "cost_x8": 40.0,
+      "cost_x12": 60.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 3,
+      "cost_per_segment": 8.0,
+      "cost_x4": 32.0,
+      "cost_x8": 64.0,
+      "cost_x12": 96.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "tested_pace": 8,
+      "cost_per_segment": 13.0,
+      "cost_x4": 52.0,
+      "cost_x8": 104.0,
+      "cost_x12": 156.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "tested_pace": 9,
+      "cost_per_segment": 14.0,
+      "cost_x4": 56.0,
+      "cost_x8": 112.0,
+      "cost_x12": 168.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "tested_pace": 10,
+      "cost_per_segment": 15.0,
+      "cost_x4": 60.0,
+      "cost_x8": 120.0,
+      "cost_x12": 180.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "BALANCED",
+      "tested_pace": 6,
+      "cost_per_segment": 11.0,
+      "cost_x4": 44.0,
+      "cost_x8": 88.0,
+      "cost_x12": 132.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "BALANCED",
+      "tested_pace": 7,
+      "cost_per_segment": 10.0,
+      "cost_x4": 40.0,
+      "cost_x8": 80.0,
+      "cost_x12": 120.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "BALANCED",
+      "tested_pace": 8,
+      "cost_per_segment": 13.0,
+      "cost_x4": 52.0,
+      "cost_x8": 104.0,
+      "cost_x12": 156.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 4,
+      "cost_per_segment": 9.0,
+      "cost_x4": 36.0,
+      "cost_x8": 72.0,
+      "cost_x12": 108.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 5,
+      "cost_per_segment": 6.0,
+      "cost_x4": 24.0,
+      "cost_x8": 48.0,
+      "cost_x12": 72.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 6,
+      "cost_per_segment": 11.0,
+      "cost_x4": 44.0,
+      "cost_x8": 88.0,
+      "cost_x12": 132.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "FULL_POSITION",
+      "tested_pace": 9,
+      "cost_per_segment": 14.0,
+      "cost_x4": 56.0,
+      "cost_x8": 112.0,
+      "cost_x12": 168.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "FULL_POSITION",
+      "tested_pace": 10,
+      "cost_per_segment": 15.0,
+      "cost_x4": 60.0,
+      "cost_x8": 120.0,
+      "cost_x12": 180.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "BALANCED",
+      "tested_pace": 9,
+      "cost_per_segment": 14.0,
+      "cost_x4": 56.0,
+      "cost_x8": 112.0,
+      "cost_x12": 168.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "BALANCED",
+      "tested_pace": 10,
+      "cost_per_segment": 15.0,
+      "cost_x4": 60.0,
+      "cost_x8": 120.0,
+      "cost_x12": 180.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 7,
+      "cost_per_segment": 12.0,
+      "cost_x4": 48.0,
+      "cost_x8": 96.0,
+      "cost_x12": 144.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 8,
+      "cost_per_segment": 11.0,
+      "cost_x4": 44.0,
+      "cost_x8": 88.0,
+      "cost_x12": 132.0
+    },
+    {
+      "curve": "LINEAR",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 9,
+      "cost_per_segment": 14.0,
+      "cost_x4": 56.0,
+      "cost_x8": 112.0,
+      "cost_x12": 168.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "tested_pace": 5,
+      "cost_per_segment": 10.25,
+      "cost_x4": 41.0,
+      "cost_x8": 82.0,
+      "cost_x12": 123.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "tested_pace": 6,
+      "cost_per_segment": 11.6,
+      "cost_x4": 46.4,
+      "cost_x8": 92.8,
+      "cost_x12": 139.2
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_POSITION",
+      "tested_pace": 7,
+      "cost_per_segment": 13.05,
+      "cost_x4": 52.2,
+      "cost_x8": 104.4,
+      "cost_x12": 156.6
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "BALANCED",
+      "tested_pace": 3,
+      "cost_per_segment": 7.85,
+      "cost_x4": 31.4,
+      "cost_x8": 62.8,
+      "cost_x12": 94.2
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "BALANCED",
+      "tested_pace": 4,
+      "cost_per_segment": 7.0,
+      "cost_x4": 28.0,
+      "cost_x8": 56.0,
+      "cost_x12": 84.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "BALANCED",
+      "tested_pace": 5,
+      "cost_per_segment": 10.25,
+      "cost_x4": 41.0,
+      "cost_x8": 82.0,
+      "cost_x12": 123.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 1,
+      "cost_per_segment": 5.85,
+      "cost_x4": 23.4,
+      "cost_x8": 46.8,
+      "cost_x12": 70.2
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 2,
+      "cost_per_segment": 5.0,
+      "cost_x4": 20.0,
+      "cost_x8": 40.0,
+      "cost_x12": 60.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "LOW",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 3,
+      "cost_per_segment": 7.85,
+      "cost_x4": 31.4,
+      "cost_x8": 62.8,
+      "cost_x12": 94.2
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "tested_pace": 8,
+      "cost_per_segment": 14.6,
+      "cost_x4": 58.4,
+      "cost_x8": 116.8,
+      "cost_x12": 175.2
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "tested_pace": 9,
+      "cost_per_segment": 16.25,
+      "cost_x4": 65.0,
+      "cost_x8": 130.0,
+      "cost_x12": 195.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_POSITION",
+      "tested_pace": 10,
+      "cost_per_segment": 18.0,
+      "cost_x4": 72.0,
+      "cost_x8": 144.0,
+      "cost_x12": 216.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "BALANCED",
+      "tested_pace": 6,
+      "cost_per_segment": 11.6,
+      "cost_x4": 46.4,
+      "cost_x8": 92.8,
+      "cost_x12": 139.2
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "BALANCED",
+      "tested_pace": 7,
+      "cost_per_segment": 11.05,
+      "cost_x4": 44.2,
+      "cost_x8": 88.4,
+      "cost_x12": 132.6
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "BALANCED",
+      "tested_pace": 8,
+      "cost_per_segment": 14.6,
+      "cost_x4": 58.4,
+      "cost_x8": 116.8,
+      "cost_x12": 175.2
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 4,
+      "cost_per_segment": 9.0,
+      "cost_x4": 36.0,
+      "cost_x8": 72.0,
+      "cost_x12": 108.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 5,
+      "cost_per_segment": 6.25,
+      "cost_x4": 25.0,
+      "cost_x8": 50.0,
+      "cost_x12": 75.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "MID",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 6,
+      "cost_per_segment": 11.6,
+      "cost_x4": 46.4,
+      "cost_x8": 92.8,
+      "cost_x12": 139.2
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "FULL_POSITION",
+      "tested_pace": 9,
+      "cost_per_segment": 16.25,
+      "cost_x4": 65.0,
+      "cost_x8": 130.0,
+      "cost_x12": 195.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "FULL_POSITION",
+      "tested_pace": 10,
+      "cost_per_segment": 18.0,
+      "cost_x4": 72.0,
+      "cost_x8": 144.0,
+      "cost_x12": 216.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "BALANCED",
+      "tested_pace": 9,
+      "cost_per_segment": 16.25,
+      "cost_x4": 65.0,
+      "cost_x8": 130.0,
+      "cost_x12": 195.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "BALANCED",
+      "tested_pace": 10,
+      "cost_per_segment": 18.0,
+      "cost_x4": 72.0,
+      "cost_x8": 144.0,
+      "cost_x12": 216.0
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 7,
+      "cost_per_segment": 13.05,
+      "cost_x4": 52.2,
+      "cost_x8": 104.4,
+      "cost_x12": 156.6
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 8,
+      "cost_per_segment": 11.2,
+      "cost_x4": 44.8,
+      "cost_x8": 89.6,
+      "cost_x12": 134.4
+    },
+    {
+      "curve": "CONVEX",
+      "start": "HIGH",
+      "build": "FULL_EFFICIENCY",
+      "tested_pace": 9,
+      "cost_per_segment": 16.25,
+      "cost_x4": 65.0,
+      "cost_x8": 130.0,
+      "cost_x12": 195.0
+    }
+  ],
+  "checks": {
+    "monotone": true,
+    "zero_at_EF": true,
+    "zero_at_VMA": true,
+    "nonnegative_envelope": true,
+    "floor_respected": true
+  }
+}
