@@ -320,11 +320,228 @@ def run_d3(raw: dict) -> dict:
     return {"curve_variant": "C1", "rows": rows}
 
 
+def enumerate_headroom(context: str, zone_low: int, zone_high: int) -> dict:
+    """Enumerate the single D4 structural envelope (no randomness)."""
+    if context not in CONTEXTS or zone_high < zone_low:
+        raise ValueError("invalid headroom fixture")
+    headroom = zone_high - zone_low
+
+    def builds(high: int) -> set[tuple[int, int]]:
+        width = high - zone_low
+        return {(relative_as, eco) for relative_as in range(width + 1)
+                for eco in range(width - relative_as + 1)}
+
+    before = builds(zone_high)
+    after = builds(zone_high + 1)
+    new = after - before
+    return {
+        "context": context, "zone_low": zone_low, "zone_high": zone_high,
+        "headroom": headroom, "build_count": len(before),
+        "speed_oriented": sum(relative_as > 0 and eco == 0 for relative_as, eco in before),
+        "economy_oriented": sum(relative_as == 0 and eco > 0 for relative_as, eco in before),
+        "mixed": sum(relative_as > 0 and eco > 0 for relative_as, eco in before),
+        "neutral": int((0, 0) in before),
+        "legal_builds": sorted([{"as_relative": relative_as, "eco": eco}
+                                for relative_as, eco in before],
+                               key=lambda row: (row["as_relative"], row["eco"])),
+        "after_zone_high_plus_one_count": len(after),
+        "new_build_count": len(new),
+        "new_builds": sorted([{"as_relative": relative_as, "eco": eco}
+                              for relative_as, eco in new],
+                             key=lambda row: (row["as_relative"], row["eco"])),
+    }
+
+
+def run_d4a() -> dict:
+    fixtures = {
+        "AS42": ((6, 8), (8, 12), (10, 15), (12, 18)),
+        "AS10": ((8, 10), (12, 16), (15, 20), (18, 24)),
+    }
+    rows = [enumerate_headroom(context, low, high)
+            for context, pairs in fixtures.items() for low, high in pairs]
+    confirmed = all(row["new_build_count"] > 1 for row in rows)
+    return {"method": "ANALYTICAL_ENUMERATION", "rows": rows,
+            "headroom_reopens_useful_nontrivial_capacity": confirmed}
+
+
+def _d4_saturated(state: State) -> bool:
+    # Under the requested definition, used <= headroom simplifies to
+    # AS + ECO <= zone_high. EF/Seuil remain the named zone lows but therefore
+    # do not independently alter remaining capacity.
+    zone_high = state.seuil if state.context == "AS42" else state.vma
+    return state.as_value + state.eco >= zone_high
+
+
+def _allocate_d4(state: State, q_energy: int) -> tuple[list[tuple[str, int]], int, int]:
+    """Minimal G_SWITCH_HEADROOM allocation for one turn."""
+    remaining, spec = q_energy, 0
+    attempts: list[tuple[str, int]] = []
+    used: set[str] = set()
+    spec_need = SPEC_TABLES["S2"][state.spec_tiers] - state.progression_spec \
+        if state.spec_tiers < len(SPEC_TABLES["S2"]) and not _d4_saturated(state) else None
+    while remaining:
+        options = _phys_options(state, used)
+        phys = min(options, key=lambda row: (row[1], 0 if row[0] == "VMA" else 1)) \
+            if options else None
+        choose_phys = phys is not None and (spec_need is None or phys[1] <= spec_need)
+        if choose_phys and phys[1] <= remaining:
+            attempts.append(phys)
+            used.add(phys[0])
+            remaining -= phys[1]
+        elif spec_need is not None:
+            amount = min(remaining, spec_need)
+            spec += amount
+            remaining -= amount
+            break
+        else:
+            break
+    return attempts, spec, remaining
+
+
+def _award_d4_tier(state: State) -> list[str]:
+    if state.spec_tiers >= len(SPEC_TABLES["S2"]):
+        return []
+    threshold = SPEC_TABLES["S2"][state.spec_tiers]
+    if state.progression_spec < threshold or _d4_saturated(state):
+        return []
+    # BALANCED alternation. Both adaptations consume the same envelope unit;
+    # if the preferred one were unavailable, the other is the required fallback.
+    award = "AS" if state.spec_tiers % 2 == 0 else "ECO"
+    if award == "AS":
+        state.as_value += 1
+    else:
+        state.eco += 1
+    state.spec_tiers += 1
+    return [award]
+
+
+def simulate_d4(seed: int, context: str, turns: int = 16) -> tuple[dict, list[dict]]:
+    rng = random.Random(seed)
+    state = State(context=context, spec_table="S2")
+    trajectory = []
+    totals = Counter()
+    saturation_episodes = 0
+    reopenings = 0
+    open_reopening_turn: int | None = None
+    durations = []
+    was_saturated = False
+    ever_selected_spec = False
+    awaiting_spec_after_reopen = False
+    alternation_count = 0
+    for turn in range(1, turns + 1):
+        saturated_start = _d4_saturated(state)
+        if saturated_start and not was_saturated:
+            saturation_episodes += 1
+            if open_reopening_turn is not None:
+                durations.append(turn - open_reopening_turn)
+                open_reopening_turn = None
+        raw = tuple(rng.randint(1, size) for size in state.pool)
+        final = resolve_roll(raw)
+        ef_energy, q_energy, _ = min(
+            legal_partitions(final), key=lambda row: (-row[1], -row[0], row[2]))
+        attempts, spec_energy, unused = _allocate_d4(state, q_energy)
+        old_ef, old_q = state.progression_ef, state.progression_q
+        old_high = state.seuil if context == "AS42" else state.vma
+        state.progression_ef += ef_energy
+        successful = []
+        for name, cost in attempts:
+            succeeded = True
+            if cost > max(final):
+                succeeded = rng.randint(1, max(state.pool)) > cost - max(final)
+            if succeeded:
+                successful.append(name)
+                state.progression_q += cost
+        if "SEUIL" in successful:
+            state.seuil += 1
+        if "VMA" in successful:
+            state.vma += 1
+        state.progression_spec += spec_energy
+        awards = _award_d4_tier(state)
+        _apply_track_milestones(state, old_ef, old_q)
+        new_high = state.seuil if context == "AS42" else state.vma
+        reopened = saturated_start and new_high > old_high and not _d4_saturated(state)
+        if reopened:
+            reopenings += 1
+            open_reopening_turn = turn
+            awaiting_spec_after_reopen = True
+        selected_spec = spec_energy > 0
+        if selected_spec and ever_selected_spec and awaiting_spec_after_reopen:
+            alternation_count += 1
+            awaiting_spec_after_reopen = False
+        ever_selected_spec |= selected_spec
+        totals.update(q_total=q_energy, q_phys=sum(cost for _, cost in attempts),
+                      q_spec=spec_energy, q_unused=unused)
+        trajectory.append({
+            "turn": turn, "saturated_start": saturated_start, "reopened": reopened,
+            "selected_spec": selected_spec, "q_total": q_energy,
+            "q_phys": sum(cost for _, cost in attempts), "q_spec": spec_energy,
+            "q_unused": unused, "successful": successful, "awards": awards,
+            "ef": state.ef, "seuil": state.seuil, "vma": state.vma,
+            "as": state.as_value, "eco": state.eco,
+        })
+        was_saturated = saturated_start and not reopened
+
+    record = {
+        "seed": seed, "context": context, "EF": state.ef, "SEUIL": state.seuil,
+        "VMA": state.vma, "AS": state.as_value, "ECO": state.eco,
+        "q_total": totals["q_total"], "q_phys": totals["q_phys"],
+        "q_spec": totals["q_spec"], "q_unused": totals["q_unused"],
+        "saturated_turns": sum(step["saturated_start"] for step in trajectory),
+        "saturation_episodes": saturation_episodes,
+        "first_saturation_turn": next((step["turn"] for step in trajectory
+                                       if step["saturated_start"]), None),
+        "reopenings": reopenings, "alternation_count": alternation_count,
+        "reopen_to_saturation_durations": durations,
+    }
+    for start, end in BLOCKS:
+        block = trajectory[start - 1:end]
+        total = sum(step["q_total"] for step in block)
+        record[f"phys_share_t{start}_{end}"] = sum(step["q_phys"] for step in block) / total
+        record[f"spec_share_t{start}_{end}"] = sum(step["q_spec"] for step in block) / total
+    return record, trajectory
+
+
+def run_d4b(seeds: int = 30) -> dict:
+    cells = {}
+    for context in CONTEXTS:
+        records = [simulate_d4(seed, context)[0] for seed in range(seeds)]
+        durations = [duration for row in records for duration in row["reopen_to_saturation_durations"]]
+        metrics = ("AS", "ECO", "SEUIL", "VMA", "saturated_turns",
+                   "saturation_episodes", "reopenings", "alternation_count",
+                   "first_saturation_turn")
+        summary = {name: _distribution([row[name] for row in records]) for name in metrics}
+        summary["mean_reopen_to_saturation_duration"] = round(statistics.mean(durations), 3) \
+            if durations else None
+        summary["runs_with_alternation_pct"] = round(
+            100 * sum(row["alternation_count"] > 0 for row in records) / seeds, 3)
+        summary["block_shares"] = {
+            f"T{start}-{end}": {
+                "phys_pct": round(100 * statistics.mean(
+                    row[f"phys_share_t{start}_{end}"] for row in records), 3),
+                "spec_pct": round(100 * statistics.mean(
+                    row[f"spec_share_t{start}_{end}"] for row in records), 3),
+            } for start, end in BLOCKS
+        }
+        cells[context] = summary
+    all_alternation = statistics.mean(cell["runs_with_alternation_pct"] for cell in cells.values())
+    classification = ("PAS D'ALTERNANCE" if all_alternation == 0 else
+                      "ALTERNANCE RARE" if all_alternation < 50 else "ALTERNANCE RÉCURRENTE")
+    return {"policy": "G_SWITCH_HEADROOM", "spec_table": "S2", "build": "BALANCED",
+            "seeds": list(range(seeds)), "turns": 16, "total_turns": seeds * 16 * 2,
+            "classification": classification, "cells": cells}
+
+
+def run_d4() -> dict:
+    d4a = run_d4a()
+    return {"status": STATUS, "formula": "used_spec_capacity = (AS - zone_low) + ECO",
+            "D4-A": d4a, "D4-B": run_d4b() if d4a["headroom_reopens_useful_nontrivial_capacity"] else None}
+
+
 def run_all(seeds: int = 50) -> dict:
     d1, raw = run_d1(seeds)
     return {"status": STATUS, "protocol": {"source_baseline": SOURCE_BASELINE,
                                              "seed_count": seeds, "seed_range": [0, seeds - 1]},
-            "D1": d1, "D2": run_d2(raw), "D3": run_d3(raw)}
+            "D1": d1, "D2": run_d2(raw), "D3": run_d3(raw), "D4": run_d4()}
 
 
 if __name__ == "__main__":

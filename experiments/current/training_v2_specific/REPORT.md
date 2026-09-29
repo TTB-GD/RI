@@ -152,3 +152,139 @@ stratégique équilibrée.
    valeur économique d'AS/ECO aux valeurs physiologiques 6/8/10 ?
 5. Le plancher zéro doit-il faire partie d'une future règle ECO, ou rester une
    simple protection technique de cette expérience ?
+
+---
+
+# D4 — Enveloppe SPEC physiologique
+
+**EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN.** Cette enveloppe est une
+**sonde structurelle**, pas une règle validée.
+
+## FACT
+
+- D4 teste une seule formule : `headroom = zone_high - zone_low` et
+  `used_spec_capacity = (AS - zone_low) + ECO`, donc la contrainte équivalente
+  `AS + ECO <= zone_high`. AS42 emploie `[EF, Seuil]`; AS10 emploie
+  `[Seuil, VMA]`. Une unité de Vitesse ou d'Économie consomme une unité de
+  capacité.
+- D4-A est une énumération analytique sans Monte-Carlo. D4-B n'est lancé
+  qu'après confirmation analytique; il exécute **30 seeds (`0..29`) × 2
+  contextes × 16 tours = 960 tours**, uniquement avec S2, BALANCED et
+  `G_SWITCH_HEADROOM`.
+- À saturation, SPEC est indisponible. Une réussite Seuil rouvre AS42; une
+  réussite VMA rouvre AS10. La capacité rouverte ne devient éligible qu'au tour
+  suivant. Les coûts, le bust, les pistes, la partition maximisant Q et le D99
+  bonus-réserve restent ceux du harnais D1.
+- `alternation_count` compte un cycle complété où SPEC avait déjà été choisi,
+  est ensuite observé saturé avec investissement physiologique, est rouvert par
+  la frontière pertinente, puis est de nouveau choisi.
+- Classement descriptif fixé dans le harnais : 0 % des runs avec alternance =
+  `PAS D'ALTERNANCE`; strictement moins de 50 % = `ALTERNANCE RARE`; au moins
+  50 % = `ALTERNANCE RÉCURRENTE`.
+
+## RESULTS D4-A
+
+| Contexte / zone | Headroom | Builds | Vitesse | Économie | Mixtes | Nouveaux builds après `high +1` |
+|---|---:|---:|---:|---:|---:|---:|
+| AS42 6–8 | 2 | 6 | 2 | 2 | 1 | 4 |
+| AS42 8–12 | 4 | 15 | 4 | 4 | 6 | 6 |
+| AS42 10–15 | 5 | 21 | 5 | 5 | 10 | 7 |
+| AS42 12–18 | 6 | 28 | 6 | 6 | 15 | 8 |
+| AS10 8–10 | 2 | 6 | 2 | 2 | 1 | 4 |
+| AS10 12–16 | 4 | 15 | 4 | 4 | 6 | 6 |
+| AS10 15–20 | 5 | 21 | 5 | 5 | 10 | 7 |
+| AS10 18–24 | 6 | 28 | 6 | 6 | 15 | 8 |
+
+Le build neutre `(0, 0)` complète chaque total. Dans chaque fixture,
+`zone_high +1` ajoute exactement la nouvelle diagonale
+`AS_relative + ECO = headroom +1`, soit 4, 6, 7 ou 8 builds. D4-A confirme
+donc qu'une unité de frontière rouvre une capacité utile et plusieurs choix,
+et autorise l'exécution de D4-B.
+
+## RESULTS D4-B
+
+Parts moyennes de Q par bloc :
+
+| Contexte | Mesure | T1–4 | T5–8 | T9–12 | T13–16 |
+|---|---|---:|---:|---:|---:|
+| AS42 | Physiologie | 49,7 % | 39,7 % | 55,2 % | 50,2 % |
+| AS42 | SPEC | 38,2 % | 39,8 % | 33,0 % | 30,2 % |
+| AS10 | Physiologie | 49,7 % | 42,4 % | 53,9 % | 45,9 % |
+| AS10 | SPEC | 31,6 % | 38,2 % | 34,0 % | 31,3 % |
+
+| Mesure | AS42 | AS10 |
+|---|---:|---:|
+| Tours saturés, moyenne [min–max] | 0 [0–0] | 0,9 [0–2] |
+| Épisodes, moyenne [min–max] | 0 [0–0] | 0,9 [0–2] |
+| Premier épisode | jamais | médiane T3 [T3–T4], 86,7 % des runs |
+| Réouvertures, moyenne [min–max] | 0 [0–0] | 0,9 [0–2] |
+| Alternations complètes, moyenne [min–max] | 0 [0–0] | 0,9 [0–2] |
+| Runs avec ≥1 alternance | 0 % | 86,7 % |
+| Réouverture → prochaine saturation | non observé | 4 tours en moyenne |
+| AS final moyen | 9,73 | 11,70 |
+| ECO final moyen | 2,00 | 2,00 |
+| Seuil / VMA final moyens | 15,13 / 16,73 | 15,10 / 16,60 |
+
+Sur les 60 trajectoires, 26 (43,3 %) présentent au moins une alternance; elles
+sont toutes AS10. Classement global descriptif : **ALTERNANCE RARE**. Le sous-
+ensemble AS10 est au contraire **ALTERNANCE RÉCURRENTE**; AS42 est
+**PAS D'ALTERNANCE**.
+
+## OBSERVATIONS
+
+1. **Les timings diffèrent enfin.** AS10 sature généralement vers T3 et alterne
+   dans 86,7 % des runs; AS42 ne présente aucun tour saturé.
+2. **La saturation AS10 est précoce mais non universelle**, entre T3 et T4. Sa
+   durée n'est pas longue : VMA rouvre la capacité dans les 27 épisodes
+   observés. AS42 ne permet pas de qualifier un timing de saturation.
+3. **La réouverture est effective.** Chaque `+1 VMA` pertinent en AS10 rouvre
+   une décision SPEC, suivie d'un nouveau choix SPEC dans les cycles comptés.
+   D4-A établit analytiquement la même propriété pour `+1 Seuil` en AS42, mais
+   D4-B n'observe pas de saturation AS42 à rouvrir.
+4. **Aucun blocage durable n'est observé.** AS10 sort de chacun de ses épisodes;
+   AS42 ne s'y engage jamais.
+5. L'alternance AS10 n'est pas une simple alternance imposée à chaque tour :
+   seuls 0 à 2 cycles apparaissent par run et quatre tours séparent en moyenne
+   une réouverture de la saturation suivante. Elle reste néanmoins une
+   conséquence directe et mécanique de la priorité minimale testée.
+
+## INTERPRETATIONS
+
+- D4 **EST INCONCLUSIF SUR** l'hypothèse générale : « la physiologie construit
+  l'enveloppe, SPEC la consomme, puis sa saturation rend la physiologie à
+  nouveau pertinente ». La chaîne est structurellement valide en D4-A et
+  apparaît nettement pour AS10, mais pas une seule fois pour AS42 en D4-B.
+- La différence vient de la dynamique des coûts et frontières, non d'une règle
+  propre à la distance : dans les tours qui financent SPEC, Seuil progresse
+  assez souvent pour déplacer simultanément la frontière AS42 et empêcher
+  l'état saturé d'être observé au tour suivant. Pour AS10, une progression
+  Seuil ne déplace pas VMA; la capacité peut donc se fermer avant que VMA ne la
+  rouvre.
+- L'enveloppe produit ainsi plus qu'un simple plafond, mais elle ne garantit pas
+  à elle seule le même cycle selon la zone physiologique considérée.
+
+## LIMITS
+
+- Une saturation n'est comptée que si elle existe au début d'un tour. Une
+  frontière progressant dans le même tour qu'un palier SPEC peut empêcher
+  toute saturation observable, ce qui explique une partie du résultat AS42.
+- La partition maximise Q et la politique reste déterministe; les fréquences
+  décrivent cette sonde, pas un joueur humain. Les trajectoires ne sont pas des
+  contre-factuels appariés après divergence du RNG.
+- Seule S2, une formule de headroom et 16 tours sont testés. Conformément au
+  critère d'arrêt, aucune autre équation ni campagne supplémentaire n'est
+  essayée après ce résultat mixte.
+- Les builds D4-A sont des possibilités géométriques. Leur nombre ne mesure ni
+  leur valeur de course, ni leur accessibilité temporelle dans D4-B.
+
+## DESIGN QUESTIONS
+
+1. Une saturation momentanée en fin de tour, immédiatement annulée par la
+   progression de frontière du même tour, doit-elle avoir une signification de
+   jeu ou rester invisible comme dans cette sonde ?
+2. Une enveloppe est-elle voulue si elle produit des cycles pour AS10 mais pas
+   pour AS42 avec les mêmes coûts et la même politique ?
+3. Le déplacement de la borne basse doit-il avoir un effet propre sur la
+   capacité, malgré l'équivalence algébrique `AS + ECO <= zone_high` ?
+4. Faut-il juger l'alternance sur la présence d'au moins un cycle ou sur une
+   répétition minimale au cours d'une préparation ?

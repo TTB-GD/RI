@@ -2,7 +2,7 @@
 
 **EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN.**
 
-Expérience isolée D1–D3 sur une chaîne où EF/Seuil/VMA ouvrent seulement les
+Expérience isolée D1–D4 sur une chaîne où EF/Seuil/VMA ouvrent seulement les
 frontières physiologiques, tandis que SPEC seul modifie les comparaisons de
 coût de course. Le harnais réutilise la résolution de lancer, les coûts de
 qualité et Curve B des expériences existantes, sans modifier la production, le
@@ -20,4 +20,5 @@ python -m unittest experiments.current.training_v2_specific.test_harness -v
 ```
 
 `results.json` contient les agrégats reproductibles (seeds 0–49), les six états
-D2 et la grille déterministe D3. `REPORT.md` contient la synthèse décisionnelle.
+D2, la grille déterministe D3 et la sonde d'enveloppe D4 (30 seeds, 960 tours).
+`REPORT.md` contient la synthèse décisionnelle.
