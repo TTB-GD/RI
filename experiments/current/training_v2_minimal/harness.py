@@ -23,6 +23,7 @@ EF_DIE_MILESTONES = {35, 100}
 Q_MILESTONES = (7, 15, 25, 35, 50, 65, 80, 100)
 Q_UPGRADE_MILESTONES = {15, 35, 65, 100}
 SIZE_SEQUENCE = (6, 8, 10, 12)
+QUALITY_PROGRAMS = ((), ("SEUIL",), ("VMA",), ("SEUIL", "VMA"))
 
 
 def difficulty(x: int) -> int:
@@ -141,6 +142,61 @@ def experiment_a() -> dict:
     return result
 
 
+def affordable_programs(q_energy: int, ef: int, seuil: int, vma: int) -> tuple[dict, ...]:
+    """Return all minimal A2/B2 programs affordable by one Q compartment."""
+    costs = {"SEUIL": quality_cost(seuil, ef), "VMA": quality_cost(vma, ef)}
+    rows = []
+    for qualities in QUALITY_PROGRAMS:
+        consumed = sum(costs[name] for name in qualities)
+        if consumed <= q_energy:
+            rows.append({"qualities": qualities, "consumed": consumed,
+                         "remainder": q_energy - consumed})
+    return tuple(rows)
+
+
+def experiment_a2() -> dict:
+    """Exhaustive correction: simultaneous means funding both quality costs."""
+    outcomes = []
+    remainder_samples = {"SEUIL": [], "VMA": [], "SEUIL+VMA": []}
+    examples = []
+    example_raws = {(1, 1, 1, 1), (1, 2, 3, 4), (2, 2, 5, 5),
+                    (3, 3, 3, 6), (4, 4, 5, 6), (5, 5, 6, 6), (6, 6, 6, 6)}
+    for raw in product(range(1, 7), repeat=4):
+        final = resolve_roll(raw)
+        financed = set()
+        example_programs = set()
+        for ef_energy, q_energy, _ in legal_partitions(final):
+            for program in affordable_programs(q_energy, 6, 8, 10):
+                if not program["qualities"]:
+                    continue
+                name = "+".join(program["qualities"])
+                financed.add(name)
+                remainder_samples[name].append(program["remainder"])
+                example_programs.add((ef_energy, q_energy, name,
+                                      program["consumed"], program["remainder"]))
+        outcomes.append(financed)
+        if raw in example_raws:
+            examples.append({"raw": raw, "final": final, "programs": sorted(example_programs)})
+
+    count = len(outcomes)
+    pct = lambda predicate: round(100 * sum(predicate(row) for row in outcomes) / count, 3)
+    return {
+        "raw_outcomes": count,
+        "d99_mode": "D99_BONUS_ONLY",
+        "any_quality_pct": pct(bool),
+        "seuil_pct": pct(lambda row: "SEUIL" in row),
+        "vma_pct": pct(lambda row: "VMA" in row),
+        "seuil_plus_vma_same_partition_pct": pct(lambda row: "SEUIL+VMA" in row),
+        "at_least_two_distinct_quality_programs_pct": pct(lambda row: len(row) >= 2),
+        "mean_distinct_quality_programs": round(statistics.mean(map(len, outcomes)), 3),
+        "mean_remainder_after_program": {
+            name: round(statistics.mean(values), 3) if values else None
+            for name, values in remainder_samples.items()
+        },
+        "examples": examples,
+    }
+
+
 @dataclass
 class TrainingState:
     ef: int = 6
@@ -148,10 +204,14 @@ class TrainingState:
     vma: int = 10
     progression_ef: int = 0
     progression_q: int = 0
+    progression_spec: int = 0
     pool: tuple[int, ...] = (6, 6, 6, 6)
     upgrades: int = 0
     risky_attempts: int = 0
     busts: int = 0
+    q_available: int = 0
+    q_consumed: int = 0
+    q_lost_bust: int = 0
 
 
 def _percentile(values: list[int], proportion: float) -> float:
@@ -281,6 +341,161 @@ def experiment_b() -> dict:
     return output
 
 
+def _b2_candidates(state: TrainingState, final: tuple[int, ...]) -> list[tuple[dict, dict]]:
+    candidates = []
+    for row in partition_features(final, state.ef, state.seuil, state.vma):
+        for program in affordable_programs(row["q_energy"], state.ef, state.seuil, state.vma):
+            qualities = program["qualities"]
+            # Preserve EF < Seuil < VMA after every candidate program.
+            next_seuil = state.seuil + ("SEUIL" in qualities)
+            next_vma = state.vma + ("VMA" in qualities)
+            if state.ef < next_seuil < next_vma:
+                candidates.append((row, program))
+    return candidates
+
+
+def _choose_b2_program(state: TrainingState, final: tuple[int, ...], policy: str) -> tuple[dict, dict]:
+    candidates = _b2_candidates(state, final)
+    if policy == "P_BALANCED":
+        starts = {"EF": 6, "SEUIL": 8, "VMA": 10}
+        current = {"EF": state.ef, "SEUIL": state.seuil, "VMA": state.vma}
+        lag_order = tuple(sorted(current, key=lambda name: (
+            (current[name] - starts[name]) / starts[name], ("EF", "SEUIL", "VMA").index(name))))
+        primary = lag_order[0]
+
+        def key(candidate):
+            row, program = candidate
+            qualities = program["qualities"]
+            primary_value = row["ef_energy"] if primary == "EF" else int(primary in qualities)
+            coverage = tuple(int(name in qualities) for name in lag_order if name != "EF")
+            return (-primary_value, tuple(-value for value in coverage), -len(qualities),
+                    -program["consumed"], -row["ef_energy"], row["q_indices"])
+    elif policy == "P_QUALITY":
+        def key(candidate):
+            row, program = candidate
+            qualities = program["qualities"]
+            return (-len(qualities), -int("VMA" in qualities), -int("SEUIL" in qualities),
+                    -program["consumed"], -row["ef_energy"], row["q_indices"])
+    else:
+        raise ValueError("B2 supports only P_BALANCED and P_QUALITY")
+    return min(candidates, key=key)
+
+
+def simulate_b2(seed: int, policy: str, variant: str, turns: int = 16) -> tuple[dict, list[dict]]:
+    if variant not in {"Q_FULL", "Q_SPENT_SPEC"}:
+        raise ValueError("unknown B2 variant")
+    rng = random.Random(seed)
+    state = TrainingState()
+    trajectory = []
+    quality_turns = Counter()
+    for turn in range(1, turns + 1):
+        raw = tuple(rng.randint(1, size) for size in state.pool)
+        final = resolve_roll(raw)
+        row, program = _choose_b2_program(state, final, policy)
+        old_ef, old_q = state.progression_ef, state.progression_q
+        state.progression_ef += row["ef_energy"]
+        state.q_available += row["q_energy"]
+
+        costs = {name: quality_cost(getattr(state, name.lower()), state.ef)
+                 for name in program["qualities"]}
+        successes = []
+        bust_loss = 0
+        # Deterministic resolution order required by A2/B2: Seuil, then VMA.
+        for name in program["qualities"]:
+            cost = costs[name]
+            succeeded = True
+            if cost > max(final):
+                state.risky_attempts += 1
+                k = cost - max(final)
+                succeeded = rng.randint(1, max(state.pool)) > k
+                if not succeeded:
+                    state.busts += 1
+                    bust_loss += cost
+            if succeeded:
+                successes.append(name)
+                state.q_consumed += cost
+
+        if "SEUIL" in successes:
+            state.seuil += 1
+        if "VMA" in successes:
+            state.vma += 1
+        quality_turns[len(successes)] += 1
+        state.q_lost_bust += bust_loss
+
+        if variant == "Q_FULL":
+            # PR #10 control: a turn with a successful quality credits the full
+            # Q compartment, except energy explicitly lost to a busted quality.
+            if successes:
+                state.progression_q += row["q_energy"] - bust_loss
+        else:
+            state.progression_q += sum(costs[name] for name in successes)
+            # Assigned busted energy is lost. Only never-assigned remainder is SPEC.
+            state.progression_spec += program["remainder"]
+
+        _apply_milestones(state, old_ef, old_q)
+        trajectory.append({
+            "turn": turn, "ef": state.ef, "seuil": state.seuil, "vma": state.vma,
+            "progression_ef": state.progression_ef, "progression_q": state.progression_q,
+            "progression_spec": state.progression_spec, "pool": state.pool,
+            "upgrades": state.upgrades, "program": program["qualities"],
+            "successful_qualities": tuple(successes), "q_available": state.q_available,
+            "q_consumed": state.q_consumed, "q_spec": state.progression_spec,
+            "q_lost_bust": state.q_lost_bust,
+        })
+
+    record = {
+        "seed": seed, "policy": policy, "variant": variant, "EF": state.ef,
+        "SEUIL": state.seuil, "VMA": state.vma, "progression_EF": state.progression_ef,
+        "progression_Q": state.progression_q, "progression_SPEC": state.progression_spec,
+        "dice_count": len(state.pool), "upgrades": state.upgrades,
+        "quality_turns_0": quality_turns[0], "quality_turns_1": quality_turns[1],
+        "quality_turns_2": quality_turns[2], "risky_attempts": state.risky_attempts,
+        "busts": state.busts, "q_available": state.q_available,
+        "q_consumed": state.q_consumed, "q_to_spec": state.progression_spec,
+        "q_lost_bust": state.q_lost_bust,
+    }
+    return record, trajectory
+
+
+def _distribution(values: list[int | float]) -> dict:
+    return {"mean": round(statistics.mean(values), 3), "median": _percentile(values, .5),
+            "p10": _percentile(values, .1), "p90": _percentile(values, .9)}
+
+
+def _event_timing(trajectories: tuple[list[dict], ...], predicate) -> dict:
+    turns = [next((step["turn"] for step in trajectory if predicate(step)), None)
+             for trajectory in trajectories]
+    reached = [turn for turn in turns if turn is not None]
+    return {"median_among_reached": _percentile(reached, .5) if reached else None,
+            "reached_by_t16_pct": round(100 * len(reached) / len(turns), 3)}
+
+
+def experiment_b2() -> dict:
+    metrics = (
+        "EF", "SEUIL", "VMA", "progression_EF", "progression_Q", "progression_SPEC",
+        "dice_count", "upgrades", "quality_turns_0", "quality_turns_1", "quality_turns_2",
+        "risky_attempts", "busts", "q_available", "q_consumed", "q_to_spec", "q_lost_bust",
+    )
+    output = {"seeds": 100, "turns": 16, "total_turns": 6400,
+              "d99_mode": "D99_BONUS_ONLY", "cells": {}}
+    for policy in ("P_BALANCED", "P_QUALITY"):
+        for variant in ("Q_FULL", "Q_SPENT_SPEC"):
+            records, trajectories = zip(*(simulate_b2(seed, policy, variant) for seed in range(100)))
+            summary = {metric: _distribution([row[metric] for row in records]) for metric in metrics}
+            summary["fifth_die_timing"] = _event_timing(trajectories, lambda step: len(step["pool"]) >= 5)
+            summary["sixth_die_timing"] = _event_timing(trajectories, lambda step: len(step["pool"]) >= 6)
+            summary["upgrade_timing"] = {
+                str(number): _event_timing(trajectories,
+                                           lambda step, number=number: step["upgrades"] >= number)
+                for number in range(1, 5)
+            }
+            shares = [100 * row["q_to_spec"] / row["q_available"] if row["q_available"] else 0
+                      for row in records]
+            summary["spec_share_pct"] = _distribution(shares)
+            output["cells"][f"{policy}__{variant}"] = summary
+    return output
+
+
 def experiment_c() -> dict:
     # Fixed analytical fixtures only: AS42 is lower intensity/longer duration;
     # AS10 is higher intensity/shorter duration. ECO subtracts cost per repeat.
@@ -310,6 +525,11 @@ def experiment_c() -> dict:
 
 def run_all() -> dict:
     a = experiment_a()
+    results = {"status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN",
+               "A": a, "A2": experiment_a2()}
+    if a["criterion"] != "CHOIX QUASI AUTOMATIQUE":
+        results["B"] = experiment_b()
+        results["B2"] = experiment_b2()
     results = {"status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN", "A": a}
     if a["criterion"] != "CHOIX QUASI AUTOMATIQUE":
         results["B"] = experiment_b()
@@ -317,6 +537,19 @@ def run_all() -> dict:
     return results
 
 
+def run_a2_b2() -> dict:
+    """Run only the targeted second pass (A2 plus the prescribed 6,400 B2 turns)."""
+    return {"A2": experiment_a2(), "B2": experiment_b2()}
+
+
+if __name__ == "__main__":
+    destination = Path(__file__).with_name("results.json")
+    # Preserve the first-pass evidence without paying to rerun its 9,600 turns.
+    results = json.loads(destination.read_text(encoding="utf-8")) if destination.exists() else {
+        "status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN"
+    }
+    results.update(run_a2_b2())
+    destination.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 if __name__ == "__main__":
     destination = Path(__file__).with_name("results.json")
     destination.write_text(json.dumps(run_all(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

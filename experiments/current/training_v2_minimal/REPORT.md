@@ -144,6 +144,166 @@ de Production contre des économies répétées croissantes.
 - Les trajectoires B incluent les effets de leurs choix; elles ne sont donc pas
   des contre-factuels appariés tour par tour après divergence des pools/RNG.
 
+La question de première passe sur le crédit de toute l'énergie Q et celle sur la
+progression de plusieurs marqueurs sont traitées expérimentalement par A2/B2
+ci-dessous. Les autres arbitrages ouverts sont consolidés dans la liste finale,
+limitée à cinq questions.
+
+---
+
+# Deuxième passe ciblée — A2 / B2
+
+## FACT
+
+- **A2** réutilise exactement les 1 296 tirages et partitions physiques de A,
+  mais compose réellement les programmes `aucun`, `Seuil`, `VMA` et
+  `Seuil+VMA`. Le double programme exige `E_Q >= coût Seuil + coût VMA`, soit
+  8 à la baseline (3 + 5). La mesure A « accès simultané » à 77,623 % était une
+  **co-accessibilité alternative**, pas la finançabilité des deux séances; A2 la
+  remplace pour toute conclusion sur la multi-qualité. Les reliquats moyens A2
+  pondèrent chaque occurrence lancer × partition physique × programme.
+- **B2** exécute 100 seeds partagées (`0..99`) × 2 politiques × 2 variantes ×
+  16 tours = **400 campagnes / 6 400 tours**. `Q_FULL` conserve le contrôle de
+  la PR #10 : dès qu'au moins une qualité réussit, tout E_Q non perdu par bust
+  est crédité à progression Q. `Q_SPENT_SPEC` crédite seulement les coûts des
+  qualités réussies; le reliquat jamais affecté va à SPEC. Une énergie affectée
+  à une qualité busted est perdue, sans crédit Q ni SPEC. Les qualités sont
+  résolues dans l'ordre déterministe Seuil puis VMA; un bust n'annule pas la
+  seconde, car B2 ne reproduit pas la résolution post-bust CURRENT.
+- Les seuils EF/Q, D99 bonus-only et conventions de pool de la première passe
+  sont inchangés. SPEC reste un compteur sans effet Vitesse/Économie.
+
+## RESULTS
+
+### A2 — vraie composition multi-qualités
+
+| Mesure par lancer | Résultat |
+|---|---:|
+| Au moins une qualité | 99,614 % |
+| Seuil | 99,614 % |
+| VMA | 77,623 % |
+| Seuil + VMA réellement financés dans une partition | **5,787 %** |
+| Choix entre ≥2 programmes qualitatifs distincts | 77,623 % |
+| Programmes qualitatifs distincts, moyenne | 1,830 |
+| Reliquat moyen après Seuil | 1,935 |
+| Reliquat moyen après VMA | 1,007 |
+| Reliquat moyen après Seuil + VMA | 1,125 |
+
+Exemples représentatifs (`EF/Q : programme, consommé, reliquat`) :
+
+- `1,1,1,1` : aucun programme qualitatif;
+- `4,3,2` : `6/3 : Seuil, 3, 0` et `5/4 : Seuil, 3, 1`;
+- `5,5,2,2` : jusqu'à `7/7 : Seuil, 3, 4` ou `VMA, 5, 2`, sans double;
+- `6,3,3,3` : `9/6 : Seuil, 3, 3` ou `VMA, 5, 1`;
+- `6,5,4` : programmes simples seulement, reliquat maximal 3;
+- `6,6,5,5` : `12/10 : Seuil+VMA, 8, 2` ou `11/11 : ..., 8, 3`;
+- `6,6,6,6` : `12/12 : Seuil+VMA, 8, 4`.
+
+### B2 — Q_FULL vs Q_SPENT_SPEC
+
+Notation : `moyenne [P10 ; médiane ; P90]` sur 100 campagnes.
+
+| Mesure | BAL Q_FULL | BAL Q_SPENT_SPEC | QUALITY Q_FULL | QUALITY Q_SPENT_SPEC |
+|---|---:|---:|---:|---:|
+| EF final | 11,99 [12;12;12] | 11,99 [12;12;12] | 11,78 [11;12;12] | 11,76 [11;12;12] |
+| Seuil final | 15,80 [15;16;16,1] | 15,83 [15;16;17] | 14,63 [13,9;14;16] | 14,65 [13,9;15;16] |
+| VMA final | 18,96 [18;19;20] | 18,99 [18;19;20] | 19,42 [18;19;21] | 19,37 [18;19;20] |
+| progression EF | 188,84 [175;187;208] | 187,90 [174;187;206,1] | 175,98 [159;176;191,1] | 175,44 [159;175;190,2] |
+| progression Q | 88,43 [75,9;89;101] | 86,13 [74,9;86,5;96,1] | 93,38 [77,9;94,5;107,1] | 89,99 [74,9;90;104,1] |
+| progression SPEC | 0 [0;0;0] | 5,55 [3;5;8,1] | 0 [0;0;0] | 3,42 [1;3;6] |
+| dés finaux | 6 [6;6;6] | 6 [6;6;6] | 6 [6;6;6] | 6 [6;6;6] |
+| upgrades | 3,15 [3;3;4] | 3,02 [3;3;3] | 3,32 [3;3;4] | 3,23 [3;3;4] |
+| tours à 0 qualité réussie | 2,23 [1;2;4] | 2,22 [1;2;4] | 1,79 [0;2;3] | 1,79 [0;2;3,1] |
+| tours à 1 qualité réussie | 10,78 [8;11;13] | 10,74 [8;11;13] | 12,37 [10;13;15] | 12,40 [10;13;15] |
+| tours à 2 qualités réussies | 2,99 [1;3;5] | 3,04 [1,9;3;5] | 1,84 [1;2;3] | 1,81 [0,9;2;3] |
+| tentatives risquées | 4,89 [3;5;7] | 4,90 [3;5;7] | 6,99 [5;7;9] | 7,10 [5;7;9] |
+| busts | 1,12 [0;1;3] | 1,02 [0;1;2] | 1,96 [0,9;2;4] | 1,99 [0;2;4] |
+| énergie Q disponible | 99,95 [87;100,5;112] | 99,83 [88,9;100;109,2] | 111,33 [97,9;111;126,1] | 111,21 [98,9;110;125,1] |
+| énergie Q consommée | 85,56 [73;86;98] | 86,13 [74,9;86,5;96,1] | 90,30 [76;90,5;104] | 89,99 [74,9;90;104,1] |
+| énergie Q → SPEC | 0 [0;0;0] | 5,55 [3;5;8,1] | 0 [0;0;0] | 3,42 [1;3;6] |
+| énergie Q perdue par bust | 8,94 [0;8;21,1] | 8,15 [0;8;19,1] | 17,63 [5,4;16;33,1] | 17,80 [0;17,5;33] |
+| part SPEC de Q | 0 % | 5,539 % [2,752;5,465;8,421] | 0 % | 3,056 % [0,999;2,885;5,273] |
+
+| Événement | BAL Q_FULL | BAL Q_SPENT_SPEC | QUALITY Q_FULL | QUALITY Q_SPENT_SPEC |
+|---|---:|---:|---:|---:|
+| 5e dé, tour médian (% à T16) | 5 (100 %) | 5 (100 %) | 5 (100 %) | 5 (100 %) |
+| 6e dé, tour médian (% à T16) | 11 (100 %) | 11 (100 %) | 11 (100 %) | 11 (100 %) |
+| Upgrade 1 | 5 (100 %) | 5 (100 %) | 4 (100 %) | 4 (100 %) |
+| Upgrade 2 | 8 (100 %) | 8 (100 %) | 7 (100 %) | 8 (100 %) |
+| Upgrade 3 | 13 (100 %) | 13 (99 %) | 12 (100 %) | 13 (100 %) |
+| Upgrade 4 | 16 (15 %) | 16 (3 %) | 16 (32 %) | 16 (23 %) |
+
+Réponses prioritaires :
+
+1. **Ralentissement des upgrades :** Q_SPENT réduit la moyenne de 3,15 à 3,02
+   pour P_BALANCED et de 3,32 à 3,23 pour P_QUALITY. L'accès au quatrième
+   upgrade à T16 baisse respectivement de 15 % à 3 % (−12 points) et de 32 % à
+   23 % (−9 points); les deuxième/troisième upgrades de P_QUALITY reculent
+   chacun d'un tour médian.
+2. **Deuxième d6 :** oui, il reste universel dans cet échantillon : 100 % à T16
+   dans les quatre cellules, tour médian 11.
+3. **Part naturelle vers SPEC :** 5,539 % de Q en moyenne pour P_BALANCED et
+   3,056 % pour P_QUALITY sous Q_SPENT_SPEC.
+4. **Doubles qualités :** elles sont occasionnelles : 3,04 tours sur 16
+   (19,0 %) pour P_BALANCED et 1,81 sur 16 (11,3 %) pour P_QUALITY dans la
+   variante test. Il s'agit de doubles réussites, après bust éventuel.
+5. **Différenciation :** elle subsiste sous Q_SPENT_SPEC. P_BALANCED finit à
+   Seuil 15,83 / VMA 18,99 avec 4,90 risques; P_QUALITY à Seuil 14,65 / VMA
+   19,37 avec 7,10 risques. L'écart VMA est modeste, mais les répartitions Seuil,
+   risque et reliquat SPEC restent différentes.
+
+## OBSERVATIONS
+
+- La vraie double qualité initiale (5,787 % des lancers) est bien plus rare que
+  la co-accessibilité alternative annoncée dans A (77,623 %).
+- Q_SPENT ralentit surtout le quatrième upgrade; il ne retarde ni le cinquième
+  ni le sixième dé dans ces trajectoires, car ceux-ci dépendent de la piste EF.
+- Le reliquat SPEC mesuré reste petit devant Q totale et est plus élevé chez
+  P_BALANCED, tandis que P_QUALITY consomme davantage de Q et perd davantage au
+  bust.
+- Les doubles réussites restent minoritaires sous les deux politiques, sans être
+  exceptionnelles.
+
+## INTERPRETATIONS
+
+- Supprimer le crédit Q gratuit corrige une partie de l'accélération observée en
+  B, mais ne suffit pas, sur 16 tours, à rendre les premiers upgrades ou les dés
+  supplémentaires rares.
+- Le compteur SPEC reçoit un flux mesurable sans détourner de coûts réellement
+  affectés aux qualités. Son volume dépend de la politique et ne constitue pas
+  encore une cadence de piste validée.
+- Les deux sondes conservent des signatures distinctes après la correction,
+  surtout sur la répartition Seuil/VMA et l'exposition au risque; cela ne prouve
+  pas qu'elles représentent des stratégies humaines ou équilibrées.
+
+## LIMITS
+
+- Les conventions de lancer, pool, gain EF bloqué et upgrades restent celles du
+  harnais initial; B2 ne les revalide pas.
+- `Q_FULL` est un contrôle technique : après au moins une réussite il crédite le
+  compartiment moins les coûts busted. Il n'est ni une nouvelle règle CURRENT,
+  ni une proposition de design.
+- Un bust n'arrête pas la qualité suivante. Le reliquat jamais affecté reste
+  SPEC; le coût affecté au bust est perdu. Aucune redistribution post-bust n'est
+  simulée.
+- Les fréquences longitudinales reflètent ces deux politiques déterministes et
+  les trajectoires divergent après leurs gains/RNG; elles ne décrivent pas un
+  joueur optimal ou humain.
+- Les moyennes de reliquat A2 pondèrent les partitions physiques et peuvent donc
+  compter plusieurs fois un même couple énergétique produit par des dés égaux.
+
+## DESIGN QUESTIONS
+
+1. Un programme multi-qualités doit-il continuer après le bust de sa première
+   qualité, ou s'arrêter ?
+2. Le reliquat SPEC doit-il être automatique, optionnel, ou exiger une allocation
+   Q explicite distincte ?
+3. Les futurs paliers SPEC doivent-ils interpréter un flux moyen de 3–6 % de Q
+   comme cadence cible, ou faut-il d'abord définir leur effet ?
+4. Le quatrième upgrade doit-il être normalement accessible à T16, ou rester un
+   résultat minoritaire ?
+5. Les politiques doivent-elles pouvoir renoncer à une qualité finançable pour
+   préserver davantage de SPEC ?
 ## DESIGN QUESTIONS
 
 1. Une énergie Q doit-elle être entièrement créditée lorsqu'une seule qualité

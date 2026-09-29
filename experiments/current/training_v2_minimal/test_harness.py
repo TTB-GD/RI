@@ -3,6 +3,8 @@
 import unittest
 
 from experiments.current.training_v2_minimal.harness import (
+    affordable_programs, experiment_a, experiment_a2, experiment_c,
+    legal_partitions, quality_cost, resolve_roll, simulate, simulate_b2,
     experiment_a, experiment_c, legal_partitions, quality_cost, resolve_roll, simulate,
 )
 
@@ -42,6 +44,29 @@ class TrainingV2HarnessTests(unittest.TestCase):
         rows = experiment_c()["rows"]
         self.assertEqual(len(rows), 6)
         self.assertTrue(all(row["speed"] + -row["eco"] == 4 for row in rows))
+
+    def test_a2_requires_sum_of_costs_for_double_quality(self):
+        self.assertNotIn(("SEUIL", "VMA"),
+                         [row["qualities"] for row in affordable_programs(7, 6, 8, 10)])
+        double = next(row for row in affordable_programs(9, 6, 8, 10)
+                      if row["qualities"] == ("SEUIL", "VMA"))
+        self.assertEqual((double["consumed"], double["remainder"]), (8, 1))
+
+    def test_a2_is_exhaustive_and_uses_true_simultaneous_program(self):
+        result = experiment_a2()
+        self.assertEqual(result["raw_outcomes"], 1296)
+        self.assertLess(result["seuil_plus_vma_same_partition_pct"], result["vma_pct"])
+
+    def test_q_spent_spec_conserves_q_energy_except_bust_loss(self):
+        record, _ = simulate_b2(17, "P_QUALITY", "Q_SPENT_SPEC")
+        self.assertEqual(record["q_available"], record["q_consumed"]
+                         + record["q_to_spec"] + record["q_lost_bust"])
+        self.assertEqual(record["progression_Q"], record["q_consumed"])
+
+    def test_b2_is_reproducible(self):
+        first, _ = simulate_b2(29, "P_BALANCED", "Q_FULL")
+        second, _ = simulate_b2(29, "P_BALANCED", "Q_FULL")
+        self.assertEqual(first, second)
 
 
 if __name__ == "__main__":

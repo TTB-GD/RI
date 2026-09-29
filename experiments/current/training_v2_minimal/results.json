@@ -265,6 +265,345 @@
     ],
     "criterion": "CHOIX REEL"
   },
+  "A2": {
+    "raw_outcomes": 1296,
+    "d99_mode": "D99_BONUS_ONLY",
+    "any_quality_pct": 99.614,
+    "seuil_pct": 99.614,
+    "vma_pct": 77.623,
+    "seuil_plus_vma_same_partition_pct": 5.787,
+    "at_least_two_distinct_quality_programs_pct": 77.623,
+    "mean_distinct_quality_programs": 1.83,
+    "mean_remainder_after_program": {
+      "SEUIL": 1.935,
+      "VMA": 1.007,
+      "SEUIL+VMA": 1.125
+    },
+    "examples": [
+      {
+        "raw": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "final": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "programs": []
+      },
+      {
+        "raw": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "final": [
+          4,
+          3,
+          2
+        ],
+        "programs": [
+          [
+            5,
+            4,
+            "SEUIL",
+            3,
+            1
+          ],
+          [
+            6,
+            3,
+            "SEUIL",
+            3,
+            0
+          ]
+        ]
+      },
+      {
+        "raw": [
+          2,
+          2,
+          5,
+          5
+        ],
+        "final": [
+          5,
+          5,
+          2,
+          2
+        ],
+        "programs": [
+          [
+            7,
+            7,
+            "SEUIL",
+            3,
+            4
+          ],
+          [
+            7,
+            7,
+            "VMA",
+            5,
+            2
+          ],
+          [
+            9,
+            5,
+            "SEUIL",
+            3,
+            2
+          ],
+          [
+            9,
+            5,
+            "VMA",
+            5,
+            0
+          ],
+          [
+            10,
+            4,
+            "SEUIL",
+            3,
+            1
+          ]
+        ]
+      },
+      {
+        "raw": [
+          3,
+          3,
+          3,
+          6
+        ],
+        "final": [
+          6,
+          3,
+          3,
+          3
+        ],
+        "programs": [
+          [
+            9,
+            6,
+            "SEUIL",
+            3,
+            3
+          ],
+          [
+            9,
+            6,
+            "VMA",
+            5,
+            1
+          ],
+          [
+            12,
+            3,
+            "SEUIL",
+            3,
+            0
+          ]
+        ]
+      },
+      {
+        "raw": [
+          4,
+          4,
+          5,
+          6
+        ],
+        "final": [
+          6,
+          5,
+          4
+        ],
+        "programs": [
+          [
+            9,
+            6,
+            "SEUIL",
+            3,
+            3
+          ],
+          [
+            9,
+            6,
+            "VMA",
+            5,
+            1
+          ],
+          [
+            10,
+            5,
+            "SEUIL",
+            3,
+            2
+          ],
+          [
+            10,
+            5,
+            "VMA",
+            5,
+            0
+          ],
+          [
+            11,
+            4,
+            "SEUIL",
+            3,
+            1
+          ]
+        ]
+      },
+      {
+        "raw": [
+          5,
+          5,
+          6,
+          6
+        ],
+        "final": [
+          6,
+          6,
+          5,
+          5
+        ],
+        "programs": [
+          [
+            11,
+            11,
+            "SEUIL",
+            3,
+            8
+          ],
+          [
+            11,
+            11,
+            "SEUIL+VMA",
+            8,
+            3
+          ],
+          [
+            11,
+            11,
+            "VMA",
+            5,
+            6
+          ],
+          [
+            12,
+            10,
+            "SEUIL",
+            3,
+            7
+          ],
+          [
+            12,
+            10,
+            "SEUIL+VMA",
+            8,
+            2
+          ],
+          [
+            12,
+            10,
+            "VMA",
+            5,
+            5
+          ],
+          [
+            16,
+            6,
+            "SEUIL",
+            3,
+            3
+          ],
+          [
+            16,
+            6,
+            "VMA",
+            5,
+            1
+          ],
+          [
+            17,
+            5,
+            "SEUIL",
+            3,
+            2
+          ],
+          [
+            17,
+            5,
+            "VMA",
+            5,
+            0
+          ]
+        ]
+      },
+      {
+        "raw": [
+          6,
+          6,
+          6,
+          6
+        ],
+        "final": [
+          6,
+          6,
+          6,
+          6
+        ],
+        "programs": [
+          [
+            12,
+            12,
+            "SEUIL",
+            3,
+            9
+          ],
+          [
+            12,
+            12,
+            "SEUIL+VMA",
+            8,
+            4
+          ],
+          [
+            12,
+            12,
+            "VMA",
+            5,
+            7
+          ],
+          [
+            18,
+            6,
+            "SEUIL",
+            3,
+            3
+          ],
+          [
+            18,
+            6,
+            "VMA",
+            5,
+            1
+          ]
+        ]
+      }
+    ]
+  },
+  "B": {
+    "seeds": 200,
+    "turns": 16,
   "B": {
     "seeds": 200,
     "turns": 16,
@@ -2953,6 +3292,558 @@
               "busts": 2
             }
           ]
+        }
+      }
+    }
+  },
+  "B2": {
+    "seeds": 100,
+    "turns": 16,
+    "total_turns": 6400,
+    "d99_mode": "D99_BONUS_ONLY",
+    "cells": {
+      "P_BALANCED__Q_FULL": {
+        "EF": {
+          "mean": 11.99,
+          "median": 12.0,
+          "p10": 12.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 15.8,
+          "median": 16.0,
+          "p10": 15.0,
+          "p90": 16.1
+        },
+        "VMA": {
+          "mean": 18.96,
+          "median": 19.0,
+          "p10": 18.0,
+          "p90": 20.0
+        },
+        "progression_EF": {
+          "mean": 188.84,
+          "median": 187.0,
+          "p10": 175.0,
+          "p90": 208.0
+        },
+        "progression_Q": {
+          "mean": 88.43,
+          "median": 89.0,
+          "p10": 75.9,
+          "p90": 101.0
+        },
+        "progression_SPEC": {
+          "mean": 0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "dice_count": {
+          "mean": 6,
+          "median": 6.0,
+          "p10": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.15,
+          "median": 3.0,
+          "p10": 3.0,
+          "p90": 4.0
+        },
+        "quality_turns_0": {
+          "mean": 2.23,
+          "median": 2.0,
+          "p10": 1.0,
+          "p90": 4.0
+        },
+        "quality_turns_1": {
+          "mean": 10.78,
+          "median": 11.0,
+          "p10": 8.0,
+          "p90": 13.0
+        },
+        "quality_turns_2": {
+          "mean": 2.99,
+          "median": 3.0,
+          "p10": 1.0,
+          "p90": 5.0
+        },
+        "risky_attempts": {
+          "mean": 4.89,
+          "median": 5.0,
+          "p10": 3.0,
+          "p90": 7.0
+        },
+        "busts": {
+          "mean": 1.12,
+          "median": 1.0,
+          "p10": 0.0,
+          "p90": 3.0
+        },
+        "q_available": {
+          "mean": 99.95,
+          "median": 100.5,
+          "p10": 87.0,
+          "p90": 112.0
+        },
+        "q_consumed": {
+          "mean": 85.56,
+          "median": 86.0,
+          "p10": 73.0,
+          "p90": 98.0
+        },
+        "q_to_spec": {
+          "mean": 0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "q_lost_bust": {
+          "mean": 8.94,
+          "median": 8.0,
+          "p10": 0.0,
+          "p90": 21.1
+        },
+        "fifth_die_timing": {
+          "median_among_reached": 5.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "sixth_die_timing": {
+          "median_among_reached": 11.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "upgrade_timing": {
+          "1": {
+            "median_among_reached": 5.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "2": {
+            "median_among_reached": 8.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "3": {
+            "median_among_reached": 13.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "4": {
+            "median_among_reached": 16.0,
+            "reached_by_t16_pct": 15.0
+          }
+        },
+        "spec_share_pct": {
+          "mean": 0.0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        }
+      },
+      "P_BALANCED__Q_SPENT_SPEC": {
+        "EF": {
+          "mean": 11.99,
+          "median": 12.0,
+          "p10": 12.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 15.83,
+          "median": 16.0,
+          "p10": 15.0,
+          "p90": 17.0
+        },
+        "VMA": {
+          "mean": 18.99,
+          "median": 19.0,
+          "p10": 18.0,
+          "p90": 20.0
+        },
+        "progression_EF": {
+          "mean": 187.9,
+          "median": 187.0,
+          "p10": 174.0,
+          "p90": 206.1
+        },
+        "progression_Q": {
+          "mean": 86.13,
+          "median": 86.5,
+          "p10": 74.9,
+          "p90": 96.1
+        },
+        "progression_SPEC": {
+          "mean": 5.55,
+          "median": 5.0,
+          "p10": 3.0,
+          "p90": 8.1
+        },
+        "dice_count": {
+          "mean": 6,
+          "median": 6.0,
+          "p10": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.02,
+          "median": 3.0,
+          "p10": 3.0,
+          "p90": 3.0
+        },
+        "quality_turns_0": {
+          "mean": 2.22,
+          "median": 2.0,
+          "p10": 1.0,
+          "p90": 4.0
+        },
+        "quality_turns_1": {
+          "mean": 10.74,
+          "median": 11.0,
+          "p10": 8.0,
+          "p90": 13.0
+        },
+        "quality_turns_2": {
+          "mean": 3.04,
+          "median": 3.0,
+          "p10": 1.9,
+          "p90": 5.0
+        },
+        "risky_attempts": {
+          "mean": 4.9,
+          "median": 5.0,
+          "p10": 3.0,
+          "p90": 7.0
+        },
+        "busts": {
+          "mean": 1.02,
+          "median": 1.0,
+          "p10": 0.0,
+          "p90": 2.0
+        },
+        "q_available": {
+          "mean": 99.83,
+          "median": 100.0,
+          "p10": 88.9,
+          "p90": 109.2
+        },
+        "q_consumed": {
+          "mean": 86.13,
+          "median": 86.5,
+          "p10": 74.9,
+          "p90": 96.1
+        },
+        "q_to_spec": {
+          "mean": 5.55,
+          "median": 5.0,
+          "p10": 3.0,
+          "p90": 8.1
+        },
+        "q_lost_bust": {
+          "mean": 8.15,
+          "median": 8.0,
+          "p10": 0.0,
+          "p90": 19.1
+        },
+        "fifth_die_timing": {
+          "median_among_reached": 5.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "sixth_die_timing": {
+          "median_among_reached": 11.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "upgrade_timing": {
+          "1": {
+            "median_among_reached": 5.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "2": {
+            "median_among_reached": 8.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "3": {
+            "median_among_reached": 13.0,
+            "reached_by_t16_pct": 99.0
+          },
+          "4": {
+            "median_among_reached": 16.0,
+            "reached_by_t16_pct": 3.0
+          }
+        },
+        "spec_share_pct": {
+          "mean": 5.539,
+          "median": 5.465,
+          "p10": 2.752,
+          "p90": 8.421
+        }
+      },
+      "P_QUALITY__Q_FULL": {
+        "EF": {
+          "mean": 11.78,
+          "median": 12.0,
+          "p10": 11.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 14.63,
+          "median": 14.0,
+          "p10": 13.9,
+          "p90": 16.0
+        },
+        "VMA": {
+          "mean": 19.42,
+          "median": 19.0,
+          "p10": 18.0,
+          "p90": 21.0
+        },
+        "progression_EF": {
+          "mean": 175.98,
+          "median": 176.0,
+          "p10": 159.0,
+          "p90": 191.1
+        },
+        "progression_Q": {
+          "mean": 93.38,
+          "median": 94.5,
+          "p10": 77.9,
+          "p90": 107.1
+        },
+        "progression_SPEC": {
+          "mean": 0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "dice_count": {
+          "mean": 6,
+          "median": 6.0,
+          "p10": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.32,
+          "median": 3.0,
+          "p10": 3.0,
+          "p90": 4.0
+        },
+        "quality_turns_0": {
+          "mean": 1.79,
+          "median": 2.0,
+          "p10": 0.0,
+          "p90": 3.0
+        },
+        "quality_turns_1": {
+          "mean": 12.37,
+          "median": 13.0,
+          "p10": 10.0,
+          "p90": 15.0
+        },
+        "quality_turns_2": {
+          "mean": 1.84,
+          "median": 2.0,
+          "p10": 1.0,
+          "p90": 3.0
+        },
+        "risky_attempts": {
+          "mean": 6.99,
+          "median": 7.0,
+          "p10": 5.0,
+          "p90": 9.0
+        },
+        "busts": {
+          "mean": 1.96,
+          "median": 2.0,
+          "p10": 0.9,
+          "p90": 4.0
+        },
+        "q_available": {
+          "mean": 111.33,
+          "median": 111.0,
+          "p10": 97.9,
+          "p90": 126.1
+        },
+        "q_consumed": {
+          "mean": 90.3,
+          "median": 90.5,
+          "p10": 76.0,
+          "p90": 104.0
+        },
+        "q_to_spec": {
+          "mean": 0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        },
+        "q_lost_bust": {
+          "mean": 17.63,
+          "median": 16.0,
+          "p10": 5.4,
+          "p90": 33.1
+        },
+        "fifth_die_timing": {
+          "median_among_reached": 5.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "sixth_die_timing": {
+          "median_among_reached": 11.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "upgrade_timing": {
+          "1": {
+            "median_among_reached": 4.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "2": {
+            "median_among_reached": 7.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "3": {
+            "median_among_reached": 12.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "4": {
+            "median_among_reached": 16.0,
+            "reached_by_t16_pct": 32.0
+          }
+        },
+        "spec_share_pct": {
+          "mean": 0.0,
+          "median": 0.0,
+          "p10": 0.0,
+          "p90": 0.0
+        }
+      },
+      "P_QUALITY__Q_SPENT_SPEC": {
+        "EF": {
+          "mean": 11.76,
+          "median": 12.0,
+          "p10": 11.0,
+          "p90": 12.0
+        },
+        "SEUIL": {
+          "mean": 14.65,
+          "median": 15.0,
+          "p10": 13.9,
+          "p90": 16.0
+        },
+        "VMA": {
+          "mean": 19.37,
+          "median": 19.0,
+          "p10": 18.0,
+          "p90": 20.0
+        },
+        "progression_EF": {
+          "mean": 175.44,
+          "median": 175.0,
+          "p10": 159.0,
+          "p90": 190.2
+        },
+        "progression_Q": {
+          "mean": 89.99,
+          "median": 90.0,
+          "p10": 74.9,
+          "p90": 104.1
+        },
+        "progression_SPEC": {
+          "mean": 3.42,
+          "median": 3.0,
+          "p10": 1.0,
+          "p90": 6.0
+        },
+        "dice_count": {
+          "mean": 6,
+          "median": 6.0,
+          "p10": 6.0,
+          "p90": 6.0
+        },
+        "upgrades": {
+          "mean": 3.23,
+          "median": 3.0,
+          "p10": 3.0,
+          "p90": 4.0
+        },
+        "quality_turns_0": {
+          "mean": 1.79,
+          "median": 2.0,
+          "p10": 0.0,
+          "p90": 3.1
+        },
+        "quality_turns_1": {
+          "mean": 12.4,
+          "median": 13.0,
+          "p10": 10.0,
+          "p90": 15.0
+        },
+        "quality_turns_2": {
+          "mean": 1.81,
+          "median": 2.0,
+          "p10": 0.9,
+          "p90": 3.0
+        },
+        "risky_attempts": {
+          "mean": 7.1,
+          "median": 7.0,
+          "p10": 5.0,
+          "p90": 9.0
+        },
+        "busts": {
+          "mean": 1.99,
+          "median": 2.0,
+          "p10": 0.0,
+          "p90": 4.0
+        },
+        "q_available": {
+          "mean": 111.21,
+          "median": 110.0,
+          "p10": 98.9,
+          "p90": 125.1
+        },
+        "q_consumed": {
+          "mean": 89.99,
+          "median": 90.0,
+          "p10": 74.9,
+          "p90": 104.1
+        },
+        "q_to_spec": {
+          "mean": 3.42,
+          "median": 3.0,
+          "p10": 1.0,
+          "p90": 6.0
+        },
+        "q_lost_bust": {
+          "mean": 17.8,
+          "median": 17.5,
+          "p10": 0.0,
+          "p90": 33.0
+        },
+        "fifth_die_timing": {
+          "median_among_reached": 5.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "sixth_die_timing": {
+          "median_among_reached": 11.0,
+          "reached_by_t16_pct": 100.0
+        },
+        "upgrade_timing": {
+          "1": {
+            "median_among_reached": 4.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "2": {
+            "median_among_reached": 8.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "3": {
+            "median_among_reached": 13.0,
+            "reached_by_t16_pct": 100.0
+          },
+          "4": {
+            "median_among_reached": 16.0,
+            "reached_by_t16_pct": 23.0
+          }
+        },
+        "spec_share_pct": {
+          "mean": 3.056,
+          "median": 2.885,
+          "p10": 0.999,
+          "p90": 5.273
         }
       }
     }
