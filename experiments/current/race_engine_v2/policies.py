@@ -1,6 +1,15 @@
 """Deterministic technical probes. These are not official player behaviours."""
 
+from race_v2 import is_production_physiologically_legal
+
 from .core import PolicyView, production_cost
+
+
+def _cost_source(view: PolicyView):
+    source = view.physiology_profile or view.curve
+    if source is None:
+        raise ValueError("policy view has no cost source")
+    return source
 
 
 def _affordable_continuation(view: PolicyView, production: int, buffer_per_turn: int = 1) -> bool:
@@ -9,14 +18,21 @@ def _affordable_continuation(view: PolicyView, production: int, buffer_per_turn:
     else:
         budget = view.final_reserve - view.spent
     remaining_turns = view.race_length - view.segment
-    future_floor = sum(production_cost(1, difficulty, view.curve)
+    if view.physiology_profile is not None and any(
+        not is_production_physiologically_legal(view.physiology_profile, 1, difficulty)
+        for difficulty in view.remaining_difficulty_profile
+    ):
+        return False
+    source = _cost_source(view)
+    future_floor = sum(production_cost(1, difficulty, source)
                        for difficulty in view.remaining_difficulty_profile)
-    return production_cost(production, view.current_difficulty, view.curve) + max(
+    return production_cost(production, view.current_difficulty, source) + max(
         remaining_turns * buffer_per_turn, future_floor) <= budget
 
 
 def efficient_policy(view: PolicyView) -> int:
-    return max(view.payable, key=lambda p: (p / production_cost(p, view.current_difficulty, view.curve), p))
+    source = _cost_source(view)
+    return max(view.payable, key=lambda p: (p / production_cost(p, view.current_difficulty, source), p))
 
 
 def aggressive_policy(view: PolicyView) -> int:

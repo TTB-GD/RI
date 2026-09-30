@@ -473,3 +473,12 @@ pour VMA. Tant qu'elles restent ouvertes, la migration sûre consiste seulement
 à reconnaître que la majorité de l'orchestration est mécaniquement réutilisable,
 alors que la fonction de coût et son domaine ne sont pas substituables partout
 sans décision de Game Design.
+
+
+## Note de clôture post-audit — 2026-09-29
+
+Cet audit reste le constat historique pré-intégration. Les décisions ultérieures ont
+validé le plancher `Cost = EF` sous EF, la légalité `Charge <= VMA`, et la
+conservation expérimentale de l'orchestration S1–S3. Le moteur a ensuite reçu un
+chemin `PhysiologyProfile` explicite tout en conservant Curve A/B/C pour reproduire
+les campagnes historiques. Les calibrations et la conversion Training restent OPEN.

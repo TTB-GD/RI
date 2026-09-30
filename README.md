@@ -20,19 +20,22 @@ puis convertit sa préparation en performance lors d'une course finale.
 ## Profil physiologique V2
 
 La frontière intégrée entre un futur Training et Race V2 est un profil ordonné
-`EF < Seuil < VMA` : EF est l'origine du coût, Seuil son changement de régime,
-et VMA la borne haute du domaine physiologique intégré. La courbe native est
-continue et utilise actuellement des pentes 2 puis 3. Ces deux valeurs sont une
+`EF < Seuil < VMA` : une Charge sous ou à EF reste légale avec un coût plancher
+EF, Seuil marque le changement de régime, et VMA borne durement la Charge. Race
+V2 choisit librement parmi les sommes de sous-ensembles telles que
+`Production + Difficulty ≤ VMA`, calcule leur coût physiologique, puis utilise
+la Réserve longitudinale expérimentale. La courbe native est continue et utilise
+actuellement des pentes 2 puis 3. Ces deux valeurs sont une
 **CALIBRATION EXPERIMENTAL**, pas un équilibrage définitif.
 
 ## Statuts importants
 
 - **CURRENT / INTÉGRÉ :** profil EF/Seuil/VMA, calcul pur du coût, et résolution
   locale Production + Difficulty → Charge → coût / score.
-- **EXPERIMENTAL :** pentes 2/3, construction de la Réserve, Form, politiques de
-  course, Fatigue V1 et politiques automatiques d'entraînement.
-- **OPEN :** légalité et coût au-dessus de VMA, conversion complète du Training
-  vers le profil, rôle concret de SL en course et SPEC. SPEC n'est pas implémenté
+- **EXPERIMENTAL :** pentes 2/3, construction longitudinale de la Réserve, Form,
+  Freshness, SL, politiques de course, Fatigue V1 et politiques automatiques d'entraînement.
+- **OPEN :** conversion complète du Training vers le profil, calibration des
+  mécanismes expérimentaux, rôle définitif de SL en course et SPEC. SPEC n'est pas implémenté
   dans le chemin Race V2 ; Position, Efficacité et AS42/AS21/AS10/AS5 ne sont pas
   des mécanismes actifs de cette baseline.
 
