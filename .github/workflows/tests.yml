@@ -15,3 +15,28 @@ jobs:
           python-version: '3.x'
       - name: Run tests
         run: python -m unittest discover -s tests -v
+      - name: Validate tracked JSON evidence
+        run: python scripts/validate_experimental_json.py
+      - name: Run lightweight experimental tests
+        # Explicit list: never invoke harness entry points or campaign runners.
+        run: |
+          python -m unittest -v \
+            experiments.current.training_v2_minimal.test_harness \
+            experiments.current.bust_trigger.test_harness \
+            experiments.current.race_efficiency_probe.test_harness \
+            experiments.current.training_race_bridge.test_harness \
+            experiments.current.race_engine_v2.test_harness \
+            experiments.current.race_engine_v2.test_physiology_integration \
+            experiments.current.race_engine_v2.test_r1a2 \
+            experiments.current.race_engine_v2.test_r1b \
+            experiments.current.race_engine_v2.test_r1b2 \
+            experiments.current.training_v2_specific.test_harness.SpecificHarnessTests.test_switch_tie_prefers_physiology \
+            experiments.current.training_v2_specific.test_harness.SpecificHarnessTests.test_speed_saturation_forces_eco \
+            experiments.current.training_v2_specific.test_harness.SpecificHarnessTests.test_q_accounting_and_reproducibility \
+            experiments.current.training_v2_specific.test_harness.SpecificHarnessTests.test_curve_ignores_physiology_and_c2_uses_half_up \
+            experiments.current.training_v2_specific.test_harness.SpecificHarnessTests.test_headroom_enumeration_reopens_exactly_one_shell \
+            experiments.current.training_v2_specific.test_harness.SpecificHarnessTests.test_d4a_confirms_all_fixtures \
+            experiments.current.training_v2_specific.test_harness.SpecificHarnessTests.test_d4_is_reproducible_and_conserves_q \
+            experiments.current.training_v2_specific.test_harness.SpecificHarnessTests.test_d4_saturation_blocks_tier_conversion
+        # Exclude test_d1_protocol_size (576 turns) and
+        # test_d4_protocol_and_observed_classification (960 turns): campaigns.
