@@ -17,12 +17,14 @@ avant l'expérience : `231d49e729431c48ce24ebcdd55871b9f9f76302`.
   `CHOIX REEL`.
 - **B** exécute, puisque A n'a pas déclenché l'arrêt, 200 seeds partagées
   (`0..199`) × 3 politiques × 16 tours = **600 campagnes / 9 600 tours**.
-  Chaque politique choisit au plus une progression physiologique par tour,
-  avec tie-breaks déterministes. Toute l'énergie des compartiments alimente
-  les compteurs; Q n'est créditée que si la qualité choisie réussit. Le bust
-  local reprend exactement le principe CURRENT : `k = coût - meilleur dé`,
-  meilleur dé du pool, bust sur face brute `<= k`. Les gains s'appliquent en
-  fin de tour. Aux paliers EF sans dé, `EF +1` est provisoire et seulement
+  Chaque politique choisit au plus une qualité (Seuil ou VMA) par tour,
+  avec tie-breaks déterministes. EF peut aussi progresser passivement lors du
+  franchissement de ses paliers : la limite ne porte pas sur tous les marqueurs.
+  Toute l'énergie des compartiments alimente les compteurs; Q n'est créditée que si la qualité choisie réussit. Le test de bust
+  local reprend la forme du test CURRENT : `k = coût - max(lancer final)`,
+  lancer du meilleur dé du pool, bust sur face brute `<= k`. Le coût de qualité
+  et la frontière sûre restent ceux du harnais, pas le catalogue/RPE Max CURRENT.
+  Les gains s'appliquent en fin de tour. Aux paliers EF sans dé, `EF +1` est provisoire et seulement
   appliqué si `EF + 1 < Seuil`; un gain bloqué n'est pas mis en attente. Aux
   paliers Q sans upgrade, rien n'est attribué (simples marqueurs). Les upgrades
   suivent une politique locale répartie et déterministe.
@@ -38,6 +40,10 @@ avant l'expérience : `231d49e729431c48ce24ebcdd55871b9f9f76302`.
 
 ### A — cartographie d'un tour
 
+Ces taux décrivent le lancer et les partitions du harnais, sans relance ni
+décision de joueur, avec D99 bonus-only et sans son plafond de qualités.
+Ils ne mesurent pas les possibilités ni les décisions du Training CURRENT.
+
 | Mesure | Résultat |
 |---|---:|
 | Lancers avec ≥1 partition non triviale | 100,000 % |
@@ -47,11 +53,15 @@ avant l'expérience : `231d49e729431c48ce24ebcdd55871b9f9f76302`.
 | Accès au premier palier EF (10) | 55,633 % |
 | Accès Seuil | 99,614 % |
 | Accès VMA | 77,623 % |
-| Accès simultané Seuil/VMA | 77,623 % |
+| Co-accessibilité alternative Seuil/VMA (ancien « accès simultané ») | 77,623 % |
 | Au moins une qualité sûre | 98,765 % |
 | Au moins une qualité risquée | 4,398 % |
 
-**Critère : `CHOIX REEL`.** Exemples compacts (lancer final → couples EF/Q) :
+**Critère opérationnel : `CHOIX REEL`.** Ce label désigne plusieurs programmes
+énergie/accès dans ≥50 % des lancers, sans mesurer leur intérêt stratégique,
+leur non-dominance ou les décisions d’un joueur. Dans les exemples, `Seuil/VMA`
+désigne deux options alternatives, jamais leur financement conjoint.
+Exemples compacts (lancer final → couples EF/Q) :
 
 - `1,1,1,1 → 3/1, 2/2` (aucune qualité);
 - `4,3,2 → 7/2, 6/3, 5/4` (aucune puis Seuil);
@@ -78,7 +88,8 @@ Chaque cellule est `moyenne [P10 ; médiane ; P90]`.
 | qualités risquées tentées | 0,065 [0;0;0] | 2,355 [1;2;4] | 6,580 [5;7;8] |
 | busts | 0,010 [0;0;0] | 0,460 [0;0;1] | 1,905 [0;2;3] |
 
-Les 200 runs de chaque politique finissent à six dés; médiane d'obtention au
+Sous ces politiques et paramètres locaux, les 200 runs de chaque politique
+finissent à six dés; médiane d'obtention au
 tour 11 pour P_EF et 12 pour les deux autres. Les quatre upgrades sont atteints
 à T16 dans 13 %, 94 % et 81,5 % des runs respectivement. Tous les marqueurs ont
 progressé dans 100 % des runs des trois politiques. Les pools finaux détaillés
@@ -96,37 +107,55 @@ et trois trajectoires (`0`, `73`, `199`) par politique sont dans `results.json`.
 |  | FULL_ECO | 23 | 1 | 4 | 16 |
 
 Autour d'AS, FULL_SPEED gagne toujours +3/+4/+5 Production par rapport à
-l'AS de contexte. À AS42, le plancher écrase la différence de coût entre
-BALANCED et FULL_ECO. À AS10, les trois profils restent distincts : davantage
-de Production contre des économies répétées croissantes.
+l'AS fixe de contexte; à offset identique, le gain dû à ses quatre points Vitesse
+reste +4. À AS42, le plancher écrase la différence de coût entre BALANCED et
+FULL_ECO : BALANCED fournit deux Production de plus pour le même coût nul,
+aux trois offsets, donc domine localement FULL_ECO sur ces deux métriques.
+Les 20/8/16 unités « économisées par ECO » comparent chaque profil à lui-même
+sans son bonus ECO, à Production inchangée; ce ne sont pas les économies par
+rapport à FULL_SPEED. À AS10, les trois profils à AS restent distincts : davantage
+de Production contre davantage de coût répété. Ces fixtures ne représentent
+ni la courbe physiologique native ni une mécanique SPEC intégrée à Race V2.
 
 ## OBSERVATIONS
 
 - La partition n'est pas structurellement unique dans ce modèle : tous les
   tirages ont plusieurs programmes distincts, même si une part des différences
   ne change pas l'ensemble de qualités accessible.
-- Seuil est presque toujours finançable dès la baseline; VMA l'est dans plus de
-  trois quarts des tirages. Le risque est rare dans la cartographie initiale.
+- Seuil est presque toujours finançable dès la baseline expérimentale; VMA
+  l'est dans plus de trois quarts des tirages, comme option alternative.
+  4,398 % des lancers exposent au moins une option risquée dans A : il ne
+  s'agit ni d'un taux de tentative ni d'un taux de bust sous politique.
 - Les trois sondes font progresser tous les marqueurs et obtiennent les deux dés
   en 16 tours. P_BALANCED et P_QUALITY obtiennent presque toujours les quatre
   upgrades; P_QUALITY sépare nettement VMA mais tente et subit plus de risque.
 - C mesure des bénéfices de nature différente (Production instantanée contre
   coût répété), mais le plancher zéro masque l'économie marginale au contexte
-  bas et la courbe convexe amplifie fortement les écarts au contexte haut.
+  bas et les paliers Curve B amplifient les écarts à AS10. Le coût terminal
+  reste toutefois constant à partir de Production 27; la convexité globale
+  ne peut être supposée.
 
 ## INTERPRETATIONS
 
-- La partition paraît produire un choix combinatoire réel, mais l'accès Seuil
-  quasi universel suggère que le choix porte davantage sur l'allocation et la
-  cible que sur l'ouverture de Seuil.
-- B présente un signal d'accélération forte plutôt qu'un blocage : les gains de
-  pool sont universels et tous les marqueurs progressent. Cela ne suffit pas à
-  qualifier l'équilibre, car les politiques maximisent explicitement un
-  compartiment et les conventions de dépense sont locales.
-- Vitesse et économie ne se dominent pas analytiquement sur les deux axes : la
-  première achète de la Production, la seconde de la Reserve. Leur valeur
-  relative change avec intensité et répétitions, mais la fixture ECO est trop
-  simplifiée pour conclure à un équilibre.
+- La multiplicité combinatoire est établie. L'accès Seuil quasi universel
+  suggère une question d'allocation et de cible plutôt que d'ouverture de Seuil.
+  L'intérêt stratégique, les options dominées et la lisibilité pour un joueur
+  restent non démontrés : **OPEN — REQUIRES NEW EXPERIMENT** après définition
+  des critères C1/C2, sans expérience supplémentaire dans cet audit.
+- B établit l'absence de blocage dans ses 600 campagnes et un rythme soutenu
+  sous ses paliers et politiques techniques. « Accélération forte » reste une
+  interprétation sans cadence cible ni comparaison au Training CURRENT.
+  EF reçoit toute l'énergie de son compartiment; les dés arrivent aux paliers
+  EF 35/100, les upgrades aux paliers Q 15/35/65/100. Ces conventions, la priorité
+  de chaque politique et le crédit Q intégral contribuent aux résultats, sans
+  isoler leurs effets. La différenciation des marqueurs et risques mesurée en B
+  ne démontre ni des builds humains ni une profondeur ludique.
+- À AS10/offset zéro, les profils ne se dominent pas sur Production/coût;
+  à AS42, BALANCED domine localement FULL_ECO (voir C). La valeur stratégique
+  d'une Production supplémentaire face à une économie de Réserve dépend d'une
+  course et d'un objectif absents de C. Même la non-dominance à AS10 ne démontre
+  pas un compromis équilibré. Le contexte et les répétitions sont des fixtures,
+  sans preuve d'équilibrage physiologique dans Race V2 intégré.
 
 ## LIMITS
 
@@ -135,8 +164,8 @@ de Production contre des économies répétées croissantes.
   boundary test mais aucune seconde campagne n'est exécutée.
 - Les partitions physiques dupliquent parfois le même programme énergétique
   quand des faces sont égales; le rapport donne aussi les programmes distincts.
-- B impose une seule progression physiologique par tour, crédite toute l'énergie
-  de compartiment, ne reporte pas un gain EF bloqué, et ne modélise ni fatigue,
+- B limite le choix à une qualité par tour, avec gains EF passifs, crédite
+  toute l'énergie de compartiment, ne reporte pas un gain EF bloqué, et ne modélise ni fatigue,
   ni catalogue, ni joueur humain. Les politiques ne sont pas optimales.
 - Les valeurs AS42/AS10, répétitions et effet linéaire ECO de C sont des fixtures
   abstraites locales. Curve B est réutilisée, mais son domaine terminal agrège
@@ -144,10 +173,10 @@ de Production contre des économies répétées croissantes.
 - Les trajectoires B incluent les effets de leurs choix; elles ne sont donc pas
   des contre-factuels appariés tour par tour après divergence des pools/RNG.
 
-La question de première passe sur le crédit de toute l'énergie Q et celle sur la
-progression de plusieurs marqueurs sont traitées expérimentalement par A2/B2
-ci-dessous. Les autres arbitrages ouverts sont consolidés dans la liste finale,
-limitée à cinq questions.
+A2/B2 teste la composition de deux qualités et une variante de crédit Q;
+ces résultats précisent les questions initiales sans décider de leur adoption.
+La traçabilité finale conserve les cinq questions de chaque passe dans un seul
+registre; elle distingue réponse expérimentale locale et arbitrage de design.
 
 ---
 
@@ -161,7 +190,10 @@ limitée à cinq questions.
   8 à la baseline (3 + 5). La mesure A « accès simultané » à 77,623 % était une
   **co-accessibilité alternative**, pas la finançabilité des deux séances; A2 la
   remplace pour toute conclusion sur la multi-qualité. Les reliquats moyens A2
-  pondèrent chaque occurrence lancer × partition physique × programme.
+  pondèrent chaque occurrence lancer × partition physique × programme finançable,
+  séparément pour Seuil, VMA et Seuil+VMA. Ce sont des moyennes conditionnelles,
+  pas des reliquats moyens par lancer ni sous une politique de choix; la moyenne
+  de 1,830 compte uniquement les programmes qualitatifs, sans « aucun ».
 - **B2** exécute 100 seeds partagées (`0..99`) × 2 politiques × 2 variantes ×
   16 tours = **400 campagnes / 6 400 tours**. `Q_FULL` conserve le contrôle de
   la PR #10 : dès qu'au moins une qualité réussit, tout E_Q non perdu par bust
@@ -201,7 +233,13 @@ Exemples représentatifs (`EF/Q : programme, consommé, reliquat`) :
 
 ### B2 — Q_FULL vs Q_SPENT_SPEC
 
-Notation : `moyenne [P10 ; médiane ; P90]` sur 100 campagnes.
+Notation : `moyenne [P10 ; médiane ; P90]` sur 100 campagnes par cellule.
+Les médianes de dates d'événements ci-dessous portent uniquement sur les
+campagnes ayant atteint l'événement; les taux à T16 portent sur les 100 campagnes.
+`q_consumed` mesure seulement le coût des qualités réussies, pas l'énergie
+busted. La part SPEC est la moyenne des ratios individuels `q_to_spec/q_available`,
+pas le ratio des moyennes. SPEC est un compteur sans effet de course, avec
+résolution de bust non-CURRENT; les doubles réussites et flux restent locaux.
 
 | Mesure | BAL Q_FULL | BAL Q_SPENT_SPEC | QUALITY Q_FULL | QUALITY Q_SPENT_SPEC |
 |---|---:|---:|---:|---:|
@@ -242,11 +280,13 @@ Réponses prioritaires :
    chacun d'un tour médian.
 2. **Deuxième d6 :** oui, il reste universel dans cet échantillon : 100 % à T16
    dans les quatre cellules, tour médian 11.
-3. **Part naturelle vers SPEC :** 5,539 % de Q en moyenne pour P_BALANCED et
-   3,056 % pour P_QUALITY sous Q_SPENT_SPEC.
+3. **Part dirigée vers SPEC par la convention locale :** 5,539 % de Q en
+   moyenne pour P_BALANCED et 3,056 % pour P_QUALITY sous Q_SPENT_SPEC.
 4. **Doubles qualités :** elles sont occasionnelles : 3,04 tours sur 16
    (19,0 %) pour P_BALANCED et 1,81 sur 16 (11,3 %) pour P_QUALITY dans la
-   variante test. Il s'agit de doubles réussites, après bust éventuel.
+   variante test. Il s'agit de doubles réussites : aucune des deux qualités
+   ne bust sur ces tours. Les autres tours peuvent contenir des busts, dont la
+   résolution non-CURRENT affecte aussi les trajectoires ultérieures.
 5. **Différenciation :** elle subsiste sous Q_SPENT_SPEC. P_BALANCED finit à
    Seuil 15,83 / VMA 18,99 avec 4,90 risques; P_QUALITY à Seuil 14,65 / VMA
    19,37 avec 7,10 risques. L'écart VMA est modeste, mais les répartitions Seuil,
@@ -256,8 +296,11 @@ Réponses prioritaires :
 
 - La vraie double qualité initiale (5,787 % des lancers) est bien plus rare que
   la co-accessibilité alternative annoncée dans A (77,623 %).
-- Q_SPENT ralentit surtout le quatrième upgrade; il ne retarde ni le cinquième
-  ni le sixième dé dans ces trajectoires, car ceux-ci dépendent de la piste EF.
+- Sous Q_SPENT_SPEC, l'accès au quatrième upgrade à T16 baisse de 12 et 9
+  points selon la politique. Les médianes des dates des cinquième/sixième dés
+  (5/11) et leurs taux à T16 (100 %) restent identiques. Cela n'établit pas
+  l'identité des dates individuelles ou des distributions. Les dés dépendent
+  directement de la piste EF, mais les gains Q peuvent modifier pool, choix et RNG.
 - Le reliquat SPEC mesuré reste petit devant Q totale et est plus élevé chez
   P_BALANCED, tandis que P_QUALITY consomme davantage de Q et perd davantage au
   bust.
@@ -266,9 +309,13 @@ Réponses prioritaires :
 
 ## INTERPRETATIONS
 
-- Supprimer le crédit Q gratuit corrige une partie de l'accélération observée en
-  B, mais ne suffit pas, sur 16 tours, à rendre les premiers upgrades ou les dés
-  supplémentaires rares.
+- Dans B2, passer de Q_FULL à Q_SPENT_SPEC réduit les upgrades moyens et
+  l'accès au quatrième upgrade, sous les deux politiques. Il ne s'agit pas d'un
+  effet causal pur à trajectoire identique : les seeds sont partagées, mais les
+  états, choix et consommations RNG peuvent ensuite diverger. B et B2 diffèrent
+  aussi par composition, sélection et échantillon (200/100 seeds); la baisse
+  entre B et B2 ne peut donc être attribuée au seul crédit Q. Les premiers
+  upgrades et les dés restent fréquents dans B2, sans validation de cadence cible.
 - Le compteur SPEC reçoit un flux mesurable sans détourner de coûts réellement
   affectés aux qualités. Son volume dépend de la politique et ne constitue pas
   encore une cadence de piste validée.
@@ -285,32 +332,119 @@ Réponses prioritaires :
   ni une proposition de design.
 - Un bust n'arrête pas la qualité suivante. Le reliquat jamais affecté reste
   SPEC; le coût affecté au bust est perdu. Aucune redistribution post-bust n'est
-  simulée.
+  simulée. CURRENT annule les qualités risquées ultérieures et conserve les
+  séances sûres : une question de poursuite ne doit pas rouvrir implicitement
+  cette règle. Les fréquences B2 ne permettent pas d'en évaluer un remplacement.
 - Les fréquences longitudinales reflètent ces deux politiques déterministes et
-  les trajectoires divergent après leurs gains/RNG; elles ne décrivent pas un
-  joueur optimal ou humain.
+  les trajectoires peuvent diverger après leurs gains/RNG; elles ne décrivent
+  pas un joueur optimal ou humain. Aucun effet intrinsèque du crédit Q, isolé
+  du retour pool/choix/RNG, n'est mesuré. Le nom P_QUALITY couvre une priorité
+  VMA dans B, puis nombre de qualités/VMA dans B2; les noms identiques ne
+  rendent pas les deux passes expérimentalement équivalentes.
 - Les moyennes de reliquat A2 pondèrent les partitions physiques et peuvent donc
   compter plusieurs fois un même couple énergétique produit par des dés égaux.
 
-## DESIGN QUESTIONS
+## TRAÇABILITÉ DES QUESTIONS DE DESIGN
 
-1. Un programme multi-qualités doit-il continuer après le bust de sa première
-   qualité, ou s'arrêter ?
-2. Le reliquat SPEC doit-il être automatique, optionnel, ou exiger une allocation
-   Q explicite distincte ?
-3. Les futurs paliers SPEC doivent-ils interpréter un flux moyen de 3–6 % de Q
-   comme cadence cible, ou faut-il d'abord définir leur effet ?
-4. Le quatrième upgrade doit-il être normalement accessible à T16, ou rester un
-   résultat minoritaire ?
-5. Les politiques doivent-elles pouvoir renoncer à une qualité finançable pour
-   préserver davantage de SPEC ?
-## DESIGN QUESTIONS
+Les deux anciennes listes finales avaient chacune cinq questions : celles de
+la première passe A/B/C avaient été placées après celles d'A2/B2. Le registre
+ci-dessous conserve leur origine et leur contenu, sans en faire deux listes
+finales équivalentes. « Précisée expérimentalement » ne signifie pas « décidée ».
+Toutes les questions d'adoption concernent une éventuelle cible Training V2,
+sous réserve de C/D; aucune règle CURRENT n'est changée.
 
-1. Une énergie Q doit-elle être entièrement créditée lorsqu'une seule qualité
-   progresse, ou seulement son coût effectif ?
-2. Plusieurs marqueurs physiologiques peuvent-ils progresser dans un même tour ?
-3. Un gain `EF +1` bloqué par `EF < Seuil` est-il perdu, différé, ou converti ?
-4. Quel effet de règle relie exactement `ECO -1` au coût Race Engine V2, et un
-   coût nul est-il admissible ?
-5. Les fixtures d'intensité/durée AS42 et AS10 doivent-elles être remplacées par
-   des valeurs canoniques avant toute comparaison d'équilibrage ?
+| ID / origine | Question conservée | Statut après audit |
+|---|---|---|
+| Q1 — A/B/C 1 | Créditer toute Q après une réussite, ou seulement son coût ? | **Précisée par B2** : comparaison Q_FULL/Q_SPENT_SPEC mesurée sous politiques; choix de crédit encore OPEN si V2 retenu. |
+| Q2 — A/B/C 2 | Plusieurs marqueurs peuvent-ils progresser dans un tour ? | **Précisée/remplacée** : B permet déjà qualité + EF passive; A2/B2 démontre localement le financement/la réussite de deux qualités. L'autorisation de design reste OPEN si V2 retenu. |
+| Q3 — A/B/C 3 | Gain EF +1 bloqué : perdu, différé ou converti ? | **OPEN si V2 retenu** : perte immédiate imposée par le harnais; aucune alternative comparée. |
+| Q4 — A/B/C 4 | Quel lien entre ECO −1 et coût Race, et coût nul admissible ? | **OPEN** : convention Curve B/plancher zéro testée seulement dans C; SPEC absent du chemin intégré. |
+| Q5 — A/B/C 5 | Remplacer les fixtures AS42/AS10 par des valeurs canoniques avant comparaison d'équilibrage ? | **OPEN** : fixtures non canoniques, insuffisantes pour un équilibrage. Définir d'abord effet et contexte de course. |
+| Q6 — A2/B2 1 | Poursuivre un programme après bust de sa première qualité, ou s'arrêter ? | **Précisée, OPEN pour V2 uniquement** : B2 poursuit; CURRENT conserve les sûres et annule les risques ultérieurs. Aucun résultat B2 ne tranche une modification de CURRENT. |
+| Q7 — A2/B2 2 | Reliquat SPEC automatique, optionnel ou alloué explicitement ? | **OPEN si V2 retenu** : automatisme imposé, non comparé. |
+| Q8 — A2/B2 3 | Flux moyen de 3–6 % de Q comme cadence SPEC cible, ou définir d'abord son effet ? | **Précisée par B2, OPEN** : moyenne de ratios sous deux politiques, pas cadence cible démontrée; aucun effet SPEC simulé. |
+| Q9 — A2/B2 4 | Quatrième upgrade normalement accessible à T16 ou minoritaire ? | **OPEN** : taux de 3/15/23/32 % dans B2, sans horizon/cadence cible validés. |
+| Q10 — A2/B2 5 | Renoncer à une qualité finançable pour préserver SPEC ? | **OPEN si V2 retenu** : programme vide disponible, mais aucune politique orientée SPEC ni valeur de course testée. |
+
+Réponses expérimentales acquises : financement double à la baseline (A2),
+répartition Q réussie/reliquat/bust et fréquence des upgrades sous politiques
+(B2), arithmétique des fixtures SPEC (C). Elles précisent Q1/Q2/Q8 sans résoudre
+leur choix de design. L'intérêt des décisions humaines, un effet de crédit Q
+isolé des trajectoires, et la valeur d'une boucle Training → Race restent
+**OPEN — REQUIRES NEW EXPERIMENT**, après arbitrage de périmètre; aucune de ces
+expériences n'est réalisée ici.
+
+## MATRICE D'AUDIT — ACTION A2 DE LA ROADMAP
+
+Audit documentaire du 2026-10-14, sur la baseline A1 intégrée par la PR #21
+(`5ea9254360619b5b188c813ae789bf3ea585cc86`). Ne pas confondre cette action A2
+avec le bloc combinatoire A2. Le JSON est valide, A/A2/B/B2/C sont présents et
+le README porte cinq statuts `REPRODUCIBLE`; la reproductibilité A1 est reprise,
+sans relancer ses campagnes. Les statuts ci-dessous évaluent les formulations
+avant les corrections ciblées de cet audit; les lignes marquées « Extension »
+classent des généralisations non démontrées, sans les attribuer au texte initial.
+Les chemins JSON sont relatifs à
+`results.json`; les fonctions citées sont dans `harness.py`.
+
+| ID | Affirmation | Source | Évaluation | Action |
+|---|---|---|---|---|
+| A-01 | Tous les lancers offrent plusieurs programmes énergie/accès; moyenne 3,946 partitions physiques | `A.multiple_distinct_programs_pct`, `mean_legal_partitions`; `legal_partitions`, `experiment_a` | VALID | Conserver; les partitions physiques avec faces égales peuvent dupliquer un programme. |
+| A-02 | `CHOIX REEL` établit un choix intéressant | `A.criterion`; seuil basé seulement sur la multiplicité | QUALIFY | Limiter au label combinatoire; intérêt stratégique UNSUPPORTED par A. |
+| A-03 | Seuil 99,614 %, VMA 77,623 %, options risquées 4,398 % | `A.*_access_pct`; baseline 6/8/10, coûts 3/5 | VALID | Conserver avec condition baseline, accès alternatif et absence de taux de tentative/bust. |
+| A-04 | Extension : généraliser A au Training CURRENT | `resolve_roll`, `has_reserve_bonus`; GDD §§2–4 | UNSUPPORTED | Rendre visible l'absence du plafond D99, des relances et des choix humains; ne pas généraliser. |
+| A2-01 | « Accès simultané » à 77,623 % | `A.simultaneous_access_pct` vs `A2.seuil_plus_vma_same_partition_pct` 5,787 | CORRECT | Renommer la ligne A en co-accessibilité alternative et expliciter les exemples; A2 seul établit le financement conjoint. |
+| A2-02 | Reliquats 1,935/1,007/1,125 | `A2.mean_remainder_after_program`; `experiment_a2` | QUALIFY | Conserver les valeurs; préciser moyenne conditionnelle pondérée par occurrences physiques, sans politique. |
+| B-01 | Une seule progression physiologique par tour | `simulate`, `_apply_milestones` | CORRECT | Une seule qualité choisie, plus gains EF passifs possibles; corriger FACT et LIMITS. |
+| B-02 | Le test local reprend exactement CURRENT | `simulate`; GDD §4, `session_risk.py` | QUALIFY | Distinguer forme seuil/face brute du coût et de la frontière sûre locaux. |
+| B-03 | Six dés et trois marqueurs progressés dans tous les runs; upgrades 13/94/81,5 % | `B.policies.*.timing_diagnostics`, `final_pool_composition` | VALID | Conserver les 600 campagnes et les observations, sans généralisation au joueur. |
+| B-04 | Accélération forte du futur Training | Paliers EF 35/100, Q 15/35/65/100; `B.policies` | QUALIFY | Rythme sous conventions et politiques; aucune cadence cible/comparaison CURRENT. |
+| B-05 | P_QUALITY se différencie en VMA et risque | `B.policies.*.VMA`, `risky_attempts`, `busts`; `_choose_partition` | VALID | Conserver la différence observée; ne pas l'assimiler à des builds équilibrés. |
+| B2-01 | Quatrième upgrade : 15→3 % et 32→23 % | `B2.cells.*.upgrade_timing.4` | VALID | Conserver −12/−9 points; effet observé sous politique, pas causalité à trajectoire identique. |
+| B2-02 | Les dés ne sont jamais retardés | `B2.cells.*.fifth_die_timing`, `sixth_die_timing`; `_apply_milestones` | CORRECT | Seulement médianes 5/11 et taux à T16 identiques; distributions/dates individuelles non établies. |
+| B2-03 | Part « naturelle » SPEC 5,539/3,056 % | `spec_share_pct`, `q_to_spec`, `experiment_b2` | QUALIFY | Allocation automatique expérimentale; moyenne de ratios, pas cible ni effet SPEC. |
+| B2-04 | Doubles réussites 19,0/11,3 % « après bust éventuel » | `quality_turns_2`; `simulate_b2` | CORRECT | Deux réussites impliquent zéro bust sur ce tour; préciser les effets longitudinaux du traitement non-CURRENT. |
+| B2-05 | B2 corrige l'accélération de B grâce au seul crédit Q | `simulate` vs `simulate_b2`, `_choose_partition` vs `_choose_b2_program`; échantillons 200/100 | UNSUPPORTED | Comparer Q_FULL/Q_SPENT_SPEC au sein de B2; B→B2 modifie aussi composition et politiques. |
+| B2-06 | Différenciation BAL/QUALITY : Seuil, risque, SPEC | `B2.cells.*__Q_SPENT_SPEC` | VALID | Conserver les écarts descriptifs; feedback/RNG, bust et absence d'effet de course limitent l'inférence. |
+| C-01 | Production/coûts/économies répétées du tableau | `C.rows.*`, `experiment_c`, Curve B | VALID | Conserver; économie versus même profil sans ECO, pas versus FULL_SPEED. |
+| C-02 | Aucune dominance Vitesse/Économie dans les fixtures | `C.rows` : AS42 BALANCED 20/0 vs FULL_ECO 18/0 | CORRECT | Reconnaître la dominance locale de BALANCED à AS42; non-dominance à AS10 ≠ équilibre stratégique. |
+| C-03 | Extension : fixtures SPEC prouvent l'équilibre physiologique Race V2 | `C.curve`; GDD §§7.1–7.3; `CURRENT_STATE.md` | UNSUPPORTED | SPEC OPEN, Curve B legacy et plancher local zéro; aucune preuve sur la courbe native. |
+| T-01 | Deux listes finales de cinq questions équivalentes | Anciennes sections finales, première et seconde passes | CORRECT | Registre Q1–Q10 avec origine et statut; conserver les questions, sans arbitrage. |
+
+Vérification factuelle : **481 valeurs numériques des tableaux** comparées aux
+champs JSON (arrondis publiés), diagnostics B et arithmétique B2 examinés;
+fixtures C vérifiées analytiquement. Aucun chiffre de tableau ne nécessite de
+remplacement. Code, paramètres, JSON, tests, GDD et roadmap sont inchangés.
+Les inférences corrigées ne retirent pas la reproductibilité des résultats.
+
+## SYNTHÈSE DE VALIDITÉ — UTILISATION FUTURE
+
+**Ce que Training V2 démontre.** Dans le harnais : multiplicité de programmes
+énergie/accès sur les 1 296 lancers, accès alternatif ≠ financement conjoint
+(77,623 % contre 5,787 %), progression sous les politiques et paliers spécifiés,
+baisse observée de l'accès au quatrième upgrade sous Q_SPENT_SPEC, et calcul
+local des fixtures SPEC avec saturation du plancher. Les deux passes restent
+distinctes; ces résultats ne sont pas des propriétés générales de Training.
+
+**Ce que Training V2 suggère.** L'allocation plutôt que l'ouverture de Seuil
+pourrait porter les choix; le crédit Q et les paliers pourraient contribuer au
+rythme; la saturation ECO et les signatures des politiques donnent des sujets
+à examiner après définition de critères. Leurs effets isolés, leur intérêt
+humain et leur utilité en course restent à valider.
+
+**Ce que Training V2 ne démontre pas.** Sa supériorité sur Training CURRENT,
+sa profondeur stratégique pour un joueur humain, son équilibre final, la
+pertinence définitive de SPEC ou la qualité d'une boucle Training → Race
+complète. Les seeds partagées n'impliquent pas un contrefactuel à trajectoire
+identique; les deux métriques de C ne suffisent pas à prouver un compromis
+équilibré, et ses résultats ne valident pas Race V2 intégré.
+
+**Ce qui reste utile pour C/D.**
+
+1. **C1/C2 :** définir l'intérêt, la lisibilité et les conséquences recherchées
+   d'une décision d'allocation; distinguer ces critères du nombre d'options.
+2. **C2/D1 :** définir horizon et cadence de progression avant de comparer les
+   rythmes; les écarts de crédit Q sont des observations conditionnelles, pas
+   une preuve de supériorité ni une recommandation A/B/C.
+3. **C1/C2/D1 :** préciser le rôle du risque et l'effet de SPEC en course avant
+   toute valeur cible; conserver la distinction entre bust CURRENT, compteurs
+   expérimentaux et coûts physiologiques intégrés.
