@@ -1,9 +1,14 @@
 """Tests for the isolated Training V2 experiment, not CURRENT behavior."""
 
+import ast
+import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+
+from scripts.validate_experimental_json import TRAINING_RESULTS, validate_repository
 
 from experiments.current.training_v2_minimal.harness import (
     affordable_programs, experiment_a, experiment_a2, experiment_c,
@@ -95,6 +100,104 @@ class TrainingV2HarnessTests(unittest.TestCase):
                 update_second_pass(destination)
 
             self.assertEqual(destination.read_text(encoding="utf-8"), invalid)
+
+    def test_harness_has_one_main_entry_point(self):
+        tree = ast.parse(Path(__file__).with_name("harness.py").read_text(encoding="utf-8"))
+        guard = ast.dump(ast.parse('__name__ == "__main__"', mode="eval").body)
+        entries = [node for node in ast.walk(tree)
+                   if isinstance(node, ast.If) and ast.dump(node.test) == guard]
+        self.assertEqual(len(entries), 1)
+        self.assertIn(entries[0], tree.body)
+        self.assertEqual(ast.dump(entries[0].body[0]), ast.dump(ast.parse("main()").body[0]))
+        self.assertEqual(len(entries[0].body), 1)
+
+
+class JsonEvidenceTests(unittest.TestCase):
+    """Mutate temporary tracked evidence only; never regenerate experiments."""
+
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        subprocess.run(["git", "init", "--quiet", str(self.root)], check=True)
+        self.destination = self.root / TRAINING_RESULTS
+        self.destination.parent.mkdir(parents=True)
+        self.original = Path(__file__).with_name("results.json").read_text(encoding="utf-8")
+        self.destination.write_text(self.original, encoding="utf-8")
+        self.track(TRAINING_RESULTS)
+
+    def track(self, relative):
+        subprocess.run(["git", "-C", str(self.root), "add", "--", relative], check=True)
+
+    def write_result(self, result):
+        self.destination.write_text(json.dumps(result), encoding="utf-8")
+
+    def test_valid_tracked_json_and_untracked_outputs_ignored(self):
+        (self.root / "local-output.json").write_text("{broken", encoding="utf-8")
+        self.assertEqual(validate_repository(self.root), 1)
+        self.assertEqual(self.destination.read_text(encoding="utf-8"), self.original)
+
+    def test_invalid_tracked_json_rejected_without_overwrite(self):
+        for relative in (TRAINING_RESULTS, "other-evidence.json"):
+            with self.subTest(path=relative):
+                self.destination.write_text(self.original, encoding="utf-8")
+                path = self.root / relative
+                path.write_text("{broken", encoding="utf-8")
+                self.track(relative)
+                with self.assertRaises(ValueError):
+                    validate_repository(self.root)
+                self.assertEqual(path.read_text(encoding="utf-8"), "{broken")
+
+    def test_required_result_must_exist_and_be_tracked(self):
+        self.destination.unlink()
+        with self.assertRaisesRegex(ValueError, "results.json"):
+            validate_repository(self.root)
+        self.destination.write_text(self.original, encoding="utf-8")
+        subprocess.run(["git", "-C", str(self.root), "rm", "--cached", "--quiet",
+                        "--", TRAINING_RESULTS], check=True)
+        with self.assertRaisesRegex(ValueError, "required tracked JSON missing"):
+            validate_repository(self.root)
+
+    def test_missing_blocks_are_rejected(self):
+        for block in ("A", "A2", "B", "B2", "C"):
+            with self.subTest(block=block):
+                result = json.loads(self.original)
+                del result[block]
+                self.write_result(result)
+                with self.assertRaisesRegex(ValueError, f"block {block} "):
+                    validate_repository(self.root)
+
+    def test_null_empty_and_wrong_block_types_are_rejected(self):
+        for block in ("A", "A2", "B", "B2", "C"):
+            for replacement in (None, {}, [], "placeholder"):
+                with self.subTest(block=block, replacement=replacement):
+                    result = json.loads(self.original)
+                    result[block] = replacement
+                    self.write_result(result)
+                    with self.assertRaisesRegex(ValueError, f"block {block} "):
+                        validate_repository(self.root)
+
+    def test_essential_nested_containers_are_checked(self):
+        for block, replacement in (("A", {"raw_outcomes": None}),
+                                   ("A2", {"raw_outcomes": True}),
+                                   ("B", {"policies": {}}),
+                                   ("B2", {"cells": {"cell": None}}),
+                                   ("C", {"rows": [None]})):
+            with self.subTest(block=block):
+                result = json.loads(self.original)
+                result[block] = replacement
+                self.write_result(result)
+                with self.assertRaisesRegex(ValueError, f"Training V2 {block}\\."):
+                    validate_repository(self.root)
+
+    def test_duplicate_keys_and_non_json_constants_are_rejected(self):
+        extra = self.root / "other-evidence.json"
+        for text in ('{"B2": {}, "B2": {}}', '{"value": NaN}', '{"value": Infinity}'):
+            with self.subTest(text=text):
+                extra.write_text(text, encoding="utf-8")
+                self.track(extra.name)
+                with self.assertRaises(ValueError):
+                    validate_repository(self.root)
 
 
 if __name__ == "__main__":
