@@ -524,15 +524,13 @@ def experiment_c() -> dict:
 
 
 def run_all() -> dict:
+    """Regenerate every historical block with its original parameters."""
     a = experiment_a()
     results = {"status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN",
                "A": a, "A2": experiment_a2()}
     if a["criterion"] != "CHOIX QUASI AUTOMATIQUE":
         results["B"] = experiment_b()
         results["B2"] = experiment_b2()
-    results = {"status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN", "A": a}
-    if a["criterion"] != "CHOIX QUASI AUTOMATIQUE":
-        results["B"] = experiment_b()
         results["C"] = experiment_c()
     return results
 
@@ -542,15 +540,33 @@ def run_a2_b2() -> dict:
     return {"A2": experiment_a2(), "B2": experiment_b2()}
 
 
-if __name__ == "__main__":
-    destination = Path(__file__).with_name("results.json")
-    # Preserve the first-pass evidence without paying to rerun its 9,600 turns.
-    results = json.loads(destination.read_text(encoding="utf-8")) if destination.exists() else {
-        "status": "EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN"
-    }
+def update_second_pass(destination: Path) -> None:
+    """Update A2/B2 only after validating the preserved first-pass evidence."""
+    try:
+        results = json.loads(destination.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise RuntimeError(
+            f"cannot update A2/B2: historical results are unavailable or invalid: {destination}"
+        ) from exc
+
+    required = {"status", "A", "B", "C"}
+    missing = sorted(required.difference(results))
+    if missing:
+        raise RuntimeError(
+            f"cannot update A2/B2: historical results are missing {', '.join(missing)}"
+        )
+
     results.update(run_a2_b2())
-    destination.write_text(json.dumps(results, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-if __name__ == "__main__":
+    destination.write_text(
+        json.dumps(results, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
+
+
+def main() -> None:
     destination = Path(__file__).with_name("results.json")
-    destination.write_text(json.dumps(run_all(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    update_second_pass(destination)
     print(destination)
+
+
+if __name__ == "__main__":
+    main()
