@@ -1,11 +1,14 @@
 """Tests for the isolated Training V2 experiment, not CURRENT behavior."""
 
+import tempfile
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
 from experiments.current.training_v2_minimal.harness import (
     affordable_programs, experiment_a, experiment_a2, experiment_c,
     legal_partitions, quality_cost, resolve_roll, simulate, simulate_b2,
-    experiment_a, experiment_c, legal_partitions, quality_cost, resolve_roll, simulate,
+    run_all, update_second_pass,
 )
 
 
@@ -67,6 +70,31 @@ class TrainingV2HarnessTests(unittest.TestCase):
         first, _ = simulate_b2(29, "P_BALANCED", "Q_FULL")
         second, _ = simulate_b2(29, "P_BALANCED", "Q_FULL")
         self.assertEqual(first, second)
+
+    @patch("experiments.current.training_v2_minimal.harness.experiment_c")
+    @patch("experiments.current.training_v2_minimal.harness.experiment_b2")
+    @patch("experiments.current.training_v2_minimal.harness.experiment_b")
+    @patch("experiments.current.training_v2_minimal.harness.experiment_a2")
+    @patch("experiments.current.training_v2_minimal.harness.experiment_a")
+    def test_run_all_keeps_every_block(self, a, a2, b, b2, c):
+        a.return_value = {"criterion": "CHOIX REEL"}
+        a2.return_value = {"probe": "A2"}
+        b.return_value = {"probe": "B"}
+        b2.return_value = {"probe": "B2"}
+        c.return_value = {"probe": "C"}
+
+        self.assertEqual(set(run_all()), {"status", "A", "A2", "B", "B2", "C"})
+
+    def test_invalid_history_is_not_overwritten(self):
+        with tempfile.TemporaryDirectory() as directory:
+            destination = Path(directory) / "results.json"
+            invalid = '{"status": "historical"'
+            destination.write_text(invalid, encoding="utf-8")
+
+            with self.assertRaisesRegex(RuntimeError, "historical results.*invalid"):
+                update_second_pass(destination)
+
+            self.assertEqual(destination.read_text(encoding="utf-8"), invalid)
 
 
 if __name__ == "__main__":

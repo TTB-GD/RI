@@ -41,4 +41,5 @@ actuellement des pentes 2 puis 3. Ces deux valeurs sont une
 
 Le document normatif et les distinctions de statut se trouvent dans
 [`Run It - GDD.md`](Run%20It%20-%20GDD.md). L'état exact du prototype est résumé
-dans [`CURRENT_STATE.md`](CURRENT_STATE.md).
+dans [`CURRENT_STATE.md`](CURRENT_STATE.md), et l'ordre des prochains chantiers
+dans [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).

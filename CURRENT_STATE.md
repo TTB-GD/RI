@@ -5,6 +5,8 @@ Canonical branch: `main`
 
 This snapshot does not replace the GDD; the authority hierarchy in `AGENTS.md` applies.
 
+Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
+
 ## TRAINING CURRENT
 
 - The persistent pool starts at `4d6`; cumulative CTL adds one d6 at 50 and
