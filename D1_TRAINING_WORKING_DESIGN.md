@@ -169,3 +169,130 @@ Sources dépôt (GDD V2, CURRENT_STATE, code principal au 16-10-2026) :
 ## 9. Hors portée de ce document
 
 Aucune modification de GDD CURRENT, aucun changement de code de production, aucun réglage numérique promu comme normatif, aucune affirmation que le moteur V2 intégré implémente déjà ces règles. Ce document sert de référence de discussion et de harnais pour une PR de prototypage ultérieure.
+
+---
+
+## 10. Complément D1-S1 à D1-S8 — Catalogue, adaptations et acquisitions (16/10/2026)
+
+> **Statut documentaire :** décisions de conception retenues dans la discussion, à ne pas confondre avec les règles CURRENT du GDD. Les exemples de cartes, scores et trajectoires restent **illustratifs et non simulés**. Ce complément prévaut sur les hypothèses incompatibles de la section 5, notamment la taille de portefeuille et l'approche des combos.
+
+### 10.1. D1-S1 — Cinq familles fonctionnelles, sans contrainte matérielle
+
+Les séances disponibles constituent un **catalogue évolutif**, pas nécessairement un ensemble de cartes distinctes. Un affichage matériel en cinq familles (EF, Seuil, VMA, SL, SPEC), chaque famille regroupant ses options acquises, est envisageable mais **n'est pas une décision de composants**. La seule donnée normative recherchée pour le modèle est la **liste des options disponibles au joueur**.
+
+- Socle initial retenu **D1-S3 : EF / Seuil / VMA**, avec au moins une option dans chaque famille.
+- **SL et SPEC** deviennent accessibles progressivement ; pas nécessairement dès le premier tour.
+- Les options acquises restent disponibles et ne remplacent pas les anciennes. Une séance avancée peut être plus coûteuse, plus pénible, plus spécialisée ou multidimensionnelle ; elle n'a pas à dominer toute séance précédente.
+- **SPEC reste conceptuellement transversal** : l'économie ciblée peut caractériser différentes séances. La famille SPEC est une classification d'accès/présentation et ne doit pas imposer une cinquième énergie ou une séance indépendante obligatoire.
+
+### 10.2. D1-S1/S2 — Schéma minimal d'une séance
+
+Champs conceptuels souhaités :
+
+| Champ | Fonction | Statut |
+|---|---|---|
+| Identifiant, nom et courte description | Identité lisible et évocation sportive | Retenu |
+| Famille | EF / Seuil / VMA / SL / SPEC (classification de catalogue) | Retenu comme organisation fonctionnelle |
+| Coût énergétique | Énergie nécessaire à la réalisation ; finance le programme | Retenu |
+| RPE | Intensité/risque employé dans la mécanique de bust | Retenu, distinct du coût |
+| Type de charge pour le bilan | **EF ou Qualité**, indépendamment de la famille, afin de calculer l'excès qualitatif | Retenu ; classification de SL/SPEC à préciser selon option |
+| Adaptations **fixes** | Contributions pré-définies, mono- ou multidimensionnelles : EF, Seuil, VMA, Durabilité, Économie ciblée | **D1-S2 : A retenu** |
+| Fatigue spécifique | Pénibilité intrinsèque non issue du blackjack ni de la différence EF/Qualité | Retenu |
+| Déblocage/éligibilité | Condition locale ou globale pour proposer l'option | Retenu |
+| Maximum par tour | Champ **optionnel**, exceptionnel quand justifié sportivement (ex. une seule SL par tour) | Retenu comme possibilité, pas plafond général |
+| Effet conditionnel/combinaison | Extension possible pour plan d'entraînement cohérent ou synergie de séances | **D1-S2 : C réservé, inactif dans le premier prototype** |
+
+**A plutôt que B :** l'adaptation résulte des gains fixes propres à l'option, et non d'une multiplication générique du coût par une formule. Pour représenter une séance plus productive, augmenter directement ses gains définis. Le coût et les gains sont deux paramètres pouvant être calibrés séparément.
+
+**C (combos) :** les associations de séances ou un « plan bien calibré » constituent une opportunité ludique intéressante, liée au thème de la course à pied. Prévoir une **frontière d'extension** pour des effets conditionnels inter-séances ; **ne pas activer de combos, ajouter de règles de séquençage, ni coder un moteur de règles complet** au premier prototype. Les adaptions restent additives pour le moment.
+
+### 10.3. Fatigue intrinsèque : fonction et interprétation affinées
+
+La fatigue spécifique sert principalement à **décourager les séances très exigeantes lorsqu'un coureur est déjà proche ou au-delà du surentraînement**, **même** si son programme est équilibré entre EF et Qualité et si son énergie de dés est inférieure au TN.
+
+- Elle participe à la gestion d'une **marge de tolérance** `M = F_limite − F_actuelle`. Une séance pénible consomme cette marge et peut prolonger la neutralisation de la réserve.
+- Elle reste **une conséquence positive de fatigue** dans la version de référence, **pas** un prérequis dur du type « séance impossible si F > x » : la restriction éventuelle doit d'abord émerger du coût futur.
+- La fatigue du blackjack, la surcharge d'excès de Qualité et la fatigue spécifique sont des composantes distinctes ; ne pas compter deux fois les conséquences déjà représentées par RPE/bust.
+- Certains entraînements peuvent ne pas avoir de fatigue spécifique ; en particulier ne pas attribuer automatiquement une pénibilité à toute séance Qualité.
+
+**D1-F3 retenu comme hypothèse de calibrage :**
+
+```text
+F_exces = ceil(max(0, E_Qualite − E_EF) / 2)
+F_fin = F_debut + F_blackjack(resultat_des_des − TN_permanent)
+                 + F_exces + Σ(fatigue_specifique_des_seances_realisees)
+```
+
+On ne génère **aucune récupération supplémentaire** par le simple fait d'avoir une part EF élevée. Les valeurs de la courbe blackjack, la borne basse et le seuil de surentraînement restent expérimentaux. Les premiers tests conceptuels favorisent la courbe Fatigue V1 du GDD pour l'autorégulation ; **aucune courbe n'est promue CURRENT**. On privilégie une analyse sans nouveaux plafonds avant de modifier la mécanique.
+
+**Seuils de surentraînement à revisiter plus tard :** seuil égal à `n` dés permanents (4/5/6) est mnémotechnique mais peut être trop strict. Pistes non retenues : `6 + 2(n−4)` et `6 + 3(n−4)` (soit 6/8/10 ou 6/9/12 pour n=4/5/6). Reporter le calibrage **après** la prise en compte de la fatigue spécifique.
+
+### 10.4. Multiplicités et liberté de composition
+
+Le système d'équilibre de charge et la fatigue doivent **autant que possible suffire** à réguler les répétitions. On ne réintroduit pas automatiquement `Qualités <= EF` ni un plafond de Qualité issu de D99.
+
+- Prévoir une propriété `max_par_tour` facultative pour des exceptions justifiables, par exemple **SL : au plus une occurrence par tour**, à essayer en prototype.
+- Les autres répétitions sont **a priori ouvertes à l'expérimentation** ; examiner la dominance d'une séance répétée avant de poser un plafond.
+- Le matériel (nombre de cartes physiques) n'impose ni la taille du portefeuille ni les multiplicités.
+
+### 10.5. D1-S5 et D1-S6 — Éligibilité et acquisition mixtes
+
+**Décision D1-S6 retenue :**
+
+1. **Voie locale EF/Seuil/VMA** : les paliers de la piste correspondante ouvrent les options spécialisées avancées **de cette piste**. Un coureur avancé en EF ne débloque pas automatiquement la VMA avancée.
+2. **Voie globale SL/SPEC** : un développement plus général ouvre l'entrée dans les familles Durabilité/SL et Économie ciblée/SPEC. Des variantes avancées pourront exiger en outre une capacité locale ou une durabilité appropriée, sous réserve de tests.
+3. **Éligibilité ≠ acquisition** : atteindre une condition rend l'option choisissable ; acquérir signifie l'intégrer de façon permanente au portefeuille. Les options éligibles non acquises restent candidates pour plus tard.
+4. **Acquisition mixte** : jalons locaux pour approfondir la spécialisation et jalons globaux pour SL/SPEC. Ne pas transformer les jalons en monnaie supplémentaire à gérer.
+5. Le calcul du **développement global** reste **OPEN** : somme des progressions EF/Seuil/VMA, socle minimal multidomaine souple ou volume réalisé/CTL ; attention au double comptage puisque le volume fait déjà progresser le pool de dés. Ne PAS considérer un minimum d'équilibre physiologique comme validé.
+6. Les nombres exacts de jalons, seuils et acquisitions ne sont pas fixés.
+
+### 10.6. D1-S4 — Jeu minimal de séances (fixtures uniquement)
+
+Ces options illustrent les contrastes coût/RPE/adaptation/pénibilité ; **ni équilibrage validé, ni modèle chiffré à intégrer automatiquement au GDD** :
+
+| Famille | Option | Coût | RPE | Adaptations fixes | Fatigue spécifique | Disponibilité illustrative |
+|---|---|---:|---:|---|---:|---|
+| EF | EF fondamentale | 2 | 2 | EF +1 | 0 | Initial |
+| Seuil | Tempo au seuil | 4 | 4 | Seuil +2 | 0 | Initial |
+| VMA | Fractionné VMA | 5 | 5 | VMA +2 | +1 | Initial |
+| EF | EF soutenue | 4 | 3 | EF +3 | 0 | Palier EF |
+| Seuil | Seuil long | 6 | 6 | EF +1, Seuil +4 | +1 | Palier Seuil |
+| VMA | Intervalles courts | 4 | 6 | VMA +3 | +2 | Palier VMA |
+| SL | Sortie longue initiale | 7 | 4 | EF +2, Durabilité +3 | +2 | Jalon global |
+| SPEC | Économie ciblée | 5 | 5 | Seuil +1, Économie +2 | +1 | Jalon global, ciblage ouvert |
+
+Le type de charge EF/Qualité n'est **pas automatiquement assimilé** à la famille, notamment pour SL ou SPEC. Les données sont des exemples de scénarisation et peuvent conduire à des gains disproportionnés ; **ne pas en inférer une échelle de progression actuelle**.
+
+### 10.7. D1-S7 — Exemple de progression sur 14 tours (non simulé)
+
+Trajectoire purement illustrative d'un coureur orienté **Seuil et endurance longue**, au milieu de la plage 12–16 tours :
+
+| Tour | Événement possible | Options acquises cumulées |
+|---|---|---:|
+| T1 | Socle EF fondamentale / Tempo Seuil / Fractionné VMA | 3 |
+| T3 | Jalon local Seuil : acquisition Seuil long | 4 |
+| T5 | Jalon global : acquisition première SL | 5 |
+| T7 | Jalon local EF : acquisition EF soutenue | 6 |
+| T9 | Jalon global : acquisition SPEC Économie | 7 |
+| T11 | Jalon local Seuil : acquisition Seuil avancé | 8 |
+| T12–T14 | Exploitation du portefeuille plutôt que nouveaux achats permanents obligatoires | 8 |
+
+En fin de scénario : **2 EF, 3 Seuil, 1 VMA, 1 SL, 1 SPEC**. La valeur « 8 options » n'est **pas un plafond physique** ; la distribution des jalons sur T3/5/7/9/11 n'est **pas issue d'une simulation**.
+
+Comparer ultérieurement trois profils distincts construits à partir du même socle (endurance longue / Seuil / VMA), et mesurer :
+
+- Disponibilité assez précoce des nouvelles options pour pouvoir les utiliser.
+- Acquisitions produisant **de nouveaux arbitrages** plutôt que le remplacement trivial d'une séance inférieure.
+- Portefeuilles réellement différenciés selon les investissements EF/Seuil/VMA.
+- Importance des choix de fatigue et de pénibilité sur la construction du programme.
+- Charge cognitive et durée de la phase Training ; éviter un marché de cartes à chaque tour.
+- Valeur réelle de Durabilité et Économie en **Race**, encore non démontrée.
+
+### 10.8. Points ouverts explicites après D1-S7
+
+- Définition du jalon global et règle de franchissement (sans seconde monnaie ni contrainte de généraliste).
+- Gains des séances et progression physiologique, intégration Training → Race, pertinence des spécialisations.
+- Cas limite des séances SPEC transversales et classification EF/Qualité de SL/SPEC.
+- Répétition autorisée et max facultatif SL ; absence de plafond Qualité à vérifier expérimentalement.
+- Coût, RPE, risque de bust et fatigue propre à calibrer ensemble, sans double comptage.
+- Le combo « bon plan d'entraînement » reste une **extension dormant** et non un mécanisme exigé ou une raison de complexifier la phase Training.
