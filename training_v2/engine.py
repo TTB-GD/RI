@@ -118,6 +118,9 @@ def resolve_turn(
         raise ValueError("a quality option cannot be selected twice in one turn")
     if any(name not in QUALITY_CATALOG for name in planned_qualities):
         raise ValueError("unknown quality option")
+    if ("SEUIL" in planned_qualities
+            and state.profile.threshold + 1 >= state.profile.vma):
+        raise ValueError("Seuil adaptation would violate EF < Seuil < VMA")
 
     dice = make_pool(state.dice_pool)
     tn = pool_tn(dice)
