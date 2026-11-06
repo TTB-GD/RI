@@ -49,6 +49,21 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(state.profile.vma, 11)
         self.assertEqual(state.turns_played, 2)
 
+    def test_roll_and_resolve_callback_selects_after_the_roll(self):
+        from training_v2 import roll_and_resolve_turn
+
+        state = PlayerState()
+
+        def choose_program(roll):
+            self.assertEqual(len(roll.final_values), 3)
+            return (0, 1), (2,), ()
+
+        result = roll_and_resolve_turn(
+            state, choose_program, rng=__import__("random").Random(3)
+        )
+        self.assertEqual(result.turn, 1)
+        self.assertEqual(state.turns_played, 1)
+
     def test_bust_loses_assigned_quality_energy_and_does_not_adapt(self):
         state = PlayerState()
         result = resolve_turn(
