@@ -33,6 +33,7 @@ import os
 # ailleurs dans ce projet, qui n'est PAS un package installé).
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from collections import defaultdict, deque
 import random
 from dice_types import pool_tn
 from decision_engine import choose_weighted_action, energy_and_fatigue
@@ -53,7 +54,7 @@ DEFAULT_WEIGHTS = {"w_energy": 1.0, "w_sessions": 1.0, "w_fatigue": 1.0, "w_rpe"
 def choose_replacement_ef_greedy(options):
     """Politique technique de simulation, distincte des règles de résolution.
 
-    Elle conserve l'ancien comportement déterministe : EF sûre la plus chère
+    Elle conserve l'ancien comportement deterministe : EF sûre la plus chère
     encore abordable, répétée dans les limites fournies par le rule engine.
     Elle n'est ni une obligation de jeu ni une politique joueur optimale.
     """
@@ -75,6 +76,39 @@ def choose_replacement_ef_greedy(options):
     return tuple(chosen)
 
 
+def _session_occurrence_traces(completed_sessions, replacement_sessions, trace):
+    """Match selection traces to repeated planned sessions in occurrence order.
+
+    Resolver output keeps completed planned sessions in plan order and appends
+    redistribution choices afterwards. A FIFO per session name preserves the
+    individual trace for repeated EF entries without confusing replacements
+    with selected sessions of the same name.
+    """
+    trace_by_name = defaultdict(deque)
+    for trace_index, step in enumerate(trace):
+        trace_by_name[step["session"]].append((trace_index, step))
+
+    planned_count = len(completed_sessions) - len(replacement_sessions)
+    occurrences = []
+    for name in completed_sessions[:planned_count]:
+        matched = trace_by_name[name].popleft() if trace_by_name[name] else (None, {})
+        trace_index, step = matched
+        occurrences.append({
+            "session": name,
+            "origin": "planned",
+            "trace_index": trace_index,
+            "trace": step,
+        })
+    for name in replacement_sessions:
+        occurrences.append({
+            "session": name,
+            "origin": "redistribution",
+            "trace_index": None,
+            "trace": {},
+        })
+    return tuple(occurrences)
+
+
 def _split_active_reserve(dice_objects):
     """
     Sépare le pool en (dés actifs, dé de réserve) : le dé de réserve est
@@ -86,6 +120,8 @@ def _split_active_reserve(dice_objects):
     reserve_die = dice_objects[reserve_idx]
     active = [d for i, d in enumerate(dice_objects) if i != reserve_idx]
     return active, reserve_die
+
+
 def roll_turn_budget(dice_pool, weights=DEFAULT_WEIGHTS):
     """
     Réutilise le moteur de dés existant sur le pool PERSISTANT du joueur
@@ -130,6 +166,8 @@ def roll_turn_budget(dice_pool, weights=DEFAULT_WEIGHTS):
         "pattern": pattern_name(faces),
         "action_chosen": choice,
     }
+
+
 def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
                       session_weights=None, upgrade_weights=None, bust_index=None,
                       risk_roll_face=None):
@@ -137,9 +175,8 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
     Joue un tour pour un joueur et retourne (turn_row, session_rows) :
     - turn_row     : dict résumant le tour (tirage, CTL, fatigue, état de
                        progression du pool et des séances) pour player_turns.csv.
-    - session_rows : une ligne par séance réalisée ce tour, pour
-                       player_sessions.csv (inclut la trace du moteur
-                       pondéré : utilité marginale ayant motivé le choix).
+    - session_rows : une ligne par occurrence de séance réalisée, avec sa trace
+                       propre et son origine (programme ou redistribution EF).
     Trois jeux de poids indépendants, réglables séparément :
         weights          -> moteur de dés (choose_weighted_action)
         session_weights   -> moteur de séances (choose_sessions_weighted)
@@ -175,19 +212,26 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
     _, fatigue = energy_and_fatigue(ctl, roll["tn"])
     player.cumulative_ctl += ctl
     session_rows = []
-    trace_by_name = {step["session"]: step for step in trace}
-    for name in resolution.completed_sessions:
-        step = trace_by_name.get(name, {})
+    occurrences = _session_occurrence_traces(
+        resolution.completed_sessions, resolution.replacement_sessions, trace,
+    )
+    for occurrence_index, occurrence in enumerate(occurrences, start=1):
+        name = occurrence["session"]
+        step = occurrence["trace"]
         category, rpe = SESSION_CATALOG[name]
         session_rows.append({
             "turn": turn_id,
             "session": name,
+            "occurrence_index": occurrence_index,
+            "origin": occurrence["origin"],
+            "trace_index": occurrence["trace_index"],
             "category": category,
             "rpe": rpe,
             "energy_cost": rpe,
             "marginal_utility": step.get("marginal_utility"),
             "alternatives_considered": step.get("alternatives_considered"),
-            "note": step.get("note", "redistribution_EF"),
+            "note": ("redistribution_EF" if occurrence["origin"] == "redistribution"
+                     else step.get("note", "")),
         })
         player.progress.record_session(name)
     turn_row = {
@@ -216,6 +260,8 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
         "max_unlocked_rpe": max((SESSION_CATALOG[n][1] for n in available), default=0),
     }
     return turn_row, session_rows
+
+
 def run_player_simulation(n_turns=12, weights=DEFAULT_WEIGHTS,
                            session_weights=None, upgrade_weights=None, seed=42):
     random.seed(seed)
@@ -231,6 +277,8 @@ def run_player_simulation(n_turns=12, weights=DEFAULT_WEIGHTS,
         turns.append(turn_row)
         sessions.extend(session_rows)
     return turns, sessions, player
+
+
 def print_summary(turns, player):
     print(f"{len(turns)} tours simulés pour 1 joueur.\n")
     print(f"{'Tour':>4} {'TN':>6} {'Pool':>10} {'Énergie':>8} {'RPE max':>8} "
@@ -247,6 +295,8 @@ def print_summary(turns, player):
           f"(améliorations utilisées : {player.dice_pool.upgrades_used}/4, "
           f"dés ajoutés : {player.dice_pool.dice_added}/2)")
     print(f"Historique des réalisations : {dict(player.progress.completions)}")
+
+
 if __name__ == "__main__":
     turns, sessions, player = run_player_simulation(n_turns=12)
     write_csv("player_turns.csv", turns)
