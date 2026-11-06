@@ -5,7 +5,7 @@ Canonical branch: `main`
 
 This snapshot does not replace the GDD; the authority hierarchy in `AGENTS.md` applies.
 
-Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md) and the [Training gate B status addendum](DEVELOPMENT_PLAN_STATUS.md).
+Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
 
 ## TRAINING CURRENT
 
@@ -24,16 +24,16 @@ Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md) and the [T
   accessible EF sessions, including an empty or partial choice.
 - CTL, prerequisites and die progression use only sessions actually completed
   successfully after bust resolution and any EF redistribution.
-- Training simulation uses a local, seedable RNG (`random.Random`) rather than
-  reseeding Python's module-global random stream. The RNG can be injected through
-  the dice-budget and bust-risk rolls for deterministic replay (PRs #29–#31).
+- Training simulation uses a local, seedable/injectable RNG for dice-budget and
+  bust-risk rolls, without reseeding Python's module-global random state. The
+  merged tests cover seeded replay and global RNG isolation (PRs #29–#31).
 - Session logs distinguish each occurrence, including repeated session names,
-  and identify planned versus EF-redistribution origin with occurrence and trace
-  indices (PR #30).
-- Unit tests cover RNG replay, isolation from global RNG state, CTL die-addition
-  thresholds, upgrade caps, and the rule that progression gains apply on the
-  following turn. Test presence does not itself imply that the latest CI run
-  passed; consult the PR checks for execution results.
+  and identify the origin of redistributed EF sessions (PR #30).
+- D99 static coverage audit: `tests/test_d99_table.py` defines independent
+  expected fixtures for all 23 CURRENT signatures from the GDD: 5 at four dice,
+  7 at five dice and 11 at six dice. It checks exact table equality and the
+  `session_outcome` result for each signature. CI execution status has not been
+  confirmed as part of this audit; do not infer passing CI from test presence.
 
 ## RACE V2 CURRENT / INTEGRATED
 
@@ -63,9 +63,11 @@ Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md) and the [T
 - Final calibration of slopes 2/3 and of Reserve, Form, Freshness and SL is open.
 - SPEC remains OPEN and unimplemented in Race V2; Training's `Spec*` catalogue
   entries are still an explicit design/implementation gap.
-- The selector's technical SL priority and D99 three-die convention remain open.
-- D99 table-driven coverage for all required four-, five- and six-die rows still
-  needs completion/verification; the three-die convention remains OPEN.
+- The selector's technical SL priority remains open.
+- D99's three-die convention remains OPEN / IMPLEMENTATION POLICY; this audit
+  made no change to it.
+- B3 has complete static test coverage for four-, five- and six-die GDD rows;
+  confirm the relevant CI run before marking the gate fully verified.
 
 ## HISTORICAL / TRACEABILITY
 
@@ -81,8 +83,8 @@ profile path.
 
 ## NEXT TARGETS
 
-1. Complete and verify the remaining D99 table-driven coverage; retain the open
-   three-die convention as an explicit policy question.
+1. Confirm CI execution of `tests/test_d99_table.py` and then close B3; keep the
+   three-die convention explicitly open.
 2. Define the minimal Training-to-profile mapping after the Game Design target
    has been decided.
 3. Calibrate Reserve/Form/Freshness/SL and the physiological slopes.
