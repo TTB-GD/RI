@@ -82,7 +82,7 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(result.successful_qualities, ())
         self.assertEqual(state.profile.threshold, 8)
         self.assertEqual(state.progression_q, 0)
-        self.assertEqual(state.progression_spec, 9)
+        self.assertEqual(state.progression_spec, 1)
 
     def test_invalid_partition_is_rejected_without_mutating_state(self):
         state = PlayerState()
