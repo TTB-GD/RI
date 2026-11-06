@@ -98,7 +98,10 @@ class TrainingV2TurnTests(unittest.TestCase):
             raw_faces=(6, 6, 1, 1), final_values=(6, 6, 1, 1), tn=14.0
         )
         options = list_program_options(state, roll)
-        no_quality = next(option for option in options if not option.qualities)
+        no_quality = next(
+            option for option in options
+            if option.quality_indices == (2, 3) and not option.qualities
+        )
         self.assertEqual(no_quality.quality_energy, 2)
         self.assertEqual(no_quality.spec_remainder, 2)
 
