@@ -29,14 +29,28 @@ class InjectedRNGTests(unittest.TestCase):
             roll_turn_budget(pool_b, rng=random.Random(876)),
         )
 
+    @staticmethod
+    def simulation_state(simulation):
+        turns, sessions, player = simulation
+        return (
+            turns,
+            sessions,
+            dict(player.progress.completions),
+            player.progress.ef_total,
+            player.progress.quality_total,
+            list(player.dice_pool.sizes),
+            player.dice_pool.upgrades_used,
+            player.dice_pool.dice_added,
+            set(player.dice_pool._milestones_claimed),
+            player.cumulative_ctl,
+        )
+
     def test_simulation_seed_replays_and_does_not_mutate_global_rng(self):
         global_rng = random.getstate()
-        first = run_player_simulation(n_turns=2, seed=2718)
+        first = self.simulation_state(run_player_simulation(n_turns=2, seed=2718))
         self.assertEqual(random.getstate(), global_rng)
-        second = run_player_simulation(n_turns=2, seed=2718)
-        self.assertEqual(first[0], second[0])
-        self.assertEqual(first[1], second[1])
-        self.assertEqual(first[2], second[2])
+        second = self.simulation_state(run_player_simulation(n_turns=2, seed=2718))
+        self.assertEqual(first, second)
 
 
 class LongitudinalProgressionTests(unittest.TestCase):
@@ -84,17 +98,17 @@ class LongitudinalProgressionTests(unittest.TestCase):
         player.progress.available_sessions = lambda: available
         player.progress.tentable_sessions = lambda: available
 
-        with patch("simulate_player.roll_turn_budget", return_value=roll), patch(
-            "simulate_player.choose_sessions_weighted",
-            return_value=(["EF1"], [{"session": "EF1", "note": "test"}]),
-        ):
-            first_turn, _ = __import__("simulate_player").play_player_turn(1, player)
+        from simulate_player import play_player_turn
+        with patch("simulate_player.roll_turn_budget", return_value=roll):
+            with patch("simulate_player.choose_sessions_weighted",
+                       return_value=(["EF1"], [{"session": "EF1", "note": "test"}])):
+                first_turn, _ = play_player_turn(1, player)
             self.assertEqual(first_turn["dice_pool_sizes"], "6-6-6-6")
             self.assertEqual(first_turn["cumulative_ctl"], 50)
 
             second_roll = dict(roll, pool_size=5)
             with patch("simulate_player.roll_turn_budget", return_value=second_roll):
-                second_turn, _ = __import__("simulate_player").play_player_turn(2, player)
+                second_turn, _ = play_player_turn(2, player)
 
         self.assertEqual(second_turn["dice_pool_sizes"], "6-6-6-6-6")
         self.assertEqual(player.dice_pool.dice_added, 1)
