@@ -47,13 +47,13 @@ Training CURRENT (catalogue, composition, risque/bust, CTL, progression, pool) e
 
 **B1 TERMINÉ (PR #25).** `plan_validation.validate_plan(...)` fournit une validation structurée, indépendante du sélecteur. Les tests couvrent les contraintes du programme ; le risque sans taille de dé renvoie une violation explicite.
 
-**B2 TERMINÉ (PR #30).** La simulation journalise chaque occurrence séparément, conserve les traces correspondantes et indique l’origine des séances redistribuées en EF.
+**B2 TERMINÉ (PR #30).** La simulation journalise chaque occurrence séparément, conserve les traces correspondantes et indique l'origine des séances redistribuées en EF.
 
-**B3 EN COURS.** Tests table-driven attendus pour chaque ligne D99 CURRENT à 4/5/6 dés. La table à 3 dés reste séparément **OPEN / IMPLEMENTATION POLICY**, non décision de design. Vérifier la couverture et les résultats CI avant de clôturer.
+**B3 IMPLÉMENTÉ — vérification CI à confirmer.** `tests/test_d99_table.py` contient des fixtures indépendantes des tables de production pour toutes les signatures CURRENT : 5 lignes à 4 dés, 7 à 5 dés et 11 à 6 dés. Le test vérifie l'égalité exacte avec `SESSION_EFFECTS` et les sorties de `session_outcome`. L'audit statique les compare aux lignes du GDD et ne relève pas de ligne manquante. La convention à 3 dés reste séparément **OPEN / IMPLEMENTATION POLICY**, non décision de design et hors statut de clôture B3. Confirmer le résultat CI avant de déclarer B3 terminé.
 
-**B4 TERMINÉ — implémentation et couverture de base (PR #29–#31).** Le RNG local/injectable permet le rejeu des lancers de dés et de risque ainsi que de la simulation. Les tests couvrent le rejeu avec une seed et l’absence de mutation de l’état aléatoire global. La reproductibilité est attendue dans le même environnement logiciel ; aucune garantie de séquence inter-version Python n’est posée.
+**B4 TERMINÉ — implémentation et couverture de base (PR #29–#31).** Le RNG local/injectable permet le rejeu des lancers de dés et de risque ainsi que de la simulation. Les tests couvrent le rejeu avec une seed et l'absence de mutation de l'état aléatoire global. La reproductibilité est attendue dans le même environnement logiciel ; aucune garantie de séquence inter-version Python n’est posée.
 
-**B5 TERMINÉ pour les invariants testés (PR #31).** Les tests protègent les paliers CTL 50/100, l’ajout unique/plafonné de dés, les seuils et le plafond des améliorations et leur application au tour suivant. Ils n’imposent pas de policy gloutonne aux règles de progression.
+**B5 TERMINÉ pour les invariants testés (PR #31).** Les tests protègent les paliers CTL 50/100, l'ajout unique/plafonné de dés, les seuils et le plafond des améliorations et leur application au tour suivant. Ils n'imposent pas de policy gloutonne aux règles de progression.
 
 ### Porte C — Vision et expérience cible (P0 — GAME DESIGN)
 
@@ -108,7 +108,7 @@ A et B avancent en parallèle. C s'appuie sur les preuves fiabilisées sans choi
 | A3 | A | P0 | TECH | CI harness/JSON | A1 | régression F9 détectée | DONE |
 | B1 | B | P0 | TECH | `validate_plan` pur | — | règles indépendantes du sélecteur | DONE (PR #25) |
 | B2 | B | P0 | BUG | Trace EF répétées/redistribution | — | occurrence et origine distinctes | DONE (PR #30) |
-| B3 | B | P0 | TEST | D99 table-driven | — | lignes CURRENT protégées ; 3 dés séparés | IN PROGRESS |
+| B3 | B | P0 | TEST | D99 table-driven | — | lignes CURRENT protégées ; 3 dés séparés | IMPLEMENTED — CI confirmation pending |
 | B4 | B | P0 | TECH | RNG injectable minimal | — | replay contrôlé d'un tour | DONE (PR #29–#31) |
 | B5 | B | P0 | TEST | Transitions longitudinales | B1, B4 | transitions/invariants protégés | DONE (PR #31) |
 | C1 | C | P0 — GAME DESIGN | DESIGN | Piliers / expérience cible | A, B | direction courte validée | TODO |
@@ -125,4 +125,4 @@ A et B avancent en parallèle. C s'appuie sur les preuves fiabilisées sans choi
 
 ## 6. Prochain chantier recommandé
 
-Terminer l'audit B3 et confirmer que ses tests couvrent toutes les lignes requises pour 4/5/6 dés en CI ; la convention à 3 dés reste **OPEN**. Ensuite, avancer C1 puis C2. Aucune décision Training A/B/C, aucun mapping Training → profil et aucune analyse quantitative Race ne doivent précéder ces portes et E3.
+Confirmer le passage CI de `tests/test_d99_table.py` pour clôturer B3 ; son audit statique couvre toutes les signatures D99 du GDD à 4/5/6 dés. La convention à 3 dés reste **OPEN** et n'est pas modifiée par ce chantier. Ensuite, avancer C1 puis C2. Aucune décision Training A/B/C, aucun mapping Training → profil et aucune analyse quantitative Race ne doivent précéder ces portes et E3.
