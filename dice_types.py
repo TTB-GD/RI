@@ -18,9 +18,15 @@ class Die:
             raise ValueError(f"Taille de dé non supportée : {self.size}")
         self.bonus = DIE_BONUS[self.size]
 
-    def roll(self):
-        """Retourne (face_brute, valeur_finale = face + bonus)."""
-        face = random.randint(1, self.size)
+    def roll(self, rng=None):
+        """Retourne (face_brute, valeur_finale = face + bonus).
+
+        ``rng`` may be any object exposing ``randint`` (including
+        ``random.Random``). Omitting it preserves the legacy module-global
+        random stream for callers outside the injected Training simulation.
+        """
+        roller = rng if rng is not None else random
+        face = roller.randint(1, self.size)
         return face, face + self.bonus
 
 
