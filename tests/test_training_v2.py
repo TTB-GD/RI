@@ -105,6 +105,18 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(no_quality.quality_energy, 2)
         self.assertEqual(no_quality.spec_remainder, 2)
 
+    def test_program_options_accept_roll_with_lowest_die_discarded(self):
+        state = PlayerState()
+        roll = RollResult(
+            raw_faces=(1, 2, 3, 4), final_values=(4, 3, 2), tn=14.0
+        )
+        options = list_program_options(state, roll)
+        self.assertTrue(options)
+        self.assertTrue(all(
+            max(option.ef_indices + option.quality_indices) < 3
+            for option in options
+        ))
+
     def test_program_options_reject_pool_mismatch(self):
         state = PlayerState()
         roll = RollResult(raw_faces=(6, 6), final_values=(6, 6), tn=14.0)
