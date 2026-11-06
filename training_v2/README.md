@@ -70,5 +70,5 @@ print(player.profile, player.dice_pool, player.fatigue)
 Run tests:
 
 ~~~bash
-python -m unittest test_training_v2 -v
+python -m unittest discover -s tests -p 'test_training_v2.py' -v
 ~~~
