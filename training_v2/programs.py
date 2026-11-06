@@ -30,11 +30,15 @@ def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramO
     allowing the player to route all Q energy to the experimental SPEC counter.
     """
     values = tuple(roll.final_values)
-    if len(values) != len(state.dice_pool):
-        raise ValueError("roll must contain one retained value per pool die")
-    if not values or any(value < 1 or value > size
-                         for value, size in zip(values, state.dice_pool)):
-        raise ValueError("retained value is outside its die range")
+    if len(roll.raw_faces) != len(state.dice_pool):
+        raise ValueError("roll must contain one raw face per pool die")
+    if not values or len(values) > len(state.dice_pool):
+        raise ValueError("roll must contain a valid retained-dice subset")
+    # session_outcome may discard the lowest die. Retained values are sorted
+    # by value, so they no longer align positionally with the original pool.
+    # Validate against the pool's maximum die size, not each original index.
+    if any(value < 1 or value > max(state.dice_pool) for value in values):
+        raise ValueError("retained value is outside the pool's die range")
 
     names = tuple(QUALITY_CATALOG)
     options = []
