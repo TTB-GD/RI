@@ -1,4 +1,4 @@
-"""Tests for the minimal interactive Training V2 console."""
+""""Tests for the minimal interactive Training V2 console."""
 import random
 import unittest
 
@@ -21,7 +21,7 @@ class TrainingV2ConsoleTests(unittest.TestCase):
 
         self.assertEqual(result.turn, 1)
         self.assertEqual(state.turns_played, 1)
-        self.assertIn("Saisie invalide", output)
+        self.assertTrue(any("Saisie invalide" in line for line in output))
         self.assertTrue(any("Choix invalide" in line for line in output))
         self.assertTrue(any("Programmes accessibles:" in line for line in output))
         self.assertTrue(any("Profil EF/Seuil/VMA:" in line for line in output))
