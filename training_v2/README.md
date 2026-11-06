@@ -22,7 +22,7 @@ next turn.
 Example:
 
 ~~~python
-from training_v2 import PlayerState, resolve_turn
+from training_v2 import PlayerState, roll_pool, resolve_turn
 
 player = PlayerState()
 result = resolve_turn(
