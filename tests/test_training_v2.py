@@ -55,8 +55,15 @@ class TrainingV2TurnTests(unittest.TestCase):
         state = PlayerState()
 
         def choose_program(roll):
-            quality_index = len(roll.final_values) - 1
-            return tuple(range(quality_index)), (quality_index,), ()
+            quality_index = min(
+                range(len(roll.final_values)),
+                key=lambda index: roll.final_values[index],
+            )
+            ef_indices = tuple(
+                index for index in range(len(roll.final_values))
+                if index != quality_index
+            )
+            return ef_indices, (quality_index,), ()
 
         result = roll_and_resolve_turn(
             state, choose_program, rng=__import__("random").Random(3)
