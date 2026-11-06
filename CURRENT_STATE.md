@@ -1,11 +1,11 @@
 # Run It — Current State
 
-Last consolidated: 2026-09-29
+Last consolidated: 2026-11-06  
 Canonical branch: `main`
 
 This snapshot does not replace the GDD; the authority hierarchy in `AGENTS.md` applies.
 
-Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
+Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md) and the [Training gate B status addendum](DEVELOPMENT_PLAN_STATUS.md).
 
 ## TRAINING CURRENT
 
@@ -24,6 +24,16 @@ Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
   accessible EF sessions, including an empty or partial choice.
 - CTL, prerequisites and die progression use only sessions actually completed
   successfully after bust resolution and any EF redistribution.
+- Training simulation uses a local, seedable RNG (`random.Random`) rather than
+  reseeding Python's module-global random stream. The RNG can be injected through
+  the dice-budget and bust-risk rolls for deterministic replay (PRs #29–#31).
+- Session logs distinguish each occurrence, including repeated session names,
+  and identify planned versus EF-redistribution origin with occurrence and trace
+  indices (PR #30).
+- Unit tests cover RNG replay, isolation from global RNG state, CTL die-addition
+  thresholds, upgrade caps, and the rule that progression gains apply on the
+  following turn. Test presence does not itself imply that the latest CI run
+  passed; consult the PR checks for execution results.
 
 ## RACE V2 CURRENT / INTEGRATED
 
@@ -54,6 +64,8 @@ Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
 - SPEC remains OPEN and unimplemented in Race V2; Training's `Spec*` catalogue
   entries are still an explicit design/implementation gap.
 - The selector's technical SL priority and D99 three-die convention remain open.
+- D99 table-driven coverage for all required four-, five- and six-die rows still
+  needs completion/verification; the three-die convention remains OPEN.
 
 ## HISTORICAL / TRACEABILITY
 
@@ -69,6 +81,9 @@ profile path.
 
 ## NEXT TARGETS
 
-1. Define the minimal Training-to-profile mapping.
-2. Calibrate Reserve/Form/Freshness/SL and the physiological slopes.
-3. Resolve the remaining SPEC, SL selector and D99 convention questions.
+1. Complete and verify the remaining D99 table-driven coverage; retain the open
+   three-die convention as an explicit policy question.
+2. Define the minimal Training-to-profile mapping after the Game Design target
+   has been decided.
+3. Calibrate Reserve/Form/Freshness/SL and the physiological slopes.
+4. Resolve the remaining SPEC and SL selector questions.
