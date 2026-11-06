@@ -22,7 +22,7 @@ class ScriptedRNG:
 
 
 class TrainingTurnRNGIntegrationTests(unittest.TestCase):
-    def test_same_rng_is_used_for_risk_after_budget_roll(self):
+    def test_injected_rng_is_used_for_risk_roll(self):
         player = Player(dice_pool=PlayerDicePool(sizes=[6, 6, 6, 6]))
         accessible = ["EF1", "Seuil5"]
         player.progress.available_sessions = lambda: accessible
@@ -34,13 +34,14 @@ class TrainingTurnRNGIntegrationTests(unittest.TestCase):
         }
         plan = ["EF1", "Seuil5"]
         trace = [{"session": name, "note": "test"} for name in plan]
-        rng = ScriptedRNG([2])
+        rng = ScriptedRNG([1])
 
-        with patch("simulate_player.roll_turn_budget", return_value=budget), patch(
+        with patch("simulate_player.roll_turn_budget", return_value=budget) as roll_mock, patch(
             "simulate_player.choose_sessions_weighted", return_value=(plan, trace)
         ):
             turn, _ = play_player_turn(1, player, rng=rng)
 
+        self.assertIs(roll_mock.call_args.kwargs["rng"], rng)
         self.assertEqual(rng.calls, [(1, 6)])
         self.assertEqual(turn["sessions_completed"], "EF1")
         self.assertEqual(turn["energy_lost"], 5)
