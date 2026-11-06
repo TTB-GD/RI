@@ -164,8 +164,9 @@ def resolve_turn(
             if risk_face < 1 or risk_face > max(state.dice_pool):
                 raise ValueError("risk face is outside the largest die range")
             if risk_face <= cost - max(values):
-                busted = name
-                break
+                if busted is None:
+                    busted = name
+                continue
         successful.append(name)
         fatigue_specific += option.fatigue
 
