@@ -30,19 +30,20 @@ def is_risk_tentable(session_name, rpe_max, best_die_size):
     return threshold < best_die_size
 
 
-def first_bust_index(planned, rpe_max, pool_sizes, roll_face=None):
+def first_bust_index(planned, rpe_max, pool_sizes, roll_face=None, rng=None):
     """Teste les qualités risquées dans l'ordre et retourne le premier index.
 
-    ``roll_face`` reçoit la taille du meilleur dé et facilite les tests. En
-    production, ``Die.roll`` fournit une paire (face brute, valeur bonifiée) :
-    seule la face brute est comparée au seuil.
+    ``roll_face`` receives the die size and takes precedence when supplied,
+    preserving the existing deterministic test seam. Otherwise an injected
+    ``rng`` is passed to ``Die.roll``; omitting both keeps legacy behavior.
+    Only the raw die face is compared with the threshold.
     """
     if not pool_sizes:
         raise ValueError("pool_sizes must not be empty")
     die_size = max(pool_sizes)
 
     def default_roll(size):
-        raw_face, _ = Die(size).roll()
+        raw_face, _ = Die(size).roll(rng=rng)
         return raw_face
 
     roller = roll_face or default_roll
