@@ -33,6 +33,8 @@ La frontière locale utilise `PhysiologyProfile(EF, Seuil, VMA)` avec `EF < Seui
 
 Training CURRENT (catalogue, composition, risque/bust, CTL, progression, pool) et Training V2 expérimental (partition EF/Q et pistes physiologiques) sont deux modèles distincts. Aucune conversion vers Race ne peut sélectionner implicitement V2 comme cible de production ; le choix A/B/C dépend de la vision Game Design et reste **OPEN**.
 
+`D1_TRAINING_WORKING_DESIGN.md` rassemble des propositions et décisions de travail formulées en discussion. Il constitue une base de préparation pour C1/C2/D1, pas une spécification normative ni une décision de remplacement de Training CURRENT.
+
 ## 3. Portes et statut
 
 ### Porte A — Fiabilité des preuves (P0)
@@ -49,7 +51,7 @@ Training CURRENT (catalogue, composition, risque/bust, CTL, progression, pool) e
 
 **B2 TERMINÉ (PR #30).** La simulation journalise chaque occurrence séparément, conserve les traces correspondantes et indique l'origine des séances redistribuées en EF.
 
-**B3 IMPLÉMENTÉ — vérification CI à confirmer.** `tests/test_d99_table.py` contient des fixtures indépendantes des tables de production pour toutes les signatures CURRENT : 5 lignes à 4 dés, 7 à 5 dés et 11 à 6 dés. Le test vérifie l'égalité exacte avec `SESSION_EFFECTS` et les sorties de `session_outcome`. L'audit statique les compare aux lignes du GDD et ne relève pas de ligne manquante. La convention à 3 dés reste séparément **OPEN / IMPLEMENTATION POLICY**, non décision de design et hors statut de clôture B3. Confirmer le résultat CI avant de déclarer B3 terminé.
+**B3 TERMINÉ (PR #27 ; CI confirmée le 2026-11-06).** `tests/test_d99_table.py` contient des fixtures indépendantes des tables de production pour les 23 signatures CURRENT : 5 lignes à 4 dés, 7 à 5 dés et 11 à 6 dés. Le test vérifie l'égalité exacte avec `SESSION_EFFECTS` et les sorties de `session_outcome`. Le workflow [Tests #42254642083](https://github.com/TTB-GD/RI/actions/runs/42254642083), exécuté sur `main` au commit `40151114`, est terminé avec succès ; la suite unitaire de 98 tests inclut ces cas. La convention à 3 dés reste séparément **OPEN / IMPLEMENTATION POLICY** : elle n'est ni une décision de design ni une condition de clôture de B3.
 
 **B4 TERMINÉ — implémentation et couverture de base (PR #29–#31).** Le RNG local/injectable permet le rejeu des lancers de dés et de risque ainsi que de la simulation. Les tests couvrent le rejeu avec une seed et l'absence de mutation de l'état aléatoire global. La reproductibilité est attendue dans le même environnement logiciel ; aucune garantie de séquence inter-version Python n’est posée.
 
@@ -57,9 +59,11 @@ Training CURRENT (catalogue, composition, risque/bust, CTL, progression, pool) e
 
 ### Porte C — Vision et expérience cible (P0 — GAME DESIGN)
 
-**C1 TODO :** formaliser fantaisie/rôle, décisions Training et rôle du risque, place relative Training/Race, diversité des profils, lisibilité/complexité, rythme/durée, horizon, course finale et interaction multijoueur pertinente.
+**C1 TODO — formalisation / validation.** Formaliser fantaisie/rôle, décisions Training et rôle du risque, place relative Training/Race, diversité des profils, lisibilité/complexité, rythme/durée, horizon, course finale et interaction multijoueur pertinente.
 
-**C2 TODO :** définir des critères de comparaison A/B/C : choix réels, lisibilité, diversité des builds, impact Race, risque, interaction pool/D99/progression, charge cognitive, rythme, équilibrage et testabilité. Pondération **OPEN**.
+**C2 TODO — formalisation / validation.** Définir des critères de comparaison A/B/C : choix réels, lisibilité, diversité des builds, impact Race, risque, interaction pool/D99/progression, charge cognitive, rythme, équilibrage et testabilité. Pondération **OPEN**.
+
+`D1_TRAINING_WORKING_DESIGN.md` contient déjà des matériaux préparatoires issus du travail C1/C2/D1, notamment les orientations et arbitrages D1-S1 à D1-S8. Il reste explicitement **WORKING DESIGN / NON NORMATIF** : sa présence ne clôt ni C1/C2, ne vaut pas sélection A/B/C et ne promeut pas ses hypothèses dans le GDD.
 
 Sortie C : direction Game Design validée avant toute sélection A/B/C.
 
@@ -97,7 +101,7 @@ A — preuves fiables ─┐
 B — CURRENT protégé ┘                                            → G → H → I → LATER
 ```
 
-A et B avancent en parallèle. C s'appuie sur les preuves fiabilisées sans choisir le modèle. D dépend de C ; E dépend de D ; F dépend du mapping et de Cost ↔ Reserve ; G suit le premier end-to-end. Ne pas interpréter quantitativement Race avant E3.
+A et B sont désormais clôturées sur leur périmètre documenté : A1–A3 et B1–B5, avec B3 confirmé par la CI du 2026-11-06. C s'appuie sur les preuves fiabilisées sans choisir le modèle. D dépend de C ; E dépend de D ; F dépend du mapping et de Cost ↔ Reserve ; G suit le premier end-to-end. Ne pas interpréter quantitativement Race avant E3.
 
 ## 5. Tableau de pilotage
 
@@ -108,7 +112,7 @@ A et B avancent en parallèle. C s'appuie sur les preuves fiabilisées sans choi
 | A3 | A | P0 | TECH | CI harness/JSON | A1 | régression F9 détectée | DONE |
 | B1 | B | P0 | TECH | `validate_plan` pur | — | règles indépendantes du sélecteur | DONE (PR #25) |
 | B2 | B | P0 | BUG | Trace EF répétées/redistribution | — | occurrence et origine distinctes | DONE (PR #30) |
-| B3 | B | P0 | TEST | D99 table-driven | — | lignes CURRENT protégées ; 3 dés séparés | IMPLEMENTED — CI confirmation pending |
+| B3 | B | P0 | TEST | D99 table-driven | — | lignes CURRENT protégées ; 3 dés séparés | DONE (PR #27 ; CI #42254642083) |
 | B4 | B | P0 | TECH | RNG injectable minimal | — | replay contrôlé d'un tour | DONE (PR #29–#31) |
 | B5 | B | P0 | TEST | Transitions longitudinales | B1, B4 | transitions/invariants protégés | DONE (PR #31) |
 | C1 | C | P0 — GAME DESIGN | DESIGN | Piliers / expérience cible | A, B | direction courte validée | TODO |
@@ -125,4 +129,4 @@ A et B avancent en parallèle. C s'appuie sur les preuves fiabilisées sans choi
 
 ## 6. Prochain chantier recommandé
 
-Confirmer le passage CI de `tests/test_d99_table.py` pour clôturer B3 ; son audit statique couvre toutes les signatures D99 du GDD à 4/5/6 dés. La convention à 3 dés reste **OPEN** et n'est pas modifiée par ce chantier. Ensuite, avancer C1 puis C2. Aucune décision Training A/B/C, aucun mapping Training → profil et aucune analyse quantitative Race ne doivent précéder ces portes et E3.
+A et B étant clôturées, reprendre C1 puis C2 en s'appuyant sur les matériaux non normatifs de `D1_TRAINING_WORKING_DESIGN.md`. La convention D99 à 3 dés reste **OPEN** et n'est pas modifiée par la clôture B3. Aucune décision Training A/B/C, aucun mapping Training → profil et aucune analyse quantitative Race ne doivent précéder la validation de ces portes et E3.

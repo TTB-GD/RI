@@ -32,8 +32,28 @@ Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
 - D99 static coverage audit: `tests/test_d99_table.py` defines independent
   expected fixtures for all 23 CURRENT signatures from the GDD: 5 at four dice,
   7 at five dice and 11 at six dice. It checks exact table equality and the
-  `session_outcome` result for each signature. CI execution status has not been
-  confirmed as part of this audit; do not infer passing CI from test presence.
+  `session_outcome` result for each signature. The three-die convention is
+  characterized separately and remains OPEN / IMPLEMENTATION POLICY.
+- CI confirmation: workflow [Tests #42254642083](https://github.com/TTB-GD/RI/actions/runs/42254642083)
+  passed on `main` at commit `40151114` (2026-11-06). The run completed the
+  98-test unit suite, JSON evidence validation and 80 lightweight experimental
+  tests. B3 is therefore closed for the 4/5/6-die CURRENT signatures; this does
+  not close or validate the separate three-die convention.
+
+## FATIGUE — IMPLEMENTATION STATUS
+
+- The current Training simulation computes `energy_and_fatigue(energy_effective,
+  TN)` after bust resolution and any EF redistribution. The quasi-Fibonacci
+  function is also used in the weighted selector's utility calculation; the
+  simulation records per-turn and cumulative fatigue diagnostics.
+- This is not the complete persistent Fatigue V1 system described as
+  EXPERIMENTAL in the GDD. The `Player` state has no persistent fatigue field,
+  and the recorded fatigue does not regulate later turns, reserve availability,
+  bust risk or session eligibility.
+- The D1 working design proposes a different decomposition based on the final
+  dice result, excess Quality load and session-specific penalty. Those rules
+  remain WORKING DESIGN / NON NORMATIVE and are not implemented in the current
+  Training path. See `D1_TRAINING_WORKING_DESIGN.md`.
 
 ## RACE V2 CURRENT / INTEGRATED
 
@@ -42,9 +62,13 @@ Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
   uses the continuous experimental slopes 2 and 3, and rejects `x > VMA`.
 - Race V2 resolves local `Charge = Production + Difficulty`, scores Production
   only, and treats `Charge <= VMA` as its hard physiological legality boundary.
-- The existing longitudinal engine now consumes a profile directly: generated
-  subset sums are filtered by Charge before the separate Reserve affordability
-  filter. SPEC and the complete Training-to-profile conversion remain absent.
+- The experimental longitudinal runner in
+  `experiments/current/race_engine_v2/core.py` can consume a profile directly:
+  generated subset sums are filtered by Charge before the separate Reserve
+  affordability filter. Its multi-segment orchestration, Reserve, Form,
+  Freshness and policies remain EXPERIMENTAL; this does not make the complete
+  Race loop a CURRENT production gameplay path.
+- SPEC and the complete Training-to-profile conversion remain absent.
 
 ## EXPERIMENTAL CONSERVED
 
@@ -83,9 +107,12 @@ profile path.
 
 ## NEXT TARGETS
 
-1. Confirm CI execution of `tests/test_d99_table.py` and then close B3; keep the
-   three-die convention explicitly open.
-2. Define the minimal Training-to-profile mapping after the Game Design target
-   has been decided.
-3. Calibrate Reserve/Form/Freshness/SL and the physiological slopes.
-4. Resolve the remaining SPEC and SL selector questions.
+1. Treat B3 as closed for the 4/5/6-die CURRENT signatures on the successful
+   2026-11-06 CI run; keep the three-die convention explicitly open.
+2. Formalize and validate C1/C2, using `D1_TRAINING_WORKING_DESIGN.md` as
+   preparatory non-normative material rather than as a selected Training model.
+3. Decide Training target A/B/C (D1) before defining the Training-to-profile
+   mapping.
+4. Calibrate Reserve/Form/Freshness/SL and the physiological slopes after the
+   minimum integrated loop is specified; resolve the remaining SPEC and SL
+   questions at the appropriate design gates.
