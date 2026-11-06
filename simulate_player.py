@@ -1,36 +1,15 @@
 """
-Simulation multi-tours pour UN joueur : à chaque tour, le moteur de dés
-existant (dice_types/decision_engine/session_effects) détermine l'énergie et
-le RPE max disponibles ce tour-ci, à partir du pool de dés PERSISTANT du
-joueur (`player_state.Player.dice_pool`, plus un simple tirage aléatoire
-comme avant) ; le joueur choisit ensuite ses séances d'entraînement sous
-les contraintes de progression/déblocage (`session_selector`).
-Pool de dés : contrairement à la version précédente (taille de pool
-re-tirée au hasard à CHAQUE tour via `get_max_dice`), le pool est
-maintenant un état qui persiste et évolue pour un même joueur — cf.
-`dice_progression.PlayerDicePool` (paliers CTL 50/100, améliorations toutes
-les 4 séances de qualité). Les évolutions dues sont appliquées en DÉBUT de
-tour, à partir de l'état accumulé à la fin du tour précédent (même
-principe que le déblocage de séances : rien de nouveau n'est disponible le
-tour même où le seuil est franchi).
-CTL (forme) du tour = somme des coûts en énergie des séances CHOISIES (pas
-l'énergie totale disponible : le joueur peut ne pas tout dépenser s'il n'a
-pas de séance débloquée/compatible pour l'utiliser). CTL CUMULÉ = somme du
-CTL de chaque tour joué, piste les paliers 50/100 du pool de dés.
-Fatigue : calculée via la même fonction que pour le moteur de dés seul
-(energy_and_fatigue, suite quasi-Fibonacci selon l'écart au TN), appliquée
-au CTL du tour. Cumulée d'un tour à l'autre par simple somme (hypothèse : pas
-de récupération/décroissance modélisée pour l'instant).
+Simulation multi-tours pour UN joueur : le moteur de dés produit le budget,
+puis le joueur choisit des séances selon les règles de progression.
+
+Le RNG est injectable depuis la simulation pour rejouer intégralement les
+lancers de dés et de risque. Les changements de pool dus à la progression
+restent appliqués au début du tour suivant.
 """
 import sys
 import os
 
-# Garde-fou : garantit que le dossier du script est dans sys.path, quel que
-# soit le répertoire de travail ou la façon dont le script est lancé (IDE,
-# double-clic, terminal depuis un autre dossier...). Évite la classe de bug
-# rencontrée ici (un import résolu par erreur vers un chemin absolu du type
-# `RI_clean4.RI.module` au lieu de l'import plat `module` utilisé partout
-# ailleurs dans ce projet, qui n'est PAS un package installé).
+# Garde-fou pour les imports plats lors d'un lancement depuis un autre dossier.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from collections import defaultdict, deque
@@ -46,29 +25,17 @@ from session_risk import first_bust_index
 from dice_progression import DEFAULT_UPGRADE_WEIGHTS
 from player_state import Player
 from game_logger import write_csv
-# Poids par défaut du moteur de dés. Un w_rpe positif augmente l'utilité des
-# options à RPE max attendu plus élevé ; ce n'est donc pas un terme de pénalité.
+
 DEFAULT_WEIGHTS = {"w_energy": 1.0, "w_sessions": 1.0, "w_fatigue": 1.0, "w_rpe": 1.0}
 
 
 def choose_replacement_ef_greedy(options):
-    """Politique technique de simulation, distincte des règles de résolution.
-
-    Elle conserve l'ancien comportement deterministe : EF sûre la plus chère
-    encore abordable, répétée dans les limites fournies par le rule engine.
-    Elle n'est ni une obligation de jeu ni une politique joueur optimale.
-    """
-    candidates = sorted(
-        options.legal_ef,
-        key=lambda name: (-SESSION_CATALOG[name][1], name),
-    )
+    """Simulation policy only: greedily fills redistribution with safe EF."""
+    candidates = sorted(options.legal_ef, key=lambda name: (-SESSION_CATALOG[name][1], name))
     remaining = options.replacement_energy
     chosen = []
     while len(chosen) < options.replacement_slots:
-        affordable = next(
-            (name for name in candidates if SESSION_CATALOG[name][1] <= remaining),
-            None,
-        )
+        affordable = next((name for name in candidates if SESSION_CATALOG[name][1] <= remaining), None)
         if affordable is None:
             break
         chosen.append(affordable)
@@ -77,13 +44,7 @@ def choose_replacement_ef_greedy(options):
 
 
 def _session_occurrence_traces(completed_sessions, replacement_sessions, trace):
-    """Match selection traces to repeated planned sessions in occurrence order.
-
-    Resolver output keeps completed planned sessions in plan order and appends
-    redistribution choices afterwards. A FIFO per session name preserves the
-    individual trace for repeated EF entries without confusing replacements
-    with selected sessions of the same name.
-    """
+    """Associate each completed planned occurrence with its own selector trace."""
     trace_by_name = defaultdict(deque)
     for trace_index, step in enumerate(trace):
         trace_by_name[step["session"]].append((trace_index, step))
@@ -91,102 +52,64 @@ def _session_occurrence_traces(completed_sessions, replacement_sessions, trace):
     planned_count = len(completed_sessions) - len(replacement_sessions)
     occurrences = []
     for name in completed_sessions[:planned_count]:
-        matched = trace_by_name[name].popleft() if trace_by_name[name] else (None, {})
-        trace_index, step = matched
-        occurrences.append({
-            "session": name,
-            "origin": "planned",
-            "trace_index": trace_index,
-            "trace": step,
-        })
+        trace_index, step = trace_by_name[name].popleft() if trace_by_name[name] else (None, {})
+        occurrences.append({"session": name, "origin": "planned",
+                            "trace_index": trace_index, "trace": step})
     for name in replacement_sessions:
-        occurrences.append({
-            "session": name,
-            "origin": "redistribution",
-            "trace_index": None,
-            "trace": {},
-        })
+        occurrences.append({"session": name, "origin": "redistribution",
+                            "trace_index": None, "trace": {}})
     return tuple(occurrences)
 
 
 def _split_active_reserve(dice_objects):
-    """
-    Sépare le pool en (dés actifs, dé de réserve) : le dé de réserve est
-    celui de plus petite taille (à égalité, le dernier ajouté, donc l'index
-    le plus élevé, reste réserve — les dés améliorés sont donc préférés en
-    actif, cohérent avec l'hypothèse déjà actée dans `example_pool`).
-    """
+    """Keep the smallest die in reserve; on ties, the last die remains reserve."""
     reserve_idx = min(range(len(dice_objects)), key=lambda i: (dice_objects[i].size, -i))
     reserve_die = dice_objects[reserve_idx]
-    active = [d for i, d in enumerate(dice_objects) if i != reserve_idx]
-    return active, reserve_die
+    return [d for i, d in enumerate(dice_objects) if i != reserve_idx], reserve_die
 
 
-def roll_turn_budget(dice_pool, weights=DEFAULT_WEIGHTS):
-    """
-    Réutilise le moteur de dés existant sur le pool PERSISTANT du joueur
-    (plus de taille de pool aléatoire par tour). Retourne un dict avec tout
-    ce qui doit être journalisé (énergie, RPE max, TN, tirage final,
-    motif détecté, action retenue par le moteur pondéré côté dés).
-    """
+def roll_turn_budget(dice_pool, weights=DEFAULT_WEIGHTS, rng=None):
+    """Roll the persistent dice pool using the supplied random generator."""
     dice_objects = dice_pool.as_dice_objects()
     max_dice = len(dice_objects)
     active, reserve_die = _split_active_reserve(dice_objects)
     tn = pool_tn(dice_objects)
     faces, values = [], []
-    for d in active:
-        face, value = d.roll()
+    for die in active:
+        face, value = die.roll(rng=rng)
         faces.append(face)
         values.append(value)
-    choice, index, ranked = choose_weighted_action(active, reserve_die, faces, max_dice, tn, **weights)
+    choice, index, _ = choose_weighted_action(active, reserve_die, faces, max_dice, tn, **weights)
     if choice == "add":
-        face, value = reserve_die.roll()
+        face, value = reserve_die.roll(rng=rng)
         faces.append(face)
         values.append(value)
     elif choice == "reroll":
-        face, value = active[index].roll()
-        faces[index] = face
-        values[index] = value
+        face, value = active[index].roll(rng=rng)
+        faces[index], values[index] = face, value
     elif choice == "add+reroll":
-        face, value = reserve_die.roll()
+        face, value = reserve_die.roll(rng=rng)
         faces.append(face)
         values.append(value)
-        face2, value2 = active[index].roll()
-        faces[index] = face2
-        values[index] = value2
+        face, value = active[index].roll(rng=rng)
+        faces[index], values[index] = face, value
     outcome = session_outcome(faces, values, max_dice)
     return {
-        "energy_budget": outcome["total"],
-        "rpe_max": outcome["rpe_max"],
-        "quality_sessions_from_roll": outcome["sessions"],
-        "tn": tn,
-        "pool_size": max_dice,
-        "final_faces": faces,
-        "final_values": values,
-        "pattern": pattern_name(faces),
-        "action_chosen": choice,
+        "energy_budget": outcome["total"], "rpe_max": outcome["rpe_max"],
+        "quality_sessions_from_roll": outcome["sessions"], "tn": tn,
+        "pool_size": max_dice, "final_faces": faces, "final_values": values,
+        "pattern": pattern_name(faces), "action_chosen": choice,
     }
 
 
 def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
-                      session_weights=None, upgrade_weights=None, bust_index=None,
-                      risk_roll_face=None):
-    """
-    Joue un tour pour un joueur et retourne (turn_row, session_rows) :
-    - turn_row     : dict résumant le tour (tirage, CTL, fatigue, état de
-                       progression du pool et des séances) pour player_turns.csv.
-    - session_rows : une ligne par occurrence de séance réalisée, avec sa trace
-                       propre et son origine (programme ou redistribution EF).
-    Trois jeux de poids indépendants, réglables séparément :
-        weights          -> moteur de dés (choose_weighted_action)
-        session_weights   -> moteur de séances (choose_sessions_weighted)
-        upgrade_weights    -> moteur d'amélioration du pool (choose_die_to_upgrade)
-    """
-    # Évolutions du pool dues à la fin du tour précédent, appliquées AVANT
-    # le tirage de ce tour (même principe que le déblocage de séances).
+                     session_weights=None, upgrade_weights=None, bust_index=None,
+                     risk_roll_face=None, rng=None):
+    """Resolve one Training turn; pass the same RNG through dice and bust rolls."""
     player.dice_pool.maybe_add_dice(player.cumulative_ctl)
-    player.dice_pool.maybe_upgrade(player.progress.quality_total, upgrade_weights or DEFAULT_UPGRADE_WEIGHTS)
-    roll = roll_turn_budget(player.dice_pool, weights)
+    player.dice_pool.maybe_upgrade(player.progress.quality_total,
+                                   upgrade_weights or DEFAULT_UPGRADE_WEIGHTS)
+    roll = roll_turn_budget(player.dice_pool, weights, rng=rng)
     available = player.progress.available_sessions()
     tentable = player.progress.tentable_sessions()
     chosen, trace = choose_sessions_weighted(
@@ -197,7 +120,8 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
     )
     if bust_index is None:
         bust_index = first_bust_index(
-            chosen, roll["rpe_max"], player.dice_pool.sizes, risk_roll_face,
+            chosen, roll["rpe_max"], player.dice_pool.sizes,
+            roll_face=risk_roll_face, rng=rng,
         )
     replacements = ()
     if bust_index is not None:
@@ -205,72 +129,66 @@ def play_player_turn(turn_id, player, weights=DEFAULT_WEIGHTS,
             chosen, available, roll["rpe_max"], bust_index,
         )
         replacements = choose_replacement_ef_greedy(options)
-    resolution = resolve_session_plan(
-        chosen, available, roll["rpe_max"], bust_index, replacements,
-    )
+    resolution = resolve_session_plan(chosen, available, roll["rpe_max"], bust_index, replacements)
     ctl = resolution.energy_effective
     _, fatigue = energy_and_fatigue(ctl, roll["tn"])
     player.cumulative_ctl += ctl
+
     session_rows = []
     occurrences = _session_occurrence_traces(
         resolution.completed_sessions, resolution.replacement_sessions, trace,
     )
     for occurrence_index, occurrence in enumerate(occurrences, start=1):
-        name = occurrence["session"]
-        step = occurrence["trace"]
+        name, step = occurrence["session"], occurrence["trace"]
         category, rpe = SESSION_CATALOG[name]
         session_rows.append({
-            "turn": turn_id,
-            "session": name,
-            "occurrence_index": occurrence_index,
-            "origin": occurrence["origin"],
-            "trace_index": occurrence["trace_index"],
-            "category": category,
-            "rpe": rpe,
-            "energy_cost": rpe,
+            "turn": turn_id, "session": name, "occurrence_index": occurrence_index,
+            "origin": occurrence["origin"], "trace_index": occurrence["trace_index"],
+            "category": category, "rpe": rpe, "energy_cost": rpe,
             "marginal_utility": step.get("marginal_utility"),
             "alternatives_considered": step.get("alternatives_considered"),
             "note": ("redistribution_EF" if occurrence["origin"] == "redistribution"
                      else step.get("note", "")),
         })
         player.progress.record_session(name)
+
     turn_row = {
-        "turn": turn_id,
-        "tn": roll["tn"],
-        "pool_size": roll["pool_size"],
+        "turn": turn_id, "tn": roll["tn"], "pool_size": roll["pool_size"],
         "dice_pool_sizes": "-".join(str(s) for s in player.dice_pool.sizes),
         "upgrades_used": player.dice_pool.upgrades_used,
         "dice_added": player.dice_pool.dice_added,
         "dice_final_roll": "-".join(str(v) for v in roll["final_values"]),
-        "pattern_detected": roll["pattern"],
-        "dice_action": roll["action_chosen"],
-        "energy_budget": roll["energy_budget"],
-        "rpe_max": roll["rpe_max"],
+        "pattern_detected": roll["pattern"], "dice_action": roll["action_chosen"],
+        "energy_budget": roll["energy_budget"], "rpe_max": roll["rpe_max"],
         "quality_sessions_from_roll": roll["quality_sessions_from_roll"],
         "sessions_chosen": "-".join(chosen) if chosen else "",
         "nb_sessions": len(resolution.counted_sessions),
         "sessions_completed": "-".join(resolution.completed_sessions),
         "sessions_cancelled": "-".join(resolution.cancelled_sessions),
-        "energy_lost": resolution.energy_lost,
-        "ctl": ctl,
-        "cumulative_ctl": player.cumulative_ctl,
-        "fatigue_turn": fatigue,
-        "ef_total": player.progress.ef_total,
-        "quality_total": player.progress.quality_total,
+        "energy_lost": resolution.energy_lost, "ctl": ctl,
+        "cumulative_ctl": player.cumulative_ctl, "fatigue_turn": fatigue,
+        "ef_total": player.progress.ef_total, "quality_total": player.progress.quality_total,
         "max_unlocked_rpe": max((SESSION_CATALOG[n][1] for n in available), default=0),
     }
     return turn_row, session_rows
 
 
 def run_player_simulation(n_turns=12, weights=DEFAULT_WEIGHTS,
-                           session_weights=None, upgrade_weights=None, seed=42):
-    random.seed(seed)
+                          session_weights=None, upgrade_weights=None, seed=42, rng=None):
+    """Run a player simulation with an isolated, seedable random stream.
+
+    ``rng`` overrides ``seed`` and may be any object exposing ``randint``.
+    The default path does not mutate Python's module-global random state.
+    """
+    if rng is not None and seed != 42:
+        raise ValueError("provide either rng or a non-default seed, not both")
+    rng = rng if rng is not None else random.Random(seed)
     player = Player()
     turns, sessions = [], []
     cumulative_fatigue = 0
     for turn_id in range(1, n_turns + 1):
         turn_row, session_rows = play_player_turn(
-            turn_id, player, weights, session_weights, upgrade_weights,
+            turn_id, player, weights, session_weights, upgrade_weights, rng=rng,
         )
         cumulative_fatigue += turn_row["fatigue_turn"]
         turn_row["cumulative_fatigue"] = cumulative_fatigue
