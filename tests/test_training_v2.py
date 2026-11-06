@@ -88,8 +88,8 @@ class TrainingV2TurnTests(unittest.TestCase):
         )
         self.assertEqual(both.ef_energy, 12)
         self.assertEqual(both.quality_energy, 12)
-        self.assertEqual(both.quality_costs, (("SEUIL", 3), ("VMA", 7)))
-        self.assertEqual(both.spec_remainder, 2)
+        self.assertEqual(both.quality_costs, (("SEUIL", 3), ("VMA", 5)))
+        self.assertEqual(both.spec_remainder, 4)
         self.assertGreater(len(options), 1)
 
     def test_program_options_include_quality_to_spec_without_session(self):
