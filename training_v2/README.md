@@ -8,10 +8,12 @@ and dice progression untouched.
 
 ## Playable loop
 
-A caller supplies:
-1. the raw dice faces (or asks the roll helper to roll the persistent pool);
-2. a physical partition of retained dice into EF and Quality compartments;
-3. the quality sessions selected by the player.
+The turn is deliberately split into two phases:
+1. roll the persistent pool with roll_pool and inspect the retained values;
+2. choose a physical partition and quality programme, then call resolve_turn.
+
+roll_and_resolve_turn also accepts a choose_program callback for a simple
+automated policy or a future player-facing interface.
 
 The engine validates the allocation, checks that the selected quality
 programme is affordable, resolves risky quality sessions, applies successful
@@ -25,9 +27,11 @@ Example:
 from training_v2 import PlayerState, roll_pool, resolve_turn
 
 player = PlayerState()
+roll = roll_pool(player)
+# Indices refer to roll.final_values, after the D99 retained-dice rule.
 result = resolve_turn(
     player,
-    raw_faces=(6, 6, 6, 6),
+    raw_faces=roll.raw_faces,
     ef_indices=(0, 1),
     quality_indices=(2, 3),
     planned_qualities=("SEUIL",),
@@ -59,8 +63,8 @@ print(player.profile, player.dice_pool, player.fatigue)
 
 ## Known limitations
 
-- Dice partition and programme selection are supplied by the caller; no AI
-  policy or UI is included.
+- Dice partition and programme selection are supplied by the caller; roll_pool
+  exposes retained values before that choice. No AI policy or UI is included.
 - Risk uses the largest die size as the risk-roll range, matching the B2
   harness convention. This remains experimental.
 - EF and Quality must both receive at least one retained die and EF energy
