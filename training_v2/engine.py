@@ -46,6 +46,13 @@ class TurnResult:
     dice_pool_after: tuple[int, ...]
 
 
+@dataclass(frozen=True)
+class RollResult:
+    raw_faces: tuple[int, ...]
+    final_values: tuple[int, ...]
+    tn: float
+
+
 def _apply_milestones(state: PlayerState, old_ef: int, old_q: int) -> None:
     for milestone in EF_MILESTONES:
         if old_ef < milestone <= state.progression_ef:
@@ -100,6 +107,7 @@ def resolve_turn(
     planned_qualities,
     *,
     risk_faces=(),
+    rng=None,
 ) -> TurnResult:
     """Resolve a supplied roll and player programme, mutating state.
 
@@ -141,6 +149,7 @@ def resolve_turn(
     if total_cost > quality_energy:
         raise ValueError("quality programme exceeds its allocated energy")
 
+    rng = rng if rng is not None else random.Random()
     rng_faces = iter(risk_faces)
     successful = []
     busted = None
@@ -151,7 +160,7 @@ def resolve_turn(
             try:
                 risk_face = next(rng_faces)
             except StopIteration:
-                risk_face = random.randint(1, max(state.dice_pool))
+                risk_face = rng.randint(1, max(state.dice_pool))
             if risk_face < 1 or risk_face > max(state.dice_pool):
                 raise ValueError("risk face is outside the largest die range")
             if risk_face <= cost - max(values):
@@ -205,14 +214,33 @@ def resolve_turn(
     )
 
 
-def roll_and_resolve_turn(
-    state: PlayerState, ef_indices, quality_indices, planned_qualities,
-    *, rng=None, risk_faces=(),
-) -> TurnResult:
-    """Roll the persistent pool, then resolve the supplied player programme."""
+def roll_pool(state: PlayerState, *, rng=None) -> RollResult:
+    """Roll and resolve retained dice before the player chooses a partition."""
     rng = rng if rng is not None else random.Random()
     raw_faces = tuple(rng.randint(1, size) for size in state.dice_pool)
+    outcome = session_outcome(raw_faces, raw_faces, len(state.dice_pool))
+    return RollResult(
+        raw_faces=raw_faces,
+        final_values=tuple(outcome["dice_used"]),
+        tn=pool_tn(make_pool(state.dice_pool)),
+    )
+
+
+def roll_and_resolve_turn(
+    state: PlayerState,
+    choose_program,
+    *,
+    rng=None,
+    risk_faces=(),
+) -> TurnResult:
+    """Roll first, then call choose_program(RollResult) for the player's choice.
+
+    choose_program returns (ef_indices, quality_indices, planned_qualities).
+    """
+    rng = rng if rng is not None else random.Random()
+    roll = roll_pool(state, rng=rng)
+    ef_indices, quality_indices, planned_qualities = choose_program(roll)
     return resolve_turn(
-        state, raw_faces, ef_indices, quality_indices, planned_qualities,
-        risk_faces=risk_faces,
+        state, roll.raw_faces, ef_indices, quality_indices, planned_qualities,
+        risk_faces=risk_faces, rng=rng,
     )
