@@ -31,6 +31,24 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(state.progression_q, 3)
         self.assertEqual(state.progression_spec, 9)
 
+    def test_two_turns_reuse_the_updated_player_state(self):
+        state = PlayerState()
+        first = resolve_turn(
+            state, (6, 6, 6, 6),
+            ef_indices=(0, 1), quality_indices=(2, 3),
+            planned_qualities=("SEUIL",),
+        )
+        second = resolve_turn(
+            state, (6, 6, 6, 6),
+            ef_indices=(0, 1), quality_indices=(2, 3),
+            planned_qualities=("VMA",),
+        )
+        self.assertEqual((first.turn, second.turn), (1, 2))
+        self.assertEqual(state.profile.ef, 7)
+        self.assertEqual(state.profile.threshold, 9)
+        self.assertEqual(state.profile.vma, 11)
+        self.assertEqual(state.turns_played, 2)
+
     def test_bust_loses_assigned_quality_energy_and_does_not_adapt(self):
         state = PlayerState()
         result = resolve_turn(
