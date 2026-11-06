@@ -19,8 +19,18 @@ The option enumerator is deliberately neutral: it does not rank, score, or
 select a preferred programme. It includes the empty quality programme, so
 unspent Q energy can progress the experimental SPEC counter.
 
-`roll_and_resolve_turn` remains available for a callback-driven policy or
-future player-facing interface.
+## Interactive console
+
+Run a persistent one-player session from the repository root:
+
+~~~bash
+python -m training_v2
+~~~
+
+Each turn displays the retained roll and all feasible programmes. Enter the
+number of a programme to resolve it; press Enter to continue with the same
+player state, or enter `q` to stop. The console is a thin interface over the
+engine and introduces no automatic programme selection.
 
 Example:
 
@@ -61,7 +71,8 @@ print(player.profile, player.dice_pool, player.fatigue)
 
 ## Known limitations
 
-- This is a rules-engine API, not yet a player-facing UI or complete game.
+- The console is a one-player terminal playtest interface, not a graphical UI
+  or complete multiplayer game.
 - Risk uses the largest die size as the risk-roll range, matching the B2
   harness convention. This remains experimental.
 - EF and Quality must both receive at least one retained die and EF energy
