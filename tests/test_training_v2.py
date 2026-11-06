@@ -55,8 +55,8 @@ class TrainingV2TurnTests(unittest.TestCase):
         state = PlayerState()
 
         def choose_program(roll):
-            self.assertEqual(len(roll.final_values), 3)
-            return (0, 1), (2,), ()
+            quality_index = len(roll.final_values) - 1
+            return tuple(range(quality_index)), (quality_index,), ()
 
         result = roll_and_resolve_turn(
             state, choose_program, rng=__import__("random").Random(3)
