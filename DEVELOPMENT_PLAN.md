@@ -4,7 +4,7 @@
 
 ## 1. Gouvernance
 
-Les statuts ont un sens strict : **FACT** vérifié dans le dépôt ; **DECISION VALIDATED** porté par le GDD ; **OPEN** arbitrage requis ; **PROPOSAL** ordre recommandé ; **CURRENT** comportement du prototype ; **INTEGRATED** branché dans le chemin intégré ; **EXPERIMENTAL** non promu en règle ; **IMPLEMENTATION GAP** frontière absente/incomplète ; **HISTORICAL** preuve conservée sans portée CURRENT ; **LATER** volontairement différé.
+Les statuts ont un sens strict : **FACT** vérifié dans le dépôt ; **DECISION VALIDATED** porté par le GDD ; **OPEN** arbitrage requis ; **PROPOSAL** ordre recommandé ; **CURRENT** comportement du prototype ; **INTEGRATED** branché dans le chemin retenu ; **EXPERIMENTAL** non promu en règle ; **IMPLEMENTATION GAP** frontière absente/incomplète ; **HISTORICAL** preuve conservée sans portée actuelle ; **LATER** volontairement différé.
 
 Chaîne de gouvernance :
 
@@ -21,7 +21,9 @@ Priorités : **P0** bloque la phase structurante ; **P1** nécessaire avant anal
 
 ### Training CURRENT
 
-**DECISION VALIDATED / CURRENT.** Le pool persistant commence à `4d6`, gagne un d6 aux seuils CTL 50 et 100 (disponible au tour suivant), et quatre qualités réussies améliorent un dé `d6 → d8 → d10 → d12` (bonus permanents `0 / 0 / 0`). Le lancer fournit D99, énergie et RPE Max. Les contraintes incluent au plus sept séances, entrées Qualité uniques, EF répétables et `qualités ≤ EF` par tour. RPE Max fixe la zone sûre ; une Qualité au-dessus peut être risquée volontairement, une EF au-dessus est indisponible. Le premier bust conserve les séances sûres, annule les Qualités risquées postérieures et laisse un choix explicite de redistribution en EF. Seules les séances réussies après résolution avancent CTL, prérequis et progression des dés.
+**DECISION VALIDATED / CURRENT.** Le pool persistant commence à `4d6`, gagne un d6 aux seuils CTL 50 et 100 (disponible au tour suivant), et quatre qualités réussies améliorent un dé `d6 → d8 → d10 → d12` (bonus permanent nul). Le lancer fournit D99, énergie et RPE Max. Les contraintes incluent au plus sept séances, entrées Qualité uniques, EF répétables et `qualités ≤ EF` par tour. RPE Max fixe la zone sûre ; une Qualité au-dessus peut être choisie puis risquée, EF au-dessus est indisponible. Le premier bust conserve les séances sûres, annule les Qualités risquées postérieures et laisse une décision explicite de redistribution en EF, vide ou partielle. Seules les séances réellement complétées après résolution avancent CTL, prérequis et progression des dés.
+
+La simulation Training emploie un RNG local seedable/injectable pour le budget de dés et le risque ; le flux global `random` n’est pas reseedé. Les journaux distinguent les occurrences de séances, y compris les répétitions, et identifient les séances planifiées et les EF redistribuées. Les PR #29–#31 ont ajouté l’injection et les tests de rejeu/transitions ; consulter les checks GitHub pour l’état d’exécution, car la présence des tests n’atteste pas leur succès.
 
 ### Race V2 CURRENT / INTEGRATED
 
@@ -45,13 +47,13 @@ Training CURRENT (catalogue, composition, risque/bust, CTL, progression, pool) e
 
 **B1 TERMINÉ (PR #25).** `plan_validation.validate_plan(...)` fournit une validation structurée, indépendante du sélecteur. Les tests couvrent les contraintes du programme ; le risque sans taille de dé renvoie une violation explicite.
 
-**B2 TODO.** Corriger la trace par nom dans `simulate_player.py` : journaliser chaque occurrence distinctement et marquer toute EF redistribuée.
+**B2 TERMINÉ (PR #30).** La simulation journalise chaque occurrence séparément, conserve les traces correspondantes et indique l’origine des séances redistribuées en EF.
 
-**B3 IMPLÉMENTÉ (branche de travail).** Tests table-driven attendus pour chaque ligne D99 CURRENT à 4/5/6 dés. La table à 3 dés reste séparément **OPEN / IMPLEMENTATION POLICY**, non décision de design. Ajouter les tests à la CI.
+**B3 EN COURS.** Tests table-driven attendus pour chaque ligne D99 CURRENT à 4/5/6 dés. La table à 3 dés reste séparément **OPEN / IMPLEMENTATION POLICY**, non décision de design. Vérifier la couverture et les résultats CI avant de clôturer.
 
-**B4 TODO.** Seam RNG minimal injectable pour rejouer exactement un tour Training, sans service/framework.
+**B4 TERMINÉ — implémentation et couverture de base (PR #29–#31).** Le RNG local/injectable permet le rejeu des lancers de dés et de risque ainsi que de la simulation. Les tests couvrent le rejeu avec une seed et l’absence de mutation de l’état aléatoire global. La reproductibilité est attendue dans le même environnement logiciel ; aucune garantie de séquence inter-version Python n’est posée.
 
-**B5 TODO.** Tests des transitions longitudinales et invariants, sans lier les règles à la policy gloutonne.
+**B5 TERMINÉ pour les invariants testés (PR #31).** Les tests protègent les paliers CTL 50/100, l’ajout unique/plafonné de dés, les seuils et le plafond des améliorations et leur application au tour suivant. Ils n’imposent pas de policy gloutonne aux règles de progression.
 
 ### Porte C — Vision et expérience cible (P0 — GAME DESIGN)
 
@@ -71,13 +73,13 @@ Sortie C : direction Game Design validée avant toute sélection A/B/C.
 
 **E2 TODO :** si requis par D1, mapping déterministe/documenté `Training state → EF → Seuil → VMA → PhysiologyProfile`.
 
-**E3 TODO :** vérifier l'échelle Cost ↔ Reserve avant end-to-end. La réserve actuelle inclut une baseline expérimentale `race_length × 2 + floor(CTL / 50)` ; ne pas modifier `Charge <= EF → Cost = EF` sans décision de design.
+**E3 TODO :** vérifier l'échelle Cost ↔ Reserve avant end-to-end. La réserve actuelle inclut une baseline expérimentale `race_length × 2 + floor(CTL / 50)` ; ne pas modifier `Charge <= EF ↔ Cost = EF` sans décision de design.
 
 **E4 TODO :** analyse combinatoire légère D99 × upgrades sur pools accessibles, sans campagne massive ni changement de règle.
 
 ### Porte F — End-to-end et diagnostics (P1, après D/E)
 
-**F1 TODO :** fixer le cadre minimal de partie/horizon. **F2 TODO :** scénario déterministe Training → progression → profil → moteur Race V2 intégré. **F3 TODO :** comparer une policy Training risk-aware à la baseline technique. **F4 TODO :** instrumenter et mesurer la sensibilité Race (profils faibles/intermédiaires/forts). **F5 TODO :** diagnostic de 100–1 000 trajectoires, jamais équilibrage final.
+**F1 TODO :** fixer le cadre minimal de partie/horizon. **F2 TODO :** scénario déterministe Training → progression → profil → moteur Race V2 intégré. **F3 TODO :** comparer une policy Training risk-aware à la baseline technique. **F4 TODO :** instrumenter et mesurer la sensibilité Race (profils faibles/intermédiaires/forts). **F5 TODO :** diagnostic de 100–1 000 trajectoires, jamais un équilibrage final.
 
 ### Portes ultérieures
 
@@ -92,7 +94,7 @@ SPEC, blessures, surentraînement définitif, nutrition, save-a-die, personnages
 ```text
 A — preuves fiables ─┐
                      ├→ C — vision → D — cible Training → E — cohérence → F — end-to-end
-B — CURRENT protégé ┘                                             → G → H → I → LATER
+B — CURRENT protégé ┘                                            → G → H → I → LATER
 ```
 
 A et B avancent en parallèle. C s'appuie sur les preuves fiabilisées sans choisir le modèle. D dépend de C ; E dépend de D ; F dépend du mapping et de Cost ↔ Reserve ; G suit le premier end-to-end. Ne pas interpréter quantitativement Race avant E3.
@@ -105,10 +107,10 @@ A et B avancent en parallèle. C s'appuie sur les preuves fiabilisées sans choi
 | A2 | A | P0 | AUDIT | Revalider les REPORT | A1 | conclusions alignées sur preuves | DONE |
 | A3 | A | P0 | TECH | CI harness/JSON | A1 | régression F9 détectée | DONE |
 | B1 | B | P0 | TECH | `validate_plan` pur | — | règles indépendantes du sélecteur | DONE (PR #25) |
-| B2 | B | P0 | BUG | Trace EF répétées/redistribution | — | occurrence et origine distinctes | TODO |
+| B2 | B | P0 | BUG | Trace EF répétées/redistribution | — | occurrence et origine distinctes | DONE (PR #30) |
 | B3 | B | P0 | TEST | D99 table-driven | — | lignes CURRENT protégées ; 3 dés séparés | IN PROGRESS |
-| B4 | B | P0 | TECH | RNG injectable minimal | — | replay contrôlé d'un tour | TODO |
-| B5 | B | P0 | TEST | Transitions longitudinales | B1, B4 | transitions/invariants protégés | TODO |
+| B4 | B | P0 | TECH | RNG injectable minimal | — | replay contrôlé d'un tour | DONE (PR #29–#31) |
+| B5 | B | P0 | TEST | Transitions longitudinales | B1, B4 | transitions/invariants protégés | DONE (PR #31) |
 | C1 | C | P0 — GAME DESIGN | DESIGN | Piliers / expérience cible | A, B | direction courte validée | TODO |
 | C2 | C | P0 — GAME DESIGN | DESIGN | Critères A/B/C | C1 | critères comparables | TODO |
 | D1 | D | P0 — GAME DESIGN | DESIGN | Choisir Training A/B/C | C2 | décision intégrée au GDD | TODO |
@@ -123,4 +125,4 @@ A et B avancent en parallèle. C s'appuie sur les preuves fiabilisées sans choi
 
 ## 6. Prochain chantier recommandé
 
-Compléter B3 et brancher ses tests à la CI. Puis B2 (traçabilité des occurrences EF), B4/B5 (déterminisme et transitions CURRENT). Le prochain chantier Game Design reste C1 puis C2 ; aucune décision A/B/C ne doit les précéder.
+Terminer l'audit B3 et confirmer que ses tests couvrent toutes les lignes requises pour 4/5/6 dés en CI ; la convention à 3 dés reste **OPEN**. Ensuite, avancer C1 puis C2. Aucune décision Training A/B/C, aucun mapping Training → profil et aucune analyse quantitative Race ne doivent précéder ces portes et E3.
