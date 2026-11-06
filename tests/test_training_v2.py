@@ -1,7 +1,9 @@
 """Focused tests for the isolated Training V2 first playable turn."""
 import unittest
 
-from training_v2 import PlayerState, PhysiologyProfile, resolve_turn
+from training_v2 import (
+    PlayerState, PhysiologyProfile, RollResult, list_program_options, resolve_turn,
+)
 from training_v2.catalog import quality_cost
 
 
@@ -71,6 +73,40 @@ class TrainingV2TurnTests(unittest.TestCase):
         )
         self.assertEqual(result.turn, 1)
         self.assertEqual(state.turns_played, 1)
+
+    def test_program_options_include_multi_quality_choice_without_ranking(self):
+        state = PlayerState()
+        roll = RollResult(
+            raw_faces=(6, 6, 6, 6), final_values=(6, 6, 6, 6), tn=14.0
+        )
+        options = list_program_options(state, roll)
+        both = next(
+            option for option in options
+            if option.ef_indices == (0, 1)
+            and option.quality_indices == (2, 3)
+            and option.qualities == ("SEUIL", "VMA")
+        )
+        self.assertEqual(both.ef_energy, 12)
+        self.assertEqual(both.quality_energy, 12)
+        self.assertEqual(both.quality_costs, (("SEUIL", 3), ("VMA", 7)))
+        self.assertEqual(both.spec_remainder, 2)
+        self.assertGreater(len(options), 1)
+
+    def test_program_options_include_quality_to_spec_without_session(self):
+        state = PlayerState()
+        roll = RollResult(
+            raw_faces=(6, 6, 1, 1), final_values=(6, 6, 1, 1), tn=14.0
+        )
+        options = list_program_options(state, roll)
+        no_quality = next(option for option in options if not option.qualities)
+        self.assertEqual(no_quality.quality_energy, 2)
+        self.assertEqual(no_quality.spec_remainder, 2)
+
+    def test_program_options_reject_pool_mismatch(self):
+        state = PlayerState()
+        roll = RollResult(raw_faces=(6, 6), final_values=(6, 6), tn=14.0)
+        with self.assertRaises(ValueError):
+            list_program_options(state, roll)
 
     def test_bust_loses_assigned_quality_energy_and_does_not_adapt(self):
         state = PlayerState()
