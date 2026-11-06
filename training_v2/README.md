@@ -28,13 +28,13 @@ from training_v2 import PlayerState, roll_pool, resolve_turn
 
 player = PlayerState()
 roll = roll_pool(player)
-# Indices refer to roll.final_values, after the D99 retained-dice rule.
+# Allocate the lowest retained die to Quality; the others support EF.
+q_index = min(range(len(roll.final_values)),
+              key=lambda index: roll.final_values[index])
+ef_indices = tuple(i for i in range(len(roll.final_values)) if i != q_index)
+qualities = ("SEUIL",) if roll.final_values[q_index] >= 3 else ()
 result = resolve_turn(
-    player,
-    raw_faces=roll.raw_faces,
-    ef_indices=(0, 1),
-    quality_indices=(2, 3),
-    planned_qualities=("SEUIL",),
+    player, roll.raw_faces, ef_indices, (q_index,), qualities
 )
 print(result)
 print(player.profile, player.dice_pool, player.fatigue)
