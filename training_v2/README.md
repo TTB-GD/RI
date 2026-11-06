@@ -8,33 +8,32 @@ and dice progression untouched.
 
 ## Playable loop
 
-The turn is deliberately split into two phases:
-1. roll the persistent pool with roll_pool and inspect the retained values;
-2. choose a physical partition and quality programme, then call resolve_turn.
+The turn is deliberately split into three phases:
+1. roll the persistent pool with `roll_pool` and inspect the retained values;
+2. call `list_program_options(state, roll)` to enumerate every feasible
+   physical dice partition and affordable quality programme;
+3. choose one returned option and pass its indices and qualities to
+   `resolve_turn`.
 
-roll_and_resolve_turn also accepts a choose_program callback for a simple
-automated policy or a future player-facing interface.
+The option enumerator is deliberately neutral: it does not rank, score, or
+select a preferred programme. It includes the empty quality programme, so
+unspent Q energy can progress the experimental SPEC counter.
 
-The engine validates the allocation, checks that the selected quality
-programme is affordable, resolves risky quality sessions, applies successful
-local adaptations, updates EF / Quality / SPEC progression, applies the
-provisional pool milestones, and carries fatigue and player state into the
-next turn.
+`roll_and_resolve_turn` remains available for a callback-driven policy or
+future player-facing interface.
 
 Example:
 
 ~~~python
-from training_v2 import PlayerState, roll_pool, resolve_turn
+from training_v2 import PlayerState, roll_pool, list_program_options, resolve_turn
 
 player = PlayerState()
 roll = roll_pool(player)
-# Allocate the lowest retained die to Quality; the others support EF.
-q_index = min(range(len(roll.final_values)),
-              key=lambda index: roll.final_values[index])
-ef_indices = tuple(i for i in range(len(roll.final_values)) if i != q_index)
-qualities = ("SEUIL",) if roll.final_values[q_index] >= 3 else ()
+options = list_program_options(player, roll)
+choice = options[0]  # Replace with an explicit player choice.
 result = resolve_turn(
-    player, roll.raw_faces, ef_indices, (q_index,), qualities
+    player, roll.raw_faces,
+    choice.ef_indices, choice.quality_indices, choice.qualities,
 )
 print(result)
 print(player.profile, player.dice_pool, player.fatigue)
@@ -58,18 +57,15 @@ print(player.profile, player.dice_pool, player.fatigue)
   excess-quality term. Session-specific fatigue is zero in this first pass;
   it remains an explicit catalogue field for later calibration.
 - The initial catalogue contains Seuil and VMA. SL/SPEC session acquisition,
-  permanent portfolio rules, player-facing programme selection, and Race
-  conversion are deliberately not implemented in this slice.
+  permanent portfolio rules, and Race conversion are not implemented.
 
 ## Known limitations
 
-- Dice partition and programme selection are supplied by the caller; roll_pool
-  exposes retained values before that choice. No AI policy or UI is included.
+- This is a rules-engine API, not yet a player-facing UI or complete game.
 - Risk uses the largest die size as the risk-roll range, matching the B2
   harness convention. This remains experimental.
 - EF and Quality must both receive at least one retained die and EF energy
   must be at least Quality energy, matching the A/B2 partition experiment.
-- This first slice is a rules engine API, not yet a complete turn interface.
 
 Run tests:
 
