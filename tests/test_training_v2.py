@@ -36,6 +36,8 @@ class TrainingV2TurnTests(unittest.TestCase):
         from unittest.mock import patch
 
         state = PlayerState()
+        state.progression_ef = 150
+        state.ef_milestones_claimed = {10, 20, 35, 50, 70, 100, 120, 150}
         multidimensional = QualityOption(
             key="TEST", label="Test", profile_attribute="threshold",
             family="SEUIL", adaptations=(("threshold", 1), ("ef", 1)),
