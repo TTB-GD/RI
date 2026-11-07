@@ -18,9 +18,9 @@ def test_budget_splits_keep_compartments_distinct():
 
 def test_h_funds_sessions_from_matching_compartment():
     programmes = set(_catalogue_programs(4, 5))
-    assert (2, 0, 1, 4, 0) in programmes
+    assert (2, 0, 1, 4, 5) in programmes
     assert (0, 1, 1, 0, 9) not in programmes
-    assert (2, 1, 0, 4, 4) not in programmes
+    assert (2, 1, 1, 4, 9) not in programmes
 
 
 def test_direct_model_requires_each_die_to_fund_one_session():
