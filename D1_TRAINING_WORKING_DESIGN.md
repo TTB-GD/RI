@@ -22,6 +22,19 @@
 - Les séances apportent des adaptations physiologiques propres, éventuellement multidimensionnelles (EF / Seuil / VMA) ; paliers de progression croissants, bénéfices perceptibles à horizon de quelques tours.
 - Ne pas réutiliser sans examen les anciens seuils CTL et d'upgrade comme objectifs d'équilibrage du modèle futur.
 
+
+### C1 — direction validée
+
+**Validation utilisateur : 2026-11-07.** La vision et l'expérience cible sont confirmées. La fantaisie est celle d'un entraîneur qui construit une préparation en vue d'une course. Training construit le moteur physiologique ; Race l'exploite et le met à l'épreuve.
+
+- **Hiérarchie de valeur :** la qualité de la préparation prime sur le seul résultat de Race. La course reste indispensable comme épreuve et révélateur, mais une performance isolée ne doit pas effacer la cohérence et la qualité des décisions de préparation.
+- **Répartition cible :** environ 2/3 Training et 1/3 Race ; 60–90 minutes ; 2–4 joueurs ; 12–16 tours de Training comme horizon à tester, non comme règle définitive.
+- **Piliers :** construction d'un profil physiologique, arbitrage d'allocation et de composition, prise de risque volontaire, progression durable et exploitation en Race.
+- **Expérience :** le hasard crée contraintes et opportunités ; le joueur arbitre. Les profils doivent être différenciés et leurs conséquences observables en Race.
+- **Garde-fous :** une erreur isolée ne condamne pas toute la préparation ; pas de verrouillage précoce ; complexité issue des arbitrages plutôt que de l'accumulation de sous-systèmes ; coopération positive sans dépendance systématique entre joueurs.
+
+**Portée :** C1 fixe la direction de conception, pas les règles détaillées du Training ou de la Race. Les paramètres, systèmes et modèles A/B/C restent à comparer en C2/D1. Cette validation ne promeut aucune proposition D1 dans le GDD CURRENT.
+
 ## 2. Décisions D1 formulées et acceptées en conversation
 
 | ID | Décision de conception | Portée |
