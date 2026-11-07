@@ -1,6 +1,7 @@
-"""One complete, deterministic-testable Training V2 turn.
+"""One complete, deterministic-testable Training B turn.
 
-This is an experimental vertical slice, not a replacement for CURRENT.
+This is an experimental vertical slice on the selected replacement path for
+historical Training CURRENT.
 The player chooses a physical dice partition and a quality programme. The
 engine validates the allocation, resolves quality risk, applies progression,
 and persists the resulting player state.
