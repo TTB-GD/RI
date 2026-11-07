@@ -8,7 +8,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
-from .harness import DiceResolution, ProgramResolution, Session
+from .harness import DiceResolution, ProgramResolution
 
 
 @dataclass(frozen=True)
@@ -22,8 +22,9 @@ class Milestone:
     def __post_init__(self):
         if not self.key or not self.track or self.threshold <= 0:
             raise ValueError("milestone needs a key, track and positive threshold")
-        if any(value <= 0 for _, value in self.profile_gain):
-            raise ValueError("profile gains must be positive")
+        if any(not dimension or value <= 0
+               for dimension, value in self.profile_gain):
+            raise ValueError("profile gains need dimensions and positive values")
 
 
 @dataclass(frozen=True)
@@ -36,6 +37,8 @@ class TrainingRules:
         sizes = [size for size, _ in self.fatigue_limit_by_pool_size]
         if len(sizes) != len(set(sizes)) or any(size < 2 for size in sizes):
             raise ValueError("fatigue limits need unique pool sizes >= 2")
+        if any(limit < 0 for _, limit in self.fatigue_limit_by_pool_size):
+            raise ValueError("fatigue limits cannot be negative")
         if self.fatigue_floor < 0:
             raise ValueError("fatigue floor cannot be negative")
         keys = [milestone.key for milestone in self.milestones]
@@ -91,27 +94,29 @@ def advance_training_turn(
     if len(acquired_now) != len(set(acquired_now)):
         raise ValueError("duplicate acquisition request")
 
-    # Only completed sessions contribute. Failed/cancelled sessions are absent
-    # from ProgramResolution.completed by construction.
-    for session in program.completed:
-        if session.name not in state.acquired_options and session.name not in acquired_now:
+    # Every planned option (completed, failed or cancelled) must already be
+    # in the portfolio at the start of this turn. A new acquisition is usable
+    # only from a subsequent turn.
+    attempted = list(program.completed)
+    if program.failed is not None:
+        attempted.append(program.failed)
+    attempted.extend(program.cancelled)
+    for session in attempted:
+        if session.name not in state.acquired_options:
             raise ValueError(f"session option is not acquired: {session.name}")
 
     progression = _as_dict(state.progression)
     profile = _as_dict(state.profile)
     for session in program.completed:
         for track, points in session.adaptations:
-            if points < 0:
-                raise ValueError("session adaptations cannot be negative")
             progression[track] = progression.get(track, 0) + points
-        if session.global_progress < 0:
-            raise ValueError("global progression cannot be negative")
-        progression["GLOBAL"] = progression.get("GLOBAL", 0) + session.global_progress
+        progression["GLOBAL"] = (
+            progression.get("GLOBAL", 0) + session.global_progress
+        )
 
     reached = set(state.reached_milestones)
     eligible = set(state.eligible_options)
     newly_reached = []
-    # Stable order makes the output deterministic and reviewable.
     for milestone in rules.milestones:
         if milestone.key in reached:
             continue
@@ -122,8 +127,8 @@ def advance_training_turn(
                 profile[dimension] = profile.get(dimension, 0) + gain
             eligible.update(milestone.unlock_options)
 
-    # Newly unlocked options may be acquired immediately, but only by an
-    # explicit player-supplied choice.
+    # Acquisition is a separate, explicit player choice after milestone
+    # resolution. Newly acquired options become usable on the next turn.
     if not set(acquired_now).issubset(eligible):
         raise ValueError("cannot acquire an option that is not yet eligible")
     acquired = set(state.acquired_options)
