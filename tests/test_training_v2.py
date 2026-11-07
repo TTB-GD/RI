@@ -16,8 +16,8 @@ class TrainingV2TurnTests(unittest.TestCase):
         seuil = QUALITY_CATALOG["SEUIL"]
         vma = QUALITY_CATALOG["VMA"]
         self.assertEqual((seuil.family, seuil.load_type), ("SEUIL", "QUALITY"))
-        self.assertEqual(seuil.adaptations, (("threshold", 2),))
-        self.assertEqual(vma.adaptations, (("vma", 2),))
+        self.assertEqual(seuil.adaptations, (("threshold", 1),))
+        self.assertEqual(vma.adaptations, (("vma", 1),))
         self.assertEqual((seuil.energy_cost, seuil.rpe), (4, 4))
         self.assertEqual((vma.energy_cost, vma.rpe), (5, 5))
         self.assertEqual(vma.fatigue, 1)
@@ -101,11 +101,11 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(result.ef_energy, 12)
         self.assertEqual(result.quality_energy, 12)
         self.assertEqual(result.successful_qualities, ("SEUIL",))
-        self.assertEqual(state.profile.threshold, 10)
+        self.assertEqual(state.profile.threshold, 9)
         self.assertEqual(state.turns_played, 1)
         self.assertEqual(state.progression_ef, 12)
-        self.assertEqual(state.progression_q, 4)
-        self.assertEqual(state.progression_spec, 8)
+        self.assertEqual(state.progression_q, 3)
+        self.assertEqual(state.progression_spec, 9)
 
     def test_two_turns_reuse_the_updated_player_state(self):
         state = PlayerState()
@@ -123,7 +123,7 @@ class TrainingV2TurnTests(unittest.TestCase):
         # EF milestones 10 and 20 are both crossed over the two turns.
         self.assertEqual(state.profile.ef, 8)
         self.assertEqual(state.profile.threshold, 10)
-        self.assertEqual(state.profile.vma, 12)
+        self.assertEqual(state.profile.vma, 11)
         self.assertEqual(state.turns_played, 2)
 
     def test_roll_and_resolve_callback_selects_after_the_roll(self):
