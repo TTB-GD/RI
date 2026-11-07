@@ -39,7 +39,7 @@ Values are executable fixtures, not calibrated rules. Cost and RPE are independe
 
 - This is a one-player terminal prototype, not multiplayer or a graphical UI.
 - Initial profile is EF 6 / Seuil 8 / VMA 10.
-- Milestone thresholds and fatigue formula remain experimental B2 fixtures.
+- Volume milestones remain experimental B2 fixtures and add dice at selected thresholds; physiological EF gains come from successful EF sessions, not from a second automatic EF increase. Fatigue remains experimental.
 - SL, SPEC acquisition, permanent session portfolio, combinations, and Training-to-Race conversion are not implemented.
 - Risk uses the largest persistent die as the risk-roll range; this remains experimental.
 
