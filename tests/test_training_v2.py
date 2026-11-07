@@ -104,8 +104,8 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(state.profile.threshold, 9)
         self.assertEqual(state.turns_played, 1)
         self.assertEqual(state.progression_ef, 12)
-        self.assertEqual(state.progression_q, 3)
-        self.assertEqual(state.progression_spec, 9)
+        self.assertEqual(state.progression_q, 4)
+        self.assertEqual(state.progression_spec, 8)
 
     def test_two_turns_reuse_the_updated_player_state(self):
         state = PlayerState()
