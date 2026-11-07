@@ -52,6 +52,7 @@ def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramO
         raise ValueError("retained value is outside the pool's die range")
 
     options = []
+    seen_signatures = set()
     keys = tuple(SESSION_CATALOG)
     for blocks in _set_partitions(tuple(range(len(values)))):
         for session_keys in product(keys, repeat=len(blocks)):
@@ -95,6 +96,11 @@ def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramO
                 for item in allocations
                 if SESSION_CATALOG[item.session_key].load_type == "QUALITY"
             )
+            signature = tuple(sorted((item.session_key, item.energy) for item in allocations))
+            if signature in seen_signatures:
+                continue
+            seen_signatures.add(signature)
+            allocations.sort(key=lambda item: (item.session_key, item.energy, item.die_indices))
             options.append(ProgramOption(
                 allocations=tuple(allocations),
                 ef_energy=ef_energy,
