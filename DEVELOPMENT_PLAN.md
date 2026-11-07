@@ -97,8 +97,8 @@ SPEC, blessures, surentraînement définitif, nutrition, save-a-die, personnages
 
 ```text
 A — preuves fiables ─┐
-                     ├→ C — vision → D — cible Training → E — cohérence → F — end-to-end
-B — CURRENT protégé ┘                                            → G → H → I → LATER
+                     ├→ C1/C2 — vision et cible B → B — implémentation Training → E → F
+B — CURRENT audité ──┘                                                   → G → H → I → LATER
 ```
 
 A et B sont clôturées sur leur périmètre documenté. C1/C2 et D1 ont fixé la vision et la cible B. Le chemin critique est désormais : implémentation incrémentale de Training B → cohérence Training/Race (E) → boucle end-to-end (F). Les éléments CURRENT ne sont conservés que comme références historiques. Ne pas interpréter quantitativement Race avant E3.
