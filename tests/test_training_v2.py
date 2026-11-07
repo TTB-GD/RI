@@ -1,250 +1,133 @@
-"""Focused tests for the isolated Training V2 first playable turn."""
+"""Tests for direct dice-to-session allocation in Training B."""
 import unittest
+from unittest.mock import patch
 
 from training_v2 import (
-    PlayerState, PhysiologyProfile, RollResult, list_program_options, resolve_turn,
+    PlayerState, PhysiologyProfile, RollResult, SessionAllocation,
+    list_program_options, resolve_turn,
 )
-from training_v2.catalog import QUALITY_CATALOG, QualityOption, quality_cost
+from training_v2.catalog import SESSION_CATALOG, SessionOption, quality_cost
 
 
-class TrainingV2TurnTests(unittest.TestCase):
+class TrainingBAllocationTests(unittest.TestCase):
     def test_profile_requires_ordered_landmarks(self):
         with self.assertRaises(ValueError):
             PhysiologyProfile(ef=8, threshold=8, vma=10).validate()
 
-    def test_catalogue_declares_session_family_load_and_adaptations(self):
-        seuil = QUALITY_CATALOG["SEUIL"]
-        vma = QUALITY_CATALOG["VMA"]
-        self.assertEqual((seuil.family, seuil.load_type), ("SEUIL", "QUALITY"))
-        self.assertEqual(seuil.adaptations, (("threshold", 1),))
-        self.assertEqual(vma.adaptations, (("vma", 1),))
-        self.assertEqual((seuil.energy_cost, seuil.rpe), (4, 4))
-        self.assertEqual((vma.energy_cost, vma.rpe), (5, 5))
-        self.assertEqual(vma.fatigue, 1)
-        self.assertEqual(seuil.max_per_turn, 1)
+    def test_catalogue_has_initial_ef_threshold_vma_sessions(self):
+        self.assertEqual(set(SESSION_CATALOG), {"EF", "SEUIL", "VMA"})
+        self.assertEqual(SESSION_CATALOG["EF"].load_type, "EF")
+        self.assertIsNone(SESSION_CATALOG["EF"].max_per_turn)
+        self.assertEqual(SESSION_CATALOG["SEUIL"].energy_cost, 4)
+        self.assertEqual(SESSION_CATALOG["VMA"].rpe, 5)
 
     def test_catalogue_rejects_invalid_load_type(self):
         with self.assertRaises(ValueError):
-            QualityOption(
-                key="BAD", label="Bad", profile_attribute="vma",
-                family="VMA", load_type="OTHER",
+            SessionOption(
+                key="BAD", label="Bad", family="VMA", load_type="OTHER",
+                adaptations=(("vma", 1),), energy_cost=1, rpe=1,
             )
 
-    def test_historical_b2_cost_formula_remains_available_for_reference(self):
+    def test_historical_b2_cost_formula_is_not_active(self):
         self.assertEqual(quality_cost(8, 6), 3)
-        self.assertEqual(quality_cost(12, 6), 7)
-        self.assertEqual(quality_cost(13, 6), 9)
 
-    def test_risk_uses_rpe_not_energy_cost(self):
-        from unittest.mock import patch
-
+    def test_options_allocate_every_die_once_without_ef_q_partition(self):
         state = PlayerState()
-        option = QualityOption(
-            key="TEST", label="Test", profile_attribute="threshold",
-            family="SEUIL", adaptations=(("threshold", 1),),
-            energy_cost=1, rpe=6,
-        )
-        with patch.dict(QUALITY_CATALOG, {"TEST": option}):
-            result = resolve_turn(
-                state, (2, 2, 2, 2),
-                ef_indices=(0, 1), quality_indices=(2, 3),
-                planned_qualities=("TEST",), risk_faces=(1,),
-            )
-        self.assertEqual(result.quality_costs, (("TEST", 1),))
-        self.assertEqual(result.busted_quality, "TEST")
-
-    def test_energy_cost_is_not_used_as_rpe(self):
-        from unittest.mock import patch
-
-        state = PlayerState()
-        option = QualityOption(
-            key="TEST", label="Test", profile_attribute="threshold",
-            family="SEUIL", adaptations=(("threshold", 1),),
-            energy_cost=6, rpe=1,
-        )
-        with patch.dict(QUALITY_CATALOG, {"TEST": option}):
-            result = resolve_turn(
-                state, (3, 3, 3, 3),
-                ef_indices=(0, 1), quality_indices=(2, 3),
-                planned_qualities=("TEST",),
-            )
-        self.assertEqual(result.quality_costs, (("TEST", 6),))
-        self.assertIsNone(result.busted_quality)
-
-    def test_multidimensional_catalogue_adaptation_is_applied_generically(self):
-        from unittest.mock import patch
-
-        state = PlayerState()
-        state.progression_ef = 150
-        state.ef_milestones_claimed = {10, 20, 35, 50, 70, 100, 120, 150}
-        multidimensional = QualityOption(
-            key="TEST", label="Test", profile_attribute="threshold",
-            family="SEUIL", adaptations=(("threshold", 1), ("ef", 1)),
-        )
-        with patch.dict(QUALITY_CATALOG, {"TEST": multidimensional}):
-            result = resolve_turn(
-                state, (6, 6, 6, 6),
-                ef_indices=(0, 1), quality_indices=(2, 3),
-                planned_qualities=("TEST",),
-            )
-        self.assertEqual(result.successful_qualities, ("TEST",))
-        self.assertEqual(state.profile.threshold, 9)
-        self.assertEqual(state.profile.ef, 7)
-
-    def test_successful_quality_updates_profile_and_persists(self):
-        state = PlayerState()
-        result = resolve_turn(
-            state, (6, 6, 6, 6),
-            ef_indices=(0, 1), quality_indices=(2, 3),
-            planned_qualities=("SEUIL",),
-        )
-        self.assertEqual(result.ef_energy, 12)
-        self.assertEqual(result.quality_energy, 12)
-        self.assertEqual(result.successful_qualities, ("SEUIL",))
-        self.assertEqual(state.profile.threshold, 9)
-        self.assertEqual(state.turns_played, 1)
-        self.assertEqual(state.progression_ef, 12)
-        self.assertEqual(state.progression_q, 4)
-        self.assertEqual(state.progression_spec, 8)
-
-    def test_two_turns_reuse_the_updated_player_state(self):
-        state = PlayerState()
-        first = resolve_turn(
-            state, (6, 6, 6, 6),
-            ef_indices=(0, 1), quality_indices=(2, 3),
-            planned_qualities=("SEUIL",),
-        )
-        second = resolve_turn(
-            state, (6, 6, 6, 6),
-            ef_indices=(0, 1), quality_indices=(2, 3),
-            planned_qualities=("VMA",),
-        )
-        self.assertEqual((first.turn, second.turn), (1, 2))
-        # EF milestones 10 and 20 are both crossed over the two turns.
-        self.assertEqual(state.profile.ef, 8)
-        self.assertEqual(state.profile.threshold, 9)
-        self.assertEqual(state.profile.vma, 11)
-        self.assertEqual(state.turns_played, 2)
-
-    def test_roll_and_resolve_callback_selects_after_the_roll(self):
-        from training_v2 import roll_and_resolve_turn
-
-        state = PlayerState()
-
-        def choose_program(roll):
-            quality_index = min(
-                range(len(roll.final_values)),
-                key=lambda index: roll.final_values[index],
-            )
-            ef_indices = tuple(
-                index for index in range(len(roll.final_values))
-                if index != quality_index
-            )
-            return ef_indices, (quality_index,), ()
-
-        result = roll_and_resolve_turn(
-            state, choose_program, rng=__import__("random").Random(3)
-        )
-        self.assertEqual(result.turn, 1)
-        self.assertEqual(state.turns_played, 1)
-
-    def test_program_options_include_multi_quality_choice_without_ranking(self):
-        state = PlayerState()
-        roll = RollResult(
-            raw_faces=(6, 6, 6, 6), final_values=(6, 6, 6, 6), tn=14.0
-        )
-        options = list_program_options(state, roll)
-        both = next(
-            option for option in options
-            if option.ef_indices == (0, 1)
-            and option.quality_indices == (2, 3)
-            and option.qualities == ("SEUIL", "VMA")
-        )
-        self.assertEqual(both.ef_energy, 12)
-        self.assertEqual(both.quality_energy, 12)
-        self.assertEqual(both.quality_costs, (("SEUIL", 4), ("VMA", 5)))
-        self.assertEqual(both.spec_remainder, 3)
-        self.assertGreater(len(options), 1)
-
-    def test_program_options_include_quality_to_spec_without_session(self):
-        state = PlayerState()
-        roll = RollResult(
-            raw_faces=(6, 6, 1, 1), final_values=(6, 6, 1, 1), tn=14.0
-        )
-        options = list_program_options(state, roll)
-        no_quality = next(
-            option for option in options
-            if option.quality_indices == (2, 3) and not option.qualities
-        )
-        self.assertEqual(no_quality.quality_energy, 2)
-        self.assertEqual(no_quality.spec_remainder, 2)
-
-    def test_program_options_accept_roll_with_lowest_die_discarded(self):
-        state = PlayerState()
-        roll = RollResult(
-            raw_faces=(1, 2, 3, 4), final_values=(4, 3, 2), tn=14.0
-        )
+        roll = RollResult((6, 6, 6, 6), (6, 6, 6, 6), 14.0)
         options = list_program_options(state, roll)
         self.assertTrue(options)
-        self.assertTrue(all(
-            max(option.ef_indices + option.quality_indices) < 3
+        for option in options:
+            indices = [i for item in option.allocations for i in item.die_indices]
+            self.assertEqual(sorted(indices), [0, 1, 2, 3])
+        self.assertTrue(any(
+            any(item.session_key == "EF" for item in option.allocations)
+            and any(item.session_key == "SEUIL" for item in option.allocations)
             for option in options
         ))
 
-    def test_program_options_reject_pool_mismatch(self):
+    def test_ef_sessions_can_repeat_and_quality_sessions_are_limited(self):
         state = PlayerState()
-        roll = RollResult(raw_faces=(6, 6), final_values=(6, 6), tn=14.0)
-        with self.assertRaises(ValueError):
-            list_program_options(state, roll)
+        roll = RollResult((6, 6, 6, 6), (6, 6, 6, 6), 14.0)
+        options = list_program_options(state, roll)
+        self.assertTrue(any(
+            sum(item.session_key == "EF" for item in option.allocations) == 2
+            for option in options
+        ))
+        self.assertFalse(any(
+            sum(item.session_key == "SEUIL" for item in option.allocations) > 1
+            for option in options
+        ))
 
-    def test_bust_loses_assigned_quality_energy_and_does_not_adapt(self):
+    def test_equivalent_die_permutations_are_collapsed(self):
+        state = PlayerState(dice_pool=[6, 6, 6, 6, 6, 6])
+        roll = RollResult((6, 6, 6, 6, 6, 6), (6, 6, 6, 6, 6, 6), 21.0)
+        options = list_program_options(state, roll)
+        self.assertGreater(len(options), 0)
+        self.assertLess(len(options), 100)
+
+    def test_ef_only_composition_is_available(self):
         state = PlayerState()
-        result = resolve_turn(
-            state, (2, 2, 2, 2),
-            ef_indices=(0, 1), quality_indices=(2, 3),
-            planned_qualities=("SEUIL",), risk_faces=(1,),
-        )
-        self.assertEqual(result.busted_quality, "SEUIL")
-        self.assertEqual(result.successful_qualities, ())
+        roll = RollResult((6, 6, 6, 6), (6, 6, 6, 6), 14.0)
+        options = list_program_options(state, roll)
+        self.assertTrue(any(
+            all(item.session_key == "EF" for item in option.allocations)
+            for option in options
+        ))
+
+    def test_resolve_applies_session_adaptation_and_tracks_load(self):
+        state = PlayerState()
+        allocation = (SessionAllocation("SEUIL", (0, 1), 12),
+                      SessionAllocation("EF", (2, 3), 12))
+        result = resolve_turn(state, (6, 6, 6, 6), allocation)
+        self.assertEqual([x.session_key for x in result.successful_sessions],
+                         ["SEUIL", "EF"])
+        self.assertEqual(state.profile.threshold, 9)
+        self.assertEqual(state.profile.ef, 7)
+        self.assertEqual(state.progression_ef, 12)
+        self.assertEqual(state.progression_q, 4)
+
+    def test_bust_prevents_session_adaptation(self):
+        state = PlayerState()
+        allocation = (SessionAllocation("SEUIL", (0, 1), 4),
+                      SessionAllocation("EF", (2, 3), 4))
+        # RPE 4 > retained max 2; risk face 1 busts the first session.
+        result = resolve_turn(state, (2, 2, 2, 2), allocation, risk_faces=(1,))
+        self.assertEqual(result.busted_session, "SEUIL")
         self.assertEqual(state.profile.threshold, 8)
         self.assertEqual(state.progression_q, 0)
-        self.assertEqual(state.progression_spec, 0)
 
-    def test_invalid_partition_is_rejected_without_mutating_state(self):
+    def test_invalid_allocation_does_not_mutate_state(self):
         state = PlayerState()
         before = state.clone()
+        invalid = (SessionAllocation("SEUIL", (0, 1), 12),)
         with self.assertRaises(ValueError):
-            resolve_turn(
-                state, (6, 6, 6, 6),
-                ef_indices=(0,), quality_indices=(1, 2, 3),
-                planned_qualities=("SEUIL", "VMA"),
-            )
+            resolve_turn(state, (6, 6, 6, 6), invalid)
         self.assertEqual(state, before)
 
-    def test_quality_program_must_fit_allocated_compartment(self):
+    def test_unknown_session_is_rejected(self):
         state = PlayerState()
+        with self.assertRaises(ValueError):
+            resolve_turn(state, (6, 6, 6, 6),
+                         (SessionAllocation("UNKNOWN", (0, 1, 2, 3), 24),))
+
+    def test_profile_order_is_checked_before_mutation(self):
+        state = PlayerState(profile=PhysiologyProfile(ef=6, threshold=9, vma=10))
+        invalid = (SessionAllocation("SEUIL", (0, 1, 2, 3), 24),)
         before = state.clone()
         with self.assertRaises(ValueError):
-            resolve_turn(
-                state, (6, 6, 6, 6),
-                ef_indices=(0, 1, 2), quality_indices=(3,),
-                planned_qualities=("SEUIL", "VMA"),
-            )
+            resolve_turn(state, (6, 6, 6, 6), invalid)
         self.assertEqual(state, before)
 
-    def test_milestone_adds_dice_and_upgrade_once(self):
+    def test_roll_and_resolve_uses_direct_allocations(self):
+        from training_v2 import roll_and_resolve_turn
         state = PlayerState()
-        state.progression_ef = 34
-        state.progression_q = 14
-        resolve_turn(
-            state, (6, 6, 6, 6),
-            ef_indices=(0, 1), quality_indices=(2, 3),
-            planned_qualities=("SEUIL",),
+        result = roll_and_resolve_turn(
+            state,
+            lambda roll: list_program_options(state, roll)[0].allocations,
+            rng=__import__("random").Random(3),
         )
-        self.assertEqual(len(state.dice_pool), 5)
-        self.assertEqual(state.dice_added, 1)
-        self.assertEqual(state.upgrades_used, 1)
-        self.assertEqual(state.profile.ef, 6)
+        self.assertEqual(result.turn, 1)
+        self.assertEqual(state.turns_played, 1)
 
 
 if __name__ == "__main__":

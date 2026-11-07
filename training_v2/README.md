@@ -1,96 +1,50 @@
-# Training B — first playable turn and catalogue foundation
+# Training B — direct dice-to-session allocation
 
-**EXPERIMENTAL — target architecture selected on 2026-11-07.** Training CURRENT is a historical reference scheduled for retirement; this package is the active implementation path.
-
-This package is the first executable vertical slice of Training B. It remains
-isolated from the historical CURRENT implementation; no compatibility layer
-or hybrid dependency is introduced.
+**EXPERIMENTAL — target architecture selected on 2026-11-07.** Training CURRENT is historical and is not a compatibility target.
 
 ## Playable loop
 
-The turn is deliberately split into three phases:
-1. roll the persistent pool with `roll_pool` and inspect the retained values;
-2. call `list_program_options(state, roll)` to enumerate every feasible
-   physical dice partition and affordable quality programme;
-3. choose one returned option and pass its indices and qualities to
-   `resolve_turn`.
+1. Roll the persistent dice pool.
+2. Enumerate feasible compositions from the session catalogue.
+3. Assign every retained die to exactly one session occurrence.
+4. Choose a composition; the engine resolves risk, adaptations, progression and fatigue.
 
-The option enumerator is deliberately neutral: it does not rank, score, or
-select a preferred programme. It includes the empty quality programme, so
-unspent Q energy can progress the experimental SPEC counter.
+There is no separate EF-dice / Quality-dice partition. Each session declares its family, load type, fixed adaptations, energy cost, RPE, specific fatigue and optional per-turn occurrence limit. The player can repeat EF sessions; Seuil and VMA are limited to one occurrence each in this initial fixture. The option enumerator does not rank or select a composition.
 
-## Interactive console
-
-Run a persistent one-player session from the repository root:
+Run the console from the repository root:
 
 ~~~bash
 python -m training_v2
 ~~~
 
-Each turn displays the retained roll and all feasible programmes. Enter the
-number of a programme to resolve it; press Enter to continue with the same
-player state, or enter `q` to stop. The console is a thin interface over the
-engine and introduces no automatic programme selection.
+## Initial catalogue fixtures — EXPERIMENTAL
 
-Example:
+| Session | Load | Cost | RPE | Adaptation | Fatigue | Per turn |
+|---|---|---:|---:|---|---:|---:|
+| EF fondamentale | EF | 2 | 2 | EF +1 | 0 | No general cap |
+| Tempo au seuil | Quality | 4 | 4 | Seuil +1 | 0 | 1 |
+| Fractionné VMA | Quality | 5 | 5 | VMA +1 | 1 | 1 |
 
-~~~python
-from training_v2 import PlayerState, roll_pool, list_program_options, resolve_turn
+Values are executable fixtures, not calibrated rules. Cost and RPE are independent fields. Adaptations are fixed per successful session and are not multiplied by energy.
 
-player = PlayerState()
-roll = roll_pool(player)
-options = list_program_options(player, roll)
-choice = options[0]  # Replace with an explicit player choice.
-result = resolve_turn(
-    player, roll.raw_faces,
-    choice.ef_indices, choice.quality_indices, choice.qualities,
-)
-print(result)
-print(player.profile, player.dice_pool, player.fatigue)
-~~~
+## Accounting retained provisionally
 
-## Experimental boundaries made explicit
-
-- Initial profile: EF 6 / Seuil 8 / VMA 10.
-- Quality cost and progression thresholds reproduce the B2 experimental
-  harness, not a final calibration.
-- EF milestones: 10, 20, 35, 50, 70, 100, 120, 150. At 35 and 100, a d6 is
-  added instead of raising EF; other milestones raise EF by one only while
-  EF remains below Seuil.
-- Quality milestones: 7, 15, 25, 35, 50, 65, 80, 100. The milestones 15,
-  35, 65 and 100 grant one pool upgrade, with a four-upgrade ceiling.
-- Session entries now declare independent experimental energy cost and RPE.
-  The cost is paid from the allocated quality energy; RPE alone determines
-  whether the session enters the risk/bust check.
-- The initial Seuil/VMA fixtures use illustrative D1-S4 values (cost/RPE 4/4
-  and 5/5); these values are not calibrated. Adaptations remain +1 per successful session.
-- Successful Seuil/VMA sessions apply their fixed catalogue adaptations.
-- Unassigned Quality energy advances the SPEC progression counter. Quality
-  energy assigned to a session that busts is lost. This is the B2
-  Q_SPENT_SPEC accounting variant.
-- Fatigue uses the existing experimental blackjack curve plus the D1-F3
-  excess-quality term. Session-specific fatigue is zero in this first pass;
-  it remains an explicit catalogue field for later calibration.
-- The initial quality catalogue contains Seuil and VMA. Each entry now declares
-  its family, load type, fixed profile adaptations, specific fatigue and
-  per-turn limit. The engine applies the declared adaptations generically,
-  including multidimensional entries.
-- The historical B2 formula remains available only as a reference helper;
-  catalogue sessions now use fixed experimental costs and independent RPE.
-  Selectable EF sessions, SL/SPEC acquisition, permanent portfolio rules,
-  and Race conversion are not implemented yet.
+- Energy assigned to EF-load sessions advances EF volume progression.
+- Successful Quality sessions advance Q progression by their catalogue energy cost.
+- The unused energy assigned to Quality sessions continues to feed the experimental SPEC counter. SPEC itself remains OPEN and this accounting is temporary.
+- A bust stops subsequent session resolution; the busted session receives no adaptation or progression.
+- Fatigue still uses the existing experimental blackjack term, the excess Quality-over-EF term, and specific session fatigue. Calibration is deferred.
 
 ## Known limitations
 
-- The console is a one-player terminal playtest interface, not a graphical UI
-  or complete multiplayer game.
-- Risk uses the largest die size as the risk-roll range, matching the B2
-  harness convention. This remains experimental.
-- EF and Quality must both receive at least one retained die and EF energy
-  must be at least Quality energy, matching the A/B2 partition experiment.
+- This is a one-player terminal prototype, not multiplayer or a graphical UI.
+- Initial profile is EF 6 / Seuil 8 / VMA 10.
+- Volume milestones remain experimental B2 fixtures and add dice at selected thresholds; physiological EF gains come from successful EF sessions, not from a second automatic EF increase. Fatigue remains experimental.
+- SL, SPEC acquisition, permanent session portfolio, combinations, and Training-to-Race conversion are not implemented.
+- Risk uses the largest persistent die as the risk-roll range; this remains experimental.
 
 Run tests:
 
 ~~~bash
-python -m unittest discover -s tests -p 'test_training_v2.py' -v
+python -m unittest discover -s tests -p 'test_training_v2*.py' -v
 ~~~

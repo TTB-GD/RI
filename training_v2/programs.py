@@ -1,33 +1,47 @@
-"""Enumerate player-selectable Training B programmes after a roll.
-
-The module exposes feasible choices without selecting or ranking a preferred
-programme. Costs and progression thresholds remain experimental B2 values.
-"""
+"""Enumerate direct dice-to-session allocations for Training B."""
+from __future__ import annotations
 from dataclasses import dataclass
-from itertools import combinations
+from itertools import product
 
-from .catalog import QUALITY_CATALOG, projected_profile
-from .engine import RollResult
+from .catalog import SESSION_CATALOG, projected_profile
 from .state import PlayerState
 
 
 @dataclass(frozen=True)
+class SessionAllocation:
+    session_key: str
+    die_indices: tuple[int, ...]
+    energy: int
+
+
+@dataclass(frozen=True)
 class ProgramOption:
-    ef_indices: tuple[int, ...]
-    quality_indices: tuple[int, ...]
+    allocations: tuple[SessionAllocation, ...]
     ef_energy: int
     quality_energy: int
-    qualities: tuple[str, ...]
-    quality_costs: tuple[tuple[str, int], ...]
+    session_costs: tuple[tuple[str, int], ...]
     spec_remainder: int
 
 
-def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramOption, ...]:
-    """Return every affordable physical partition/program for this roll.
+def _set_partitions(items):
+    """Yield each set partition once; blocks are ordered by first index."""
+    if not items:
+        yield ()
+        return
+    first, *rest = items
+    for partition in _set_partitions(rest):
+        yield ((first,),) + partition
+        for index in range(len(partition)):
+            blocks = list(partition)
+            blocks[index] = (first,) + blocks[index]
+            yield tuple(blocks)
 
-    An empty quality programme is included, allowing the player to route all Q
-    energy to the experimental SPEC counter. Profile legality is evaluated from
-    the fixed adaptations declared by each selected catalogue entry.
+
+def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramOption, ...]:
+    """Assign every retained die to exactly one selectable session occurrence.
+
+    EF can repeat without a general cap. Seuil and VMA are single-occurrence
+    entries in this first catalogue. No EF/Q partition or ranking is applied.
     """
     values = tuple(roll.final_values)
     if len(roll.raw_faces) != len(state.dice_pool):
@@ -37,44 +51,61 @@ def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramO
     if any(value < 1 or value > max(state.dice_pool) for value in values):
         raise ValueError("retained value is outside the pool's die range")
 
-    names = tuple(QUALITY_CATALOG)
     options = []
-    indices = range(len(values))
-
-    for quality_count in range(1, len(values)):
-        for quality_indices in combinations(indices, quality_count):
-            quality_set = set(quality_indices)
-            ef_indices = tuple(i for i in indices if i not in quality_set)
-            q_indices = tuple(quality_indices)
-            ef_energy = sum(values[i] for i in ef_indices)
-            quality_energy = sum(values[i] for i in q_indices)
-            if ef_energy < quality_energy:
+    seen_signatures = set()
+    keys = tuple(SESSION_CATALOG)
+    for blocks in _set_partitions(tuple(range(len(values)))):
+        for session_keys in product(keys, repeat=len(blocks)):
+            counts = {key: session_keys.count(key) for key in keys}
+            if any(
+                SESSION_CATALOG[key].max_per_turn is not None
+                and count > SESSION_CATALOG[key].max_per_turn
+                for key, count in counts.items()
+            ):
                 continue
 
-            affordable = []
-            costs_by_name = {}
-            for name in names:
-                option = QUALITY_CATALOG[name]
-                costs_by_name[name] = option.energy_cost
-                affordable.append(name)
+            allocations = []
+            affordable = True
+            for block, key in zip(blocks, session_keys):
+                energy = sum(values[index] for index in block)
+                if energy < SESSION_CATALOG[key].energy_cost:
+                    affordable = False
+                    break
+                allocations.append(SessionAllocation(key, tuple(block), energy))
+            if not affordable:
+                continue
 
-            for count in range(len(affordable) + 1):
-                for qualities in combinations(affordable, count):
-                    costs = tuple((name, costs_by_name[name]) for name in qualities)
-                    total_cost = sum(cost for _, cost in costs)
-                    if total_cost > quality_energy:
-                        continue
-                    projected = projected_profile(state.profile, qualities)
-                    if not projected["ef"] < projected["threshold"] < projected["vma"]:
-                        continue
-                    options.append(ProgramOption(
-                        ef_indices=ef_indices,
-                        quality_indices=q_indices,
-                        ef_energy=ef_energy,
-                        quality_energy=quality_energy,
-                        qualities=tuple(qualities),
-                        quality_costs=costs,
-                        spec_remainder=quality_energy - total_cost,
-                    ))
+            projected = projected_profile(state.profile, session_keys)
+            if not projected["ef"] < projected["threshold"] < projected["vma"]:
+                continue
 
+            ef_energy = sum(
+                item.energy for item in allocations
+                if SESSION_CATALOG[item.session_key].load_type == "EF"
+            )
+            quality_energy = sum(
+                item.energy for item in allocations
+                if SESSION_CATALOG[item.session_key].load_type == "QUALITY"
+            )
+            costs = tuple(
+                (item.session_key, SESSION_CATALOG[item.session_key].energy_cost)
+                for item in allocations
+            )
+            spec_remainder = sum(
+                item.energy - SESSION_CATALOG[item.session_key].energy_cost
+                for item in allocations
+                if SESSION_CATALOG[item.session_key].load_type == "QUALITY"
+            )
+            signature = tuple(sorted((item.session_key, item.energy) for item in allocations))
+            if signature in seen_signatures:
+                continue
+            seen_signatures.add(signature)
+            allocations.sort(key=lambda item: (item.session_key, item.energy, item.die_indices))
+            options.append(ProgramOption(
+                allocations=tuple(allocations),
+                ef_energy=ef_energy,
+                quality_energy=quality_energy,
+                session_costs=costs,
+                spec_remainder=spec_remainder,
+            ))
     return tuple(options)

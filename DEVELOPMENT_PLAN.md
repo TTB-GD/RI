@@ -133,6 +133,6 @@ A et B sont clôturées sur leur périmètre documenté. C1/C2 et D1 ont fixé l
 
 **B2 — coût énergétique distinct du RPE.** Les séances Seuil/VMA portent maintenant un coût énergétique fixe et un RPE indépendant. Le coût est payé sur l'énergie allouée ; le RPE pilote l'entrée dans le test de risque/bust. Les valeurs du catalogue sont des fixtures D1-S4 expérimentales, non calibrées.
 
-**B3 — séances EF sélectionnables et allocation par séances.** Remplacer progressivement la logique où EF est un simple compartiment de progression par une composition de séances du catalogue. Le socle initial doit proposer EF, Seuil et VMA ; les séances EF peuvent être répétées, tandis que les limites par tour restent optionnelles et justifiées par entrée. Ne pas ajouter les combos. SL/SPEC, acquisitions permanentes et fatigue D1 suivront par incréments dédiés.
+**B3 EN COURS — allocation directe des dés aux séances.** Remplacer la partition EF/Qualité par une composition où chaque dé conservé finance une occurrence du catalogue. Socle EF/Seuil/VMA, répétition EF ouverte, limites de répétition spécifiques par entrée. Aucun combo. Les fixtures de coût, RPE, adaptations et fatigue restent expérimentales. SL/SPEC, acquisitions permanentes et conversion Race suivent dans des incréments distincts.
 
 La convention D99 à 3 dés reste une question historique/OPEN hors du premier chemin B ; elle ne bloque pas le prototype B.
