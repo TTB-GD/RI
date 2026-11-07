@@ -68,6 +68,15 @@ def blackjack_fatigue(energy: int, tn: float) -> int:
     return {-4: -1, -5: -1, -6: -2, -7: -2, -8: -3, -9: -5}.get(offset, -8)
 
 
+def _reserve_index(pool_sizes):
+    return min(range(len(pool_sizes)), key=lambda i: (pool_sizes[i], -i))
+
+
+def _active_sizes(pool_sizes):
+    reserve_index = _reserve_index(pool_sizes)
+    return tuple(size for i, size in enumerate(pool_sizes) if i != reserve_index)
+
+
 def resolve_dice_action(
     pool_sizes: Iterable[int],
     active_values: Iterable[int],
@@ -78,19 +87,15 @@ def resolve_dice_action(
     *,
     overtraining: bool = False,
 ) -> DiceResolution:
-    """Resolve an explicit Keep/Reroll/Add/Add+Reroll player choice.
-
-    active_values are the initial n-1 active dice results. The reserve result
-    is only consumed by Add or Add+Reroll. A reroll result is supplied by the
-    caller so scenarios remain deterministic and testable.
-    """
+    """Resolve an explicit Keep/Reroll/Add/Add+Reroll player choice."""
     sizes = tuple(pool_sizes)
+    tn = pool_tn(sizes)
+    active_sizes = _active_sizes(sizes)
     active = list(active_values)
     if len(active) != len(sizes) - 1:
         raise ValueError("initial roll must contain n-1 active dice")
-    if any(v < 1 or v > size for v, size in zip(active, _active_sizes(sizes))):
+    if any(v < 1 or v > size for v, size in zip(active, active_sizes)):
         raise ValueError("active die result outside its die range")
-    tn = pool_tn(sizes)
     if action not in {"keep", "reroll", "add", "add+reroll"}:
         raise ValueError("unknown dice action")
     if overtraining and action in {"add", "add+reroll"}:
@@ -100,14 +105,14 @@ def resolve_dice_action(
             raise ValueError("reroll action requires a valid active die index")
         if rerolled_value is None:
             raise ValueError("reroll action requires a rerolled value")
-        if not 1 <= rerolled_value <= _active_sizes(sizes)[reroll_index]:
+        if not 1 <= rerolled_value <= active_sizes[reroll_index]:
             raise ValueError("rerolled value outside die range")
         active[reroll_index] = rerolled_value
     elif reroll_index is not None or rerolled_value is not None:
         raise ValueError("reroll data supplied for an action without reroll")
 
     if action in {"add", "add+reroll"}:
-        reserve_size = _reserve_size(sizes)
+        reserve_size = sizes[_reserve_index(sizes)]
         if not 1 <= reserve_value <= reserve_size:
             raise ValueError("reserve result outside its die range")
         active.append(reserve_value)
@@ -117,36 +122,26 @@ def resolve_dice_action(
                           blackjack_fatigue(energy, tn))
 
 
-def _active_sizes(pool_sizes):
-    # The reserve is the smallest die; ties leave the last die in reserve,
-    # matching the current pool convention.
-    reserve_index = min(range(len(pool_sizes)),
-                        key=lambda i: (pool_sizes[i], -i))
-    return tuple(size for i, size in enumerate(pool_sizes) if i != reserve_index)
-
-
-def _reserve_size(pool_sizes):
-    reserve_index = min(range(len(pool_sizes)),
-                        key=lambda i: (pool_sizes[i], -i))
-    return pool_sizes[reserve_index]
-
-
 def resolve_program(
     ef_budget: int,
     quality_budget: int,
     planned_sessions: Iterable[Session],
     bust_index: int | None = None,
+    *,
+    total_energy: int,
 ) -> ProgramResolution:
     """Resolve a player-composed H programme after the dice phase.
 
-    On bust, the indexed risky session fails. Later risky sessions are
-    cancelled, while later safe sessions remain completable, matching the
-    legacy session-resolution convention. No automatic EF redistribution
-    occurs in this prototype.
+    The EF and Quality budgets must partition no more than the final dice
+    energy. On bust, the indexed risky session fails. Later risky sessions
+    are cancelled, while later safe sessions remain completable, matching
+    the legacy session-resolution convention. No automatic redistribution.
     """
     sessions = tuple(planned_sessions)
-    if ef_budget < 0 or quality_budget < 0:
-        raise ValueError("budgets cannot be negative")
+    if ef_budget < 0 or quality_budget < 0 or total_energy < 0:
+        raise ValueError("energy and budgets cannot be negative")
+    if ef_budget + quality_budget > total_energy:
+        raise ValueError("EF and Quality budgets exceed final dice energy")
     if bust_index is not None:
         if not 0 <= bust_index < len(sessions):
             raise IndexError("bust_index outside planned programme")
