@@ -1,9 +1,9 @@
 """Enumerate direct dice-to-session allocations for Training B."""
+from __future__ import annotations
 from dataclasses import dataclass
 from itertools import product
 
 from .catalog import SESSION_CATALOG, projected_profile
-from .engine import RollResult
 from .state import PlayerState
 
 
