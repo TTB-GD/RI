@@ -172,7 +172,7 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
             setattr(state.profile, attribute, getattr(state.profile, attribute) + amount)
 
     _apply_milestones(state, old_ef, old_q)
-    _, fatigue_blackjack = energy_and_fatigue(sum(values), pool_tn(make_pool(state.dice_pool)))
+    _, fatigue_blackjack = energy_and_fatigue(sum(values), tn)
     fatigue_excess = math.ceil(max(0, quality_energy - ef_energy) / 2)
     state.fatigue = max(
         0, state.fatigue + fatigue_blackjack + fatigue_excess + fatigue_specific
@@ -180,7 +180,7 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
     state.turns_played += 1
     return TurnResult(
         turn=state.turns_played, raw_faces=raw_faces, final_values=values,
-        tn=pool_tn(make_pool(state.dice_pool)), allocations=allocations,
+        tn=tn, allocations=allocations,
         successful_sessions=tuple(successful), busted_session=busted,
         ef_energy=ef_energy, quality_energy=quality_energy,
         session_costs=costs, progression_spec_gained=spec_gained,
