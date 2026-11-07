@@ -64,7 +64,7 @@ class TrainingV2TurnTests(unittest.TestCase):
         )
         with patch.dict(QUALITY_CATALOG, {"TEST": option}):
             result = resolve_turn(
-                state, (2, 2, 2, 2),
+                state, (3, 3, 3, 3),
                 ef_indices=(0, 1), quality_indices=(2, 3),
                 planned_qualities=("TEST",),
             )
@@ -88,7 +88,7 @@ class TrainingV2TurnTests(unittest.TestCase):
                 planned_qualities=("TEST",),
             )
         self.assertEqual(result.successful_qualities, ("TEST",))
-        self.assertEqual(state.profile.threshold, 10)
+        self.assertEqual(state.profile.threshold, 9)
         self.assertEqual(state.profile.ef, 7)
 
     def test_successful_quality_updates_profile_and_persists(self):
@@ -104,8 +104,8 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(state.profile.threshold, 10)
         self.assertEqual(state.turns_played, 1)
         self.assertEqual(state.progression_ef, 12)
-        self.assertEqual(state.progression_q, 3)
-        self.assertEqual(state.progression_spec, 9)
+        self.assertEqual(state.progression_q, 4)
+        self.assertEqual(state.progression_spec, 8)
 
     def test_two_turns_reuse_the_updated_player_state(self):
         state = PlayerState()
@@ -122,7 +122,7 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual((first.turn, second.turn), (1, 2))
         # EF milestones 10 and 20 are both crossed over the two turns.
         self.assertEqual(state.profile.ef, 8)
-        self.assertEqual(state.profile.threshold, 9)
+        self.assertEqual(state.profile.threshold, 10)
         self.assertEqual(state.profile.vma, 12)
         self.assertEqual(state.turns_played, 2)
 
@@ -162,8 +162,8 @@ class TrainingV2TurnTests(unittest.TestCase):
         )
         self.assertEqual(both.ef_energy, 12)
         self.assertEqual(both.quality_energy, 12)
-        self.assertEqual(both.quality_costs, (("SEUIL", 3), ("VMA", 5)))
-        self.assertEqual(both.spec_remainder, 4)
+        self.assertEqual(both.quality_costs, (("SEUIL", 4), ("VMA", 5)))
+        self.assertEqual(both.spec_remainder, 3)
         self.assertGreater(len(options), 1)
 
     def test_program_options_include_quality_to_spec_without_session(self):
@@ -208,7 +208,7 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(result.successful_qualities, ())
         self.assertEqual(state.profile.threshold, 8)
         self.assertEqual(state.progression_q, 0)
-        self.assertEqual(state.progression_spec, 1)
+        self.assertEqual(state.progression_spec, 0)
 
     def test_invalid_partition_is_rejected_without_mutating_state(self):
         state = PlayerState()
