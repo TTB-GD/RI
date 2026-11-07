@@ -1,12 +1,12 @@
-"""Enumerate player-selectable Training V2 programmes after a roll.
+"""Enumerate player-selectable Training B programmes after a roll.
 
 The module exposes feasible choices without selecting or ranking a preferred
-programme. All costs and accessibility checks remain experimental B2 rules.
+programme. Costs and progression thresholds remain experimental B2 values.
 """
 from dataclasses import dataclass
 from itertools import combinations
 
-from .catalog import QUALITY_CATALOG, quality_cost
+from .catalog import QUALITY_CATALOG, projected_profile, quality_cost
 from .engine import RollResult
 from .state import PlayerState
 
@@ -25,18 +25,15 @@ class ProgramOption:
 def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramOption, ...]:
     """Return every affordable physical partition/program for this roll.
 
-    The function is deliberately descriptive, not prescriptive: it does not
-    score, rank, or choose an option. An empty quality programme is included,
-    allowing the player to route all Q energy to the experimental SPEC counter.
+    An empty quality programme is included, allowing the player to route all Q
+    energy to the experimental SPEC counter. Profile legality is evaluated from
+    the fixed adaptations declared by each selected catalogue entry.
     """
     values = tuple(roll.final_values)
     if len(roll.raw_faces) != len(state.dice_pool):
         raise ValueError("roll must contain one raw face per pool die")
     if not values or len(values) > len(state.dice_pool):
         raise ValueError("roll must contain a valid retained-dice subset")
-    # session_outcome may discard the lowest die. Retained values are sorted
-    # by value, so they no longer align positionally with the original pool.
-    # Validate against the pool's maximum die size, not each original index.
     if any(value < 1 or value > max(state.dice_pool) for value in values):
         raise ValueError("retained value is outside the pool's die range")
 
@@ -59,8 +56,6 @@ def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramO
             for name in names:
                 option = QUALITY_CATALOG[name]
                 marker = getattr(state.profile, option.profile_attribute)
-                if name == "SEUIL" and marker + 1 >= state.profile.vma:
-                    continue
                 costs_by_name[name] = quality_cost(marker, state.profile.ef)
                 affordable.append(name)
 
@@ -70,9 +65,8 @@ def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramO
                     total_cost = sum(cost for _, cost in costs)
                     if total_cost > quality_energy:
                         continue
-                    next_threshold = state.profile.threshold + int("SEUIL" in qualities)
-                    next_vma = state.profile.vma + int("VMA" in qualities)
-                    if not state.profile.ef < next_threshold < next_vma:
+                    projected = projected_profile(state.profile, qualities)
+                    if not projected["ef"] < projected["threshold"] < projected["vma"]:
                         continue
                     options.append(ProgramOption(
                         ef_indices=ef_indices,

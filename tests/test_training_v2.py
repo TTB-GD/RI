@@ -4,7 +4,7 @@ import unittest
 from training_v2 import (
     PlayerState, PhysiologyProfile, RollResult, list_program_options, resolve_turn,
 )
-from training_v2.catalog import quality_cost
+from training_v2.catalog import QUALITY_CATALOG, QualityOption, quality_cost
 
 
 class TrainingV2TurnTests(unittest.TestCase):
@@ -12,10 +12,45 @@ class TrainingV2TurnTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             PhysiologyProfile(ef=8, threshold=8, vma=10).validate()
 
+    def test_catalogue_declares_session_family_load_and_adaptations(self):
+        seuil = QUALITY_CATALOG["SEUIL"]
+        vma = QUALITY_CATALOG["VMA"]
+        self.assertEqual((seuil.family, seuil.load_type), ("SEUIL", "QUALITY"))
+        self.assertEqual(seuil.adaptations, (("threshold", 1),))
+        self.assertEqual(vma.adaptations, (("vma", 1),))
+        self.assertEqual(seuil.max_per_turn, 1)
+
+    def test_catalogue_rejects_invalid_load_type(self):
+        with self.assertRaises(ValueError):
+            QualityOption(
+                key="BAD", label="Bad", profile_attribute="vma",
+                family="VMA", load_type="OTHER",
+            )
+
     def test_quality_cost_matches_b2_boundary(self):
         self.assertEqual(quality_cost(8, 6), 3)
         self.assertEqual(quality_cost(12, 6), 7)
         self.assertEqual(quality_cost(13, 6), 9)
+
+    def test_multidimensional_catalogue_adaptation_is_applied_generically(self):
+        from unittest.mock import patch
+
+        state = PlayerState()
+        state.progression_ef = 150
+        state.ef_milestones_claimed = {10, 20, 35, 50, 70, 100, 120, 150}
+        multidimensional = QualityOption(
+            key="TEST", label="Test", profile_attribute="threshold",
+            family="SEUIL", adaptations=(("threshold", 1), ("ef", 1)),
+        )
+        with patch.dict(QUALITY_CATALOG, {"TEST": multidimensional}):
+            result = resolve_turn(
+                state, (6, 6, 6, 6),
+                ef_indices=(0, 1), quality_indices=(2, 3),
+                planned_qualities=("TEST",),
+            )
+        self.assertEqual(result.successful_qualities, ("TEST",))
+        self.assertEqual(state.profile.threshold, 9)
+        self.assertEqual(state.profile.ef, 7)
 
     def test_successful_quality_updates_profile_and_persists(self):
         state = PlayerState()

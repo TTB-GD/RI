@@ -6,7 +6,9 @@
 
 Run It est un jeu tactique de préparation à la course. Les joueurs construisent leur pool de dés, composent des séances sous contraintes d'énergie et de risque, développent leur forme et gèrent leur fatigue. La course finale donne un sens aux décisions de préparation. Son noyau physiologique Race V2 est intégré ; son orchestration complète et son équilibrage restent partiellement OPEN ou EXPERIMENTAL selon les éléments ci-dessous.
 
-## 2. Dés et tour — CURRENT
+> **Évolution de trajectoire — 7 novembre 2026 :** le joueur a validé Training B comme cible de développement, avec possibilité d'extensions ultérieures vers C. Le modèle Training CURRENT décrit dans les sections 2 à 6 ci-dessous est conservé comme référence **HISTORICAL / RETIRED TARGET** ; il ne constitue plus la base des nouvelles règles ou implémentations. Les décisions détaillées de Training B seront promues dans ce GDD au fur et à mesure de leur validation.
+
+## 2. Dés et tour — HISTORICAL (ancien Training CURRENT)
 
 ### D0–D3. Pool et actions
 
