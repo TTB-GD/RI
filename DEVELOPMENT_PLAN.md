@@ -29,11 +29,13 @@ La simulation Training emploie un RNG local seedable/injectable pour le budget d
 
 La frontière locale utilise `PhysiologyProfile(EF, Seuil, VMA)` avec `EF < Seuil < VMA`, `Charge = Production + Difficulty`, `Charge <= VMA`, `Cost = EF` si `Charge <= EF`, pentes 2/3 **EXPERIMENTAL** au-dessus de EF, et score `Production`. Le moteur longitudinal conserve encore des éléments expérimentaux. Le mapping complet Training → profil est absent.
 
-### Training V2
+### Training — cible B validée
 
-Training CURRENT (catalogue, composition, risque/bust, CTL, progression, pool) et Training V2 expérimental (partition EF/Q et pistes physiologiques) sont deux modèles distincts. Aucune conversion vers Race ne peut sélectionner implicitement V2 comme cible de production ; le choix A/B/C dépend de la vision Game Design et reste **OPEN**.
+**DECISION VALIDATED — 2026-11-07 : TRAINING TARGET = B.** Le prototype `training_v2/` devient la base de développement du Training. Le modèle Training CURRENT est destiné à être abandonné ; son code, ses règles et ses simulations sont conservés comme références **HISTORICAL** et ne doivent plus contraindre la conception de B.
 
-`D1_TRAINING_WORKING_DESIGN.md` rassemble des propositions et décisions de travail formulées en discussion. Il constitue une base de préparation pour C1/C2/D1, pas une spécification normative ni une décision de remplacement de Training CURRENT.
+La cible B reprend le principe d'une allocation qui finance la préparation, des adaptations physiologiques explicites, un portefeuille de séances choisi par le joueur et une fatigue qui régule la charge. Les paramètres issus des harnesses B2 restent **EXPERIMENTAL** tant qu'ils ne sont pas validés. La conception doit permettre des extensions vers C sans ajouter dès maintenant les sous-systèmes différés (combos, coopération D99 avancée, SPEC complet, etc.).
+
+La migration est incrémentale : faire évoluer le vertical slice Training V2 existant, conserver ses tests utiles, et remplacer progressivement les hypothèses B2 par des règles de catalogue et de progression explicites. Ne pas maintenir de compatibilité fonctionnelle avec CURRENT au prix d'une complexité supplémentaire.
 
 ## 3. Portes et statut
 
@@ -61,15 +63,13 @@ Training CURRENT (catalogue, composition, risque/bust, CTL, progression, pool) e
 
 **C1 TERMINÉ — direction validée le 2026-11-07.** La fantaisie est celle d'un entraîneur qui construit une préparation pour une course. Training construit le moteur physiologique ; Race le met à l'épreuve. L'expérience cible est d'environ 2/3 Training et 1/3 Race, 60–90 minutes, 2–4 joueurs et 12–16 tours de Training à tester. Les décisions d'allocation, la composition des séances, le risque volontaire et la progression durable sont au cœur du Training. Les profils doivent être différenciés et leurs conséquences observables en Race. **Arbitrage déterminant : la qualité de la préparation prime sur le seul résultat de Race.** La course reste indispensable comme épreuve et révélateur, mais une performance isolée ne doit pas effacer la cohérence et la qualité des choix de préparation. Le hasard crée des contraintes et opportunités ; le joueur arbitre. Une erreur isolée ne doit pas condamner toute la préparation. La coopération est positive sans dépendance systématique entre joueurs. Référence détaillée : `D1_TRAINING_WORKING_DESIGN.md` (section « C1 — direction validée »).
 
-**C2 TODO — formalisation / validation.** Définir des critères de comparaison A/B/C : choix réels, lisibilité, diversité des builds, impact Race, risque, interaction pool/D99/progression, charge cognitive, rythme, équilibrage et testabilité. Pondération **OPEN**.
+**C2 TERMINÉ — décision de trajectoire validée le 2026-11-07.** L'utilisateur demande d'accélérer la mise en place de Training B, avec possibilité d'évolution vers C. Le modèle CURRENT sera abandonné. La comparaison A/B/C n'est plus sur le chemin critique.
 
-`D1_TRAINING_WORKING_DESIGN.md` contient déjà des matériaux préparatoires issus du travail C1/C2/D1, notamment les orientations et arbitrages D1-S1 à D1-S8. Il reste explicitement **WORKING DESIGN / NON NORMATIF** : sa présence ne clôt ni C1/C2, ne vaut pas sélection A/B/C et ne promeut pas ses hypothèses dans le GDD.
-
-Sortie C : direction Game Design validée avant toute sélection A/B/C.
+`D1_TRAINING_WORKING_DESIGN.md` reste une base de conception non normative. Ses décisions de travail D1-S1 à D1-S8 alimentent l'implémentation B ; les paramètres non arbitrés restent OPEN/EXPERIMENTAL.
 
 ### Porte D — Modèle Training cible (P0 — GAME DESIGN)
 
-**D1 TODO.** Décision explicite `TRAINING TARGET = A / B / C`, principes retenus et éléments écartés/reportés, inscrits au GDD après C. A = conserver CURRENT ; B = remplacer substantiellement par V2 ; C = hybride explicite. Aucun mapping Training → profil avant cette décision.
+**D1 TERMINÉ — TARGET B validé le 2026-11-07.** Training V2 est la base de développement ; Training CURRENT est à abandonner et devient HISTORICAL. Les principes détaillés, les paramètres expérimentaux et les extensions différées sont à intégrer progressivement au GDD au fil des PR d'implémentation. Aucun maintien hybride de CURRENT n'est recherché.
 
 ### Porte E — Cohérence Training ↔ Race (P0/P1)
 
@@ -101,7 +101,7 @@ A — preuves fiables ─┐
 B — CURRENT protégé ┘                                            → G → H → I → LATER
 ```
 
-A et B sont désormais clôturées sur leur périmètre documenté : A1–A3 et B1–B5, avec B3 confirmé par la CI du 2026-11-06. C s'appuie sur les preuves fiabilisées sans choisir le modèle. D dépend de C ; E dépend de D ; F dépend du mapping et de Cost ↔ Reserve ; G suit le premier end-to-end. Ne pas interpréter quantitativement Race avant E3.
+A et B sont clôturées sur leur périmètre documenté. C1/C2 et D1 ont fixé la vision et la cible B. Le chemin critique est désormais : implémentation incrémentale de Training B → cohérence Training/Race (E) → boucle end-to-end (F). Les éléments CURRENT ne sont conservés que comme références historiques. Ne pas interpréter quantitativement Race avant E3.
 
 ## 5. Tableau de pilotage
 
@@ -116,8 +116,8 @@ A et B sont désormais clôturées sur leur périmètre documenté : A1–A3 et 
 | B4 | B | P0 | TECH | RNG injectable minimal | — | replay contrôlé d'un tour | DONE (PR #29–#31) |
 | B5 | B | P0 | TEST | Transitions longitudinales | B1, B4 | transitions/invariants protégés | DONE (PR #31) |
 | C1 | C | P0 — GAME DESIGN | DESIGN | Piliers / expérience cible | A, B | direction courte validée | DONE (validation utilisateur 2026-11-07) |
-| C2 | C | P0 — GAME DESIGN | DESIGN | Critères A/B/C | C1 | critères comparables | TODO |
-| D1 | D | P0 — GAME DESIGN | DESIGN | Choisir Training A/B/C | C2 | décision intégrée au GDD | TODO |
+| C2 | C | P0 — GAME DESIGN | DECISION | Fixer la trajectoire Training B | C1 | orientation B et abandon de CURRENT actés | DONE (validation utilisateur 2026-11-07) |
+| D1 | D | P0 — GAME DESIGN | DECISION | Définir le périmètre d'implémentation B | C2 | V2 retenu comme base, extensions C différées | DONE (validation utilisateur 2026-11-07) |
 | E1 | E | P1 | DESIGN | Décisions strictement bloquantes | D1 | règles nécessaires définies | TODO |
 | E2 | E | P1 | DESIGN+TECH | Mapping profil | D1, E1 | dérivation documentée | TODO |
 | E3 | E | P0/P1 | DESIGN+SIM | Cost ↔ Reserve | E2 | échelles compatibles | TODO |
@@ -129,4 +129,6 @@ A et B sont désormais clôturées sur leur périmètre documenté : A1–A3 et 
 
 ## 6. Prochain chantier recommandé
 
-A et B étant clôturées, C1 est validée ; reprendre C2 en s'appuyant sur les matériaux non normatifs de `D1_TRAINING_WORKING_DESIGN.md`. La convention D99 à 3 dés reste **OPEN** et n'est pas modifiée par la clôture B3. Aucune décision Training A/B/C, aucun mapping Training → profil et aucune analyse quantitative Race ne doivent précéder la validation de ces portes et E3.
+**B1 — catalogue de séances piloté par les données.** Étendre le schéma de séance pour porter explicitement la famille, le type de charge, les adaptations physiologiques fixes et la pénibilité spécifique. Le premier incrément conserve les coûts B2 comme paramètres expérimentaux et généralise leur application aux adaptations déclarées. Les règles d'énergie/RPE, les séances EF sélectionnables, SL/SPEC, les acquisitions et la fatigue D1 seront intégrées par incréments suivants, sans réintroduire CURRENT.
+
+La convention D99 à 3 dés reste une question historique/OPEN hors du premier chemin B ; elle ne bloque pas le prototype B.
