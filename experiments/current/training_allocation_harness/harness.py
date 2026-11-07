@@ -89,7 +89,7 @@ def _fatigue_blackjack(energy, tn):
     """Mirror current decision_engine curve for integer 4d6 energy/TN."""
     offset = int(energy - tn)
     if offset >= -1:
-        fib = (0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144)
+        fib = (0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89)
         index = offset + 3
         return fib[index] if 0 <= index < len(fib) else fib[-1]
     if offset in (-2, -3):
