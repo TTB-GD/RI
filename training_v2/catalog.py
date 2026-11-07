@@ -15,6 +15,8 @@ class QualityOption:
     family: str
     load_type: str = "QUALITY"
     adaptations: tuple[tuple[str, int], ...] = ()
+    energy_cost: int = 0
+    rpe: int = 0
     fatigue: int = 0
     max_per_turn: int | None = 1
 
@@ -23,6 +25,8 @@ class QualityOption:
             raise ValueError("load_type must be EF or QUALITY")
         if self.max_per_turn is not None and self.max_per_turn < 1:
             raise ValueError("max_per_turn must be positive or None")
+        if self.energy_cost < 0 or self.rpe < 0 or self.fatigue < 0:
+            raise ValueError("energy_cost, rpe and fatigue must be non-negative")
         if any(amount < 0 for _, amount in self.adaptations):
             raise ValueError("adaptations must be non-negative")
 
@@ -33,14 +37,19 @@ QUALITY_CATALOG = {
         label="Séance au seuil",
         profile_attribute="threshold",
         family="SEUIL",
-        adaptations=(("threshold", 1),),
+        adaptations=(("threshold", 2),),
+        energy_cost=4,
+        rpe=4,
     ),
     "VMA": QualityOption(
         key="VMA",
         label="Séance VMA",
         profile_attribute="vma",
         family="VMA",
-        adaptations=(("vma", 1),),
+        adaptations=(("vma", 2),),
+        energy_cost=5,
+        rpe=5,
+        fatigue=1,
     ),
 }
 
@@ -67,7 +76,7 @@ def difficulty(marker: int) -> int:
 
 
 def quality_cost(marker: int, ef: int) -> int:
-    """B2 cost: marker gap plus the experimental difficulty surcharge."""
+    """Historical B2 experimental cost formula; not used by the B catalogue."""
     if marker <= ef:
         raise ValueError("quality marker must be above EF")
     return (marker - ef) + difficulty(marker)
