@@ -59,7 +59,7 @@ class TrainingBAllocationTests(unittest.TestCase):
         ))
 
     def test_equivalent_die_permutations_are_collapsed(self):
-        state = PlayerState()
+        state = PlayerState(dice_pool=[6, 6, 6, 6, 6, 6])
         roll = RollResult((6, 6, 6, 6, 6, 6), (6, 6, 6, 6, 6, 6), 21.0)
         options = list_program_options(state, roll)
         self.assertGreater(len(options), 0)
