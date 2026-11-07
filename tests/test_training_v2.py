@@ -58,6 +58,13 @@ class TrainingBAllocationTests(unittest.TestCase):
             for option in options
         ))
 
+    def test_equivalent_die_permutations_are_collapsed(self):
+        state = PlayerState()
+        roll = RollResult((6, 6, 6, 6, 6, 6), (6, 6, 6, 6, 6, 6), 21.0)
+        options = list_program_options(state, roll)
+        self.assertGreater(len(options), 0)
+        self.assertLess(len(options), 100)
+
     def test_ef_only_composition_is_available(self):
         state = PlayerState()
         roll = RollResult((6, 6, 6, 6), (6, 6, 6, 6), 14.0)
