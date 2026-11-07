@@ -59,7 +59,7 @@ Training CURRENT (catalogue, composition, risque/bust, CTL, progression, pool) e
 
 ### Porte C — Vision et expérience cible (P0 — GAME DESIGN)
 
-**C1 TODO — formalisation / validation.** Formaliser fantaisie/rôle, décisions Training et rôle du risque, place relative Training/Race, diversité des profils, lisibilité/complexité, rythme/durée, horizon, course finale et interaction multijoueur pertinente.
+**C1 TERMINÉ — direction validée le 2026-11-07.** La fantaisie est celle d'un entraîneur qui construit une préparation pour une course. Training construit le moteur physiologique ; Race le met à l'épreuve. L'expérience cible est d'environ 2/3 Training et 1/3 Race, 60–90 minutes, 2–4 joueurs et 12–16 tours de Training à tester. Les décisions d'allocation, la composition des séances, le risque volontaire et la progression durable sont au cœur du Training. Les profils doivent être différenciés et leurs conséquences observables en Race. **Arbitrage déterminant : la qualité de la préparation prime sur le seul résultat de Race.** La course reste indispensable comme épreuve et révélateur, mais une performance isolée ne doit pas effacer la cohérence et la qualité des choix de préparation. Le hasard crée des contraintes et opportunités ; le joueur arbitre. Une erreur isolée ne doit pas condamner toute la préparation. La coopération est positive sans dépendance systématique entre joueurs. Référence détaillée : `D1_TRAINING_WORKING_DESIGN.md` (section « C1 — direction validée »).
 
 **C2 TODO — formalisation / validation.** Définir des critères de comparaison A/B/C : choix réels, lisibilité, diversité des builds, impact Race, risque, interaction pool/D99/progression, charge cognitive, rythme, équilibrage et testabilité. Pondération **OPEN**.
 
@@ -115,7 +115,7 @@ A et B sont désormais clôturées sur leur périmètre documenté : A1–A3 et 
 | B3 | B | P0 | TEST | D99 table-driven | — | lignes CURRENT protégées ; 3 dés séparés | DONE (PR #27 ; CI #42254642083) |
 | B4 | B | P0 | TECH | RNG injectable minimal | — | replay contrôlé d'un tour | DONE (PR #29–#31) |
 | B5 | B | P0 | TEST | Transitions longitudinales | B1, B4 | transitions/invariants protégés | DONE (PR #31) |
-| C1 | C | P0 — GAME DESIGN | DESIGN | Piliers / expérience cible | A, B | direction courte validée | TODO |
+| C1 | C | P0 — GAME DESIGN | DESIGN | Piliers / expérience cible | A, B | direction courte validée | DONE (validation utilisateur 2026-11-07) |
 | C2 | C | P0 — GAME DESIGN | DESIGN | Critères A/B/C | C1 | critères comparables | TODO |
 | D1 | D | P0 — GAME DESIGN | DESIGN | Choisir Training A/B/C | C2 | décision intégrée au GDD | TODO |
 | E1 | E | P1 | DESIGN | Décisions strictement bloquantes | D1 | règles nécessaires définies | TODO |
@@ -129,4 +129,4 @@ A et B sont désormais clôturées sur leur périmètre documenté : A1–A3 et 
 
 ## 6. Prochain chantier recommandé
 
-A et B étant clôturées, reprendre C1 puis C2 en s'appuyant sur les matériaux non normatifs de `D1_TRAINING_WORKING_DESIGN.md`. La convention D99 à 3 dés reste **OPEN** et n'est pas modifiée par la clôture B3. Aucune décision Training A/B/C, aucun mapping Training → profil et aucune analyse quantitative Race ne doivent précéder la validation de ces portes et E3.
+A et B étant clôturées, C1 est validée ; reprendre C2 en s'appuyant sur les matériaux non normatifs de `D1_TRAINING_WORKING_DESIGN.md`. La convention D99 à 3 dés reste **OPEN** et n'est pas modifiée par la clôture B3. Aucune décision Training A/B/C, aucun mapping Training → profil et aucune analyse quantitative Race ne doivent précéder la validation de ces portes et E3.
