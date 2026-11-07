@@ -14,7 +14,7 @@ from decision_engine import energy_and_fatigue
 from dice_types import make_pool, pool_tn
 from session_effects import session_outcome
 
-from .catalog import QUALITY_CATALOG, quality_cost
+from .catalog import QUALITY_CATALOG
 from .state import PlayerState
 
 
@@ -141,10 +141,7 @@ def resolve_turn(
     )
 
     costs = tuple(
-        (name, quality_cost(
-            getattr(state.profile, QUALITY_CATALOG[name].profile_attribute),
-            state.profile.ef,
-        ))
+        (name, QUALITY_CATALOG[name].energy_cost)
         for name in planned_qualities
     )
     total_cost = sum(cost for _, cost in costs)
@@ -158,14 +155,15 @@ def resolve_turn(
     fatigue_specific = 0
     for name, cost in costs:
         option = QUALITY_CATALOG[name]
-        if cost > max(values):
+        rpe = QUALITY_CATALOG[name].rpe
+        if rpe > max(values):
             try:
                 risk_face = next(rng_faces)
             except StopIteration:
                 risk_face = rng.randint(1, max(state.dice_pool))
             if risk_face < 1 or risk_face > max(state.dice_pool):
                 raise ValueError("risk face is outside the largest die range")
-            if risk_face <= cost - max(values):
+            if risk_face <= rpe - max(values):
                 if busted is None:
                     busted = name
                 continue

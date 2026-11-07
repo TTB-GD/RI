@@ -18,6 +18,9 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual((seuil.family, seuil.load_type), ("SEUIL", "QUALITY"))
         self.assertEqual(seuil.adaptations, (("threshold", 1),))
         self.assertEqual(vma.adaptations, (("vma", 1),))
+        self.assertEqual((seuil.energy_cost, seuil.rpe), (4, 4))
+        self.assertEqual((vma.energy_cost, vma.rpe), (5, 5))
+        self.assertEqual(vma.fatigue, 1)
         self.assertEqual(seuil.max_per_turn, 1)
 
     def test_catalogue_rejects_invalid_load_type(self):
@@ -27,10 +30,46 @@ class TrainingV2TurnTests(unittest.TestCase):
                 family="VMA", load_type="OTHER",
             )
 
-    def test_quality_cost_matches_b2_boundary(self):
+    def test_historical_b2_cost_formula_remains_available_for_reference(self):
         self.assertEqual(quality_cost(8, 6), 3)
         self.assertEqual(quality_cost(12, 6), 7)
         self.assertEqual(quality_cost(13, 6), 9)
+
+    def test_risk_uses_rpe_not_energy_cost(self):
+        from unittest.mock import patch
+
+        state = PlayerState()
+        option = QualityOption(
+            key="TEST", label="Test", profile_attribute="threshold",
+            family="SEUIL", adaptations=(("threshold", 1),),
+            energy_cost=1, rpe=6,
+        )
+        with patch.dict(QUALITY_CATALOG, {"TEST": option}):
+            result = resolve_turn(
+                state, (2, 2, 2, 2),
+                ef_indices=(0, 1), quality_indices=(2, 3),
+                planned_qualities=("TEST",), risk_faces=(1,),
+            )
+        self.assertEqual(result.quality_costs, (("TEST", 1),))
+        self.assertEqual(result.busted_quality, "TEST")
+
+    def test_energy_cost_is_not_used_as_rpe(self):
+        from unittest.mock import patch
+
+        state = PlayerState()
+        option = QualityOption(
+            key="TEST", label="Test", profile_attribute="threshold",
+            family="SEUIL", adaptations=(("threshold", 1),),
+            energy_cost=6, rpe=1,
+        )
+        with patch.dict(QUALITY_CATALOG, {"TEST": option}):
+            result = resolve_turn(
+                state, (3, 3, 3, 3),
+                ef_indices=(0, 1), quality_indices=(2, 3),
+                planned_qualities=("TEST",),
+            )
+        self.assertEqual(result.quality_costs, (("TEST", 6),))
+        self.assertIsNone(result.busted_quality)
 
     def test_multidimensional_catalogue_adaptation_is_applied_generically(self):
         from unittest.mock import patch
@@ -65,8 +104,8 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(state.profile.threshold, 9)
         self.assertEqual(state.turns_played, 1)
         self.assertEqual(state.progression_ef, 12)
-        self.assertEqual(state.progression_q, 3)
-        self.assertEqual(state.progression_spec, 9)
+        self.assertEqual(state.progression_q, 4)
+        self.assertEqual(state.progression_spec, 8)
 
     def test_two_turns_reuse_the_updated_player_state(self):
         state = PlayerState()
@@ -123,8 +162,8 @@ class TrainingV2TurnTests(unittest.TestCase):
         )
         self.assertEqual(both.ef_energy, 12)
         self.assertEqual(both.quality_energy, 12)
-        self.assertEqual(both.quality_costs, (("SEUIL", 3), ("VMA", 5)))
-        self.assertEqual(both.spec_remainder, 4)
+        self.assertEqual(both.quality_costs, (("SEUIL", 4), ("VMA", 5)))
+        self.assertEqual(both.spec_remainder, 3)
         self.assertGreater(len(options), 1)
 
     def test_program_options_include_quality_to_spec_without_session(self):
@@ -169,7 +208,7 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual(result.successful_qualities, ())
         self.assertEqual(state.profile.threshold, 8)
         self.assertEqual(state.progression_q, 0)
-        self.assertEqual(state.progression_spec, 1)
+        self.assertEqual(state.progression_spec, 0)
 
     def test_invalid_partition_is_rejected_without_mutating_state(self):
         state = PlayerState()

@@ -6,7 +6,7 @@ programme. Costs and progression thresholds remain experimental B2 values.
 from dataclasses import dataclass
 from itertools import combinations
 
-from .catalog import QUALITY_CATALOG, projected_profile, quality_cost
+from .catalog import QUALITY_CATALOG, projected_profile
 from .engine import RollResult
 from .state import PlayerState
 
@@ -55,8 +55,7 @@ def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramO
             costs_by_name = {}
             for name in names:
                 option = QUALITY_CATALOG[name]
-                marker = getattr(state.profile, option.profile_attribute)
-                costs_by_name[name] = quality_cost(marker, state.profile.ef)
+                costs_by_name[name] = option.energy_cost
                 affordable.append(name)
 
             for count in range(len(affordable) + 1):

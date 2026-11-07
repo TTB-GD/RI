@@ -59,7 +59,12 @@ print(player.profile, player.dice_pool, player.fatigue)
   EF remains below Seuil.
 - Quality milestones: 7, 15, 25, 35, 50, 65, 80, 100. The milestones 15,
   35, 65 and 100 grant one pool upgrade, with a four-upgrade ceiling.
-- Successful Seuil/VMA sessions raise their respective local marker by one.
+- Session entries now declare independent experimental energy cost and RPE.
+  The cost is paid from the allocated quality energy; RPE alone determines
+  whether the session enters the risk/bust check.
+- The initial Seuil/VMA fixtures use illustrative D1-S4 values (cost/RPE 4/4
+  and 5/5); these values are not calibrated. Adaptations remain +1 per successful session.
+- Successful Seuil/VMA sessions apply their fixed catalogue adaptations.
 - Unassigned Quality energy advances the SPEC progression counter. Quality
   energy assigned to a session that busts is lost. This is the B2
   Q_SPENT_SPEC accounting variant.
@@ -70,8 +75,9 @@ print(player.profile, player.dice_pool, player.fatigue)
   its family, load type, fixed profile adaptations, specific fatigue and
   per-turn limit. The engine applies the declared adaptations generically,
   including multidimensional entries.
-- The B2 cost formula remains experimental. RPE as a separate session field,
-  selectable EF sessions, SL/SPEC acquisition, permanent portfolio rules,
+- The historical B2 formula remains available only as a reference helper;
+  catalogue sessions now use fixed experimental costs and independent RPE.
+  Selectable EF sessions, SL/SPEC acquisition, permanent portfolio rules,
   and Race conversion are not implemented yet.
 
 ## Known limitations
