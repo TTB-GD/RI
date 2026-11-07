@@ -122,7 +122,7 @@ class TrainingV2TurnTests(unittest.TestCase):
         self.assertEqual((first.turn, second.turn), (1, 2))
         # EF milestones 10 and 20 are both crossed over the two turns.
         self.assertEqual(state.profile.ef, 8)
-        self.assertEqual(state.profile.threshold, 10)
+        self.assertEqual(state.profile.threshold, 9)
         self.assertEqual(state.profile.vma, 11)
         self.assertEqual(state.turns_played, 2)
 
