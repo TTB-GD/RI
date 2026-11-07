@@ -104,9 +104,8 @@ class TrainingBAllocationTests(unittest.TestCase):
                          (SessionAllocation("UNKNOWN", (0, 1, 2, 3), 24),))
 
     def test_profile_order_is_checked_before_mutation(self):
-        state = PlayerState(profile=PhysiologyProfile(ef=6, threshold=8, vma=9))
-        state.profile.vma = 9
-        invalid = (SessionAllocation("VMA", (0, 1, 2, 3), 24),)
+        state = PlayerState(profile=PhysiologyProfile(ef=6, threshold=9, vma=10))
+        invalid = (SessionAllocation("SEUIL", (0, 1, 2, 3), 24),)
         before = state.clone()
         with self.assertRaises(ValueError):
             resolve_turn(state, (6, 6, 6, 6), invalid)
