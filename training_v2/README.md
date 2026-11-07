@@ -63,7 +63,7 @@ print(player.profile, player.dice_pool, player.fatigue)
   The cost is paid from the allocated quality energy; RPE alone determines
   whether the session enters the risk/bust check.
 - The initial Seuil/VMA fixtures use illustrative D1-S4 values (cost/RPE 4/4
-  and 5/5); these values and adaptations are not calibrated.
+  and 5/5); these values are not calibrated. Adaptations remain +1 per successful session.
 - Successful Seuil/VMA sessions apply their fixed catalogue adaptations.
 - Unassigned Quality energy advances the SPEC progression counter. Quality
   energy assigned to a session that busts is lost. This is the B2
@@ -77,8 +77,7 @@ print(player.profile, player.dice_pool, player.fatigue)
   including multidimensional entries.
 - The historical B2 formula remains available only as a reference helper;
   catalogue sessions now use fixed experimental costs and independent RPE.
-  Selectable EF sessions,
-  selectable EF sessions, SL/SPEC acquisition, permanent portfolio rules,
+  Selectable EF sessions, SL/SPEC acquisition, permanent portfolio rules,
   and Race conversion are not implemented yet.
 
 ## Known limitations
