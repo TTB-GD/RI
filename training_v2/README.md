@@ -1,10 +1,10 @@
-# Training V2 — first playable turn
+# Training B — first playable turn and catalogue foundation
 
-**EXPERIMENTAL ONLY — does not change CURRENT game rules.**
+**EXPERIMENTAL — target architecture selected on 2026-11-07.** Training CURRENT is a historical reference scheduled for retirement; this package is the active implementation path.
 
-This package is the first executable vertical slice of Training V2. It keeps
-the existing player simulation, CURRENT catalogue, selector, risk resolver,
-and dice progression untouched.
+This package is the first executable vertical slice of Training B. It remains
+isolated from the historical CURRENT implementation; no compatibility layer
+or hybrid dependency is introduced.
 
 ## Playable loop
 
@@ -66,8 +66,13 @@ print(player.profile, player.dice_pool, player.fatigue)
 - Fatigue uses the existing experimental blackjack curve plus the D1-F3
   excess-quality term. Session-specific fatigue is zero in this first pass;
   it remains an explicit catalogue field for later calibration.
-- The initial catalogue contains Seuil and VMA. SL/SPEC session acquisition,
-  permanent portfolio rules, and Race conversion are not implemented.
+- The initial quality catalogue contains Seuil and VMA. Each entry now declares
+  its family, load type, fixed profile adaptations, specific fatigue and
+  per-turn limit. The engine applies the declared adaptations generically,
+  including multidimensional entries.
+- The B2 cost formula remains experimental. RPE as a separate session field,
+  selectable EF sessions, SL/SPEC acquisition, permanent portfolio rules,
+  and Race conversion are not implemented yet.
 
 ## Known limitations
 
