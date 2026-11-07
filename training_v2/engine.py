@@ -55,8 +55,6 @@ def _apply_milestones(state: PlayerState, old_ef: int, old_q: int) -> None:
                     if state.dice_added < 2 and len(state.dice_pool) < 6:
                         state.dice_pool.append(6)
                         state.dice_added += 1
-                elif state.profile.ef + 1 < state.profile.threshold:
-                    state.profile.ef += 1
     for milestone in Q_MILESTONES:
         if old_q < milestone <= state.progression_q:
             if milestone in state.q_milestones_claimed:
@@ -115,6 +113,7 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
     if not projected["ef"] < projected["threshold"] < projected["vma"]:
         raise ValueError("session adaptations would violate EF < Seuil < VMA")
 
+    tn = pool_tn(make_pool(state.dice_pool))
     ef_energy = sum(
         item.energy for item in allocations
         if SESSION_CATALOG[item.session_key].load_type == "EF"
