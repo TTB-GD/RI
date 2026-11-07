@@ -17,6 +17,8 @@ class Session:
     cost: int
     intrinsic_fatigue: int = 0
     risky: bool = False
+    adaptations: tuple[tuple[str, int], ...] = ()
+    global_progress: int = 0
 
     def __post_init__(self):
         if self.category not in {"EF", "QUALITY"}:
@@ -25,6 +27,10 @@ class Session:
             raise ValueError("session cost must be positive")
         if self.intrinsic_fatigue < 0:
             raise ValueError("intrinsic fatigue cannot be negative")
+        if self.global_progress < 0:
+            raise ValueError("global progression cannot be negative")
+        if any(not track or points < 0 for track, points in self.adaptations):
+            raise ValueError("adaptation tracks need names and non-negative points")
 
 
 @dataclass(frozen=True)
@@ -106,7 +112,7 @@ def resolve_dice_action(
         if rerolled_value is None:
             raise ValueError("reroll action requires a rerolled value")
         if not 1 <= rerolled_value <= active_sizes[reroll_index]:
-            raise ValueError("rerolled value outside die range")
+            raise ValueError("rerolled value outside its die range")
         active[reroll_index] = rerolled_value
     elif reroll_index is not None or rerolled_value is not None:
         raise ValueError("reroll data supplied for an action without reroll")
