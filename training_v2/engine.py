@@ -80,6 +80,8 @@ def _validate_allocations(values, allocations):
     for item in allocations:
         if item.session_key not in SESSION_CATALOG:
             raise ValueError("unknown session")
+        if item.session_key not in state.acquired_session_keys:
+            raise ValueError("session is not in the acquired portfolio")
         if not item.die_indices or len(set(item.die_indices)) != len(item.die_indices):
             raise ValueError("each session requires distinct allocated dice")
         if any(index < 0 or index >= len(values) for index in item.die_indices):
