@@ -6,13 +6,11 @@ from __future__ import annotations
 
 import json
 import random
-from pathlib import Path
-
 from training_v2 import (
     PlayerState, PortfolioMilestone, list_program_options, roll_and_resolve_turn,
     acquire_session,
 )
-from training_v2.catalog import SESSION_CATALOG, projected_profile
+from training_v2.catalog import SESSION_CATALOG
 
 
 # Deliberately illustrative thresholds. They exist to exercise the unlock loop.
@@ -69,8 +67,6 @@ def run_trajectory(seed=1, focus="balanced", turns=16):
     history = []
 
     for _ in range(turns):
-        acquisitions_before = set(state.acquired_session_keys)
-
         def choose(roll):
             options = list_program_options(state, roll)
             if not options:
