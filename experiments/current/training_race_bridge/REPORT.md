@@ -131,3 +131,35 @@ connection and expose course completion/reserve behaviour; they do not
 validate balance or prove that Training B currently produces viable race
 profiles. The older synthetic SPEC results above must not be attributed to
 Training B.
+
+
+## First end-to-end observation (CI run, 9 paired cases)
+
+The direct Training B trajectory harness was executed by the CI test suite:
+three 16-turn preparation heuristics × seeds 11, 23 and 47, followed by six
+Race V2 segments. All nine software paths execute, but **none of the nine
+courses finishes** under the explicitly fixed CTL 100 / freshness 0 / SL off
+inputs and ADAPTIVE policy.
+
+| Training focus | Mean race score | Mean spent | Finish rate | Race pool |
+|---|---:|---:|---:|---|
+| Balanced | 44.00 | 129.00 | 0% | 4d8+1d6 |
+| EF | 44.00 | 139.00 | 0% | 4d8+1d6 |
+| Quality | 40.67 | 81.00 | 0% | 4d8 or 4d8+1d6 |
+
+Observed final profile ranges across the three seeds:
+- Balanced: EF 38–47, Seuil 48–56, VMA 49–57.
+- EF: EF 44–49, Seuil 45–50, VMA 46–52.
+- Quality: EF 26–29, Seuil 51–63, VMA 52–65.
+
+**RESULT:** The software adapter is functional and preserves differentiated
+Training B outputs, but the current Training B profile scale and Race V2
+reserve/cost scale are not interoperable as a playable race. The result is not
+a balance failure of the adapter; it is a concrete calibration/interface gap.
+No conversion factor or reserve multiplier has been introduced.
+
+**Next implementation gate:** determine how Training B physiological values
+map to Race V2's cost domain and how the race reserve is funded. These two
+rules must be made coherent together; tuning only one in isolation would hide
+the dimensional mismatch. The direct adapter remains an experimental bridge
+until this is resolved.
