@@ -72,6 +72,48 @@ class TrainingBDiceActionTests(unittest.TestCase):
         self.assertEqual(result.dice_action, "add")
         self.assertEqual(len(result.final_values), 4)
 
+    def test_full_pipeline_preserves_roll_fatigue_when_added_dice_session_busts(self):
+        class FixedRng:
+            def __init__(self):
+                self.values = iter((4, 4, 4, 4))
+            def randint(self, low, high):
+                value = next(self.values)
+                if not low <= value <= high:
+                    raise AssertionError("fixed die result outside requested range")
+                return value
+
+        state = PlayerState()
+        result = roll_and_resolve_turn(
+            state,
+            lambda dice: (SessionAllocation("VMA", (0, 1, 2, 3), 16),),
+            choose_dice_action=lambda roll: "add",
+            rng=FixedRng(),
+            risk_faces=(1,),
+        )
+        self.assertEqual(result.dice_action, "add")
+        self.assertEqual(result.final_values, (4, 4, 4, 4))
+        self.assertEqual(result.busted_session, "VMA")
+        self.assertEqual(result.fatigue_blackjack, 5)
+        self.assertEqual(result.fatigue_specific, 0)
+        self.assertEqual(state.fatigue, 5)
+
+    def test_overtraining_is_enforced_by_the_turn_pipeline(self):
+        state = PlayerState()
+        choose = lambda roll: ()
+        with self.assertRaises(ValueError):
+            roll_and_resolve_turn(
+                state, choose, choose_dice_action=lambda roll: "add",
+                rng=random.Random(3), overtraining=True,
+            )
+        # Reroll remains available: only reserve use is restricted.
+        result = roll_and_resolve_turn(
+            state,
+            lambda dice: list_program_options(state, dice)[0].allocations,
+            choose_dice_action=lambda roll: ("reroll", 0),
+            rng=random.Random(3), overtraining=True,
+        )
+        self.assertEqual(result.dice_action, "reroll")
+
     def test_blackjack_fatigue_survives_a_busted_session(self):
         state = PlayerState()
         allocation = (
