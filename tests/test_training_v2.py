@@ -6,6 +6,7 @@ from training_v2 import (
     PlayerState, PhysiologyProfile, RollResult, SessionAllocation,
     list_program_options, resolve_turn, make_session_eligible, acquire_session,
 )
+from training_v2.milestones import PortfolioMilestone
 from training_v2.catalog import SESSION_CATALOG, SessionOption, quality_cost
 
 
@@ -70,6 +71,82 @@ class TrainingBAllocationTests(unittest.TestCase):
         acquire_session(clone, "INTERVALLES_COURTS")
         self.assertNotIn("INTERVALLES_COURTS", state.acquired_session_keys)
         self.assertIn("INTERVALLES_COURTS", clone.acquired_session_keys)
+
+    def test_successful_local_progression_unlocks_but_does_not_acquire(self):
+        state = PlayerState()
+        milestone = PortfolioMilestone(
+            key="threshold-specialization",
+            track="threshold",
+            threshold=4,
+            unlock_session_keys=("SEUIL_LONG",),
+        )
+        allocation = (
+            SessionAllocation("SEUIL", (0, 1), 12),
+            SessionAllocation("EF", (2, 3), 12),
+        )
+        result = resolve_turn(
+            state, (6, 6, 6, 6), allocation,
+            portfolio_milestones=(milestone,),
+        )
+        self.assertEqual(state.progression_threshold, 4)
+        self.assertIn("SEUIL_LONG", state.eligible_session_keys)
+        self.assertNotIn("SEUIL_LONG", state.acquired_session_keys)
+        self.assertEqual(result.newly_eligible_sessions, ("SEUIL_LONG",))
+        self.assertIn("threshold-specialization", state.portfolio_milestones_claimed)
+
+    def test_busted_session_does_not_advance_local_unlock_track(self):
+        state = PlayerState()
+        milestone = PortfolioMilestone(
+            key="vma-specialization", track="vma", threshold=5,
+            unlock_session_keys=("INTERVALLES_COURTS",),
+        )
+        allocation = (SessionAllocation("VMA", (0, 1, 2, 3), 8),)
+        result = resolve_turn(
+            state, (2, 2, 2, 2), allocation, risk_faces=(1,),
+            portfolio_milestones=(milestone,),
+        )
+        self.assertEqual(result.busted_session, "VMA")
+        self.assertEqual(state.progression_vma, 0)
+        self.assertNotIn("INTERVALLES_COURTS", state.eligible_session_keys)
+        self.assertEqual(result.newly_eligible_sessions, ())
+
+    def test_local_progression_tracks_are_distinct(self):
+        state = PlayerState()
+        allocation = (
+            SessionAllocation("SEUIL", (0, 1), 12),
+            SessionAllocation("EF", (2, 3), 12),
+        )
+        resolve_turn(state, (6, 6, 6, 6), allocation)
+        self.assertEqual(state.progression_ef, 12)
+        self.assertEqual(state.progression_threshold, 4)
+        self.assertEqual(state.progression_vma, 0)
+        self.assertEqual(state.progression_q, 4)
+
+    def test_portfolio_milestone_is_claimed_only_once(self):
+        state = PlayerState()
+        milestone = PortfolioMilestone(
+            key="ef-advanced", track="ef", threshold=4,
+            unlock_session_keys=("EF_SOUTENUE",),
+        )
+        first = resolve_turn(
+            state, (6, 6, 6, 6),
+            (SessionAllocation("EF", (0, 1, 2, 3), 24),),
+            portfolio_milestones=(milestone,),
+        )
+        self.assertEqual(first.newly_eligible_sessions, ("EF_SOUTENUE",))
+        second = resolve_turn(
+            state, (6, 6, 6, 6),
+            (SessionAllocation("EF", (0, 1, 2, 3), 24),),
+            portfolio_milestones=(milestone,),
+        )
+        self.assertEqual(second.newly_eligible_sessions, ())
+
+    def test_portfolio_milestone_configuration_rejects_unknown_session(self):
+        with self.assertRaises(ValueError):
+            PortfolioMilestone(
+                key="bad", track="ef", threshold=1,
+                unlock_session_keys=("NOT_IN_CATALOGUE",),
+            )
 
     def test_catalogue_rejects_invalid_load_type(self):
         with self.assertRaises(ValueError):
