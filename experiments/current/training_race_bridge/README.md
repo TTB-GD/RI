@@ -147,3 +147,26 @@ tests. The progression probe shows a clear pool-size benefit in this fixture.
 Expectation and variance both rise across these pools, so this does not yet
 separate their individual contributions; an equal-expectation/different-
 variance comparison remains open.
+
+
+## Equal-expectation / different-variance comparison
+
+To separate expectation from variance, the same fixed physiology profile is
+tested against pairs of pools with equal E(pool) but different face
+composition and variance. Each pool runs 20 seeds, normalized by the shared
+expectation, at CTL 100.
+
+| Equal E(pool) | Pool | Variance | Finish | Mean score |
+|---:|---|---:|---:|---:|
+| 18.0 | 4d8 | 21.00 | 17/20 (85%) | 77.60 |
+| 18.0 | 2d6+2d10 | 22.33 | 20/20 (100%) | 83.35 |
+| 22.5 | 5d8 | 26.25 | 20/20 (100%) | 103.00 |
+| 22.5 | 3d6+1d10+1d12 | 28.92 | 20/20 (100%) | 103.70 |
+| 27.0 | 6d8 | 31.50 | 20/20 (100%) | 126.70 |
+| 27.0 | 3d6+3d10 | 33.50 | 20/20 (100%) | 126.85 |
+
+At E(pool)=18, the higher-variance pool improves completion from 85% to 100%.
+At the two higher expectations, all pools finish and score differences are
+small. This indicates variance can matter near the viability boundary, but
+does not establish a general variance bonus. CI run 42894254229 passed 138
+primary and 89 experimental tests.
