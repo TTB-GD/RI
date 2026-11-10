@@ -10,6 +10,8 @@ from session_effects import session_outcome
 from .catalog import SESSION_CATALOG, projected_profile
 from .programs import SessionAllocation
 from .state import PlayerState
+from .milestones import validate_portfolio_milestones
+from .portfolio import make_session_eligible
 
 
 EF_MILESTONES = (10, 20, 35, 50, 70, 100, 120, 150)
@@ -32,6 +34,7 @@ class TurnResult:
     quality_energy: int
     session_costs: tuple[tuple[str, int], ...]
     progression_spec_gained: int
+    newly_eligible_sessions: tuple[str, ...]
     fatigue_blackjack: int
     fatigue_excess: int
     fatigue_specific: int
@@ -99,8 +102,9 @@ def _validate_allocations(state, values, allocations):
     return allocations
 
 
-def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), rng=None):
+def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), rng=None, portfolio_milestones=()):
     """Resolve one roll and the player's direct allocation of retained dice."""
+    portfolio_milestones = validate_portfolio_milestones(portfolio_milestones)
     raw_faces = tuple(raw_faces)
     if len(raw_faces) != len(state.dice_pool):
         raise ValueError("one raw face is required for every die in the pool")
@@ -161,6 +165,14 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
         if SESSION_CATALOG[item.session_key].load_type == "QUALITY"
     )
     state.progression_q += successful_quality_cost
+    state.progression_threshold += sum(
+        SESSION_CATALOG[item.session_key].energy_cost for item in successful
+        if SESSION_CATALOG[item.session_key].family == "SEUIL"
+    )
+    state.progression_vma += sum(
+        SESSION_CATALOG[item.session_key].energy_cost for item in successful
+        if SESSION_CATALOG[item.session_key].family == "VMA"
+    )
 
     # Keep the existing experimental Q remainder accounting until SPEC is designed.
     spec_gained = sum(
@@ -175,6 +187,22 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
             setattr(state.profile, attribute, getattr(state.profile, attribute) + amount)
 
     _apply_milestones(state, old_ef, old_q)
+    newly_eligible = []
+    progression_tracks = {
+        "ef": state.progression_ef,
+        "threshold": state.progression_threshold,
+        "vma": state.progression_vma,
+    }
+    for milestone in portfolio_milestones:
+        if milestone.key in state.portfolio_milestones_claimed:
+            continue
+        if progression_tracks[milestone.track] < milestone.threshold:
+            continue
+        state.portfolio_milestones_claimed.add(milestone.key)
+        for session_key in milestone.unlock_session_keys:
+            if session_key not in state.eligible_session_keys:
+                make_session_eligible(state, session_key)
+                newly_eligible.append(session_key)
     _, fatigue_blackjack = energy_and_fatigue(sum(values), tn)
     fatigue_excess = math.ceil(max(0, quality_energy - ef_energy) / 2)
     state.fatigue = max(
@@ -187,6 +215,7 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
         successful_sessions=tuple(successful), busted_session=busted,
         ef_energy=ef_energy, quality_energy=quality_energy,
         session_costs=costs, progression_spec_gained=spec_gained,
+        newly_eligible_sessions=tuple(sorted(newly_eligible)),
         fatigue_blackjack=fatigue_blackjack, fatigue_excess=fatigue_excess,
         fatigue_specific=fatigue_specific, fatigue_after=state.fatigue,
         dice_pool_after=tuple(state.dice_pool),
