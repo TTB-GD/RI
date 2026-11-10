@@ -193,3 +193,22 @@ cost floor: the current cost function therefore does not activate its
 threshold/VMA slopes in this test. This is an important remaining integration
 gap, not evidence that terrain has no game effect in every configuration.
 CI run 42894769395 passed 138 primary and 90 experimental tests.
+
+
+## Physiological landmark activation check
+
+The 20-seed end-to-end matrix now counts both selected race loads and every
+legal production option against EF / Seuil / VMA (normalized cost, CTL 100):
+
+| Training focus | Selected loads ≤ EF | Legal options ≤ EF | Legal options EF–Seuil | Legal options > Seuil |
+|---|---:|---:|---:|---:|
+| Balanced | 114/114 | 1,865 | 0 | 0 |
+| EF | 115/115 | 1,976 | 0 | 0 |
+| Quality | 118/118 | 1,766 | 2 | 0 |
+
+Thus the policy-selected loads never leave the EF floor. Even across all legal
+options, only 2 of 1,768 quality-focus options exceed EF; none reaches the
+Seuil–VMA zone. The threshold and VMA cost slopes are effectively dormant in
+these end-to-end fixtures. This confirms a profile/load-scale integration gap:
+pool normalization alone does not make Training B's physiological landmarks
+mechanically active in Race V2.
