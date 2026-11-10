@@ -5,7 +5,6 @@ import random
 
 from decision_engine import energy_and_fatigue
 from dice_types import make_pool, pool_tn
-from session_effects import session_outcome
 
 from .catalog import SESSION_CATALOG, projected_profile
 from .programs import SessionAllocation
@@ -105,11 +104,9 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
         raise ValueError("one initial raw face is required for every die in the pool")
     if any(face < 1 or face > size for face, size in zip(raw_faces, state.dice_pool)):
         raise ValueError("raw face is outside its die range")
-    if final_values_override is None:
-        outcome = session_outcome(raw_faces, raw_faces, len(state.dice_pool))
-        values = tuple(outcome["dice_used"])
-    else:
-        values = tuple(final_values_override)
+    # Training B uses the dice selected by the player's explicit action.
+    # It does not inherit the legacy pattern-based dice filtering.
+    values = tuple(raw_faces) if final_values_override is None else tuple(final_values_override)
         if not 1 <= len(values) <= len(state.dice_pool):
             raise ValueError("final dice must be a non-empty subset of the pool")
         if any(value < 1 or value > max(state.dice_pool) for value in values):
