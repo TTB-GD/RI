@@ -1,0 +1,219 @@
+# Training B — décisions de conception
+
+> **Statut :** consolidation des réponses et clarifications recueillies jusqu'à Q55, le 10 novembre 2026.  
+> **Portée :** référence de conception pour construire la matrice des séances Training B et préparer son intégration avec Race V2.  
+> **Nature :** décisions utilisateur, hypothèses provisoires et points ouverts sont distingués. Ce document ne constitue pas une validation de l'équilibrage numérique.
+
+## 1. Principes directeurs
+
+- Training est une phase de **préparation** qui construit le profil physiologique et les spécialisations du coureur.
+- Race exploite ce profil préparé. L'ancien modèle Training sera abandonné au profit de Training B ; la compatibilité avec l'ancien moteur n'est pas un objectif.
+- Le rapport Training/Race vise une préparation substantielle : environ deux tiers de Training et un tiers de Race, pour une durée totale de partie de l'ordre de 60 à 90 minutes.
+- La conception doit rester directement implémentable et testable. Ne pas introduire d'abstractions d'architecture prématurées.
+- Le GDD doit distinguer les éléments actuels, expérimentaux, ouverts et les écarts d'implémentation.
+
+## 2. Tour de Training : dés et énergie
+
+### 2.1 Pool de dés
+
+- Le joueur commence avec **4 dés** et peut progresser jusqu'à **6 dés**.
+- Les dés peuvent être améliorés de **d6 à d8, d10 puis d12**.
+- Le joueur choisit librement quel dé améliorer ; l'amélioration n'est pas automatiquement appliquée au plus petit dé.
+- Les jalons de progression peuvent accorder un dé supplémentaire ou améliorer un dé. Les seuils exacts et le calendrier de ces gains restent à confirmer.
+
+### 2.2 Lancer et choix du joueur
+
+Au début du tour, le joueur lance **N−1 dés**. Il choisit ensuite une seule opération :
+
+1. **Keep** : conserver les résultats obtenus ;
+2. **Reroll** : relancer un dé déjà lancé ;
+3. **Add** : lancer le dé restant ;
+4. **Add + Reroll** : relancer un dé déjà lancé puis lancer le dé restant.
+
+Les résultats finaux de tous les dés sont conservés pour le calcul du tour. L'énergie disponible est la somme des résultats finaux.
+
+### 2.3 Fatigue issue des dés et TN
+
+- Le TN représente la somme attendue du pool complet de dés.
+- La variation de fatigue issue des dés est la différence entre la somme finale obtenue et le TN :
+  - résultat inférieur au TN : diminution de fatigue ;
+  - résultat égal au TN : fatigue inchangée ;
+  - résultat supérieur au TN : augmentation de fatigue.
+- La fatigue ne peut pas descendre sous zéro.
+- Cette variation est calculée après l'opération de dés, avant de résoudre les adaptations de séance.
+- La fatigue calculée est conservée même si le joueur fait un bust.
+
+> **À confirmer/calibrer :** la formule exacte du TN et les valeurs de seuil d'overtraining doivent être vérifiées dans la spécification d'implémentation. La référence historique du prototype utilisait la somme des espérances de chaque dé.
+
+## 3. Économie du tour : budgets EF et Qualité
+
+- L'énergie du tour est la somme des résultats finaux des dés.
+- Le joueur répartit librement cette énergie entre deux budgets :
+  - **budget EF** ;
+  - **budget Qualité**.
+- Le budget Qualité est ensuite réparti librement entre **Seuil** et **VMA**.
+- Il est possible d'investir dans Seuil et VMA au cours du même tour.
+- Chaque budget peut être réparti entre plusieurs séances d'une même filière pendant le tour.
+- Il n'existe pas de mécanique distincte de « surplus d'énergie ».
+- Les anciennes règles d'excès de Qualité par rapport à EF ne font pas partie du modèle retenu.
+- CTL est supprimé de Training B et ne doit pas servir de variable externe de préparation dans la nouvelle intégration Race.
+
+## 4. Catalogue de séances et dose
+
+### 4.1 Catalogue de base
+
+Les entrées de catalogue initiales sont des séances distinctes, chacune correspondant à une dose précise :
+
+| Filière | Séances de base |
+|---|---|
+| EF | EF1, EF2, EF3, EF4 |
+| Seuil | Seuil3, Seuil4, Seuil5 |
+| VMA | VMA3, VMA4, VMA5 |
+
+- Le chiffre représente la **dose investie**, c'est-à-dire le coût exact en points du budget correspondant.
+- Ce chiffre ne représente ni une capacité physiologique, ni une adaptation, ni le RPE.
+- Chaque dose est une entrée de séance distincte ; ce n'est pas une séance unique à coût variable.
+- Les séances peuvent être débloquées par la progression globale et, pour certaines séances spécialisées, par des prérequis physiologiques.
+
+### 4.2 Adaptations
+
+- Chaque séance possède une filière d'adaptation principale et une filière secondaire.
+- Les quantités d'adaptation principale et secondaire sont définies indépendamment pour chaque séance ; aucune proportion universelle n'est imposée.
+- L'adaptation dépend de la séance et de sa dose. Le résultat des dés n'en modifie pas directement la quantité, hors réussite ou bust.
+- Un bust annule l'adaptation de la séance concernée, mais ne supprime pas la fatigue déjà calculée à partir des dés.
+- Les adaptations sont accumulées dans des réserves/XP distinctes pour EF, Seuil et VMA.
+- Lorsqu'un palier est atteint, le coût requis est consommé et le surplus d'XP est conservé.
+- Les seuils de progression sont indépendants entre filières et de plus en plus espacés pour matérialiser les rendements décroissants.
+- Certaines séances peuvent également avoir leurs propres rendements décroissants en fonction de la dose ; ce traitement est défini au cas par cas, pas par une formule universelle.
+
+### 4.3 RPE, bust et fatigue de séance
+
+- Le RPE caractérise la difficulté intrinsèque de la séance et sert d'indicateur de son potentiel d'adaptation.
+- Le mécanisme de bust repose sur le **meilleur dé du pool**, comparé au dépassement de RPE autorisé par rapport au RPE de la séance.
+- La fatigue produite par une séance dépend à la fois de son RPE et de sa dose. Sa fonction peut varier selon la séance.
+- La fatigue issue des dés (écart au TN) et la fatigue produite par les séances sont deux contributions distinctes.
+
+### 4.4 Limites de répétition
+
+- Des limites peuvent exister au niveau d'une séance précise et/ou d'une famille de séances.
+- Ces limites sont définies au cas par cas ; aucune limite uniforme n'est imposée à tout le catalogue.
+
+## 5. Overtraining
+
+- Plusieurs niveaux/seuils de fatigue structurent l'overtraining.
+- Le seuil d'entrée est lié à la meilleure valeur de dé du pool ; un seuil plus élevé déclenche un état plus sévère.
+- En début d'overtraining :
+  - **Add** et **Add + Reroll** deviennent indisponibles ;
+  - **Reroll** reste possible.
+- En overtraining sévère, le joueur perd un dé au tour suivant.
+- La sortie de l'état d'overtraining est automatique lorsque la fatigue repasse sous le seuil correspondant.
+- La fatigue calculée à partir des dés reste acquise même en cas de bust.
+
+> **Ouvert :** valeurs numériques des seuils, articulation précise avec la meilleure face de dé et éventuel effet supplémentaire sur le budget disponible.
+
+## 6. SL et SPEC : préparation de course transversale
+
+- **SL** (sortie longue) et **SPEC** (spécifique) sont des familles transversales, pas de nouvelles filières physiologiques.
+- Elles sont financées par les budgets existants et peuvent être des variantes ou spécialisations de séances EF/Seuil/VMA.
+- Elles contribuent à la préparation de Race :
+  - préparation générale et fraîcheur ;
+  - bonus contextuels selon la distance ou le profil de la course cible.
+- Leurs bénéfices sont conservés jusqu'à la course ; il n'y a pas de décroissance automatique.
+- Le joueur choisit une course cible au début de la partie, avant le Training. La cible comprend la distance et éventuellement le profil du parcours.
+- La course cible ne peut pas être changée en cours de partie.
+- Le nombre de tours de Training dépend de la distance cible et du scénario. Tous les joueurs d'un même scénario ont le même nombre de tours.
+- Le dernier tour peut être consacré à un taper facultatif : le joueur réduit volontairement son investissement pour favoriser la récupération/fraîcheur.
+- Le bonus de fraîcheur en Race dépend du niveau de fatigue à la fin du Training ; il n'existe pas de variable de fraîcheur indépendante.
+- La formule du bonus de Race reste à calibrer. Une relation continue avec plafond a été évoquée comme hypothèse, pas validée.
+
+## 7. Progression physiologique et spécialisations
+
+### 7.1 Valeurs de départ
+
+Valeurs provisoires reprises du prototype :
+
+| Filière | Valeur initiale |
+|---|---:|
+| EF | 6 |
+| Seuil | 8 |
+| VMA | 10 |
+
+Ces valeurs sont conservées provisoirement, puis recalibrées avec la matrice et les scénarios.
+
+### 7.2 Rôle des filières dans Race
+
+- **EF** améliore l'efficacité énergétique : à vitesse/production identique, le coût énergétique diminue. EF n'augmente pas directement la réserve.
+- **Seuil** améliore la capacité à soutenir une allure élevée.
+- **VMA** augmente la vitesse maximale accessible.
+- La progression peut aussi permettre d'améliorer la vitesse à dépense énergétique constante.
+- Les paliers de chaque filière sont indépendants et de plus en plus espacés.
+
+### 7.3 Effet des paliers
+
+Chaque palier physiologique produit deux effets :
+
+1. une amélioration physiologique automatique ;
+2. l'ouverture d'un choix de spécialisation.
+
+L'effet physiologique automatique est propre à chaque filière et défini explicitement palier par palier. Il n'existe pas de règle universelle de type « +1 à chaque palier ».
+
+### 7.4 Spécialisations
+
+- Les spécialisations sont choisies par le joueur lorsqu'un palier les ouvre.
+- Elles sont permanentes et cumulatives jusqu'à la fin de la partie ; il n'y a ni emplacements limités ni remplacement.
+- Les options proposées dépendent des séances réalisées pendant le Training.
+- Le principe retenu provisoirement est celui de **seuils de pratique** pour rendre une spécialisation accessible. Les seuils numériques et leur métrique exacte ne sont pas définis.
+- Une amélioration de spécialisation modifie la **courbe physiologique de Race**.
+- Les paramètres de courbe modifiés sont ceux déjà présents dans Race V2, après audit du moteur.
+- Les effets de spécialisation se cumulent par addition.
+- Une spécialisation ne modifie qu'un seul paramètre de la courbe.
+- Les spécialisations ne sont donc pas de simples bonus contextuels indépendants : elles modifient la conversion de l'énergie en production/vitesse via les paramètres de la courbe.
+
+> **Précision importante :** le choix « seuils de pratique » (Q50) est une orientation préférée par l'utilisateur (« plutôt C »), pas encore un arbitrage ferme sur les valeurs ou la métrique de seuil.
+
+## 8. Course cible et calibration Race
+
+- Référence de calibration évoquée : 5 km réalisable à VMA et 10 km au seuil.
+- Le découpage exact de la course en segments et les cibles de consommation restent à finaliser.
+- La course utilise un budget/réserve énergétique et une courbe physiologique qui convertit la dépense en production/vitesse.
+- Le terrain constitue une surcharge locale.
+- La forme de course est révélée progressivement et modifie la réserve ; les règles détaillées restent à consolider.
+- Les anciens résultats de simulation fondés sur CTL externe, allocation directe des dés aux séances ou anciennes normalisations ne valident pas le nouveau modèle.
+
+## 9. Registre des décisions récentes (Q44–Q55)
+
+| Question | Décision | Statut / précision |
+|---|---|---|
+| Q44 — valeurs initiales EF/Seuil/VMA | C | Valeurs du prototype conservées provisoirement, puis recalibrées |
+| Q45 — effet d'un palier | C | Progression physiologique automatique + choix de spécialisation |
+| Q46 — nature de la progression automatique | D | Effet propre à chaque filière |
+| Q47 — amplitude de l'effet automatique | C | Définie explicitement pour chaque palier |
+| Q48 — cumul des spécialisations | A | Toutes permanentes et cumulatives |
+| Q49 — accès aux spécialisations | C | Dépend des séances réalisées |
+| Q50 — critère de déblocage | Plutôt C | Seuils de pratique ; métrique et valeurs ouvertes |
+| Q51 — nature de l'amélioration | Clarification | La spécialisation modifie la courbe physiologique de Race |
+| Q52 — partie de courbe modifiable | D | Forme de courbe : seuils, pentes, rendements et transitions |
+| Q53 — cumul des modifications | A | Additif |
+| Q54 — nombre de paramètres par spécialisation | A | Un seul paramètre |
+| Q55 — définition des paramètres | D | Partir des paramètres existants de Race V2 après audit |
+
+## 10. Points ouverts prioritaires
+
+Les points suivants doivent être résolus pour produire une matrice exploitable et implémentable :
+
+1. **Matrice des séances** : pour chaque séance et chaque dose, fixer coûts, RPE, adaptation primaire/secondaire, fatigue, bust autorisé, limites de répétition et rendements décroissants éventuels.
+2. **Formule de bust** : formaliser précisément la comparaison entre meilleur dé, RPE de séance et dépassement autorisé.
+3. **Fatigue de séance** : fixer les fonctions/valeurs par séance et les interactions avec la fatigue issue des dés.
+4. **Overtraining** : fixer les seuils numériques et l'éventuel impact sur le budget d'énergie.
+5. **Progression** : fixer les seuils d'XP indépendants EF/Seuil/VMA, les effets automatiques palier par palier et les gains de dés/améliorations de dés.
+6. **Spécialisations** : définir les familles de séances contributrices, les seuils de pratique, les options offertes et leur paramètre de courbe modifié.
+7. **Race V2** : auditer les paramètres mathématiques réellement présents dans le moteur, vérifier qu'ils permettent les modifications additives à un paramètre, puis définir les effets des spécialisations.
+8. **SL/SPEC** : définir les séances/variantes, les conditions d'accès et les effets sur la préparation générale ou contextuelle.
+9. **Taper et fraîcheur** : calibrer le lien entre fatigue finale du Training et bonus de Race.
+10. **Scénarios** : définir les durées de Training selon la course cible et valider la progression par simulations.
+
+## 11. Prochaine étape de conception
+
+Construire une **matrice provisoire des séances Training B** à partir du catalogue EF1–EF4, Seuil3–Seuil5 et VMA3–VMA5. Les paramètres non arbitrés doivent rester explicitement marqués **OPEN** plutôt que recevoir des valeurs inventées.
+
+En parallèle, auditer les paramètres existants de Race V2 nécessaires aux modifications additives de courbe. Les deux travaux doivent converger vers un premier scénario jouable et testable, sans réintroduire CTL ni l'ancien modèle Training.
