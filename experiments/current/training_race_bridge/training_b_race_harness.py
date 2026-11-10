@@ -11,7 +11,7 @@ from experiments.current.training_race_bridge.training_b_adapter import (
 )
 
 
-SEEDS = (11, 23, 47)
+SEEDS = tuple(range(20))
 FOCUSES = ("balanced", "ef", "quality")
 RACE_LENGTH = 6
 RACE_INPUTS = {"ctl": 100, "freshness_bonus": 0, "long_run_preparation": False}
