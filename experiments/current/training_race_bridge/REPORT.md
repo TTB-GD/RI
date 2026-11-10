@@ -163,3 +163,40 @@ map to Race V2's cost domain and how the race reserve is funded. These two
 rules must be made coherent together; tuning only one in isolation would hide
 the dimensional mismatch. The direct adapter remains an experimental bridge
 until this is resolved.
+
+
+## Pool-expectation normalized cost probe (CI run 42892601869)
+
+### RULE UNDER TEST
+
+For each legal physiological load, the existing physiological cost is converted to expected-pool-roll units:
+
+\[
+C_{pool}=\max\left(1,\left\lceil\frac{C_{physio}}{E(P)}\right\rceil\right)
+\]
+
+`E(P)` is calculated from the actual persistent Training B dice pool. The reserve fixture remains at 14 (six segments, CTL 100) and is provisionally interpreted in the same units. This is a deliberate test assumption; it is not yet a dimensionally proven mapping from CTL to reserve.
+
+### RESULTS
+
+Nine cases (three Training B focus heuristics × three seeds), using the same profiles, dice pools, seeds and ADAPTIVE policy as the direct PR49 bridge:
+
+| Training focus | Finish rate | Mean score | Mean spent | Mean E(pool) |
+|---|---:|---:|---:|---:|
+| Balanced | 1/3 (33.3%) | 81.00 | 14.00 | 21.50 |
+| EF | 0/3 (0%) | 69.33 | 14.00 | 21.50 |
+| Quality | 3/3 (100%) | 88.00 | 12.00 | 19.17 |
+| **Total** | **4/9 (44.4%)** | — | — | — |
+
+The CI run completed successfully: 87 lightweight experimental tests passed, including the nine-case normalization probe. The primary unit-test and JSON validation steps also passed.
+
+### INTERPRETATION
+
+- **RESULT:** Normalizing by the actual pool expectation removes the universal 0% finish outcome observed in PR49. It does not make all preparations viable: EF-focused preparation still finishes 0/3, while quality-focused preparation finishes 3/3.
+- **RESULT:** Training focus remains mechanically visible after normalization. Quality focus has the highest finish rate and mean score in this small sample; this is not sufficient evidence that quality training is globally superior.
+- **HYPOTHESIS:** The pool-normalized cost scale is closer to a usable interface between Training B and Race V2 than the unscaled profile cost. The strong focus-dependent finish-rate split may be meaningful, but three seeds per focus are too few to separate design signal from roll variance.
+- **OPEN:** The reserve interpretation is still provisional. Holding the numeric reserve at 14 while changing cost units makes a useful first probe, but does not establish how CTL should generate reserve in expected-pool units.
+
+### NEXT VALIDATION
+
+Before promoting the rule, expand the paired seed set (at least 100 seeds), retain identical rolls across the unscaled and normalized variants, and report per-seed finish, reserve clamp, DNF segment, cost and score. Then test pool progression independently: compare equal physiological profiles with different persistent pools, to verify that E(P) normalization responds to pool growth without erasing the benefit of larger/more variable dice. Do not modify CURRENT until these checks are complete.
