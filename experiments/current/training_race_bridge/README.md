@@ -126,3 +126,24 @@ Run:
 ```bash
 python -m unittest experiments.current.training_race_bridge.test_training_b_adapter -v
 ```
+
+
+## Persistent pool progression at fixed physiology
+
+A separate probe holds the same Training B physiology profile fixed (the
+balanced seed-11, 16-turn profile) and varies only the persistent dice pool.
+Each pool is normalized by its own expectation; 20 race seeds are used per
+pool, with CTL 100, six flat segments and ADAPTIVE policy.
+
+| Pool | E(pool) | Variance | Finish | Mean score | Mean spend |
+|---|---:|---:|---:|---:|---:|
+| 4d6 | 14.0 | 11.67 | 3/20 (15%) | 50.40 | 13.164 |
+| 4d8 | 18.0 | 21.00 | 17/20 (85%) | 77.60 | 12.350 |
+| 4d8+1d6 | 21.5 | 23.92 | 20/20 (100%) | 96.75 | 10.605 |
+| 2d10+4d6 | 25.0 | 28.17 | 20/20 (100%) | 117.15 | 9.120 |
+
+CI run 42893866549 passed 138 primary tests and 88 lightweight experimental
+tests. The progression probe shows a clear pool-size benefit in this fixture.
+Expectation and variance both rise across these pools, so this does not yet
+separate their individual contributions; an equal-expectation/different-
+variance comparison remains open.
