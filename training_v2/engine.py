@@ -41,7 +41,7 @@ class TurnResult:
     fatigue_specific: int
     fatigue_after: int
     dice_pool_after: tuple[int, ...]
-    dice_action: str = "legacy"
+    dice_action: str = "keep"
 
 
 def _apply_milestones(state: PlayerState, old_ef: int, old_q: int) -> None:
@@ -97,7 +97,7 @@ def _validate_allocations(state, values, allocations):
     return allocations
 
 
-def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), rng=None, portfolio_milestones=(), final_values_override=None, dice_action="legacy"):
+def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), rng=None, portfolio_milestones=(), final_values_override=None, dice_action="keep"):
     """Resolve one roll and the player's direct allocation of retained dice."""
     portfolio_milestones = validate_portfolio_milestones(portfolio_milestones)
     raw_faces = tuple(raw_faces)
@@ -237,12 +237,14 @@ def roll_and_resolve_turn(
     rng=None,
     risk_faces=(),
     portfolio_milestones=(),
+    overtraining=False,
 ):
     """Resolve initial roll, player dice action, then direct session allocation.
 
     choose_dice_action returns an action string or (action, reroll_index).
-    choose_program receives the resulting final dice values. Omitting the
-    action callback preserves a deterministic Keep default for low-level callers.
+    choose_program receives the resolved dice action. Keep is the default action.
+    Overtraining is supplied by the caller because its fatigue threshold remains
+    an explicit Training B rules parameter, not an inferred constant.
     """
     rng = rng if rng is not None else random.Random()
     initial_roll = roll_pool(state, rng=rng)
@@ -252,7 +254,8 @@ def roll_and_resolve_turn(
     else:
         action, reroll_index = choice, None
     dice = resolve_dice_action(
-        initial_roll, action, reroll_index=reroll_index, rng=rng
+        initial_roll, action, reroll_index=reroll_index, rng=rng,
+        overtraining=overtraining,
     )
     allocations = choose_program(dice)
     return resolve_turn(
