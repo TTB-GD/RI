@@ -11,6 +11,7 @@ from .catalog import SESSION_CATALOG, projected_profile
 from .programs import SessionAllocation
 from .state import PlayerState
 from .milestones import validate_portfolio_milestones
+from .dice import RollResult, roll_initial, resolve_dice_action
 from .portfolio import make_session_eligible
 
 
@@ -40,13 +41,7 @@ class TurnResult:
     fatigue_specific: int
     fatigue_after: int
     dice_pool_after: tuple[int, ...]
-
-
-@dataclass(frozen=True)
-class RollResult:
-    raw_faces: tuple[int, ...]
-    final_values: tuple[int, ...]
-    tn: float
+    dice_action: str = "legacy"
 
 
 def _apply_milestones(state: PlayerState, old_ef: int, old_q: int) -> None:
@@ -102,16 +97,23 @@ def _validate_allocations(state, values, allocations):
     return allocations
 
 
-def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), rng=None, portfolio_milestones=()):
+def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), rng=None, portfolio_milestones=(), final_values_override=None, dice_action="legacy"):
     """Resolve one roll and the player's direct allocation of retained dice."""
     portfolio_milestones = validate_portfolio_milestones(portfolio_milestones)
     raw_faces = tuple(raw_faces)
     if len(raw_faces) != len(state.dice_pool):
-        raise ValueError("one raw face is required for every die in the pool")
+        raise ValueError("one initial raw face is required for every die in the pool")
     if any(face < 1 or face > size for face, size in zip(raw_faces, state.dice_pool)):
         raise ValueError("raw face is outside its die range")
-    outcome = session_outcome(raw_faces, raw_faces, len(state.dice_pool))
-    values = tuple(outcome["dice_used"])
+    if final_values_override is None:
+        outcome = session_outcome(raw_faces, raw_faces, len(state.dice_pool))
+        values = tuple(outcome["dice_used"])
+    else:
+        values = tuple(final_values_override)
+        if not 1 <= len(values) <= len(state.dice_pool):
+            raise ValueError("final dice must be a non-empty subset of the pool")
+        if any(value < 1 or value > max(state.dice_pool) for value in values):
+            raise ValueError("final die value is outside the pool's die range")
     allocations = _validate_allocations(state, values, allocations)
 
     session_keys = tuple(item.session_key for item in allocations)
@@ -218,26 +220,43 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
         newly_eligible_sessions=tuple(sorted(newly_eligible)),
         fatigue_blackjack=fatigue_blackjack, fatigue_excess=fatigue_excess,
         fatigue_specific=fatigue_specific, fatigue_after=state.fatigue,
-        dice_pool_after=tuple(state.dice_pool),
+        dice_pool_after=tuple(state.dice_pool), dice_action=dice_action,
     )
 
 
 def roll_pool(state: PlayerState, *, rng=None) -> RollResult:
+    """Roll all dice once; expose n-1 active dice and the reserve separately."""
+    return roll_initial(state.dice_pool, rng=rng)
+
+
+def roll_and_resolve_turn(
+    state: PlayerState,
+    choose_program,
+    *,
+    choose_dice_action=None,
+    rng=None,
+    risk_faces=(),
+    portfolio_milestones=(),
+):
+    """Resolve initial roll, player dice action, then direct session allocation.
+
+    choose_dice_action returns an action string or (action, reroll_index).
+    choose_program receives the resulting final dice values. Omitting the
+    action callback preserves a deterministic Keep default for low-level callers.
+    """
     rng = rng if rng is not None else random.Random()
-    raw_faces = tuple(rng.randint(1, size) for size in state.dice_pool)
-    outcome = session_outcome(raw_faces, raw_faces, len(state.dice_pool))
-    return RollResult(
-        raw_faces=raw_faces, final_values=tuple(outcome["dice_used"]),
-        tn=pool_tn(make_pool(state.dice_pool)),
+    initial_roll = roll_pool(state, rng=rng)
+    choice = choose_dice_action(initial_roll) if choose_dice_action else "keep"
+    if isinstance(choice, tuple):
+        action, reroll_index = choice
+    else:
+        action, reroll_index = choice, None
+    dice = resolve_dice_action(
+        initial_roll, action, reroll_index=reroll_index, rng=rng
     )
-
-
-def roll_and_resolve_turn(state: PlayerState, choose_program, *, rng=None, risk_faces=(), portfolio_milestones=()):
-    """Roll first, then call choose_program(RollResult) for session allocations."""
-    rng = rng if rng is not None else random.Random()
-    roll = roll_pool(state, rng=rng)
-    allocations = choose_program(roll)
+    allocations = choose_program(dice)
     return resolve_turn(
-        state, roll.raw_faces, allocations, risk_faces=risk_faces, rng=rng,
+        state, initial_roll.raw_faces, allocations, risk_faces=risk_faces, rng=rng,
         portfolio_milestones=portfolio_milestones,
+        final_values_override=dice.final_values, dice_action=dice.action,
     )
