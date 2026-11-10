@@ -26,6 +26,7 @@ jobs:
             experiments.current.race_efficiency_probe.test_harness \
             experiments.current.training_race_bridge.test_harness \
             experiments.current.training_race_bridge.test_training_b_adapter \
+            experiments.current.training_race_bridge.test_pool_normalized_cost_probe \
             experiments.current.race_engine_v2.test_harness \
             experiments.current.race_engine_v2.test_physiology_integration \
             experiments.current.race_engine_v2.test_r1a2 \
