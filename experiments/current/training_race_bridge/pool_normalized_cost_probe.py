@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import json
 import math
-from collections import defaultdict
 from pathlib import Path
 from unittest.mock import patch
 
@@ -28,9 +27,9 @@ RACE_INPUTS = {
 }
 
 
-def normalized_cost(profile, load, pool_expected_total):
+def normalized_cost(profile, load, pool_expected_total, raw_cost_fn):
     """Cost in expected-pool-roll units, rounded up to preserve payment."""
-    raw = core.physiological_cost(profile, load)
+    raw = raw_cost_fn(profile, load)
     return max(1, math.ceil(raw / pool_expected_total))
 
 
@@ -54,7 +53,7 @@ def run_matrix():
             with patch(
                 "experiments.current.race_engine_v2.core.physiological_cost",
                 side_effect=lambda profile, load: normalized_cost(
-                    profile, load, expected
+                    profile, load, expected, original
                 ),
             ):
                 race = run_training_race(
