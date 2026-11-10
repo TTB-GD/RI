@@ -170,3 +170,26 @@ At the two higher expectations, all pools finish and score differences are
 small. This indicates variance can matter near the viability boundary, but
 does not establish a general variance bonus. CI run 42894254229 passed 138
 primary and 89 experimental tests.
+
+
+## Second Training B profile and terrain check
+
+The equal-expectation pairs were repeated on a second 16-turn Training B
+profile (EF-focused, seed 23), with flat course and an early-hills profile
+(+3 load on segments 2–3). Twenty seeds per pool:
+
+| E(pool) | Pool | Finish flat / hills | Mean score | Mean max load flat → hills | Mean terrain surcharge |
+|---:|---|---:|---:|---:|---:|
+| 18.0 | 4d8 | 0% / 0% | 60.20 | 13.85 → 16.35 | 0.000 |
+| 18.0 | 2d6+2d10 | 15% / 15% | 67.50 | 14.25 → 17.10 | 0.000 |
+| 22.5 | 5d8 | 70% / 70% | 95.10 | 18.45 → 20.35 | 0.000 |
+| 22.5 | 3d6+1d10+1d12 | 65% / 65% | 94.50 | 18.55 → 20.45 | 0.000 |
+| 27.0 | 6d8 | 100% / 100% | 124.10 | 23.70 → 24.40 | 0.000 |
+| 27.0 | 3d6+3d10 | 100% / 100% | 124.65 | 23.55 → 24.40 | 0.000 |
+
+The +3 terrain load is present, but the physiological surcharge remains zero in
+all cases. This is consistent with the selected loads remaining below the EF
+cost floor: the current cost function therefore does not activate its
+threshold/VMA slopes in this test. This is an important remaining integration
+gap, not evidence that terrain has no game effect in every configuration.
+CI run 42894769395 passed 138 primary and 90 experimental tests.
