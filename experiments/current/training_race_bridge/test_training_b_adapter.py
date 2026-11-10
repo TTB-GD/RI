@@ -2,6 +2,7 @@
 import unittest
 
 from experiments.current.race_engine_v2.policies import POLICIES
+from experiments.current.training_race_bridge.training_b_race_harness import run_matrix
 from experiments.current.training_race_bridge.training_b_adapter import (
     race_inputs_from_training,
     race_pool_from_training,
@@ -43,6 +44,15 @@ class TrainingBAdapterTests(unittest.TestCase):
             (8, 11, 14),
         )
         self.assertEqual(converted["pool"].dice, (6, 8, 6, 10))
+
+    def test_sixteen_turn_training_matrix_reaches_race_v2(self):
+        result = run_matrix()
+        self.assertEqual(len(result["courses"]), 9)
+        for course in result["courses"]:
+            self.assertEqual(course["training_turns"], 16)
+            self.assertEqual(len(course["training_profile"]), 3)
+            self.assertTrue(course["race_pool"])
+            self.assertGreaterEqual(course["race_score"], 0)
 
     def test_race_v2_runs_from_completed_training_snapshot(self):
         snapshot = {
