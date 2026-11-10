@@ -81,3 +81,21 @@ inventing a scale factor. Race completion and reserve adequacy must therefore
 be evaluated before treating this vertical slice as balanced. The earlier
 synthetic SPEC probe above remains separate and is not evidence of Training B
 integration.
+
+
+## Pool-expectation normalization probe
+
+`pool_normalized_cost_probe.py` is a separate experimental calibration probe. It preserves the Training B profile and persistent dice pool, then converts each physiological cost to expected-pool-roll units:
+
+\[
+C_{\mathrm{pool}}=\max\left(1,\left\lceil\frac{C_{\mathrm{physio}}}{E(P)}\right\rceil\right)
+\]
+
+where `E(P)` is computed from the actual Training B race pool. The Race V2 reserve fixture is left numerically unchanged and is provisionally interpreted in the same expected-pool-roll units. **That reserve interpretation is an explicit hypothesis**, not a confirmed design rule.
+
+Run:
+
+```bash
+python -m experiments.current.training_race_bridge.pool_normalized_cost_probe
+python -m unittest experiments.current.training_race_bridge.test_pool_normalized_cost_probe -v
+```
