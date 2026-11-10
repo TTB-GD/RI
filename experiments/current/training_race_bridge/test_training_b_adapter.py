@@ -3,7 +3,9 @@ import json
 import unittest
 
 from experiments.current.race_engine_v2.policies import POLICIES
-from experiments.current.training_race_bridge.training_b_race_harness import (\n    run_matrix, run_pool_progression_matrix, summarize,\n)
+from experiments.current.training_race_bridge.training_b_race_harness import (
+    run_matrix, run_pool_progression_matrix, summarize,
+)
 from experiments.current.training_race_bridge.training_b_adapter import (
     race_inputs_from_training, race_pool_from_training, race_profile_from_training,
     run_training_race,
