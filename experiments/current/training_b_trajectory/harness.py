@@ -47,6 +47,23 @@ def _score(option, focus):
     )
 
 
+
+def _choose_dice_action(roll, focus):
+    """Choose a dice action from the initial roll; reroll result remains random."""
+    target = roll.tn + (1.0 if focus == "quality" else -1.0 if focus == "ef" else 0.0)
+    active = roll.active_values
+    candidates = [(abs(sum(active) - target), 0, "keep", None)]
+    candidates.append((
+        abs(sum(active) + roll.reserve_value - target), 2, "add", None
+    ))
+    for index, (value, size) in enumerate(zip(active, roll.active_sizes)):
+        expected = sum(active) - value + (size + 1) / 2
+        candidates.append((abs(expected - target), 1, "reroll", index))
+        expected_add = expected + roll.reserve_value
+        candidates.append((abs(expected_add - target), 3, "add+reroll", index))
+    _, _, action, reroll_index = min(candidates)
+    return (action, reroll_index) if reroll_index is not None else action
+
 def _acquire_available(state):
     """A deliberately permissive player choice: acquire every newly eligible option."""
     acquired = []
@@ -80,13 +97,16 @@ def run_trajectory(seed=1, focus="balanced", turns=16):
             ).allocations
 
         result = roll_and_resolve_turn(
-            state, choose, rng=rng, portfolio_milestones=MILESTONES
+            state, choose,
+            choose_dice_action=lambda roll: _choose_dice_action(roll, focus),
+            rng=rng, portfolio_milestones=MILESTONES
         )
         acquired_now = _acquire_available(state)
         history.append({
             "turn": result.turn,
             "raw_faces": list(result.raw_faces),
             "final_values": list(result.final_values),
+            "dice_action": result.dice_action,
             "sessions": [item.session_key for item in result.successful_sessions],
             "busted_session": result.busted_session,
             "ef_energy": result.ef_energy,
