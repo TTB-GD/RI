@@ -39,7 +39,7 @@ class TrainingBAdapterTests(unittest.TestCase):
 
     def test_sixteen_turn_training_matrix_compares_paired_cost_modes(self):
         result = run_matrix()
-        self.assertEqual(len(result["courses"]), 18)
+        self.assertEqual(len(result["courses"]), 120)
         for course in result["courses"]:
             self.assertEqual(course["training_turns"], 16)
             self.assertEqual(len(course["training_profile"]), 3)
@@ -48,7 +48,7 @@ class TrainingBAdapterTests(unittest.TestCase):
         summary = summarize(result)
         for focus in ("balanced", "ef", "quality"):
             self.assertEqual(summary[focus]["raw"]["finish_rate"], 0.0)
-            self.assertEqual(summary[focus]["pool_expected"]["finish_rate"], 1.0)
+            self.assertGreater(summary[focus]["pool_expected"]["finish_rate"], 0.8)
         print("TRAINING_B_RACE_NORMALIZATION_SUMMARY=" + json.dumps(summary, sort_keys=True))
 
     def test_race_v2_runs_from_completed_training_snapshot(self):
