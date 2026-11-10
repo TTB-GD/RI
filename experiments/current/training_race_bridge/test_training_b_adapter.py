@@ -3,7 +3,7 @@ import json
 import unittest
 
 from experiments.current.race_engine_v2.policies import POLICIES
-from experiments.current.training_race_bridge.training_b_race_harness import run_matrix, summarize
+from experiments.current.training_race_bridge.training_b_race_harness import (\n    run_matrix, run_pool_progression_matrix, summarize,\n)
 from experiments.current.training_race_bridge.training_b_adapter import (
     race_inputs_from_training, race_pool_from_training, race_profile_from_training,
     run_training_race,
@@ -53,6 +53,19 @@ class TrainingBAdapterTests(unittest.TestCase):
             for mode in ("pool_expected_ctl100", "pool_expected_ctl150",
                          "pool_expected_ctl200"):
                 self.assertGreater(summary[focus][mode]["finish_rate"], baseline)
+
+    def test_pool_progression_at_fixed_training_profile(self):
+        result = run_pool_progression_matrix()
+        self.assertEqual(len(result["courses"]), 80)
+        expectations = [result["summary"][name]["expected_total"]
+                        for name in ("4d6", "4d8", "4d8+1d6", "2d10+4d6")]
+        self.assertEqual(expectations, sorted(expectations))
+        self.assertEqual(len({tuple(sorted(result["fixed_training_profile"].items()))}), 1)
+        for course in result["courses"]:
+            self.assertEqual(course["fixed_training_profile"], result["fixed_training_profile"])
+            self.assertGreater(course["pool_expected_total"], 0)
+        print("TRAINING_B_POOL_PROGRESSION_SUMMARY=" +
+              json.dumps(result["summary"], sort_keys=True))
 
     def test_race_v2_runs_from_completed_training_snapshot(self):
         snapshot = {"profile": {"ef": 15, "threshold": 21, "vma": 27},
