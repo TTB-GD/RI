@@ -5,10 +5,11 @@ from .catalog import SessionOption, SESSION_CATALOG
 from .state import PlayerState, PhysiologyProfile
 from .portfolio import make_session_eligible, acquire_session
 from .milestones import PortfolioMilestone
+from .dice import DiceActionResult, resolve_dice_action
 
 __all__ = [
-    "PlayerState", "PhysiologyProfile", "RollResult", "TurnResult",
+    "PlayerState", "PhysiologyProfile", "RollResult", "DiceActionResult", "TurnResult",
     "ProgramOption", "SessionAllocation", "SessionOption", "SESSION_CATALOG",
-    "list_program_options", "resolve_turn", "roll_pool", "roll_and_resolve_turn",
+    "list_program_options", "resolve_turn", "roll_pool", "roll_and_resolve_turn", "resolve_dice_action",
     "make_session_eligible", "acquire_session", "PortfolioMilestone",
 ]
