@@ -234,6 +234,8 @@ def run_second_profile_terrain_matrix():
                         "fixed_training_profile": profile,
                         "race_score": race["score"], "race_spent": race["spent"],
                         "race_dnf": race["dnf"], "race_dnf_turn": race["dnf_turn"],
+                        "race_max_load": max((turn["physiological_load"] for turn in race["turns"]), default=0),
+                        "race_terrain_extra_cost": sum(turn["terrain_extra_cost"] for turn in race["turns"]),
                     })
     summary = {}
     for pair_name, pool_pair in pairs.items():
@@ -250,6 +252,8 @@ def run_second_profile_terrain_matrix():
                     "mean_spent": round(sum(c["race_spent"] for c in rows) / len(rows), 3),
                     "expected_total": rows[0]["pool_expected_total"],
                     "variance": rows[0]["pool_variance"],
+                    "mean_max_load": round(sum(c["race_max_load"] for c in rows) / len(rows), 2),
+                    "mean_terrain_extra_cost": round(sum(c["race_terrain_extra_cost"] for c in rows) / len(rows), 3),
                 }
     return {"fixed_training_profile": profile, "summary": summary, "courses": courses}
 
