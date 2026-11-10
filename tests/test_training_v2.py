@@ -136,7 +136,7 @@ class TrainingBAllocationTests(unittest.TestCase):
         self.assertEqual(first.newly_eligible_sessions, ("EF_SOUTENUE",))
         second = resolve_turn(
             state, (6, 6, 6, 6),
-            (SessionAllocation("EF", (0, 1, 2, 3), 24),),
+            (SessionAllocation("VMA", (0, 1, 2, 3), 24),),
             portfolio_milestones=(milestone,),
         )
         self.assertEqual(second.newly_eligible_sessions, ())
