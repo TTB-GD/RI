@@ -56,10 +56,17 @@ class TrainingBAdapterTests(unittest.TestCase):
                          "pool_expected_ctl200"):
                 self.assertGreater(summary[focus][mode]["finish_rate"], baseline)
             zones = summary[focus]["pool_expected_ctl100"]["load_zones"]
+            selected = zones["selected"]
             self.assertEqual(
-                zones["segments_observed"],
-                zones["at_or_below_ef"] + zones["above_ef_through_threshold"]
-                + zones["above_threshold"],
+                selected["segments_observed"],
+                selected["at_or_below_ef"] + selected["above_ef_through_threshold"]
+                + selected["above_threshold"],
+            )
+            legal = zones["legal_options"]
+            self.assertEqual(
+                legal["legal_options_observed"],
+                legal["at_or_below_ef"] + legal["above_ef_through_threshold"]
+                + legal["above_threshold"],
             )
 
     def test_pool_progression_at_fixed_training_profile(self):
