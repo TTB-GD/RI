@@ -1,4 +1,5 @@
 """CI coverage for the experimental pool-normalized cost probe."""
+import json
 import unittest
 
 from experiments.current.training_race_bridge.pool_normalized_cost_probe import run_matrix
@@ -7,6 +8,7 @@ from experiments.current.training_race_bridge.pool_normalized_cost_probe import 
 class PoolNormalizedCostProbeTests(unittest.TestCase):
     def test_nine_training_b_cases_run_with_explicit_pool_normalization(self):
         result = run_matrix()
+        print("POOL_NORMALIZED_SUMMARY=" + json.dumps(result["summary"], sort_keys=True))
         self.assertEqual(len(result["courses"]), 9)
         self.assertTrue(result["protocol"]["reserve_interpretation_is_hypothesis"])
         for course in result["courses"]:
