@@ -96,6 +96,23 @@ class TrainingBAllocationTests(unittest.TestCase):
         self.assertEqual(state.profile.threshold, 8)
         self.assertEqual(state.progression_q, 0)
 
+    def test_busted_quality_does_not_count_as_realized_load_or_spec(self):
+        state = PlayerState()
+        allocation = (
+            SessionAllocation("EF", (0,), 2),
+            SessionAllocation("VMA", (1, 2, 3), 6),
+        )
+        # EF completes; VMA is risky and busts. Its unused Quality remainder
+        # and its planned energy must not affect realized progression or load.
+        result = resolve_turn(state, (2, 2, 2, 2), allocation, risk_faces=(1,))
+        self.assertEqual([x.session_key for x in result.successful_sessions], ["EF"])
+        self.assertEqual(result.busted_session, "VMA")
+        self.assertEqual(result.ef_energy, 2)
+        self.assertEqual(result.quality_energy, 0)
+        self.assertEqual(result.progression_spec_gained, 0)
+        self.assertEqual(state.progression_spec, 0)
+        self.assertEqual(result.fatigue_excess, 0)
+
     def test_invalid_allocation_does_not_mutate_state(self):
         state = PlayerState()
         before = state.clone()
