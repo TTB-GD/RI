@@ -190,11 +190,11 @@ explicit hypothesis.
   divided by its actual pool expectation = 120 Race V2 executions.
 - Both variants share the same Training B state, pool, race seed, ADAPTIVE
   policy, six-segment course, CTL 100, freshness 0 and SL off.
-- CI run: `42893031947`; 87 tests passed.
+- CI runs: `42893031947` (20-seed paired cost comparison) and `42893537620` (reserve sensitivity); 87 tests passed in the latest run.
 
-### RESULTS
+### RESULTS — COST NORMALIZATION AT CTL 100
 
-| Training focus | Raw finish | Pool-normalized finish | Mean score (normalized) | Mean spend (normalized) | Mean E(pool) |
+| Training focus | Raw finish | Pool-normalized finish | Mean score | Mean spend | Mean E(pool) |
 |---|---:|---:|---:|---:|---:|
 | Balanced | 0/20 | 14/20 (70%) | 90.50 | 11.986 | 21.50 |
 | EF | 0/20 | 15/20 (75%) | 93.75 | 12.523 | 22.02 |
@@ -202,6 +202,24 @@ explicit hypothesis.
 | **Total** | **0/60** | **47/60 (78.3%)** | — | — | — |
 
 All 13 normalized DNFs occur on segment 6. Raw-cost races all DNF on segment 4.
+
+### RESERVE SENSITIVITY — SAME 60 TRAINING B PREPARATIONS
+
+The same prepared profiles, persistent pools, seeds and ADAPTIVE policy were
+rerun with the existing Race V2 CTL reserve formula at CTL 100, 150 and 200.
+No reserve multiplier or new formula was introduced.
+
+| Training focus | Normalized CTL100 | Normalized CTL150 | Normalized CTL200 |
+|---|---:|---:|---:|
+| Balanced | 14/20 (70%) | 19/20 (95%) | 20/20 (100%) |
+| EF | 15/20 (75%) | 18/20 (90%) | 19/20 (95%) |
+| Quality | 18/20 (90%) | 20/20 (100%) | 20/20 (100%) |
+| **Total** | **47/60 (78.3%)** | **57/60 (95%)** | **59/60 (98.3%)** |
+
+Every remaining normalized DNF is at segment 6. The existing reserve formula
+adds one reserve point between CTL 100 and 150, then one more between 150 and
+200. This indicates a reserve-magnitude sensitivity, but does not prove that
+Training B should output CTL 150/200 or validate the CTL-to-reserve mapping.
 
 ### INTERPRETATION
 
@@ -225,7 +243,7 @@ an explicit open calibration choice.
 1. Hold physiology fixed and compare multiple persistent pools to isolate
    whether higher expectation and variance improve race options without
    granting an unintended cost discount.
-2. Test course difficulty and reserve sensitivity; the remaining 13/60 DNFs
-   occur at the final segment.
-3. Derive the CTL → reserve mapping in the same unit system before promoting
-   either normalization rule.
+2. Isolate pool progression at fixed physiology to ensure the normalization
+   neither erases nor double-counts the benefit of a stronger persistent pool.
+3. Test course difficulty, then derive the CTL → reserve mapping in the same
+   unit system before promoting either normalization rule.
