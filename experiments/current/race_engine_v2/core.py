@@ -24,16 +24,17 @@ class PolicyView:
     race_length: int
     available: tuple[int, ...]
     payable: tuple[int, ...]
-    spent: int
+    spent: float
     base_reserve: int
     freshness_bonus: int
     observed_form: int
-    final_reserve: int | None
+    final_reserve: float | None
     pool_expected_total: float
     curve: str | None
     current_difficulty: int = 0
     remaining_difficulty_profile: tuple[int, ...] = ()
     physiology_profile: PhysiologyProfile | None = None
+    physiology_cost_divisor: float = 1.0
 
 
 def available_productions(roll: tuple[int, ...]) -> ProductionOptions:
@@ -67,7 +68,6 @@ def physiologically_available_productions(
     options: ProductionOptions, profile: PhysiologyProfile, difficulty: int
 ) -> tuple[int, ...]:
     """Filter generated Productions by the CURRENT Charge <= VMA boundary."""
-
     return tuple(
         production for production in options.productions
         if is_production_physiologically_legal(profile, production, difficulty)
@@ -97,9 +97,14 @@ def run_race(*, seed: int, pool: DicePool, race_length: int, policy,
              ctl: int, freshness_bonus: int, long_run_preparation: bool,
              form_mode: str | None = None, difficulty_profile: tuple[int, ...] | None = None,
              profile_name: str = "D0_FLAT", curve: str | None = None,
-             physiology_profile: PhysiologyProfile | None = None) -> dict:
+             physiology_profile: PhysiologyProfile | None = None,
+             physiology_cost_divisor: float = 1.0) -> dict:
     if (curve is None) == (physiology_profile is None):
         raise ValueError("provide exactly one of curve or physiology_profile")
+    if physiology_cost_divisor <= 0:
+        raise ValueError("physiology_cost_divisor must be positive")
+    if physiology_profile is None and physiology_cost_divisor != 1.0:
+        raise ValueError("physiology_cost_divisor is only valid with a physiology profile")
     cost_source = physiology_profile if physiology_profile is not None else curve
     assert cost_source is not None
     form_mode = form_mode or ("PATTERN" if physiology_profile is not None else "SUM")
@@ -111,11 +116,14 @@ def run_race(*, seed: int, pool: DicePool, race_length: int, policy,
     signals: list[str] = []
     form_values: list[int] = []
     turns: list[dict] = []
-    spent = 0
+    spent = 0.0
     final_reserve = None
     raw_final_reserve = None
     clamped = False
     dnf_turn = None
+
+    def normalized_cost(production: int, difficulty: int) -> float:
+        return production_cost(production, difficulty, cost_source) / physiology_cost_divisor
 
     for segment, roll in enumerate(rolls, start=1):
         difficulty = difficulty_profile[segment - 1]
@@ -133,14 +141,9 @@ def run_race(*, seed: int, pool: DicePool, race_length: int, policy,
                 generated_options, physiology_profile, difficulty
             )
         )
-        # The first three commitments are never undone. At segment 3 the raw
-        # final reserve is visible, but the post-choice floor is applied after it.
         remaining = None if final_reserve is None else final_reserve - spent
-        available_options = ProductionOptions(
-            available, {p: generated_options.compositions[p] for p in available}
-        )
-        payable = available if remaining is None else payable_productions(
-            available_options, remaining, cost_source, difficulty
+        payable = available if remaining is None else tuple(
+            p for p in available if normalized_cost(p, difficulty) <= remaining
         )
         if not payable:
             dnf_turn = segment
@@ -155,12 +158,14 @@ def run_race(*, seed: int, pool: DicePool, race_length: int, policy,
             current_difficulty=difficulty,
             remaining_difficulty_profile=difficulty_profile[segment:],
             physiology_profile=physiology_profile,
+            physiology_cost_divisor=physiology_cost_divisor,
         )
         chosen = policy(view)
         if chosen not in payable:
             raise ValueError(f"policy selected illegal production {chosen}")
         load = physiological_load(chosen, difficulty)
-        cost = production_cost(chosen, difficulty, cost_source)
+        raw_cost = production_cost(chosen, difficulty, cost_source)
+        cost = raw_cost / physiology_cost_divisor
         spent += cost
         if segment == 3:
             assert raw_final_reserve is not None
@@ -179,13 +184,16 @@ def run_race(*, seed: int, pool: DicePool, race_length: int, policy,
             "form_value": form_values[-1] if segment <= 3 else None,
             "form_cumulative": sum(form_values), "available": available,
             "payable": payable, "choice": chosen, "cost": cost,
-            "terrain_extra_cost": cost - production_cost(chosen, 0, cost_source),
+            "raw_physiological_cost": raw_cost,
+            "terrain_extra_cost": cost - normalized_cost(chosen, 0),
             "spent": spent,
             "reserve_remaining": None if final_reserve is None else final_reserve - spent,
         })
 
     return {
-        "seed": seed, "pool": pool.name, "length": race_length, "curve": curve,
+        "seed": seed, "pool": pool.name, "pool_expected_total": pool.expected_total,
+        "physiology_cost_divisor": physiology_cost_divisor,
+        "length": race_length, "curve": curve,
         "physiology_profile": physiology_profile,
         "form_mode": form_mode,
         "profile": profile_name, "difficulty_profile": difficulty_profile,
