@@ -23,6 +23,8 @@ class PlayerState:
     dice_pool: list[int] = field(default_factory=lambda: [6, 6, 6, 6])
     progression_ef: int = 0
     progression_q: int = 0
+    progression_threshold: int = 0
+    progression_vma: int = 0
     progression_spec: int = 0
     fatigue: int = 0
     turns_played: int = 0
@@ -30,6 +32,7 @@ class PlayerState:
     dice_added: int = 0
     ef_milestones_claimed: set[int] = field(default_factory=set)
     q_milestones_claimed: set[int] = field(default_factory=set)
+    portfolio_milestones_claimed: set[str] = field(default_factory=set)
     eligible_session_keys: set[str] = field(
         default_factory=lambda: {"EF", "SEUIL", "VMA"}
     )
@@ -57,6 +60,8 @@ class PlayerState:
             dice_pool=list(self.dice_pool),
             progression_ef=self.progression_ef,
             progression_q=self.progression_q,
+            progression_threshold=self.progression_threshold,
+            progression_vma=self.progression_vma,
             progression_spec=self.progression_spec,
             fatigue=self.fatigue,
             turns_played=self.turns_played,
@@ -64,6 +69,7 @@ class PlayerState:
             dice_added=self.dice_added,
             ef_milestones_claimed=set(self.ef_milestones_claimed),
             q_milestones_claimed=set(self.q_milestones_claimed),
+            portfolio_milestones_claimed=set(self.portfolio_milestones_claimed),
             eligible_session_keys=set(self.eligible_session_keys),
             acquired_session_keys=set(self.acquired_session_keys),
         )
