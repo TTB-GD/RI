@@ -1,4 +1,5 @@
 """Tests for the direct Training B -> Race V2 adapter."""
+import json
 import unittest
 
 from experiments.current.race_engine_v2.policies import POLICIES
@@ -53,6 +54,17 @@ class TrainingBAdapterTests(unittest.TestCase):
             self.assertEqual(len(course["training_profile"]), 3)
             self.assertTrue(course["race_pool"])
             self.assertGreaterEqual(course["race_score"], 0)
+        summary = {}
+        for focus in ("balanced", "ef", "quality"):
+            rows = [c for c in result["courses"] if c["training_focus"] == focus]
+            summary[focus] = {
+                "profiles": sorted({tuple(sorted(c["training_profile"].items())) for c in rows}),
+                "pools": sorted({c["race_pool"] for c in rows}),
+                "finish_rate": sum(not c["race_dnf"] for c in rows) / len(rows),
+                "mean_score": round(sum(c["race_score"] for c in rows) / len(rows), 2),
+                "mean_spent": round(sum(c["race_spent"] for c in rows) / len(rows), 2),
+            }
+        print("TRAINING_B_RACE_SUMMARY=" + json.dumps(summary, sort_keys=True))
 
     def test_race_v2_runs_from_completed_training_snapshot(self):
         snapshot = {
