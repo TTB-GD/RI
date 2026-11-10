@@ -60,7 +60,7 @@ class TrainingBAdapterTests(unittest.TestCase):
         expectations = [result["summary"][name]["expected_total"]
                         for name in ("4d6", "4d8", "4d8+1d6", "2d10+4d6")]
         self.assertEqual(expectations, sorted(expectations))
-        self.assertEqual(len({tuple(sorted(result["fixed_training_profile"].items()))}), 1)
+        self.assertEqual(result["courses"][0]["fixed_training_profile"], result["fixed_training_profile"])
         for course in result["courses"]:
             self.assertEqual(course["fixed_training_profile"], result["fixed_training_profile"])
             self.assertGreater(course["pool_expected_total"], 0)
