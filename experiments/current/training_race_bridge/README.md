@@ -81,3 +81,44 @@ inventing a scale factor. Race completion and reserve adequacy must therefore
 be evaluated before treating this vertical slice as balanced. The earlier
 synthetic SPEC probe above remains separate and is not evidence of Training B
 integration.
+
+
+## Pool-expectation normalization — paired 20-seed probe
+
+The direct Race V2 runner now exposes an **opt-in experimental** divisor for
+physiological cost. The default divisor remains 1.0, so all existing Race V2
+behaviour is unchanged. For the comparison, the normalized variant uses:
+
+```
+normalized_cost = physiological_cost / E(actual Training B dice pool)
+```
+
+The same 16-turn Training B trajectory, resulting profile, persistent pool,
+race seed, policy and reserve fixture are used for raw and normalized runs.
+The reserve formula remains unchanged at CTL 100 / six segments (14 points);
+interpreting those 14 points in normalized units is still a calibration
+hypothesis, not a confirmed CTL conversion.
+
+CI run 42893031947 tested 20 seeds per focus (60 Training B preparations,
+120 paired Race V2 executions):
+
+| Training focus | Raw finish | Pool-normalized finish | Normalized mean score | Normalized mean spend |
+|---|---:|---:|---:|---:|
+| Balanced | 0/20 | 14/20 (70%) | 90.50 | 11.986 |
+| EF | 0/20 | 15/20 (75%) | 93.75 | 12.523 |
+| Quality | 0/20 | 18/20 (90%) | 90.55 | 10.049 |
+| **Total** | **0/60** | **47/60 (78.3%)** | — | — |
+
+This confirms that the direct integration is executable and that pool-relative
+cost substantially improves completion under the unchanged reserve fixture.
+It does **not** validate balance: 13/60 normalized races still DNF, all on
+segment 6. The exact-division candidate retains fractional costs; a separate
+integer-ceiling candidate is recorded in PR50 and produced 4/9 finishes on its
+initial three-seed sample. These two quantization approaches should not be
+treated as equivalent.
+
+Run:
+
+```bash
+python -m unittest experiments.current.training_race_bridge.test_training_b_adapter -v
+```
