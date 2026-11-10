@@ -107,10 +107,10 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
     # Training B uses the dice selected by the player's explicit action.
     # It does not inherit the legacy pattern-based dice filtering.
     values = tuple(raw_faces) if final_values_override is None else tuple(final_values_override)
-        if not 1 <= len(values) <= len(state.dice_pool):
-            raise ValueError("final dice must be a non-empty subset of the pool")
-        if any(value < 1 or value > max(state.dice_pool) for value in values):
-            raise ValueError("final die value is outside the pool's die range")
+    if not 1 <= len(values) <= len(state.dice_pool):
+        raise ValueError("final dice must be a non-empty subset of the pool")
+    if any(value < 1 or value > max(state.dice_pool) for value in values):
+        raise ValueError("final die value is outside the pool's die range")
     allocations = _validate_allocations(state, values, allocations)
 
     session_keys = tuple(item.session_key for item in allocations)
