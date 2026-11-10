@@ -73,8 +73,11 @@ class TrainingBAdapterTests(unittest.TestCase):
         result = run_equal_expectation_variance_matrix()
         self.assertEqual(len(result["courses"]), 120)
         for pair in result["summary"].values():
-            expectations = [entry["expected_total"] for entry in pair.values()]
+            entries = list(pair.values())
+            expectations = [entry["expected_total"] for entry in entries]
+            variances = [entry["variance"] for entry in entries]
             self.assertEqual(expectations[0], expectations[1])
+            self.assertNotEqual(variances[0], variances[1])
         for course in result["courses"]:
             self.assertEqual(course["fixed_training_profile"], result["fixed_training_profile"])
         print("TRAINING_B_EQUAL_EXPECTATION_VARIANCE_SUMMARY=" +
