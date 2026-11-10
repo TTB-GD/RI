@@ -232,9 +232,12 @@ def roll_pool(state: PlayerState, *, rng=None) -> RollResult:
     )
 
 
-def roll_and_resolve_turn(state: PlayerState, choose_program, *, rng=None, risk_faces=()):
+def roll_and_resolve_turn(state: PlayerState, choose_program, *, rng=None, risk_faces=(), portfolio_milestones=()):
     """Roll first, then call choose_program(RollResult) for session allocations."""
     rng = rng if rng is not None else random.Random()
     roll = roll_pool(state, rng=rng)
     allocations = choose_program(roll)
-    return resolve_turn(state, roll.raw_faces, allocations, risk_faces=risk_faces, rng=rng)
+    return resolve_turn(
+        state, roll.raw_faces, allocations, risk_faces=risk_faces, rng=rng,
+        portfolio_milestones=portfolio_milestones,
+    )
