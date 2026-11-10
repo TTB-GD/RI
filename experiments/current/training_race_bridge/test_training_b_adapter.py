@@ -4,7 +4,7 @@ import unittest
 
 from experiments.current.race_engine_v2.policies import POLICIES
 from experiments.current.training_race_bridge.training_b_race_harness import (
-    run_matrix, run_pool_progression_matrix, run_equal_expectation_variance_matrix, summarize,
+    run_matrix, run_pool_progression_matrix, run_equal_expectation_variance_matrix, run_second_profile_terrain_matrix, summarize,
 )
 from experiments.current.training_race_bridge.training_b_adapter import (
     race_inputs_from_training, race_pool_from_training, race_profile_from_training,
@@ -81,6 +81,19 @@ class TrainingBAdapterTests(unittest.TestCase):
         for course in result["courses"]:
             self.assertEqual(course["fixed_training_profile"], result["fixed_training_profile"])
         print("TRAINING_B_EQUAL_EXPECTATION_VARIANCE_SUMMARY=" +
+              json.dumps(result["summary"], sort_keys=True))
+
+    def test_second_training_profile_and_terrain(self):
+        result = run_second_profile_terrain_matrix()
+        self.assertEqual(len(result["courses"]), 240)
+        for pair in result["summary"].values():
+            for terrain in pair.values():
+                entries = list(terrain.values())
+                self.assertEqual(entries[0]["expected_total"], entries[1]["expected_total"])
+                self.assertNotEqual(entries[0]["variance"], entries[1]["variance"])
+        for course in result["courses"]:
+            self.assertEqual(course["fixed_training_profile"], result["fixed_training_profile"])
+        print("TRAINING_B_SECOND_PROFILE_TERRAIN_SUMMARY=" +
               json.dumps(result["summary"], sort_keys=True))
 
     def test_race_v2_runs_from_completed_training_snapshot(self):
