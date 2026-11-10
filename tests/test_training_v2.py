@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 from training_v2 import (
     PlayerState, PhysiologyProfile, RollResult, SessionAllocation,
-    list_program_options, resolve_turn,
+    list_program_options, resolve_turn, make_session_eligible, acquire_session,
 )
 from training_v2.catalog import SESSION_CATALOG, SessionOption, quality_cost
 
@@ -15,11 +15,61 @@ class TrainingBAllocationTests(unittest.TestCase):
             PhysiologyProfile(ef=8, threshold=8, vma=10).validate()
 
     def test_catalogue_has_initial_ef_threshold_vma_sessions(self):
-        self.assertEqual(set(SESSION_CATALOG), {"EF", "SEUIL", "VMA"})
+        self.assertTrue({"EF", "SEUIL", "VMA"} <= set(SESSION_CATALOG))
+        self.assertTrue({
+            "EF_SOUTENUE", "SEUIL_LONG", "INTERVALLES_COURTS"
+        } <= set(SESSION_CATALOG))
         self.assertEqual(SESSION_CATALOG["EF"].load_type, "EF")
         self.assertIsNone(SESSION_CATALOG["EF"].max_per_turn)
         self.assertEqual(SESSION_CATALOG["SEUIL"].energy_cost, 4)
         self.assertEqual(SESSION_CATALOG["VMA"].rpe, 5)
+
+    def test_eligibility_does_not_automatically_acquire_session(self):
+        state = PlayerState()
+        self.assertNotIn("INTERVALLES_COURTS", state.acquired_session_keys)
+        make_session_eligible(state, "INTERVALLES_COURTS")
+        self.assertIn("INTERVALLES_COURTS", state.eligible_session_keys)
+        self.assertNotIn("INTERVALLES_COURTS", state.acquired_session_keys)
+
+    def test_only_acquired_sessions_are_enumerated_and_playable(self):
+        state = PlayerState()
+        roll = RollResult((6, 6, 6, 6), (6, 6, 6, 6), 14.0)
+        initial = list_program_options(state, roll)
+        self.assertFalse(any(
+            item.session_key == "INTERVALLES_COURTS"
+            for option in initial for item in option.allocations
+        ))
+
+        make_session_eligible(state, "INTERVALLES_COURTS")
+        acquire_session(state, "INTERVALLES_COURTS")
+        options = list_program_options(state, roll)
+        self.assertTrue(any(
+            item.session_key == "INTERVALLES_COURTS"
+            for option in options for item in option.allocations
+        ))
+
+        allocation = (SessionAllocation("INTERVALLES_COURTS", (0, 1, 2, 3), 24),)
+        result = resolve_turn(state, (6, 6, 6, 6), allocation)
+        self.assertEqual(result.successful_sessions, allocation)
+        self.assertEqual(state.profile.vma, 13)
+
+    def test_ineligible_session_cannot_be_acquired(self):
+        state = PlayerState()
+        with self.assertRaises(ValueError):
+            acquire_session(state, "INTERVALLES_COURTS")
+
+    def test_unknown_session_cannot_be_unlocked(self):
+        state = PlayerState()
+        with self.assertRaises(ValueError):
+            make_session_eligible(state, "NOT_IN_CATALOGUE")
+
+    def test_clone_copies_portfolio_sets_independently(self):
+        state = PlayerState()
+        make_session_eligible(state, "INTERVALLES_COURTS")
+        clone = state.clone()
+        acquire_session(clone, "INTERVALLES_COURTS")
+        self.assertNotIn("INTERVALLES_COURTS", state.acquired_session_keys)
+        self.assertIn("INTERVALLES_COURTS", clone.acquired_session_keys)
 
     def test_catalogue_rejects_invalid_load_type(self):
         with self.assertRaises(ValueError):

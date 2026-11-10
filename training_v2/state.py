@@ -30,6 +30,12 @@ class PlayerState:
     dice_added: int = 0
     ef_milestones_claimed: set[int] = field(default_factory=set)
     q_milestones_claimed: set[int] = field(default_factory=set)
+    eligible_session_keys: set[str] = field(
+        default_factory=lambda: {"EF", "SEUIL", "VMA"}
+    )
+    acquired_session_keys: set[str] = field(
+        default_factory=lambda: {"EF", "SEUIL", "VMA"}
+    )
 
     def __post_init__(self):
         self.profile.validate()
@@ -39,6 +45,8 @@ class PlayerState:
             raise ValueError("dice pool supports only d6, d8, d10 and d12")
         if self.fatigue < 0:
             raise ValueError("fatigue cannot be negative")
+        if not self.acquired_session_keys <= self.eligible_session_keys:
+            raise ValueError("acquired sessions must also be eligible")
 
     def clone(self):
         """Return an independent state suitable for branching a playtest."""
@@ -56,4 +64,6 @@ class PlayerState:
             dice_added=self.dice_added,
             ef_milestones_claimed=set(self.ef_milestones_claimed),
             q_milestones_claimed=set(self.q_milestones_claimed),
+            eligible_session_keys=set(self.eligible_session_keys),
+            acquired_session_keys=set(self.acquired_session_keys),
         )

@@ -41,6 +41,22 @@ SESSION_CATALOG = {
         load_type="QUALITY", adaptations=(("vma", 1),),
         energy_cost=5, rpe=5, fatigue=1,
     ),
+    # Advanced options are candidate fixtures from D1-S4, not calibrated rules.
+    "EF_SOUTENUE": SessionOption(
+        key="EF_SOUTENUE", label="EF soutenue", family="EF",
+        load_type="EF", adaptations=(("ef", 3),),
+        energy_cost=4, rpe=3, fatigue=0,
+    ),
+    "SEUIL_LONG": SessionOption(
+        key="SEUIL_LONG", label="Seuil long", family="SEUIL",
+        load_type="QUALITY", adaptations=(("ef", 1), ("threshold", 4)),
+        energy_cost=6, rpe=6, fatigue=1,
+    ),
+    "INTERVALLES_COURTS": SessionOption(
+        key="INTERVALLES_COURTS", label="Intervalles courts", family="VMA",
+        load_type="QUALITY", adaptations=(("vma", 3),),
+        energy_cost=4, rpe=6, fatigue=2,
+    ),
 }
 
 

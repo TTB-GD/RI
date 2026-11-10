@@ -70,7 +70,7 @@ def _apply_milestones(state: PlayerState, old_ef: int, old_q: int) -> None:
                 state.upgrades_used += 1
 
 
-def _validate_allocations(values, allocations):
+def _validate_allocations(state, values, allocations):
     allocations = tuple(allocations)
     if not allocations:
         raise ValueError("at least one session must be selected")
@@ -80,6 +80,8 @@ def _validate_allocations(values, allocations):
     for item in allocations:
         if item.session_key not in SESSION_CATALOG:
             raise ValueError("unknown session")
+        if item.session_key not in state.acquired_session_keys:
+            raise ValueError("session is not in the acquired portfolio")
         if not item.die_indices or len(set(item.die_indices)) != len(item.die_indices):
             raise ValueError("each session requires distinct allocated dice")
         if any(index < 0 or index >= len(values) for index in item.die_indices):
@@ -106,7 +108,7 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
         raise ValueError("raw face is outside its die range")
     outcome = session_outcome(raw_faces, raw_faces, len(state.dice_pool))
     values = tuple(outcome["dice_used"])
-    allocations = _validate_allocations(values, allocations)
+    allocations = _validate_allocations(state, values, allocations)
 
     session_keys = tuple(item.session_key for item in allocations)
     projected = projected_profile(state.profile, session_keys)

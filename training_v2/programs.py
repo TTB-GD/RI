@@ -53,7 +53,7 @@ def list_program_options(state: PlayerState, roll: RollResult) -> tuple[ProgramO
 
     options = []
     seen_signatures = set()
-    keys = tuple(SESSION_CATALOG)
+    keys = tuple(sorted(state.acquired_session_keys))
     for blocks in _set_partitions(tuple(range(len(values)))):
         for session_keys in product(keys, repeat=len(blocks)):
             counts = {key: session_keys.count(key) for key in keys}
