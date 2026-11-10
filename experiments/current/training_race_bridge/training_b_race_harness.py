@@ -56,6 +56,21 @@ def run_matrix():
                         "threshold": race["physiology_profile"].threshold,
                         "vma": race["physiology_profile"].vma,
                     },
+                    "race_available_load_zones": {
+                        "at_or_below_ef": sum(
+                            production + turn["current_difficulty"] <= race["physiology_profile"].ef
+                            for turn in race["turns"] for production in turn["available"]
+                        ),
+                        "above_ef_through_threshold": sum(
+                            race["physiology_profile"].ef < production + turn["current_difficulty"]
+                            <= race["physiology_profile"].threshold
+                            for turn in race["turns"] for production in turn["available"]
+                        ),
+                        "above_threshold": sum(
+                            production + turn["current_difficulty"] > race["physiology_profile"].threshold
+                            for turn in race["turns"] for production in turn["available"]
+                        ),
+                    },
                 })
     return {
         "status": "EXPERIMENTAL — raw vs pool-expectation-normalized physiological cost",
@@ -94,13 +109,21 @@ def summarize(result):
                 and c["cost_mode"] == "pool_expected_ctl100"]
         loads = [(load, row["physiology_landmarks"])
                  for row in rows for load in row["race_loads"]]
+        available_zones = {
+            key: sum(row["race_available_load_zones"][key] for row in rows)
+            for key in ("at_or_below_ef", "above_ef_through_threshold", "above_threshold")
+        }
+        available_zones["legal_options_observed"] = sum(available_zones.values())
         summary[focus]["pool_expected_ctl100"]["load_zones"] = {
-            "at_or_below_ef": sum(load <= marks["ef"] for load, marks in loads),
-            "above_ef_through_threshold": sum(
-                marks["ef"] < load <= marks["threshold"] for load, marks in loads
-            ),
-            "above_threshold": sum(load > marks["threshold"] for load, marks in loads),
-            "segments_observed": len(loads),
+            "selected": {
+                "at_or_below_ef": sum(load <= marks["ef"] for load, marks in loads),
+                "above_ef_through_threshold": sum(
+                    marks["ef"] < load <= marks["threshold"] for load, marks in loads
+                ),
+                "above_threshold": sum(load > marks["threshold"] for load, marks in loads),
+                "segments_observed": len(loads),
+            },
+            "legal_options": available_zones,
         }
     return summary
 
