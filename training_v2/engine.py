@@ -70,7 +70,7 @@ def _apply_milestones(state: PlayerState, old_ef: int, old_q: int) -> None:
                 state.upgrades_used += 1
 
 
-def _validate_allocations(values, allocations):
+def _validate_allocations(state, values, allocations):
     allocations = tuple(allocations)
     if not allocations:
         raise ValueError("at least one session must be selected")
@@ -108,7 +108,7 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
         raise ValueError("raw face is outside its die range")
     outcome = session_outcome(raw_faces, raw_faces, len(state.dice_pool))
     values = tuple(outcome["dice_used"])
-    allocations = _validate_allocations(values, allocations)
+    allocations = _validate_allocations(state, values, allocations)
 
     session_keys = tuple(item.session_key for item in allocations)
     projected = projected_profile(state.profile, session_keys)
