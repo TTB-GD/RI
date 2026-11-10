@@ -17,6 +17,7 @@ class TrainingBConsoleTests(unittest.TestCase):
         )
         self.assertEqual(result.turn, 1)
         self.assertEqual(state.turns_played, 1)
+        self.assertEqual(result.dice_action, "keep")
         self.assertTrue(any("Action invalide" in line for line in output))
         self.assertTrue(any("Saisie invalide" in line for line in output))
         self.assertTrue(any("Choix invalide" in line for line in output))
