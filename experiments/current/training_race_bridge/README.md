@@ -100,22 +100,26 @@ interpreting those 14 points in normalized units is still a calibration
 hypothesis, not a confirmed CTL conversion.
 
 CI run 42893031947 tested 20 seeds per focus (60 Training B preparations,
-120 paired Race V2 executions):
+120 paired Race V2 executions). A follow-up run 42893537620 tested the same
+60 preparations at CTL 100, 150 and 200, using the existing reserve formula:
 
-| Training focus | Raw finish | Pool-normalized finish | Normalized mean score | Normalized mean spend |
+| Training focus | Raw CTL100 | Normalized CTL100 | Normalized CTL150 | Normalized CTL200 |
 |---|---:|---:|---:|---:|
-| Balanced | 0/20 | 14/20 (70%) | 90.50 | 11.986 |
-| EF | 0/20 | 15/20 (75%) | 93.75 | 12.523 |
-| Quality | 0/20 | 18/20 (90%) | 90.55 | 10.049 |
-| **Total** | **0/60** | **47/60 (78.3%)** | — | — |
+| Balanced | 0/20 | 14/20 (70%) | 19/20 (95%) | 20/20 (100%) |
+| EF | 0/20 | 15/20 (75%) | 18/20 (90%) | 19/20 (95%) |
+| Quality | 0/20 | 18/20 (90%) | 20/20 (100%) | 20/20 (100%) |
+| **Total** | **0/60** | **47/60 (78.3%)** | **57/60 (95%)** | **59/60 (98.3%)** |
 
-This confirms that the direct integration is executable and that pool-relative
-cost substantially improves completion under the unchanged reserve fixture.
-It does **not** validate balance: 13/60 normalized races still DNF, all on
-segment 6. The exact-division candidate retains fractional costs; a separate
-integer-ceiling candidate is recorded in PR50 and produced 4/9 finishes on its
-initial three-seed sample. These two quantization approaches should not be
-treated as equivalent.
+The normalized DNF cases all occur on segment 6. The reserve formula adds one
+point when CTL rises from 100 to 150 and another at 200. This sensitivity result
+shows that the remaining failures are strongly related to reserve magnitude;
+it does **not** establish that Training B should produce CTL 150 or 200, nor
+that this reserve mapping is correctly dimensioned.
+
+The exact-division candidate retains fractional costs. A separate integer-
+ceiling candidate is recorded in PR50 and produced 4/9 finishes on its initial
+three-seed sample. These two quantization approaches should not be treated as
+equivalent.
 
 Run:
 
