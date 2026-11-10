@@ -15,7 +15,10 @@ class TrainingBAllocationTests(unittest.TestCase):
             PhysiologyProfile(ef=8, threshold=8, vma=10).validate()
 
     def test_catalogue_has_initial_ef_threshold_vma_sessions(self):
-        self.assertEqual(set(SESSION_CATALOG), {"EF", "SEUIL", "VMA"})
+        self.assertTrue({"EF", "SEUIL", "VMA"} <= set(SESSION_CATALOG))
+        self.assertTrue({
+            "EF_SOUTENUE", "SEUIL_LONG", "INTERVALLES_COURTS"
+        } <= set(SESSION_CATALOG))
         self.assertEqual(SESSION_CATALOG["EF"].load_type, "EF")
         self.assertIsNone(SESSION_CATALOG["EF"].max_per_turn)
         self.assertEqual(SESSION_CATALOG["SEUIL"].energy_cost, 4)
