@@ -82,7 +82,53 @@ def summarize(result):
                 "mean_pool_expectation": round(sum(c["pool_expected_total"] for c in rows) / len(rows), 2),
                 "dnf_turns": [c["race_dnf_turn"] for c in rows],
             }
+
     return summary
+
+
+def run_pool_progression_matrix():
+    """Hold Training B physiology fixed and vary only the persistent race pool."""
+    from experiments.current.training_race_bridge.training_b_adapter import race_pool_from_training
+
+    prepared = run_trajectory(seed=11, focus="balanced", turns=16)
+    profile = prepared["final_profile"]
+    pool_fixtures = {
+        "4d6": (6, 6, 6, 6),
+        "4d8": (8, 8, 8, 8),
+        "4d8+1d6": (8, 8, 8, 8, 6),
+        "2d10+4d6": (10, 10, 6, 6, 6, 6),
+    }
+    courses = []
+    for pool_name, dice in pool_fixtures.items():
+        pool = race_pool_from_training(dice)
+        snapshot = {"profile": profile, "dice_pool": dice}
+        for seed in SEEDS:
+            race = run_training_race(
+                snapshot, seed=seed, race_length=RACE_LENGTH,
+                policy=POLICIES["ADAPTIVE"], ctl=100,
+                freshness_bonus=0, long_run_preparation=False,
+                physiology_cost_divisor=pool.expected_total,
+            )
+            courses.append({
+                "seed": seed, "pool_fixture": pool_name,
+                "pool_expected_total": pool.expected_total,
+                "pool_variance": pool.variance,
+                "fixed_training_profile": profile,
+                "race_score": race["score"], "race_spent": race["spent"],
+                "race_dnf": race["dnf"], "race_dnf_turn": race["dnf_turn"],
+                "race_pool": race["pool"],
+            })
+    summary = {}
+    for pool_name in pool_fixtures:
+        rows = [c for c in courses if c["pool_fixture"] == pool_name]
+        summary[pool_name] = {
+            "finish_rate": round(sum(not c["race_dnf"] for c in rows) / len(rows), 3),
+            "mean_score": round(sum(c["race_score"] for c in rows) / len(rows), 2),
+            "mean_spent": round(sum(c["race_spent"] for c in rows) / len(rows), 3),
+            "expected_total": rows[0]["pool_expected_total"],
+            "variance": rows[0]["pool_variance"],
+        }
+    return {"fixed_training_profile": profile, "summary": summary, "courses": courses}
 
 
 def main():
