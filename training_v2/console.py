@@ -2,6 +2,7 @@
 import random
 
 from .engine import roll_pool, resolve_turn
+from .dice import resolve_dice_action
 from .programs import list_program_options
 from .state import PlayerState
 
@@ -21,11 +22,36 @@ def _format_option(index, option):
 def play_turn(state, *, input_fn=input, output_fn=print, rng=None, risk_faces=()):
     rng = rng if rng is not None else random.Random()
     roll = roll_pool(state, rng=rng)
-    options = list_program_options(state, roll)
-    if not options:
-        raise RuntimeError("aucun programme valide pour ce lancer")
     output_fn(f"Tour {state.turns_played + 1} — lancer")
-    output_fn(f"Dés conservés: {roll.final_values} | TN: {roll.tn:.1f}")
+    output_fn(
+        f"Dés actifs: {roll.active_values} | réserve: {roll.reserve_value} "
+        f"| TN: {roll.tn:.1f}"
+    )
+    actions = {"keep", "add", "reroll", "add+reroll"}
+    while True:
+        action = input_fn("Action sur les dés (keep/add/reroll/add+reroll): ")
+        if action in actions:
+            break
+        output_fn("Action invalide.")
+    reroll_index = None
+    if action in {"reroll", "add+reroll"}:
+        while True:
+            raw_index = input_fn(f"Dé actif à relancer (1-{len(roll.active_values)}): ")
+            try:
+                reroll_index = int(raw_index) - 1
+            except (TypeError, ValueError):
+                output_fn("Saisie invalide: entrer un numéro.")
+                continue
+            if 0 <= reroll_index < len(roll.active_values):
+                break
+            output_fn("Indice de dé invalide.")
+    dice = resolve_dice_action(
+        roll, action, reroll_index=reroll_index, rng=rng
+    )
+    options = list_program_options(state, dice)
+    if not options:
+        raise RuntimeError("aucun programme valide pour cette action")
+    output_fn(f"Résultat retenu: {dice.final_values}")
     output_fn("Compositions de séances accessibles:")
     for index, option in enumerate(options, start=1):
         output_fn(_format_option(index, option))
@@ -42,6 +68,7 @@ def play_turn(state, *, input_fn=input, output_fn=print, rng=None, risk_faces=()
     result = resolve_turn(
         state, roll.raw_faces, options[selected_index].allocations,
         risk_faces=risk_faces, rng=rng,
+        final_values_override=dice.final_values, dice_action=dice.action,
     )
     output_fn("Résolution:")
     output_fn(
