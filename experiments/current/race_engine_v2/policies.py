@@ -12,6 +12,10 @@ def _cost_source(view: PolicyView):
     return source
 
 
+def _normalized_cost(view: PolicyView, production: int, difficulty: int) -> float:
+    return production_cost(production, difficulty, _cost_source(view)) / view.physiology_cost_divisor
+
+
 def _affordable_continuation(view: PolicyView, production: int, buffer_per_turn: int = 1) -> bool:
     if view.final_reserve is None:
         budget = view.base_reserve + view.freshness_bonus - view.spent
@@ -23,16 +27,15 @@ def _affordable_continuation(view: PolicyView, production: int, buffer_per_turn:
         for difficulty in view.remaining_difficulty_profile
     ):
         return False
-    source = _cost_source(view)
-    future_floor = sum(production_cost(1, difficulty, source)
+    future_floor = sum(_normalized_cost(view, 1, difficulty)
                        for difficulty in view.remaining_difficulty_profile)
-    return production_cost(production, view.current_difficulty, source) + max(
-        remaining_turns * buffer_per_turn, future_floor) <= budget
+    return _normalized_cost(view, production, view.current_difficulty) + max(
+        remaining_turns * buffer_per_turn, future_floor
+    ) <= budget
 
 
 def efficient_policy(view: PolicyView) -> int:
-    source = _cost_source(view)
-    return max(view.payable, key=lambda p: (p / production_cost(p, view.current_difficulty, source), p))
+    return max(view.payable, key=lambda p: (p / _normalized_cost(view, p, view.current_difficulty), p))
 
 
 def aggressive_policy(view: PolicyView) -> int:
