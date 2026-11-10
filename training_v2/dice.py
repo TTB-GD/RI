@@ -15,14 +15,22 @@ def reserve_index(pool_sizes):
 
 @dataclass(frozen=True)
 class RollResult:
-    """Initial roll: n-1 active dice plus one rolled reserve die."""
+    """Initial roll: n-1 active dice plus one rolled reserve die.
+
+    The first three positional fields preserve the historical synthetic
+    RollResult(raw_faces, final_values, tn) test/helper constructor.
+    """
     raw_faces: tuple[int, ...]
-    active_values: tuple[int, ...]
-    active_sizes: tuple[int, ...]
-    reserve_index: int
-    reserve_value: int
-    reserve_size: int
+    final_values: tuple[int, ...]
     tn: float
+    active_sizes: tuple[int, ...] = ()
+    reserve_index: int = -1
+    reserve_value: int = 0
+    reserve_size: int = 0
+
+    @property
+    def active_values(self):
+        return self.final_values
 
 
 @dataclass(frozen=True)
@@ -46,7 +54,7 @@ def roll_initial(pool_sizes, *, rng=None) -> RollResult:
     active_sizes = tuple(size for i, size in enumerate(sizes) if i != index)
     active_values = tuple(value for i, value in enumerate(raw) if i != index)
     return RollResult(
-        raw_faces=raw, active_values=active_values, active_sizes=active_sizes,
+        raw_faces=raw, final_values=active_values, active_sizes=active_sizes,
         reserve_index=index, reserve_value=raw[index], reserve_size=sizes[index],
         tn=pool_tn(make_pool(sizes)),
     )
