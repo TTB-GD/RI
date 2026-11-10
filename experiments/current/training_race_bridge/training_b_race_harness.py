@@ -187,6 +187,73 @@ def run_equal_expectation_variance_matrix():
     return {"fixed_training_profile": profile, "summary": summary, "courses": courses}
 
 
+
+def run_second_profile_terrain_matrix():
+    """Repeat equal-expectation pool pairs on a second Training B profile and terrain."""
+    from experiments.current.training_race_bridge.training_b_adapter import race_pool_from_training
+
+    prepared = run_trajectory(seed=23, focus="ef", turns=16)
+    profile = prepared["final_profile"]
+    pairs = {
+        "E18": {
+            "4d8": (8, 8, 8, 8),
+            "2d6+2d10": (6, 6, 10, 10),
+        },
+        "E22_5": {
+            "5d8": (8, 8, 8, 8, 8),
+            "3d6+1d10+1d12": (6, 6, 6, 10, 12),
+        },
+        "E27": {
+            "6d8": (8, 8, 8, 8, 8, 8),
+            "3d6+3d10": (6, 6, 6, 10, 10, 10),
+        },
+    }
+    terrain_profiles = {
+        "flat": (0, 0, 0, 0, 0, 0),
+        "early_hills": (0, 3, 3, 0, 0, 0),
+    }
+    courses = []
+    for pair_name, pool_pair in pairs.items():
+        for pool_name, dice in pool_pair.items():
+            pool = race_pool_from_training(dice)
+            snapshot = {"profile": profile, "dice_pool": dice}
+            for terrain_name, difficulty in terrain_profiles.items():
+                for seed in SEEDS:
+                    race = run_training_race(
+                        snapshot, seed=seed, race_length=RACE_LENGTH,
+                        policy=POLICIES["ADAPTIVE"], ctl=100,
+                        freshness_bonus=0, long_run_preparation=False,
+                        difficulty_profile=difficulty,
+                        physiology_cost_divisor=pool.expected_total,
+                    )
+                    courses.append({
+                        "seed": seed, "pair": pair_name, "pool_fixture": pool_name,
+                        "terrain": terrain_name,
+                        "pool_expected_total": pool.expected_total,
+                        "pool_variance": pool.variance,
+                        "fixed_training_profile": profile,
+                        "race_score": race["score"], "race_spent": race["spent"],
+                        "race_dnf": race["dnf"], "race_dnf_turn": race["dnf_turn"],
+                    })
+    summary = {}
+    for pair_name, pool_pair in pairs.items():
+        summary[pair_name] = {}
+        for terrain_name in terrain_profiles:
+            summary[pair_name][terrain_name] = {}
+            for pool_name in pool_pair:
+                rows = [c for c in courses if c["pair"] == pair_name
+                        and c["terrain"] == terrain_name
+                        and c["pool_fixture"] == pool_name]
+                summary[pair_name][terrain_name][pool_name] = {
+                    "finish_rate": round(sum(not c["race_dnf"] for c in rows) / len(rows), 3),
+                    "mean_score": round(sum(c["race_score"] for c in rows) / len(rows), 2),
+                    "mean_spent": round(sum(c["race_spent"] for c in rows) / len(rows), 3),
+                    "expected_total": rows[0]["pool_expected_total"],
+                    "variance": rows[0]["pool_variance"],
+                }
+    return {"fixed_training_profile": profile, "summary": summary, "courses": courses}
+
+
 def main():
     result = run_matrix()
     result["summary"] = summarize(result)
