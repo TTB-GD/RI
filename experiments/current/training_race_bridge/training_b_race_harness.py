@@ -50,6 +50,12 @@ def run_matrix():
                     "race_base_reserve": race["base_reserve"],
                     "race_final_reserve": race["final_reserve"],
                     "race_reserve_remaining": race["reserve_remaining"],
+                    "race_loads": [turn["physiological_load"] for turn in race["turns"]],
+                    "physiology_landmarks": {
+                        "ef": race["physiology_profile"].ef,
+                        "threshold": race["physiology_profile"].threshold,
+                        "vma": race["physiology_profile"].vma,
+                    },
                 })
     return {
         "status": "EXPERIMENTAL — raw vs pool-expectation-normalized physiological cost",
@@ -83,6 +89,19 @@ def summarize(result):
                 "dnf_turns": [c["race_dnf_turn"] for c in rows],
             }
 
+        rows = [c for c in result["courses"]
+                if c["training_focus"] == focus
+                and c["cost_mode"] == "pool_expected_ctl100"]
+        loads = [(load, row["physiology_landmarks"])
+                 for row in rows for load in row["race_loads"]]
+        summary[focus]["pool_expected_ctl100"]["load_zones"] = {
+            "at_or_below_ef": sum(load <= marks["ef"] for load, marks in loads),
+            "above_ef_through_threshold": sum(
+                marks["ef"] < load <= marks["threshold"] for load, marks in loads
+            ),
+            "above_threshold": sum(load > marks["threshold"] for load, marks in loads),
+            "segments_observed": len(loads),
+        }
     return summary
 
 
