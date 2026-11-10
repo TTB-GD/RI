@@ -333,3 +333,48 @@ Total: 120 Race V2 runs.
 Repeat the equal-expectation comparison on a second Training B profile and
 with a non-flat terrain profile. Then consolidate the cost unit and CTL reserve
 mapping. Keep the normalization experimental until those checks are complete.
+
+
+## Second Training B profile and terrain interaction
+
+### PROTOCOL
+
+Repeat the equal-expectation/different-variance pool pairs on a second
+16-turn Training B preparation (EF-focused, seed 23). Each pool is tested for
+20 seeds on both a flat course and an early-hills course with +3 difficulty on
+segments 2 and 3. The same normalized cost rule, CTL 100 and ADAPTIVE policy
+are retained. Total: 240 Race V2 runs.
+
+### RESULTS
+
+| E(pool) | Pool | Finish flat / hills | Mean score | Mean max load flat → hills | Mean terrain surcharge |
+|---:|---|---:|---:|---:|---:|
+| 18.0 | 4d8 | 0% / 0% | 60.20 | 13.85 → 16.35 | 0.000 |
+| 18.0 | 2d6+2d10 | 15% / 15% | 67.50 | 14.25 → 17.10 | 0.000 |
+| 22.5 | 5d8 | 70% / 70% | 95.10 | 18.45 → 20.35 | 0.000 |
+| 22.5 | 3d6+1d10+1d12 | 65% / 65% | 94.50 | 18.55 → 20.45 | 0.000 |
+| 27.0 | 6d8 | 100% / 100% | 124.10 | 23.70 → 24.40 | 0.000 |
+| 27.0 | 3d6+3d10 | 100% / 100% | 124.65 | 23.55 → 24.40 | 0.000 |
+
+### INTERPRETATION
+
+- **RESULT:** The +3 terrain load is correctly reflected in physiological
+  load, but no additional physiological cost is charged in any tested course.
+- **HYPOTHESIS:** The selected loads remain below the EF floor, so the current
+  `physiological_cost` function returns EF without reaching its threshold or
+  VMA slopes. This explains why flat and early-hills outputs are identical.
+- **IMPLEMENTATION GAP:** Pool-relative normalization makes the reserve scale
+  usable, but does not by itself align Training B's physiological landmarks
+  with Race V2's production/load domain. In this fixture, the threshold/VMA
+  part of the cost curve is effectively dormant.
+- **LIMIT:** Only one second profile, one policy and one +3 terrain profile are
+  covered. Do not generalize to all terrain or race profiles.
+- **CI:** Run `42894769395` passed 138 primary tests and 90 lightweight
+  experimental tests.
+
+### NEXT VALIDATION
+
+Quantify how often race loads fall below EF / between EF and threshold / above
+threshold for all Training B profiles, then decide whether to recalibrate
+Training B progression landmarks or the Race V2 physiological-cost function.
+Do not compensate by adding another arbitrary reserve multiplier.
