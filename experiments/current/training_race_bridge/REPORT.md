@@ -247,3 +247,46 @@ an explicit open calibration choice.
    neither erases nor double-counts the benefit of a stronger persistent pool.
 3. Test course difficulty, then derive the CTL → reserve mapping in the same
    unit system before promoting either normalization rule.
+
+
+## Persistent pool progression — physiology held constant
+
+### PROTOCOL
+
+A fixed Training B profile is taken from the balanced seed-11 trajectory after
+16 turns. That exact EF / Seuil / VMA profile is held constant while the
+persistent pool changes across four reachable/representative configurations.
+Each pool is normalized by its own expectation. Twenty race seeds are run per
+pool, with CTL 100, six flat segments, no freshness, no SL preparation and
+the ADAPTIVE policy. Total: 80 Race V2 runs.
+
+### RESULTS
+
+| Pool | E(pool) | Variance | Finish rate | Mean score | Mean spend |
+|---|---:|---:|---:|---:|---:|
+| 4d6 | 14.0 | 11.67 | 3/20 (15%) | 50.40 | 13.164 |
+| 4d8 | 18.0 | 21.00 | 17/20 (85%) | 77.60 | 12.350 |
+| 4d8+1d6 | 21.5 | 23.92 | 20/20 (100%) | 96.75 | 10.605 |
+| 2d10+4d6 | 25.0 | 28.17 | 20/20 (100%) | 117.15 | 9.120 |
+
+### INTERPRETATION
+
+- **RESULT:** With physiology fixed, larger/more capable pools materially
+  improve production and race completion under the tested normalized-cost
+  rule. The 4d6 pool finishes 3/20; 4d8 finishes 17/20; the two stronger pools
+  finish 20/20.
+- **RESULT:** The normalization does not erase the visible benefit of pool
+  progression in this fixture.
+- **LIMIT:** Expected total and variance both increase across the tested pools.
+  This experiment therefore does not isolate the expectation effect from the
+  variance / face-size effect, and only one physiological profile and policy
+  are tested.
+- **CI:** Run `42893866549` passed 138 primary tests and 88 lightweight
+  experimental tests.
+
+### NEXT VALIDATION
+
+Compare pools with approximately equal expectation but different face
+composition/variance, then repeat the pool progression probe on a second
+Training B profile. Only after that should terrain and CTL-reserve conversion
+be consolidated.
