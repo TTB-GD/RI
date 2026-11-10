@@ -290,3 +290,46 @@ Compare pools with approximately equal expectation but different face
 composition/variance, then repeat the pool progression probe on a second
 Training B profile. Only after that should terrain and CTL-reserve conversion
 be consolidated.
+
+
+## Equal-expectation / different-variance comparison
+
+### PROTOCOL
+
+Using the same fixed Training B physiology profile as the preceding pool
+progression probe, compare three pairs of pools with equal expected totals but
+different face composition and variance. Each pool is run for 20 seeds with
+the same normalized-cost rule, CTL 100, six flat segments and ADAPTIVE policy.
+Total: 120 Race V2 runs.
+
+### RESULTS
+
+| Pair | Pool | E(pool) | Variance | Finish rate | Mean score | Mean spend |
+|---|---|---:|---:|---:|---:|---:|
+| E18 | 4d8 | 18.0 | 21.00 | 85% | 77.60 | 12.350 |
+| E18 | 2d6+2d10 | 18.0 | 22.33 | 100% | 83.35 | 12.667 |
+| E22.5 | 5d8 | 22.5 | 26.25 | 100% | 103.00 | 10.133 |
+| E22.5 | 3d6+1d10+1d12 | 22.5 | 28.92 | 100% | 103.70 | 10.133 |
+| E27 | 6d8 | 27.0 | 31.50 | 100% | 126.70 | 8.444 |
+| E27 | 3d6+3d10 | 27.0 | 33.50 | 100% | 126.85 | 8.444 |
+
+### INTERPRETATION
+
+- **RESULT:** At E(pool)=18, the higher-variance pool (2d6+2d10) improves
+  completion from 85% to 100% and mean score by 5.75.
+- **RESULT:** At E(pool)=22.5 and 27, all courses finish; score differences
+  between the lower- and higher-variance pool are small (0.70 and 0.15).
+- **HYPOTHESIS:** Variance matters most near the viability boundary, where
+  additional high-roll options can rescue a course. At higher expected totals,
+  the completion ceiling hides most of the difference.
+- **LIMIT:** Only one physiology profile, one policy and three pool pairs are
+  tested. Face composition changes more than variance alone, so this is
+  evidence of a distribution-shape effect, not a pure variance coefficient.
+- **CI:** Run `42894254229` passed 138 primary tests and 89 lightweight
+  experimental tests.
+
+### NEXT VALIDATION
+
+Repeat the equal-expectation comparison on a second Training B profile and
+with a non-flat terrain profile. Then consolidate the cost unit and CTL reserve
+mapping. Keep the normalization experimental until those checks are complete.
