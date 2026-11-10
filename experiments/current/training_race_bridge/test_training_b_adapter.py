@@ -55,6 +55,12 @@ class TrainingBAdapterTests(unittest.TestCase):
             for mode in ("pool_expected_ctl100", "pool_expected_ctl150",
                          "pool_expected_ctl200"):
                 self.assertGreater(summary[focus][mode]["finish_rate"], baseline)
+            zones = summary[focus]["pool_expected_ctl100"]["load_zones"]
+            self.assertEqual(
+                zones["segments_observed"],
+                zones["at_or_below_ef"] + zones["above_ef_through_threshold"]
+                + zones["above_threshold"],
+            )
 
     def test_pool_progression_at_fixed_training_profile(self):
         result = run_pool_progression_matrix()
