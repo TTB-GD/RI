@@ -163,3 +163,69 @@ map to Race V2's cost domain and how the race reserve is funded. These two
 rules must be made coherent together; tuning only one in isolation would hide
 the dimensional mismatch. The direct adapter remains an experimental bridge
 until this is resolved.
+
+
+## Pool-expectation normalization — paired 20-seed validation
+
+### RULE UNDER TEST
+
+The experimental runner accepts an explicit `physiology_cost_divisor`.
+With the divisor set to the expectation of the actual persistent Training B
+pool, it charges:
+
+[
+C_{pool} = C_{physio} / E(P)
+]
+
+This probe uses exact division (fractional resource costs), not integer
+rounding. The default divisor remains 1.0 and preserves the original Race V2
+cost path. The reserve formula is unchanged: CTL 100 and six segments produce
+14 reserve points. Treating those points as pool-normalized units remains an
+explicit hypothesis.
+
+### PROTOCOL
+
+- 20 seeds (0–19) × three Training B focus heuristics = 60 preparations.
+- Each completed preparation is run twice: raw physiological cost and cost
+  divided by its actual pool expectation = 120 Race V2 executions.
+- Both variants share the same Training B state, pool, race seed, ADAPTIVE
+  policy, six-segment course, CTL 100, freshness 0 and SL off.
+- CI run: `42893031947`; 87 tests passed.
+
+### RESULTS
+
+| Training focus | Raw finish | Pool-normalized finish | Mean score (normalized) | Mean spend (normalized) | Mean E(pool) |
+|---|---:|---:|---:|---:|---:|
+| Balanced | 0/20 | 14/20 (70%) | 90.50 | 11.986 | 21.50 |
+| EF | 0/20 | 15/20 (75%) | 93.75 | 12.523 | 22.02 |
+| Quality | 0/20 | 18/20 (90%) | 90.55 | 10.049 | 20.45 |
+| **Total** | **0/60** | **47/60 (78.3%)** | — | — | — |
+
+All 13 normalized DNFs occur on segment 6. Raw-cost races all DNF on segment 4.
+
+### INTERPRETATION
+
+- **RESULT:** Direct Training B → Race V2 integration remains structurally valid.
+- **RESULT:** Dividing physiological cost by actual pool expectation changes the 0/60 raw finish rate to 47/60. It removes the systematic segment-4 DNF but does not make every profile viable.
+- **RESULT:** The training focus remains observable. Quality has the highest finish rate (90%) and lowest mean spend; EF has the highest mean score. This does not establish a globally superior preparation strategy.
+- **HYPOTHESIS:** Exact fractional pool-relative cost is a more promising interface than raw profile cost under the existing reserve fixture.
+- **LIMIT:** This is still only 20 seeds per focus. The unchanged reserve of 14 has not been derived dimensionally from CTL in pool-relative units.
+
+### ROUNDING COMPARISON
+
+PR50 separately tested the integer-ceiling variant
+`max(1, ceil(C_physio / E(P)))` on the original nine cases. It finished 4/9
+(44.4%): balanced 1/3, EF 0/3, quality 3/3. That result is materially more
+restrictive than exact division. It demonstrates that rounding is not a
+cosmetic implementation detail; it changes the game outcome and must remain
+an explicit open calibration choice.
+
+### NEXT VALIDATION
+
+1. Hold physiology fixed and compare multiple persistent pools to isolate
+   whether higher expectation and variance improve race options without
+   granting an unintended cost discount.
+2. Test course difficulty and reserve sensitivity; the remaining 13/60 DNFs
+   occur at the final segment.
+3. Derive the CTL → reserve mapping in the same unit system before promoting
+   either normalization rule.
