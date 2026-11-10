@@ -48,3 +48,36 @@ python -m unittest experiments.current.training_race_bridge.test_harness -v
 
 `results.json` contains protocol, synthetic athletes, aggregate metrics, all
 required seed-paired differences, and per-course traces.
+
+
+## Training B → Race V2 — direct integration
+
+The files `training_b_adapter.py`, `training_b_race_harness.py` and
+`test_training_b_adapter.py` add a separate direct integration path from the
+actual `training_v2.PlayerState` / completed Training B trajectory snapshot.
+
+- EF, Seuil and VMA are copied one-to-one into Race V2's
+  `PhysiologyProfile`; no hidden scale conversion is applied.
+- The persistent Training B die sizes are copied one-to-one into Race V2's
+  `DicePool`.
+- A 16-turn Training B trajectory is then passed to Race V2 and resolved over
+  six race segments. The harness runs three seeds across balanced, EF and
+  quality training heuristics (nine paired preparation/race cases).
+- CTL, freshness and long-run preparation remain explicit Race V2 inputs. The
+  harness uses CTL 100, freshness 0 and no long-run preparation as declared
+  experimental fixtures, not as Training B conversions.
+
+Run:
+
+```bash
+python -m experiments.current.training_race_bridge.training_b_race_harness
+python -m unittest experiments.current.training_race_bridge.test_training_b_adapter -v
+```
+
+**Calibration gap:** Training B's initial profile is EF 6 / Seuil 8 / VMA 10,
+whereas prior Race V2 calibration probes commonly used EF 15 / Seuil 21 /
+VMA 27. The adapter deliberately preserves the Training B values instead of
+inventing a scale factor. Race completion and reserve adequacy must therefore
+be evaluated before treating this vertical slice as balanced. The earlier
+synthetic SPEC probe above remains separate and is not evidence of Training B
+integration.
