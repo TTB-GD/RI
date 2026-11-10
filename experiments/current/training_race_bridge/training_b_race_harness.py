@@ -28,15 +28,18 @@ def run_matrix():
             }
             converted = race_inputs_from_training(snapshot)
             divisor = converted["pool"].expected_total
-            for mode, cost_divisor in (("raw", 1.0), ("pool_expected", divisor)):
+            variants = [("raw_ctl100", 1.0, 100)] + [
+                (f"pool_expected_ctl{ctl}", divisor, ctl) for ctl in (100, 150, 200)
+            ]
+            for mode, cost_divisor, ctl in variants:
                 race = run_training_race(
                     snapshot, seed=seed, race_length=RACE_LENGTH,
                     policy=POLICIES["ADAPTIVE"], physiology_cost_divisor=cost_divisor,
-                    **RACE_INPUTS,
+                    ctl=ctl, freshness_bonus=0, long_run_preparation=False,
                 )
                 courses.append({
                     "seed": seed, "training_focus": focus, "cost_mode": mode,
-                    "training_turns": training["turns"],
+                    "ctl": ctl, "training_turns": training["turns"],
                     "training_profile": training["final_profile"],
                     "training_dice_pool": training["dice_pool"],
                     "pool_expected_total": divisor,
@@ -46,6 +49,7 @@ def run_matrix():
                     "race_pool": race["pool"], "race_turns": race["turns"],
                     "race_base_reserve": race["base_reserve"],
                     "race_final_reserve": race["final_reserve"],
+                    "race_reserve_remaining": race["reserve_remaining"],
                 })
     return {
         "status": "EXPERIMENTAL — raw vs pool-expectation-normalized physiological cost",
@@ -54,8 +58,9 @@ def run_matrix():
             "race_length": RACE_LENGTH, "race_policy": "ADAPTIVE",
             **RACE_INPUTS,
             "normalization": "physiological_cost / sum((die_size + 1) / 2)",
-            "reserve": "unchanged Race V2 base reserve; same units as normalized cost",
-            "paired_rolls": "same seed and pool in raw and normalized modes",
+            "reserve_sensitivity": "CTL 100 / 150 / 200; existing reserve formula only",
+            "raw_baseline": "CTL 100",
+            "paired_rolls": "same seed and pool across cost and reserve variants",
         },
         "courses": courses,
     }
@@ -63,9 +68,11 @@ def run_matrix():
 
 def summarize(result):
     summary = {}
+    modes = ("raw_ctl100", "pool_expected_ctl100",
+             "pool_expected_ctl150", "pool_expected_ctl200")
     for focus in FOCUSES:
         summary[focus] = {}
-        for mode in ("raw", "pool_expected"):
+        for mode in modes:
             rows = [c for c in result["courses"]
                     if c["training_focus"] == focus and c["cost_mode"] == mode]
             summary[focus][mode] = {
