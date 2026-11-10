@@ -31,8 +31,8 @@ Values are executable fixtures, not calibrated rules. Cost and RPE are independe
 
 - Energy assigned to EF-load sessions advances EF volume progression.
 - Successful Quality sessions advance Q progression by their catalogue energy cost.
-- The unused energy assigned to Quality sessions continues to feed the experimental SPEC counter. SPEC itself remains OPEN and this accounting is temporary.
-- A bust stops subsequent session resolution; the busted session receives no adaptation or progression.
+- Only successfully completed Quality sessions contribute their unused energy to the experimental SPEC counter. SPEC itself remains OPEN and this accounting is temporary.
+- A bust stops subsequent session resolution; the busted session and later unexecuted sessions contribute no adaptation, progression, realized EF/Quality load, SPEC remainder or session-specific fatigue.
 - Fatigue still uses the existing experimental blackjack term, the excess Quality-over-EF term, and specific session fatigue. Calibration is deferred.
 
 ## Known limitations

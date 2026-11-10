@@ -114,14 +114,6 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
         raise ValueError("session adaptations would violate EF < Seuil < VMA")
 
     tn = pool_tn(make_pool(state.dice_pool))
-    ef_energy = sum(
-        item.energy for item in allocations
-        if SESSION_CATALOG[item.session_key].load_type == "EF"
-    )
-    quality_energy = sum(
-        item.energy for item in allocations
-        if SESSION_CATALOG[item.session_key].load_type == "QUALITY"
-    )
     costs = tuple(
         (item.session_key, SESSION_CATALOG[item.session_key].energy_cost)
         for item in allocations
@@ -146,6 +138,16 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
         successful.append(item)
         fatigue_specific += option.fatigue
 
+    # Only completed sessions contribute to realized load and its fatigue.
+    ef_energy = sum(
+        item.energy for item in successful
+        if SESSION_CATALOG[item.session_key].load_type == "EF"
+    )
+    quality_energy = sum(
+        item.energy for item in successful
+        if SESSION_CATALOG[item.session_key].load_type == "QUALITY"
+    )
+
     old_ef, old_q = state.progression_ef, state.progression_q
     successful_ef_energy = sum(
         item.energy for item in successful
@@ -161,7 +163,7 @@ def resolve_turn(state: PlayerState, raw_faces, allocations, *, risk_faces=(), r
     # Keep the existing experimental Q remainder accounting until SPEC is designed.
     spec_gained = sum(
         item.energy - SESSION_CATALOG[item.session_key].energy_cost
-        for item in allocations
+        for item in successful
         if SESSION_CATALOG[item.session_key].load_type == "QUALITY"
     )
     state.progression_spec += spec_gained
