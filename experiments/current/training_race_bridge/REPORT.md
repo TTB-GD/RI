@@ -378,3 +378,40 @@ Quantify how often race loads fall below EF / between EF and threshold / above
 threshold for all Training B profiles, then decide whether to recalibrate
 Training B progression landmarks or the Race V2 physiological-cost function.
 Do not compensate by adding another arbitrary reserve multiplier.
+
+
+## Physiological landmark activation — selected loads vs legal options
+
+The 20-seed Training B → Race V2 matrix at normalized cost / CTL 100 now
+classifies both the policy-selected load and every legal production option
+against the actual Training B EF / Seuil / VMA profile.
+
+| Training focus | Selected ≤ EF | Legal ≤ EF | Legal EF–Seuil | Legal > Seuil |
+|---|---:|---:|---:|---:|
+| Balanced | 114/114 | 1,865 | 0 | 0 |
+| EF | 115/115 | 1,976 | 0 | 0 |
+| Quality | 118/118 | 1,766 | 2 | 0 |
+
+### RESULT
+
+- Every selected load in all three preparation focuses is at or below EF.
+- In the complete legal option menus, balanced and EF-focused profiles have
+  no production above EF.
+- Quality focus exposes only 2 legal options above EF out of 1,768; none
+  exceeds Seuil.
+- Therefore, the current EF cost floor dominates almost every observed
+  decision. Seuil and VMA cost slopes are not meaningfully exercised by this
+  Training B → Race V2 integration sample.
+
+### IMPLEMENTATION GAP
+
+This is not solved by the pool-expectation divisor. The physiological
+landmarks produced by Training B and the production/load domain used by Race
+V2 remain misaligned. The next design/implementation task must determine
+whether Training B progression gains are too large for the current Race V2
+load domain, or whether Race V2's physiological-cost function needs a
+different dimensionless mapping. Do not silently rescale profile values or add
+another reserve multiplier.
+
+CI run `42895378423` passed 138 primary tests and 90 lightweight experimental
+tests.
