@@ -24,12 +24,11 @@ def _read(source, key):
 
 def race_profile_from_training(training_profile):
     """Copy Training B's EF/Seuil/VMA landmarks without rescaling them."""
-    profile = RacePhysiologyProfile(
+    return RacePhysiologyProfile(
         ef=int(_read(training_profile, "ef")),
         threshold=int(_read(training_profile, "threshold")),
         vma=int(_read(training_profile, "vma")),
     )
-    return profile
 
 
 def race_pool_from_training(dice_pool):
@@ -54,12 +53,8 @@ def race_inputs_from_training(training_state):
     """Convert a PlayerState or a trajectory snapshot into Race V2 inputs."""
     profile = _read(training_state, "profile")
     dice_pool = _read(training_state, "dice_pool")
-    if isinstance(profile, Mapping) and set(("ef", "threshold", "vma")) <= profile.keys():
-        race_profile = race_profile_from_training(profile)
-    else:
-        race_profile = race_profile_from_training(profile)
     return {
-        "physiology_profile": race_profile,
+        "physiology_profile": race_profile_from_training(profile),
         "pool": race_pool_from_training(dice_pool),
     }
 
@@ -75,11 +70,13 @@ def run_training_race(
     long_run_preparation: bool,
     difficulty_profile=None,
     profile_name="TRAINING_B",
+    physiology_cost_divisor: float = 1.0,
 ):
     """Run Race V2 from a completed Training B state.
 
-    CTL, freshness and long-run preparation remain explicit Race V2 inputs:
-    Training B does not yet define conversion rules for them.
+    CTL, freshness and long-run preparation remain explicit Race V2 inputs.
+    Set physiology_cost_divisor to the pool expectation only for the isolated
+    experimental pool-normalized cost comparison; default behaviour is unchanged.
     """
     converted = race_inputs_from_training(training_state)
     return run_race(
@@ -93,4 +90,5 @@ def run_training_race(
         difficulty_profile=difficulty_profile,
         profile_name=profile_name,
         physiology_profile=converted["physiology_profile"],
+        physiology_cost_divisor=physiology_cost_divisor,
     )
