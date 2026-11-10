@@ -109,3 +109,25 @@ it. That is an interaction result, not evidence that any build is “better.”
    a mixed set of options whose value remains context-dependent?
 3. Should future policy work permit deliberate above-AS Production, given that
    this minimal policy isolates at/below-AS choices only?
+
+
+## Direct Training B integration (new adapter)
+
+The direct adapter now converts a completed Training B state into Race V2
+inputs and executes the existing Race V2 runner. The integration harness
+covers nine cases: three 16-turn Training B focus heuristics (balanced, EF,
+quality) across seeds 11, 23 and 47, each followed by a six-segment Race V2
+course using the same seed and ADAPTIVE technical policy.
+
+The adapter copies EF/Seuil/VMA and every persistent die size without
+rescaling. CTL=100, freshness=0 and no long-run preparation are explicit
+experimental Race V2 fixtures; they are not inferred from Training B.
+
+**Known calibration gap:** Training B starts at EF 6 / Seuil 8 / VMA 10,
+while the earlier Race V2 calibration fixtures used EF 15 / Seuil 21 / VMA 27.
+A direct structural conversion is implemented, but no approved numerical
+cross-calibration exists. Consequently, these nine runs validate the software
+connection and expose course completion/reserve behaviour; they do not
+validate balance or prove that Training B currently produces viable race
+profiles. The older synthetic SPEC results above must not be attributed to
+Training B.
