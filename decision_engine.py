@@ -40,7 +40,7 @@ def recovery_curve(offset):
     """
     Récupération selon l'écart sous le TN.
 
-    offset = spend - tn
+    offset = spend - tn, arrondi à l'entier supérieur avant la conversion.
 
     -2 et -3 : charge faible mais neutre
     <= -4    : récupération progressive
@@ -77,7 +77,8 @@ def energy_and_fatigue(spend, tn):
       Concrètement : fatigue = fibonacci(offset + 3) pour offset >= -1.
     """
     energy = spend
-    offset = _round_half_away_from_zero(spend - tn)
+    # Training B decision (2026-11-11): round the TN deviation upward.
+    offset = math.ceil(spend - tn)
 
     if offset >= -1:
         fatigue = fibonacci(offset + 3)
