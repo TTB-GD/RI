@@ -27,6 +27,8 @@ jobs:
             experiments.current.training_race_bridge.test_harness \
             experiments.current.race_engine_v2.test_harness \
             experiments.current.race_engine_v2.test_physiology_integration \
+            experiments.current.race_engine_v2.test_physiology_grid \
+            experiments.current.race_engine_v2.test_race_turn \
             experiments.current.race_engine_v2.test_r1a2 \
             experiments.current.race_engine_v2.test_r1b \
             experiments.current.race_engine_v2.test_r1b2 \
