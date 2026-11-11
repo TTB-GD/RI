@@ -113,7 +113,7 @@ speed; ties round upward. Outside the printed grid, the first or last segment
 slope is extrapolated. A zero floor prevents a negative segment speed.
 
 For a segment, the selected dice result is the **actual energy expenditure**.
-The VMA energy coordinate caps that expenditure before terrain correction.
+The VMA energy coordinate clips that expenditure before terrain correction: any dice result above VMA is reduced to the VMA energy value; the excess is discarded, not treated as a failure.
 Terrain difficulty is then subtracted from expenditure to obtain effective
 energy: positive values are uphill, negative values downhill. The grid converts
 effective energy to speed, which is the segment score. The reserve is debited
