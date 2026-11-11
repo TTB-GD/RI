@@ -1,141 +1,48 @@
 # Run It — Current State
 
-Last consolidated: 2026-11-11  
-Canonical branch: `main`
+Last consolidated: 2026-11-11
+Canonical branch: main
 
-This snapshot does not replace the GDD; the authority hierarchy in `AGENTS.md` applies.
+This snapshot does not replace the GDD; AGENTS.md defines the authority hierarchy.
+Development roadmap: DEVELOPMENT_PLAN.md.
 
-Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
+## TRAINING B — CURRENT IMPLEMENTATION SNAPSHOT
 
-## TRAINING CURRENT
+- Active Training B rolls N−1 dice and supports Keep, Add, Reroll and Add+Reroll.
+- Final dice energy is partitioned exactly between EF, Seuil and VMA.
+- Dice-derived fatigue is committed before session/bust resolution.
+- Successful sessions add adaptation XP; a bust cancels adaptation for the busted
+  session and later sessions but does not undo dice-derived fatigue.
+- Physiological progression uses three energy/speed coordinates, strictly
+  increasing EF < Seuil < VMA. At a milestone, the player chooses speed at fixed
+  energy or lower energy at fixed speed.
 
-- The persistent pool starts at `4d6`; cumulative CTL adds one d6 at 50 and
-  another at 100, with gains becoming available on the following turn.
-- Four successful Quality sessions upgrade one die along
-  `d6 → d8 → d10 → d12`; these dice have no permanent face bonus
-  (`0 / 0 / 0`).
-- D99 caps Quality sessions (including SL), EF can repeat, each Quality entry is
-  unique, Qualities cannot outnumber EF sessions, and a turn counts at most
-  seven sessions.
-- RPE Max marks the safe zone. Eligible Qualities above it may be chosen
-  voluntarily and tested for risk; EF above RPE Max remains unavailable.
-- Bust resolution preserves safe sessions, cancels later risky Qualities, and
-  exposes an explicit player choice to redistribute eligible energy into
-  accessible EF sessions, including an empty or partial choice.
-- CTL, prerequisites and die progression use only sessions actually completed
-  successfully after bust resolution and any EF redistribution.
-- Training simulation uses a local, seedable/injectable RNG for dice-budget and
-  bust-risk rolls, without reseeding Python's module-global random state. The
-  merged tests cover seeded replay and global RNG isolation (PRs #29–#31).
-- Session logs distinguish each occurrence, including repeated session names,
-  and identify the origin of redistributed EF sessions (PR #30).
-- D99 static coverage audit: `tests/test_d99_table.py` defines independent
-  expected fixtures for all 23 CURRENT signatures from the GDD: 5 at four dice,
-  7 at five dice and 11 at six dice. It checks exact table equality and the
-  `session_outcome` result for each signature. The three-die convention is
-  characterized separately and remains OPEN / IMPLEMENTATION POLICY.
-- CI confirmation: workflow [Tests #42254642083](https://github.com/TTB-GD/RI/actions/runs/42254642083)
-  passed on `main` at commit `40151114` (2026-11-06). The run completed the
-  98-test unit suite, JSON evidence validation and 80 lightweight experimental
-  tests. B3 is therefore closed for the 4/5/6-die CURRENT signatures; this does
-  not close or validate the separate three-die convention.
+## RACE V2 — SEGMENT INTEGRATION
 
-## FATIGUE — IMPLEMENTATION STATUS
+- physiology_grid.py converts effective energy to speed using the Training B
+  curve and integer grid.
+- race_turn.py reuses Training B's N−1 dice and player-selected dice actions.
+- VMA energy clips actual segment expenditure; terrain changes effective energy
+  but not reserve debit.
+- The segment adapter accepts an externally supplied reserve.
 
-- The current Training simulation computes `energy_and_fatigue(energy_effective,
-  TN)` after bust resolution and any EF redistribution. The quasi-Fibonacci
-  function is also used in the weighted selector's utility calculation; the
-  simulation records per-turn and cumulative fatigue diagnostics.
-- This is not the complete persistent Fatigue V1 system described as
-  EXPERIMENTAL in the GDD. The `Player` state has no persistent fatigue field,
-  and the recorded fatigue does not regulate later turns, reserve availability,
-  bust risk or session eligibility.
-- The D1 working design proposes a different decomposition based on the final
-  dice result, excess Quality load and session-specific penalty. Those rules
-  remain WORKING DESIGN / NON NORMATIVE and are not implemented in the current
-  Training path. See `D1_TRAINING_WORKING_DESIGN.md`.
+## RACE RESERVE — TRAINING PREPARATION (2026-11-11)
 
-## TRAINING B — PHYSIOLOGICAL PROGRESSION (2026-11-11)
+- Training B records cumulative committed energy separately for EF, Seuil and
+  VMA. Counters update after budget validation and before session resolution,
+  so energy invested in a busted session still counts.
+- Adaptation XP remains governed by successful session resolution; busted
+  sessions contribute no adaptation.
+- experiments/current/race_engine_v2/race_reserve.py provides a deterministic
+  pre-race preview with per-track saturation, training-turn normalization,
+  race-segment scaling and a bounded freshness bonus.
+- Course segment counts are 7 / 10 / 13 / 16 for 5 km / 10 km / half /
+  marathon. Course energy targets and numerical reserve/freshness calibration
+  remain OPEN; no arbitrary balance values are hard-coded.
+- The legacy longitudinal Race runner is not migrated by this change.
 
-- EF, Seuil and VMA are now specified as three points on an energy-to-speed
-  curve; each point has an energy coordinate and a speed coordinate.
-- Both coordinates must be strictly increasing EF < Seuil < VMA.
-- VMA energy is the maximum energy spend allowed in Race.
-- Each reached adaptation milestone opens one player choice: increase speed at
-  fixed energy, or reduce energy at fixed speed. There is no automatic
-  physiological effect.
-- Milestone XP costs and coordinate deltas remain OPEN configuration. Surplus
-  XP is retained after the milestone cost is consumed.
-- `training_v2.physiology` and `training_v2.physiology_progression` implement this model
-  separately from the legacy scalar profile. The Race V2 engine has not yet
-  been migrated to consume it; this is the next integration gap.
+## OPEN
 
-## RACE V2 CURRENT / INTEGRATED
-
-- `PhysiologyProfile(ef, threshold, vma)` validates `EF < Seuil < VMA`.
-- `physiological_cost` gives the floor `C(x) = EF` for every `x <= EF`, then
-  uses the continuous experimental slopes 2 and 3, and rejects `x > VMA`.
-- Race V2 resolves local `Charge = Production + Difficulty`, scores Production
-  only, and treats `Charge <= VMA` as its hard physiological legality boundary.
-- The experimental longitudinal runner in
-  `experiments/current/race_engine_v2/core.py` can consume a profile directly:
-  generated subset sums are filtered by Charge before the separate Reserve
-  affordability filter. Its multi-segment orchestration, Reserve, Form,
-  Freshness and policies remain EXPERIMENTAL; this does not make the complete
-  Race loop a CURRENT production gameplay path.
-- SPEC and the complete Training-to-profile conversion remain absent.
-
-## EXPERIMENTAL CONSERVED
-
-- The 2/3 slopes remain calibration, not final balance.
-- The reused S1–S3 progressive Form reveal, S3 post-choice Reserve clamp, S4+
-  payable filter and DNF flow remain an experimental baseline.
-- `base_reserve = race_length × 2 + floor(CTL / 50)`, FORM_SUM/FORM_PATTERN
-  (with FORM_PATTERN as the migration reference), direct Freshness fixtures,
-  LOW protection by SL, and EFFICIENT/AGGRESSIVE/ADAPTIVE/GREEDY are experimental.
-- Curve A/B/C remain available through the explicit legacy path, preserving the
-  R1-A, R1-A2, R1-B and R1-B2 harnesses and historical results.
-
-## OPEN / IMPLEMENTATION GAPS
-
-- The integer energy-to-speed grid consumes the Training B physiology curve at segment level (`physiology_grid.py`). The new `race_turn.py` adapter also reuses Training B's N−1 / Keep / Add / Reroll / Add+Reroll implementation. The old longitudinal runner still uses Production → Charge → cost and CTL-derived experimental reserve.
-- Final calibration of slopes 2/3 and of Reserve, Form, Freshness and SL is open.
-- SPEC remains OPEN and unimplemented in Race V2; Training's `Spec*` catalogue
-  entries are still an explicit design/implementation gap.
-- The selector's technical SL priority remains open.
-- The new segment resolver applies a zero floor to extrapolated negative speed as a technical guard; validate this in scenario tests.
-- Race reserve sourcing from Training preparation and migration of the full longitudinal runner (Form, Freshness and segment sequencing) remain implementation gaps. The isolated segment adapter now implements the Training B dice actions.
-- D99's three-die convention remains OPEN / IMPLEMENTATION POLICY; this audit
-  made no change to it.
-- B3 has complete static test coverage for four-, five- and six-die GDD rows;
-  confirm the relevant CI run before marking the gate fully verified.
-
-## HISTORICAL / TRACEABILITY
-
-Prior Race, Fatigue, Training and SPEC campaigns keep their recorded status and
-results. No historical campaign is retroactively described as using the native
-profile path.
-
-## REPOSITORY CONVENTION
-
-- `tests/` contains current behavior tests.
-- `experiments/current/` contains experimental harnesses still informing open questions.
-- `experiments/archive/` contains retained historical experiments.
-
-## NEXT TARGETS
-
-1. Treat B3 as closed for the 4/5/6-die CURRENT signatures on the successful
-   2026-11-06 CI run; keep the three-die convention explicitly open.
-2. Formalize and validate C1/C2, using `D1_TRAINING_WORKING_DESIGN.md` as
-   preparatory non-normative material rather than as a selected Training model.
-3. Decide Training target A/B/C (D1) before defining the Training-to-profile
-   mapping.
-4. Calibrate Reserve/Form/Freshness/SL and the physiological slopes after the
-   minimum integrated loop is specified; resolve the remaining SPEC and SL
-   questions at the appropriate design gates.
-
-
-## GITHUB / IMPLEMENTATION NOTE — 2026-11-11
-
-The two-coordinate physiology and player-selected milestone mechanism is under
-review in PR work. Numerical milestone schedules remain intentionally unset.
+- Calibrate course-specific EF / Seuil / VMA energy targets and reserve scale.
+- Calibrate freshness threshold, rate, cap and minimum preparation ratio.
+- Integrate reserve preview into the full longitudinal Race V2 runner and UI.
