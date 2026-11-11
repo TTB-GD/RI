@@ -99,31 +99,29 @@ def _interpolate(curve: PhysiologyCurve, energy: float) -> float:
 def resolve_race_segment(
     *,
     grid: PhysiologyGrid,
-    energy_spent: int,
+    energy_result: int,
     difficulty: int,
     reserve_remaining: int,
 ) -> RaceSegmentResult:
-    """Spend energy from reserve, then apply terrain and convert to segment speed.
+    """Clip the dice result to VMA, debit reserve, then convert through terrain.
 
-    Positive difficulty is uphill; negative difficulty is downhill. The VMA
-    ceiling applies to energy_spent before terrain correction.
+    Positive difficulty is uphill; negative difficulty is downhill. The dice
+    result is clipped to the VMA energy ceiling before checking/debiting reserve.
+    Terrain correction never changes the actual reserve expenditure.
     """
     for name, value in (
-        ("energy_spent", energy_spent),
+        ("energy_result", energy_result),
         ("difficulty", difficulty),
         ("reserve_remaining", reserve_remaining),
     ):
         if isinstance(value, bool) or not isinstance(value, int):
             raise TypeError(f"{name} must be an integer")
-    if energy_spent <= 0:
-        raise ValueError("energy_spent must be positive")
-    if difficulty < 0:
-        # Negative values represent downhill terrain and are valid.
-        pass
+    if energy_result <= 0:
+        raise ValueError("energy_result must be positive")
+    # VMA is a hard clipping threshold, not a failure condition.
+    energy_spent = min(energy_result, math.floor(grid.curve.max_race_energy))
     if reserve_remaining < energy_spent:
-        raise ValueError("energy_spent exceeds remaining race reserve")
-    if energy_spent > grid.curve.max_race_energy:
-        raise ValueError("energy_spent exceeds the VMA energy ceiling")
+        raise ValueError("clipped energy expenditure exceeds remaining race reserve")
 
     effective_energy = energy_spent - difficulty
     speed = grid.speed_at(effective_energy)
