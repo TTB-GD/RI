@@ -10,6 +10,7 @@ from .budget import TrainingEnergyBudget
 from .dice import DiceActionResult, RollResult, roll_initial, resolve_dice_action
 from .session_resolution import SessionResolution, resolve_session_plan
 from .state import PlayerState
+from .physiology_progression import PhysiologyMilestone
 
 
 @dataclass(frozen=True)
@@ -34,6 +35,8 @@ def resolve_training_turn(
     rpe_authorized: int | None = None,
     rng=None,
     overtraining: bool = False,
+    physiology_milestones: Sequence[PhysiologyMilestone] = (),
+    choose_physiology_upgrade: Callable[[PhysiologyMilestone, tuple[str, ...]], str] | None = None,
 ) -> TrainingTurnResult:
     """Resolve one complete turn when a session-plan callback is supplied.
 
@@ -72,6 +75,8 @@ def resolve_training_turn(
         plan = choose_sessions(budget)
         sessions = resolve_session_plan(
             state, budget, plan, rpe_authorized=rpe_authorized, rng=roller,
+            physiology_milestones=physiology_milestones,
+            choose_physiology_upgrade=choose_physiology_upgrade,
         )
 
     return TrainingTurnResult(
