@@ -6,6 +6,7 @@ this module intentionally defines no numerical balance schedule.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import math
 from typing import Callable, Iterable
 
 from .physiology import CHOICES, TRACKS
@@ -27,7 +28,8 @@ class PhysiologyMilestone:
             raise ValueError("milestone threshold must be a positive integer")
         for name, amount in (("speed_gain", self.speed_gain),
                              ("energy_reduction", self.energy_reduction)):
-            if isinstance(amount, bool) or not isinstance(amount, (int, float)) or amount <= 0:
+            if (isinstance(amount, bool) or not isinstance(amount, (int, float))
+                    or not math.isfinite(amount) or amount <= 0):
                 raise ValueError(f"{name} must be positive")
 
 
