@@ -30,7 +30,7 @@ class TrainingBSessionResolutionTests(unittest.TestCase):
         self.assertEqual(state.progression_ef, 2)
         self.assertEqual(state.progression_threshold, 3)
         self.assertEqual(state.progression_vma, 3)
-        self.assertEqual(state.fatigue, 8)
+        self.assertEqual(state.fatigue, 7)
 
     def test_first_bust_cancels_current_and_later_effects_but_keeps_prior(self):
         state = PlayerState(fatigue=3)
