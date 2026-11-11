@@ -98,13 +98,13 @@ Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
 
 ## OPEN / IMPLEMENTATION GAPS
 
-- The integer energy-to-speed grid now consumes the Training B physiology curve at segment-resolution level (`experiments/current/race_engine_v2/physiology_grid.py`). The complete Race loop is not yet migrated: the legacy runner still uses Production → Charge → cost and CTL-derived experimental reserve.
+- The integer energy-to-speed grid consumes the Training B physiology curve at segment level (`physiology_grid.py`). The new `race_turn.py` adapter also reuses Training B's N−1 / Keep / Add / Reroll / Add+Reroll implementation. The old longitudinal runner still uses Production → Charge → cost and CTL-derived experimental reserve.
 - Final calibration of slopes 2/3 and of Reserve, Form, Freshness and SL is open.
 - SPEC remains OPEN and unimplemented in Race V2; Training's `Spec*` catalogue
   entries are still an explicit design/implementation gap.
 - The selector's technical SL priority remains open.
 - The new segment resolver applies a zero floor to extrapolated negative speed as a technical guard; validate this in scenario tests.
-- Race reserve sourcing from Training preparation, and replacing the legacy N-dice/subset choice with the Training B N−1 action sequence, remain implementation gaps.
+- Race reserve sourcing from Training preparation and migration of the full longitudinal runner (Form, Freshness and segment sequencing) remain implementation gaps. The isolated segment adapter now implements the Training B dice actions.
 - D99's three-die convention remains OPEN / IMPLEMENTATION POLICY; this audit
   made no change to it.
 - B3 has complete static test coverage for four-, five- and six-die GDD rows;
