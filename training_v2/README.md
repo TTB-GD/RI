@@ -1,15 +1,20 @@
 # Training B — dose-based session resolution
 
-**EXPERIMENTAL — target architecture selected on 2026-11-07.** Training CURRENT is historical and is not a compatibility target.
+**EXPERIMENTAL — active target architecture selected on 2026-11-07.** Training
+CURRENT and the former direct-dice-to-session prototype are historical and are
+not compatibility targets.
 
-## Playable loop
+## Historical direct dice-to-session path — RETIRED
 
-1. Roll the persistent dice pool.
-2. Enumerate feasible compositions from the session catalogue.
-3. Assign every retained die to exactly one session occurrence.
-4. Choose a composition; the engine resolves risk, adaptations, progression and fatigue.
+The old `training_v2.engine`, `programs`, `catalog` and console path assign
+dice directly to sessions. They remain temporarily for regression
+characterization only. They do not define Training B's active economy and
+must not be extended as the new model.
 
-There is no separate EF-dice / Quality-dice partition. Each session declares its family, load type, fixed adaptations, energy cost, RPE, specific fatigue and optional per-turn occurrence limit. The player can repeat EF sessions; Seuil and VMA are limited to one occurrence each in this initial fixture. The option enumerator does not rank or select a composition.
+The active turn path is `training_v2.turn.resolve_training_turn`:
+dice decisions produce one conserved energy total; the player partitions it
+between EF, Seuil and VMA; the player then selects exact-dose sessions from
+the corresponding budgets. Session effects are resolved in plan order.
 
 ## Permanent session portfolio
 
