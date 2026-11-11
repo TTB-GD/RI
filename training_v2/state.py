@@ -1,9 +1,13 @@
-"""Persistent state for the isolated Training V2 prototype.
-
-Milestone values are provisional calibration from the B2 experimental harness.
-They are not CURRENT game rules.
-"""
+"""Persistent state for the experimental Training B prototype."""
 from dataclasses import dataclass, field
+
+
+INITIAL_SESSION_PORTFOLIO = {
+    "EF", "SEUIL", "VMA",  # historical prototype keys
+    "EF1", "EF2", "EF3", "EF4",
+    "SEUIL3", "SEUIL4", "SEUIL5",
+    "VMA3", "VMA4", "VMA5",
+}
 
 
 @dataclass
@@ -33,12 +37,8 @@ class PlayerState:
     ef_milestones_claimed: set[int] = field(default_factory=set)
     q_milestones_claimed: set[int] = field(default_factory=set)
     portfolio_milestones_claimed: set[str] = field(default_factory=set)
-    eligible_session_keys: set[str] = field(
-        default_factory=lambda: {"EF", "SEUIL", "VMA"}
-    )
-    acquired_session_keys: set[str] = field(
-        default_factory=lambda: {"EF", "SEUIL", "VMA"}
-    )
+    eligible_session_keys: set[str] = field(default_factory=lambda: set(INITIAL_SESSION_PORTFOLIO))
+    acquired_session_keys: set[str] = field(default_factory=lambda: set(INITIAL_SESSION_PORTFOLIO))
 
     def __post_init__(self):
         self.profile.validate()
@@ -54,9 +54,7 @@ class PlayerState:
     def clone(self):
         """Return an independent state suitable for branching a playtest."""
         return PlayerState(
-            profile=PhysiologyProfile(
-                self.profile.ef, self.profile.threshold, self.profile.vma
-            ),
+            profile=PhysiologyProfile(self.profile.ef, self.profile.threshold, self.profile.vma),
             dice_pool=list(self.dice_pool),
             progression_ef=self.progression_ef,
             progression_q=self.progression_q,
