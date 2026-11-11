@@ -140,22 +140,36 @@ Valeurs provisoires reprises du prototype :
 
 Ces valeurs sont conservées provisoirement, puis recalibrées avec la matrice et les scénarios.
 
-### 7.2 Rôle des filières dans Race
+### 7.2 Courbe physiologique énergie / vitesse
 
-- **EF** améliore l'efficacité énergétique : à vitesse/production identique, le coût énergétique diminue. EF n'augmente pas directement la réserve.
-- **Seuil** améliore la capacité à soutenir une allure élevée.
-- **VMA** augmente la vitesse maximale accessible.
-- La progression peut aussi permettre d'améliorer la vitesse à dépense énergétique constante.
-- Les paliers de chaque filière sont indépendants et de plus en plus espacés.
+EF, Seuil et VMA sont trois points d'une même courbe de conversion énergie → vitesse. Chaque point possède deux coordonnées :
 
-### 7.3 Effet des paliers
+- **Énergie** : dépense nécessaire au niveau de vitesse correspondant.
+- **Vitesse** : vitesse accessible à cette dépense.
 
-Chaque palier physiologique produit deux effets :
+L'ordre doit être strict sur les deux axes :
 
-1. une amélioration physiologique automatique ;
-2. l'ouverture d'un choix de spécialisation.
+~~~text
+E(EF) < E(Seuil) < E(VMA)
+V(EF) < V(Seuil) < V(VMA)
+~~~
 
-L'effet physiologique automatique est propre à chaque filière et défini explicitement palier par palier. Il n'existe pas de règle universelle de type « +1 à chaque palier ».
+L'énergie du point VMA constitue le maximum d'énergie dépensable en Race. Les valeurs initiales 6 / 8 / 10 restent des valeurs provisoires de l'ancien prototype et ne suffisent pas à définir les six coordonnées de la nouvelle courbe.
+
+### 7.3 Progression physiologique par paliers
+
+- Les adaptations de séances alimentent trois réserves d'XP indépendantes : EF, Seuil et VMA.
+- Chaque filière possède ses propres seuils de palier, croissants et de plus en plus espacés.
+- Lorsqu'une réserve atteint le coût du prochain palier, le joueur choisit **une seule** des deux transformations du point correspondant :
+  1. **Vitesse** : augmenter la vitesse sans modifier l'énergie.
+  2. **Économie** : diminuer l'énergie sans modifier la vitesse.
+- Il n'y a **aucun effet physiologique automatique** au palier.
+- Le coût du palier est consommé après le choix ; l'XP excédentaire est conservée pour le palier suivant.
+- Une transformation qui romprait l'ordre EF < Seuil < VMA sur l'un des deux axes est interdite.
+
+Les seuils d'XP, les incréments de vitesse et les réductions d'énergie restent à calibrer. Ils sont fournis comme configuration et ne sont pas fixés par le code.
+
+Le système de spécialisations de Race décrit ci-dessous est distinct de cette transformation physiologique ; son articulation exacte avec le nouveau choix de palier reste à confirmer.
 
 ### 7.4 Spécialisations
 
@@ -185,7 +199,7 @@ L'effet physiologique automatique est propre à chaque filière et défini expli
 | Question | Décision | Statut / précision |
 |---|---|---|
 | Q44 — valeurs initiales EF/Seuil/VMA | C | Valeurs du prototype conservées provisoirement, puis recalibrées |
-| Q45 — effet d'un palier | C | Progression physiologique automatique + choix de spécialisation |
+| Q45 — effet d'un palier | SUPERSEDED 2026-11-11 | Le palier donne le choix vitesse ou économie sur le point de la filière ; aucun effet physiologique automatique |
 | Q46 — nature de la progression automatique | D | Effet propre à chaque filière |
 | Q47 — amplitude de l'effet automatique | C | Définie explicitement pour chaque palier |
 | Q48 — cumul des spécialisations | A | Toutes permanentes et cumulatives |
@@ -205,7 +219,7 @@ Les points suivants doivent être résolus pour produire une matrice exploitable
 2. **Formule de bust** : formaliser précisément la comparaison entre meilleur dé, RPE de séance et dépassement autorisé.
 3. **Fatigue de séance** : fixer les fonctions/valeurs par séance et les interactions avec la fatigue issue des dés.
 4. **Overtraining** : fixer les seuils numériques et l'éventuel impact sur le budget d'énergie.
-5. **Progression** : fixer les seuils d'XP indépendants EF/Seuil/VMA, les effets automatiques palier par palier et les événements qui accordent un dé supplémentaire ou une amélioration choisie par le joueur.
+5. **Progression** : fixer les seuils d'XP indépendants EF/Seuil/VMA, les amplitudes des deux transformations proposées à chaque palier et les événements qui accordent un dé supplémentaire ou une amélioration choisie par le joueur.
 6. **Spécialisations** : définir les familles de séances contributrices, les seuils de pratique, les options offertes et leur paramètre de courbe modifié.
 7. **Race V2** : auditer les paramètres mathématiques réellement présents dans le moteur, vérifier qu'ils permettent les modifications additives à un paramètre, puis définir les effets des spécialisations.
 8. **SL/SPEC** : définir les séances/variantes, les conditions d'accès et les effets sur la préparation générale ou contextuelle.

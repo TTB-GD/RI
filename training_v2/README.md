@@ -180,3 +180,28 @@ The bust comparison, the complete matrix, fatigue values and repetition caps
 are intentionally marked EXPERIMENTAL. The caller supplies `rpe_authorized`;
 its derivation from the dice/turn context remains an integration parameter
 to calibrate, not a hidden rule.
+
+
+## Physiological curve and milestone choices — 2026-11-11
+
+The new `training_v2.physiology` model represents EF, Seuil and VMA as
+three points with separate energy and speed coordinates. Both coordinates must
+increase strictly from EF to Seuil to VMA. `max_race_energy` exposes the
+VMA energy coordinate as the Race expenditure ceiling.
+
+Successful session XP feeds the three independent progression reserves.
+`PhysiologyMilestone` configuration defines increasing XP costs and the
+two possible coordinate deltas. At a reached milestone, the player chooses one:
+
+- `speed` increases speed while preserving energy;
+- `economy` decreases energy while preserving speed.
+
+No automatic physiological effect is applied. The milestone cost is consumed
+only after a valid choice; excess XP remains banked. Choices that break the
+strict EF < Seuil < VMA order on either coordinate are not offered.
+
+Milestone thresholds and coordinate deltas are deliberately configuration-only:
+no numerical schedule is approved. The curve is stored separately from the
+legacy scalar profile, and the Race V2 engine has **not yet been migrated** to
+consume this new energy-to-speed curve. The Race expenditure cap is exposed by
+the curve model but still needs to be wired into Race resolution.

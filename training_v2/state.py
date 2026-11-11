@@ -1,6 +1,8 @@
 """Persistent state for the experimental Training B prototype."""
 from dataclasses import dataclass, field
 
+from .physiology import PhysiologyCurve
+
 
 INITIAL_SESSION_PORTFOLIO = {
     "EF", "SEUIL", "VMA",  # historical prototype keys
@@ -23,7 +25,7 @@ class PhysiologyProfile:
 
 @dataclass
 class PlayerState:
-    profile: PhysiologyProfile = field(default_factory=PhysiologyProfile)
+    profile: PhysiologyProfile = field(default_factory=PhysiologyProfile)  # legacy direct-allocation path
     dice_pool: list[int] = field(default_factory=lambda: [6, 6, 6, 6])
     progression_ef: int = 0
     progression_q: int = 0
@@ -39,9 +41,13 @@ class PlayerState:
     portfolio_milestones_claimed: set[str] = field(default_factory=set)
     eligible_session_keys: set[str] = field(default_factory=lambda: set(INITIAL_SESSION_PORTFOLIO))
     acquired_session_keys: set[str] = field(default_factory=lambda: set(INITIAL_SESSION_PORTFOLIO))
+    race_curve: PhysiologyCurve | None = None
+    physiology_milestones_claimed: set[str] = field(default_factory=set)
 
     def __post_init__(self):
         self.profile.validate()
+        if self.race_curve is not None and not isinstance(self.race_curve, PhysiologyCurve):
+            raise ValueError("race_curve must be a PhysiologyCurve")
         if len(self.dice_pool) < 4 or len(self.dice_pool) > 6:
             raise ValueError("dice pool must contain between four and six dice")
         if any(size not in (6, 8, 10, 12) for size in self.dice_pool):
@@ -55,6 +61,8 @@ class PlayerState:
         """Return an independent state suitable for branching a playtest."""
         return PlayerState(
             profile=PhysiologyProfile(self.profile.ef, self.profile.threshold, self.profile.vma),
+            race_curve=self.race_curve,
+            physiology_milestones_claimed=set(self.physiology_milestones_claimed),
             dice_pool=list(self.dice_pool),
             progression_ef=self.progression_ef,
             progression_q=self.progression_q,

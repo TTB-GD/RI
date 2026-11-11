@@ -11,6 +11,9 @@ from typing import Callable, Iterable
 
 from .budget import TrainingEnergyBudget
 from .state import PlayerState
+from .physiology_progression import (
+    PhysiologyMilestone, PhysiologyUpgrade, apply_physiology_milestones,
+)
 
 
 @dataclass(frozen=True)
@@ -78,6 +81,7 @@ class SessionResolution:
     cancelled_sessions: tuple[str, ...]
     fatigue_added: int
     xp_added: tuple[tuple[str, int], ...]
+    physiology_upgrades: tuple[PhysiologyUpgrade, ...] = ()
 
     @property
     def successful_sessions(self) -> tuple[str, ...]:
@@ -121,6 +125,8 @@ def resolve_session_plan(
     rpe_authorized: int,
     rng=None,
     risk_roll: Callable[[int], int] | None = None,
+    physiology_milestones: Iterable[PhysiologyMilestone] = (),
+    choose_physiology_upgrade: Callable[[PhysiologyMilestone, tuple[str, ...]], str] | None = None,
 ) -> SessionResolution:
     """Resolve ordered sessions; the first bust cancels itself and all later rows.
 
@@ -171,6 +177,9 @@ def resolve_session_plan(
     state.progression_ef += xp["ef"]
     state.progression_threshold += xp["threshold"]
     state.progression_vma += xp["vma"]
+    physiology_upgrades = apply_physiology_milestones(
+        state, physiology_milestones, choose_physiology_upgrade
+    )
     state.fatigue += fatigue_added
     return SessionResolution(
         planned=keys,
@@ -179,4 +188,5 @@ def resolve_session_plan(
         cancelled_sessions=cancelled,
         fatigue_added=fatigue_added,
         xp_added=tuple((track, value) for track, value in xp.items()),
+        physiology_upgrades=physiology_upgrades,
     )
