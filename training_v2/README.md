@@ -1,15 +1,20 @@
-# Training B — direct dice-to-session allocation
+# Training B — dose-based session resolution
 
-**EXPERIMENTAL — target architecture selected on 2026-11-07.** Training CURRENT is historical and is not a compatibility target.
+**EXPERIMENTAL — active target architecture selected on 2026-11-07.** Training
+CURRENT and the former direct-dice-to-session prototype are historical and are
+not compatibility targets.
 
-## Playable loop
+## Historical direct dice-to-session path — RETIRED
 
-1. Roll the persistent dice pool.
-2. Enumerate feasible compositions from the session catalogue.
-3. Assign every retained die to exactly one session occurrence.
-4. Choose a composition; the engine resolves risk, adaptations, progression and fatigue.
+The old `training_v2.engine`, `programs`, `catalog` and console path assign
+dice directly to sessions. They remain temporarily for regression
+characterization only. They do not define Training B's active economy and
+must not be extended as the new model.
 
-There is no separate EF-dice / Quality-dice partition. Each session declares its family, load type, fixed adaptations, energy cost, RPE, specific fatigue and optional per-turn occurrence limit. The player can repeat EF sessions; Seuil and VMA are limited to one occurrence each in this initial fixture. The option enumerator does not rank or select a composition.
+The active turn path is `training_v2.turn.resolve_training_turn`:
+dice decisions produce one conserved energy total; the player partitions it
+between EF, Seuil and VMA; the player then selects exact-dose sessions from
+the corresponding budgets. Session effects are resolved in plan order.
 
 ## Permanent session portfolio
 
@@ -120,3 +125,58 @@ prototype and is not called by this new loop. Session-dose resolution is the
 next integration step; the EF1–EF4 / Seuil3–5 / VMA3–5 matrix and its adaptation,
 RPE/bust and session-fatigue values remain OPEN. No placeholder balance values
 are silently promoted into the new loop.
+
+
+## Session-dose resolution — 2026-11-11
+
+The Training B turn can now resolve the complete dose layer through
+`resolve_training_turn(..., choose_sessions=..., rpe_authorized=...)`.
+The session callback receives the conserved EF / Seuil / VMA budget and returns
+an ordered list of dose keys. The resolver validates that the exact session
+doses consume each corresponding budget; no energy is converted into a
+surplus or silently discarded.
+
+### Base matrix — EXPERIMENTAL
+
+The ten base entries are `EF1–EF4`, `SEUIL3–SEUIL5` and `VMA3–VMA5`.
+The number in each key is the exact energy dose, not a physiological capacity,
+adaptation amount or RPE. Each entry has independent primary XP, secondary XP,
+RPE and session fatigue values in `training_v2/session_resolution.py`.
+All these numerical values are **EXPERIMENTAL** and intended for simulation
+and playtest calibration, not promoted design rules.
+
+| Session | Dose | RPE | Primary XP | Secondary XP | Session fatigue |
+|---|---:|---:|---:|---:|---:|
+| EF1 | 1 | 1 | EF +1 | — | 0 |
+| EF2 | 2 | 2 | EF +2 | Seuil +1 | 1 |
+| EF3 | 3 | 3 | EF +3 | Seuil +1 | 2 |
+| EF4 | 4 | 4 | EF +4 | Seuil +2 | 3 |
+| SEUIL3 | 3 | 3 | Seuil +2 | EF +1 | 2 |
+| SEUIL4 | 4 | 4 | Seuil +3 | EF +1 | 3 |
+| SEUIL5 | 5 | 5 | Seuil +4 | EF +2 | 4 |
+| VMA3 | 3 | 4 | VMA +2 | Seuil +1 | 3 |
+| VMA4 | 4 | 5 | VMA +3 | Seuil +1 | 4 |
+| VMA5 | 5 | 6 | VMA +4 | Seuil +2 | 5 |
+
+EF1–EF3 may repeat up to their per-turn caps; EF4, Seuil and VMA entries
+are limited to one occurrence each. These limits are also provisional.
+
+### Bust — EXPERIMENTAL
+
+For each session in plan order, calculate
+`excess = max(0, session_RPE - rpe_authorized)`. If excess is positive,
+roll the largest persistent die and bust when its **raw face** is less than
+or equal to excess. The first bust cancels that session and every later
+planned session. Successful earlier sessions retain their effects.
+
+A successful session adds its primary and secondary XP to separate EF,
+Seuil and VMA progression reserves and adds its session-specific fatigue.
+A busted session adds neither adaptations nor session fatigue. Dice-derived
+fatigue is already committed before this resolution and is never rolled back.
+Physiological profile thresholds and automatic profile changes remain OPEN;
+this layer records XP but does not invent milestone thresholds.
+
+The bust comparison, the complete matrix, fatigue values and repetition caps
+are intentionally marked EXPERIMENTAL. The caller supplies `rpe_authorized`;
+its derivation from the dice/turn context remains an integration parameter
+to calibrate, not a hidden rule.
