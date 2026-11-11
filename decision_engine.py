@@ -63,18 +63,11 @@ def energy_and_fatigue(spend, tn):
 
     - L'énergie n'est PLUS plafonnée : énergie = spend, telle quelle, sans
       bonus ni malus.
-    - La fatigue suit une suite quasi-Fibonacci selon la proximité au TN :
-
-          offset = spend - tn
-          offset <= -2  : fatigue = 0
-          offset == -1  : fatigue = 1
-          offset == 0   : fatigue = 2   (TN pile)
-          offset == 1   : fatigue = 3
-          offset == 2   : fatigue = 5
-          offset == 3   : fatigue = 8
-          offset == 4   : fatigue = 13  (et ainsi de suite)
-
-      Concrètement : fatigue = fibonacci(offset + 3) pour offset >= -1.
+    - La fatigue suit la courbe quasi-Fibonacci historique selon l'écart au TN.
+    - L'écart est arrondi à l'entier supérieur : offset = ceil(spend - tn).
+    - offset >= -1 : fatigue = fibonacci(offset + 3)
+    - offset == -2 ou -3 : fatigue = 0
+    - offset <= -4 : récupération négative selon recovery_curve(offset).
     """
     energy = spend
     # Training B decision (2026-11-11): round the TN deviation upward.
