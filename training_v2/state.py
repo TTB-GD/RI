@@ -1,6 +1,8 @@
 """Persistent state for the experimental Training B prototype."""
 from dataclasses import dataclass, field
 
+from .physiology import PhysiologyCurve
+
 
 INITIAL_SESSION_PORTFOLIO = {
     "EF", "SEUIL", "VMA",  # historical prototype keys
@@ -23,7 +25,9 @@ class PhysiologyProfile:
 
 @dataclass
 class PlayerState:
-    profile: PhysiologyProfile = field(default_factory=PhysiologyProfile)
+    profile: PhysiologyProfile = field(default_factory=PhysiologyProfile)  # legacy direct-allocation path
+    race_curve: PhysiologyCurve | None = None
+    physiology_milestones_claimed: set[str] = field(default_factory=set)
     dice_pool: list[int] = field(default_factory=lambda: [6, 6, 6, 6])
     progression_ef: int = 0
     progression_q: int = 0
@@ -55,6 +59,8 @@ class PlayerState:
         """Return an independent state suitable for branching a playtest."""
         return PlayerState(
             profile=PhysiologyProfile(self.profile.ef, self.profile.threshold, self.profile.vma),
+            race_curve=self.race_curve,
+            physiology_milestones_claimed=set(self.physiology_milestones_claimed),
             dice_pool=list(self.dice_pool),
             progression_ef=self.progression_ef,
             progression_q=self.progression_q,
