@@ -239,7 +239,7 @@ En parallèle, auditer les paramètres existants de Race V2 nécessaires aux mod
 
 - À chaque segment, le joueur lance **N−1 dés** et utilise les mêmes opérations que pendant Training : Keep, Add one, Reroll one ou Add + Reroll.
 - Le résultat final choisi est l'énergie **effectivement dépensée** sur ce segment. Cette dépense est débitée de la réserve.
-- L'énergie dépensée ne peut pas dépasser la coordonnée énergie de VMA.
+- Le résultat énergétique des dés est écrêté à la coordonnée énergie de VMA : `énergie dépensée = min(résultat des dés, énergie VMA)`. L'excédent est perdu, sans échec ni DNF.
 - La difficulté du terrain est ensuite soustraite à l'énergie dépensée :
   `énergie utile = énergie dépensée − difficulté`.
 - Une difficulté positive représente une montée et réduit la vitesse. Une difficulté négative représente une descente et augmente la vitesse pour une même dépense.
