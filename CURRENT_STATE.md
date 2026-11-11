@@ -1,6 +1,6 @@
 # Run It — Current State
 
-Last consolidated: 2026-11-06  
+Last consolidated: 2026-11-11  
 Canonical branch: `main`
 
 This snapshot does not replace the GDD; the authority hierarchy in `AGENTS.md` applies.
@@ -55,6 +55,21 @@ Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
   remain WORKING DESIGN / NON NORMATIVE and are not implemented in the current
   Training path. See `D1_TRAINING_WORKING_DESIGN.md`.
 
+## TRAINING B — PHYSIOLOGICAL PROGRESSION (2026-11-11)
+
+- EF, Seuil and VMA are now specified as three points on an energy-to-speed
+  curve; each point has an energy coordinate and a speed coordinate.
+- Both coordinates must be strictly increasing EF < Seuil < VMA.
+- VMA energy is the maximum energy spend allowed in Race.
+- Each reached adaptation milestone opens one player choice: increase speed at
+  fixed energy, or reduce energy at fixed speed. There is no automatic
+  physiological effect.
+- Milestone XP costs and coordinate deltas remain OPEN configuration. Surplus
+  XP is retained after the milestone cost is consumed.
+- `training_v2.physiology` and `training_v2.physiology_progression` implement this model
+  separately from the legacy scalar profile. The Race V2 engine has not yet
+  been migrated to consume it; this is the next integration gap.
+
 ## RACE V2 CURRENT / INTEGRATED
 
 - `PhysiologyProfile(ef, threshold, vma)` validates `EF < Seuil < VMA`.
@@ -83,7 +98,7 @@ Development roadmap: see [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
 
 ## OPEN / IMPLEMENTATION GAPS
 
-- The complete Training → EF/Seuil/VMA mapping is not implemented.
+- The complete Training → energy/speed curve → Race mapping is not implemented; the new curve exists but is not yet consumed by Race V2.
 - Final calibration of slopes 2/3 and of Reserve, Form, Freshness and SL is open.
 - SPEC remains OPEN and unimplemented in Race V2; Training's `Spec*` catalogue
   entries are still an explicit design/implementation gap.
@@ -116,3 +131,9 @@ profile path.
 4. Calibrate Reserve/Form/Freshness/SL and the physiological slopes after the
    minimum integrated loop is specified; resolve the remaining SPEC and SL
    questions at the appropriate design gates.
+
+
+## GITHUB / IMPLEMENTATION NOTE — 2026-11-11
+
+The two-coordinate physiology and player-selected milestone mechanism is under
+review in PR work. Numerical milestone schedules remain intentionally unset.
