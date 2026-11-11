@@ -133,7 +133,7 @@ surplus or silently discarded.
 
 ### Base matrix — EXPERIMENTAL
 
-The nine base entries are `EF1–EF4`, `SEUIL3–SEUIL5` and `VMA3–VMA5`.
+The ten base entries are `EF1–EF4`, `SEUIL3–SEUIL5` and `VMA3–VMA5`.
 The number in each key is the exact energy dose, not a physiological capacity,
 adaptation amount or RPE. Each entry has independent primary XP, secondary XP,
 RPE and session fatigue values in `training_v2/session_resolution.py`.
