@@ -42,7 +42,7 @@ class PhysiologyGridTests(unittest.TestCase):
 
     def test_uphill_reduces_speed_without_increasing_reserve_spend(self):
         result = resolve_race_segment(
-            grid=self.grid, energy_spent=8, difficulty=2, reserve_remaining=20
+            grid=self.grid, energy_result=8, difficulty=2, reserve_remaining=20
         )
         self.assertEqual(result.effective_energy, 6)
         self.assertEqual(result.speed, 10)
