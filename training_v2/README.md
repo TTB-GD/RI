@@ -100,3 +100,23 @@ CTL bridge, or old progression thresholds as approved rules for Training B.
   experimental progression hooks. It is not the target Training B turn
   resolver; the new progression operations are intentionally not wired to
   those obsolete thresholds.
+
+
+## Main turn loop — 2026-11-11
+
+The new `training_v2.turn.resolve_training_turn` connects the approved player
+decisions in one deterministic turn pipeline:
+
+1. Roll exactly N−1 dice; the reserve die is not rolled yet.
+2. Choose Keep, Add, Reroll or Add+Reroll. Add rolls the reserve only after
+   that choice; Add+Reroll resolves the reroll before rolling the reserve.
+3. Allocate all final energy between EF, Seuil and VMA through the conserved
+   `TrainingEnergyBudget`.
+4. Apply the quasi-Fibonacci dice-fatigue contribution immediately and persist
+   the turn count. A subsequent session bust must not undo this contribution.
+
+The previous `engine.py` direct-dice-to-session path remains a historical
+prototype and is not called by this new loop. Session-dose resolution is the
+next integration step; the EF1–EF4 / Seuil3–5 / VMA3–5 matrix and its adaptation,
+RPE/bust and session-fatigue values remain OPEN. No placeholder balance values
+are silently promoted into the new loop.

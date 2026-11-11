@@ -7,10 +7,12 @@ from .portfolio import make_session_eligible, acquire_session
 from .milestones import PortfolioMilestone
 from .dice import DiceActionResult, resolve_dice_action
 from .budget import TrainingEnergyBudget
+from .turn import TrainingTurnResult, resolve_training_turn
 
 __all__ = [
     "PlayerState", "PhysiologyProfile", "RollResult", "DiceActionResult", "TurnResult",
     "ProgramOption", "SessionAllocation", "SessionOption", "SESSION_CATALOG",
     "list_program_options", "resolve_turn", "roll_pool", "roll_and_resolve_turn", "resolve_dice_action",
     "make_session_eligible", "acquire_session", "PortfolioMilestone", "TrainingEnergyBudget",
+    "TrainingTurnResult", "resolve_training_turn",
 ]
