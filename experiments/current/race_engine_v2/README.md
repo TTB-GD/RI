@@ -125,3 +125,18 @@ path and the experimental CTL/Form/Reserve orchestration. Its replacement must
 use the Training B N−1 dice action semantics and a Race reserve supplied by the
 new Training-to-Race preparation mapping; CTL-derived reserve must not be
 silently carried into the new path.
+
+
+## R1-D — Training B dice-action adapter
+
+`race_turn.py` now resolves one segment through the same dice implementation
+used by Training B: roll N−1 dice, then Keep, Add, Reroll or Add + Reroll.
+The smallest die is the reserved die (last pool index wins ties), and it is
+rolled only when Add is selected. Reroll targets one of the initially active
+dice. The resulting sum is passed unchanged to the R1-C segment resolver, which
+applies the VMA ceiling, terrain correction and reserve debit.
+
+The adapter accepts the remaining Race reserve as an input. It does not derive
+that reserve from CTL or invent a Training-to-Race reserve formula. The older
+longitudinal `core.py` harness remains a historical/experimental path and is
+not silently presented as migrated.

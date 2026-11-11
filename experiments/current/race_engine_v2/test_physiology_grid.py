@@ -51,7 +51,7 @@ class PhysiologyGridTests(unittest.TestCase):
 
     def test_downhill_increases_speed_without_increasing_energy_spend(self):
         result = resolve_race_segment(
-            grid=self.grid, energy_spent=8, difficulty=-2, reserve_remaining=20
+            grid=self.grid, energy_result=8, difficulty=-2, reserve_remaining=20
         )
         self.assertEqual(result.effective_energy, 10)
         self.assertEqual(result.speed, 14)
@@ -62,15 +62,18 @@ class PhysiologyGridTests(unittest.TestCase):
         self.assertEqual(self.grid.speed_at(-10), 0)
 
     def test_vma_cap_applies_before_terrain(self):
-        with self.assertRaisesRegex(ValueError, "VMA"):
-            resolve_race_segment(
-                grid=self.grid, energy_spent=13, difficulty=-5, reserve_remaining=20
-            )
+        result = resolve_race_segment(
+            grid=self.grid, energy_result=13, difficulty=-5, reserve_remaining=20
+        )
+        self.assertEqual(result.energy_spent, 12)
+        self.assertEqual(result.effective_energy, 17)
+        self.assertEqual(result.speed, 21)
+        self.assertEqual(result.reserve_remaining, 8)
 
     def test_reserve_is_debited_by_actual_energy_spent(self):
         with self.assertRaisesRegex(ValueError, "reserve"):
             resolve_race_segment(
-                grid=self.grid, energy_spent=8, difficulty=3, reserve_remaining=7
+                grid=self.grid, energy_result=8, difficulty=3, reserve_remaining=7
             )
 
 
