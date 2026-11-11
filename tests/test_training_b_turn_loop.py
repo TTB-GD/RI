@@ -23,7 +23,7 @@ class CountingRng:
 class TrainingBTurnLoopTests(unittest.TestCase):
     def test_initial_roll_rolls_exactly_n_minus_one_dice(self):
         rng = CountingRng((2, 3, 4, 5))
-        roll = roll_initial([6, 6, 6, 6], rng=rng)
+        roll = roll_initial([6, 6, 6, 6], rng=rng, defer_reserve=True)
         self.assertEqual(rng.calls, 3)
         self.assertEqual(roll.final_values, (2, 3, 4))
         self.assertIsNone(roll.reserve_value)
@@ -32,7 +32,7 @@ class TrainingBTurnLoopTests(unittest.TestCase):
 
     def test_keep_does_not_roll_reserve(self):
         rng = CountingRng((2, 3, 4))
-        roll = roll_initial([6, 6, 6, 6], rng=rng)
+        roll = roll_initial([6, 6, 6, 6], rng=rng, defer_reserve=True)
         result = resolve_dice_action(roll, "keep", rng=rng)
         self.assertEqual(rng.calls, 3)
         self.assertEqual(result.final_values, (2, 3, 4))
@@ -40,7 +40,7 @@ class TrainingBTurnLoopTests(unittest.TestCase):
 
     def test_add_rolls_reserve_only_after_player_choice(self):
         rng = CountingRng((2, 3, 4, 5))
-        roll = roll_initial([6, 6, 6, 6], rng=rng)
+        roll = roll_initial([6, 6, 6, 6], rng=rng, defer_reserve=True)
         self.assertEqual(rng.calls, 3)
         result = resolve_dice_action(roll, "add", rng=rng)
         self.assertEqual(rng.calls, 4)
@@ -49,7 +49,7 @@ class TrainingBTurnLoopTests(unittest.TestCase):
 
     def test_add_and_reroll_rolls_reserve_after_reroll(self):
         rng = CountingRng((2, 3, 4, 6, 5))
-        roll = roll_initial([6, 6, 6, 6], rng=rng)
+        roll = roll_initial([6, 6, 6, 6], rng=rng, defer_reserve=True)
         result = resolve_dice_action(
             roll, "add+reroll", reroll_index=1, rng=rng,
         )
