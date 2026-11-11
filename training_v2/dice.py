@@ -45,7 +45,7 @@ class DiceActionResult:
     reroll_index: int | None = None
 
 
-def roll_initial(pool_sizes, *, rng=None, defer_reserve=True) -> RollResult:
+def roll_initial(pool_sizes, *, rng=None, defer_reserve=False) -> RollResult:
     """Roll N-1 dice. The reserve is rolled only if Add is later selected."""
     rng = rng if rng is not None else random.Random()
     sizes = tuple(pool_sizes)
