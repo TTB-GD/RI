@@ -26,8 +26,6 @@ class PhysiologyProfile:
 @dataclass
 class PlayerState:
     profile: PhysiologyProfile = field(default_factory=PhysiologyProfile)  # legacy direct-allocation path
-    race_curve: PhysiologyCurve | None = None
-    physiology_milestones_claimed: set[str] = field(default_factory=set)
     dice_pool: list[int] = field(default_factory=lambda: [6, 6, 6, 6])
     progression_ef: int = 0
     progression_q: int = 0
@@ -43,9 +41,13 @@ class PlayerState:
     portfolio_milestones_claimed: set[str] = field(default_factory=set)
     eligible_session_keys: set[str] = field(default_factory=lambda: set(INITIAL_SESSION_PORTFOLIO))
     acquired_session_keys: set[str] = field(default_factory=lambda: set(INITIAL_SESSION_PORTFOLIO))
+    race_curve: PhysiologyCurve | None = None
+    physiology_milestones_claimed: set[str] = field(default_factory=set)
 
     def __post_init__(self):
         self.profile.validate()
+        if self.race_curve is not None and not isinstance(self.race_curve, PhysiologyCurve):
+            raise ValueError("race_curve must be a PhysiologyCurve")
         if len(self.dice_pool) < 4 or len(self.dice_pool) > 6:
             raise ValueError("dice pool must contain between four and six dice")
         if any(size not in (6, 8, 10, 12) for size in self.dice_pool):
