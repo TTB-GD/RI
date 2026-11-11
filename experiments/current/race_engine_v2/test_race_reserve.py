@@ -23,14 +23,15 @@ class RaceReserveTests(unittest.TestCase):
 
     def test_energy_counts_even_when_first_session_busts(self):
         state = PlayerState()
+        plan = ["EF4", "EF3", "EF3", "EF2", "EF2", "EF1", "EF1", "EF1", "EF1"]
         result = resolve_training_turn(
             state, choose_dice_action=lambda roll: "keep",
-            allocate_budget=lambda dice: TrainingEnergyBudget(dice.energy, 4, 8, dice.energy - 12),
-            choose_sessions=lambda budget: ["SEUIL5"], rpe_authorized=0,
+            allocate_budget=lambda dice: TrainingEnergyBudget(dice.energy, 18, 0, 0),
+            choose_sessions=lambda budget: plan, rpe_authorized=0,
             rng=FixedRng((6, 6, 6, 1)))
-        self.assertEqual(result.sessions.busted_session, "SEUIL5")
-        self.assertEqual((state.training_energy_ef, state.training_energy_threshold, state.training_energy_vma), (4, 8, 6))
-        self.assertEqual(state.progression_threshold, 0)
+        self.assertEqual(result.sessions.busted_session, "EF4")
+        self.assertEqual((state.training_energy_ef, state.training_energy_threshold, state.training_energy_vma), (18, 0, 0))
+        self.assertEqual(state.progression_ef, 0)
         self.assertEqual(state.fatigue, 13)
 
     def test_saturation_and_preview(self):
