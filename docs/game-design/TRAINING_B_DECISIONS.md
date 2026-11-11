@@ -270,3 +270,30 @@ N−1 / Keep / Add / Reroll / Add+Reroll de Training B.
 La provenance et le calcul de la réserve totale de Race depuis la préparation
 Training restent à intégrer. Le CTL et la réserve expérimentale calculée depuis
 CTL ne doivent pas être repris comme règles du nouveau modèle.
+
+
+## 13. Race V2 — réutilisation des actions de dés Training B (11 novembre 2026)
+
+### Règles déjà arbitrées
+
+- Chaque segment utilise le même pool persistant que celui construit pendant Training.
+- Le joueur lance N−1 dés ; le dé restant est réservé.
+- Les quatre opérations sont identiques à Training : Keep, Add, Reroll, Add + Reroll.
+- Add lance le dé réservé ; Reroll remplace un seul dé parmi les N−1 dés déjà lancés.
+- Le résultat final des dés est transmis à la résolution du segment, qui applique le plafond VMA, la correction de terrain et le débit de réserve conformément à la section 12.
+
+### Intégration technique
+
+`experiments/current/race_engine_v2/race_turn.py` réutilise directement
+`training_v2.dice.roll_initial` et `resolve_dice_action`. Il n'existe donc
+pas de seconde implémentation des règles Keep/Add/Reroll.
+
+Le résolveur reçoit la réserve restante en entrée. La formule de constitution
+de la réserve Race depuis la préparation Training reste **OPEN** ; aucun calcul
+basé sur CTL n'est repris dans ce nouvel adaptateur.
+
+### Limite actuelle
+
+L'adaptateur résout un segment isolé. L'orchestration longitudinale de la course
+(forme, réserve initiale, fraîcheur et enchaînement des segments) reste à migrer
+depuis l'ancien harness expérimental.
