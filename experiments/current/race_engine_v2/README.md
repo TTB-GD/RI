@@ -102,3 +102,26 @@ python experiments/current/race_engine_v2/run_r1b2.py --phase remaining --select
 ```
 
 See `REPORT_R1B2.md`. Large phase-level course/turn CSVs are ignored.
+
+
+## R1-C — Training physiology grid foundation
+
+The new `physiology_grid.py` is the first Race V2 implementation of the
+Training B energy-to-speed curve. It builds an integer-energy lookup grid from
+the player's EF, Seuil and VMA anchors. Each cell stores the nearest integer
+speed; ties round upward. Outside the printed grid, the first or last segment
+slope is extrapolated. A zero floor prevents a negative segment speed.
+
+For a segment, the selected dice result is the **actual energy expenditure**.
+The VMA energy coordinate clips that expenditure before terrain correction: any dice result above VMA is reduced to the VMA energy value; the excess is discarded, not treated as a failure.
+Terrain difficulty is then subtracted from expenditure to obtain effective
+energy: positive values are uphill, negative values downhill. The grid converts
+effective energy to speed, which is the segment score. The reserve is debited
+by actual expenditure, not effective energy.
+
+This is a tested conversion primitive, not yet the complete Race loop. The
+legacy `core.py` runner still contains the former Production → Charge → cost
+path and the experimental CTL/Form/Reserve orchestration. Its replacement must
+use the Training B N−1 dice action semantics and a Race reserve supplied by the
+new Training-to-Race preparation mapping; CTL-derived reserve must not be
+silently carried into the new path.

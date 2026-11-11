@@ -231,3 +231,42 @@ Les points suivants doivent être résolus pour produire une matrice exploitable
 Construire une **matrice provisoire des séances Training B** à partir du catalogue EF1–EF4, Seuil3–Seuil5 et VMA3–VMA5. Les paramètres non arbitrés doivent rester explicitement marqués **OPEN** plutôt que recevoir des valeurs inventées.
 
 En parallèle, auditer les paramètres existants de Race V2 nécessaires aux modifications additives de courbe. Les deux travaux doivent converger vers un premier scénario jouable et testable, sans réintroduire CTL ni l'ancien modèle Training.
+
+
+## 12. Race V2 — dépense, terrain et conversion énergie/vitesse (11 novembre 2026)
+
+### Décisions confirmées
+
+- À chaque segment, le joueur lance **N−1 dés** et utilise les mêmes opérations que pendant Training : Keep, Add one, Reroll one ou Add + Reroll.
+- Le résultat final choisi est l'énergie **effectivement dépensée** sur ce segment. Cette dépense est débitée de la réserve.
+- Le résultat énergétique des dés est écrêté à la coordonnée énergie de VMA : `énergie dépensée = min(résultat des dés, énergie VMA)`. L'excédent est perdu, sans échec ni DNF.
+- La difficulté du terrain est ensuite soustraite à l'énergie dépensée :
+  `énergie utile = énergie dépensée − difficulté`.
+- Une difficulté positive représente une montée et réduit la vitesse. Une difficulté négative représente une descente et augmente la vitesse pour une même dépense.
+- La vitesse lue dans la grille constitue le score du segment.
+- Le plateau du joueur présente une grille de conversion énergie entière → vitesse entière. La conversion est arrondie à l'entier le plus proche.
+- La grille est prolongée linéairement hors de sa plage imprimée, en utilisant la pente du premier segment sous EF et celle du dernier segment au-delà de VMA.
+- La réserve est débitée de l'énergie dépensée avant correction du terrain ; la correction ne modifie donc pas le coût énergétique réel.
+
+### Implémentation — fondation R1-C
+
+`experiments/current/race_engine_v2/physiology_grid.py` construit cette grille
+à partir de `training_v2.PhysiologyCurve` et expose la résolution d'un segment.
+Les valeurs d'énergie et de vitesse des trois ancres restent celles du profil
+individuel ; aucun barème numérique de progression n'est inventé.
+
+La résolution applique un plancher technique de vitesse à zéro si une montée
+extrême conduit, par extrapolation, à une vitesse négative. Ce plancher est une
+protection de résolution, à confirmer lors des tests de scénario.
+
+### À ne pas confondre avec l'ancien harness
+
+L'ancien `core.py` expérimental utilise encore une production, une charge
+(production + difficulté), puis une table de coût énergétique. Ce chemin n'est
+pas la nouvelle règle. La migration complète doit aussi remplacer le lancer
+de tous les dés et l'énumération de tous les sous-ensembles par les opérations
+N−1 / Keep / Add / Reroll / Add+Reroll de Training B.
+
+La provenance et le calcul de la réserve totale de Race depuis la préparation
+Training restent à intégrer. Le CTL et la réserve expérimentale calculée depuis
+CTL ne doivent pas être repris comme règles du nouveau modèle.
