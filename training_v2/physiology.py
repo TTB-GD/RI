@@ -27,7 +27,7 @@ class PhysiologyPoint:
 
 
 @dataclass(frozen=True)
-class PhysiologyProfile:
+class PhysiologyCurve:
     """Three ordered landmarks in energy/speed space."""
 
     ef: PhysiologyPoint
@@ -59,7 +59,7 @@ class PhysiologyProfile:
             raise ValueError(f"unknown physiology track: {track}")
         return getattr(self, track)
 
-    def upgraded(self, track: str, choice: str, amount: float) -> "PhysiologyProfile":
+    def upgraded(self, track: str, choice: str, amount: float) -> "PhysiologyCurve":
         """Return a validated profile after one single-coordinate milestone choice."""
         if track not in TRACKS:
             raise ValueError(f"unknown physiology track: {track}")
@@ -78,7 +78,7 @@ class PhysiologyProfile:
         )
         values = {name: self.point(name) for name in TRACKS}
         values[track] = updated
-        return PhysiologyProfile(**values)
+        return PhysiologyCurve(**values)
 
     def available_choices(self, track: str, *, speed_gain: float,
                           energy_reduction: float) -> tuple[str, ...]:
