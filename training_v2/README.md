@@ -59,3 +59,28 @@ Run tests:
 ~~~bash
 python -m unittest discover -s tests -p 'test_training_v2*.py' -v
 ~~~
+
+
+## Q1–Q55 migration status — 2026-11-11
+
+The implementation above is the historical direct-dice-to-session prototype. It
+does **not** yet implement the decisions consolidated in
+`docs/game-design/TRAINING_B_DECISIONS.md` and is not a compatibility target.
+
+The first replacement building block is `TrainingEnergyBudget`: it conserves
+the final dice energy across EF, Threshold and VMA, with Threshold + VMA forming
+the Quality budget. Session-dose allocation is deliberately not included in
+this primitive.
+
+Still to replace or specify before the new turn resolver is complete:
+
+- N−1 initial roll and Keep / Add / Reroll / Add+Reroll operation semantics;
+- TN-derived fatigue and fatigue retention on bust;
+- EF1–EF4, Threshold3–5 and VMA3–5 session matrix;
+- per-session primary/secondary adaptations, RPE, bust tolerance and fatigue;
+- independent physiological XP thresholds and milestone effects;
+- fatigue-derived overtraining states;
+- SL/SPEC preparation and the Training-to-Race conversion.
+
+Do not interpret the existing direct-allocation resolver, fixed session fixtures,
+CTL bridge, or old progression thresholds as approved rules for Training B.
