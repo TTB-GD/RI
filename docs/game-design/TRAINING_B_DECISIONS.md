@@ -17,9 +17,10 @@
 ### 2.1 Pool de dés
 
 - Le joueur commence avec **4 dés** et peut progresser jusqu'à **6 dés**.
-- Les dés peuvent être améliorés de **d6 à d8, d10 puis d12**.
+- Les dés peuvent être améliorés individuellement de **d6 à d8, d10 puis d12**.
 - Le joueur choisit librement quel dé améliorer ; l'amélioration n'est pas automatiquement appliquée au plus petit dé.
-- Les jalons de progression peuvent accorder un dé supplémentaire ou améliorer un dé. Les seuils exacts et le calendrier de ces gains restent à confirmer.
+- Le pool peut recevoir des dés supplémentaires jusqu'à un maximum de 6.
+- Les événements/jalons qui accordent un dé ou une amélioration, ainsi que leur calendrier, restent **OPEN**. Aucun seuil expérimental de l'ancien moteur ne constitue une règle validée.
 
 ### 2.2 Lancer et choix du joueur
 
@@ -35,15 +36,14 @@ Les résultats finaux de tous les dés sont conservés pour le calcul du tour. L
 ### 2.3 Fatigue issue des dés et TN
 
 - Le TN représente la somme attendue du pool complet de dés.
-- La variation de fatigue issue des dés est la différence entre la somme finale obtenue et le TN :
-  - résultat inférieur au TN : diminution de fatigue ;
-  - résultat égal au TN : fatigue inchangée ;
-  - résultat supérieur au TN : augmentation de fatigue.
-- La fatigue ne peut pas descendre sous zéro.
+- La rétroaction des dés conserve la **courbe quasi-Fibonacci historique** du prototype ; elle n'est pas remplacée par une variation linéaire `somme finale − TN`.
+- L'écart `somme finale − TN` est arrondi à l'entier supérieur avant d'être converti par cette courbe. Le TN reste calculé à partir de l'espérance du pool complet, même s'il est fractionnaire.
+- La contribution de fatigue issue des dés peut être positive (charge), nulle ou négative (récupération), selon la courbe historique.
+- La fatigue cumulée reste entière et ne peut pas descendre sous zéro.
 - Cette variation est calculée après l'opération de dés, avant de résoudre les adaptations de séance.
 - La fatigue calculée est conservée même si le joueur fait un bust.
 
-> **À confirmer/calibrer :** la formule exacte du TN et les valeurs de seuil d'overtraining doivent être vérifiées dans la spécification d'implémentation. La référence historique du prototype utilisait la somme des espérances de chaque dé.
+> **Décisions confirmées le 11 novembre 2026 :** conserver la courbe quasi-Fibonacci historique et arrondir l'écart au TN à l'entier supérieur avant consultation de la courbe. Le TN est la somme des espérances de chaque dé. Les seuils d'overtraining restent ouverts.
 
 ## 3. Économie du tour : budgets EF et Qualité
 
@@ -205,7 +205,7 @@ Les points suivants doivent être résolus pour produire une matrice exploitable
 2. **Formule de bust** : formaliser précisément la comparaison entre meilleur dé, RPE de séance et dépassement autorisé.
 3. **Fatigue de séance** : fixer les fonctions/valeurs par séance et les interactions avec la fatigue issue des dés.
 4. **Overtraining** : fixer les seuils numériques et l'éventuel impact sur le budget d'énergie.
-5. **Progression** : fixer les seuils d'XP indépendants EF/Seuil/VMA, les effets automatiques palier par palier et les gains de dés/améliorations de dés.
+5. **Progression** : fixer les seuils d'XP indépendants EF/Seuil/VMA, les effets automatiques palier par palier et les événements qui accordent un dé supplémentaire ou une amélioration choisie par le joueur.
 6. **Spécialisations** : définir les familles de séances contributrices, les seuils de pratique, les options offertes et leur paramètre de courbe modifié.
 7. **Race V2** : auditer les paramètres mathématiques réellement présents dans le moteur, vérifier qu'ils permettent les modifications additives à un paramètre, puis définir les effets des spécialisations.
 8. **SL/SPEC** : définir les séances/variantes, les conditions d'accès et les effets sur la préparation générale ou contextuelle.

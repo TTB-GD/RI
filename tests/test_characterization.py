@@ -25,9 +25,10 @@ class TestDecisionEngineCharacterization(unittest.TestCase):
             with self.subTest(spend=spend):
                 self.assertEqual(energy_and_fatigue(spend, 20), result)
 
-    def test_half_away_from_zero_rounding(self):
+    def test_ceiling_rounding_for_fractional_tn_deviation(self):
+        # Training B decision: ceil(spend - TN), including negative halves.
         self.assertEqual(energy_and_fatigue(20.5, 20), (20.5, 3))
-        self.assertEqual(energy_and_fatigue(19.5, 20), (19.5, 1))
+        self.assertEqual(energy_and_fatigue(19.5, 20), (19.5, 2))
 
 
 class TestSessionEffectsCharacterization(unittest.TestCase):

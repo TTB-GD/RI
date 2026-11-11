@@ -84,3 +84,19 @@ Still to replace or specify before the new turn resolver is complete:
 
 Do not interpret the existing direct-allocation resolver, fixed session fixtures,
 CTL bridge, or old progression thresholds as approved rules for Training B.
+
+
+## Decisions added — 2026-11-11
+
+- Dice-derived fatigue retains the historical quasi-Fibonacci curve. The deviation
+  from the full-pool TN is rounded upward with `ceil(final_energy - TN)`
+  before the curve is evaluated. The resulting fatigue contribution is an
+  integer and can represent either load or recovery.
+- `training_v2.dice_progression` exposes explicit permanent operations:
+  `add_die(state)` adds a d6 up to six dice, and
+  `upgrade_die(state, index)` advances the player-selected die by one size.
+  These operations define no milestone thresholds or automatic die selection.
+- The existing direct-allocation `engine.py` still contains historical
+  experimental progression hooks. It is not the target Training B turn
+  resolver; the new progression operations are intentionally not wired to
+  those obsolete thresholds.
