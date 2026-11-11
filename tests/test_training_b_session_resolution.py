@@ -27,14 +27,14 @@ class TrainingBSessionResolutionTests(unittest.TestCase):
         )
         self.assertIsNone(result.busted_session)
         self.assertEqual(result.successful_sessions, ("EF2", "SEUIL3", "VMA4"))
-        self.assertEqual(state.progression_ef, 2)
-        self.assertEqual(state.progression_threshold, 3)
+        self.assertEqual(state.progression_ef, 3)
+        self.assertEqual(state.progression_threshold, 4)
         self.assertEqual(state.progression_vma, 3)
         self.assertEqual(state.fatigue, 7)
 
     def test_first_bust_cancels_current_and_later_effects_but_keeps_prior(self):
         state = PlayerState(fatigue=3)
-        faces = iter((2,))
+        faces = iter((1,))
         result = resolve_session_plan(
             state, self.budget(ef=1, threshold=3, vma=3),
             ("EF1", "SEUIL3", "VMA3"), rpe_authorized=2,
