@@ -31,6 +31,7 @@ jobs:
             experiments.current.race_engine_v2.test_race_turn \
             experiments.current.race_engine_v2.test_race_reserve \
             experiments.current.race_v2_prototype.test_sector \
+            experiments.current.race_v2_prototype.test_race \
             experiments.current.race_engine_v2.test_r1a2 \
             experiments.current.race_engine_v2.test_r1b \
             experiments.current.race_engine_v2.test_r1b2 \
