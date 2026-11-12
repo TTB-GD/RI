@@ -253,6 +253,56 @@ Références consultées :
 
 Les auteurs ne publient pas une table normalisée commune donnant la proportion exacte du temps total dans ces quatre catégories. Les durées et pourcentages de cette section sont donc une **synthèse de conception** à partir de la structure des plans et des séances décrites, et non des moyennes arithmétiques extraites des ouvrages. Les catégories se recouvrent partiellement selon les méthodes : notamment AS10 et T/I, ou AS5 et I. Cette limite doit être gardée à l'esprit lors de la calibration.
 
+
+### 6.6. Première estimation du budget d'énergie Training
+
+Une première estimation du budget moyen d'énergie disponible par tour a été construite à partir du scénario de progression du pool suivant :
+
+- pool initial de **4D6**, soit une espérance de 14 points par lancer ;
+- acquisition approximative d'un dé supplémentaire après 4 puis 8 tours, pour atteindre **6 dés** ;
+- amélioration progressive des dés (D6 → D8 → D10 → D12), à raison d'environ une amélioration tous les 2 à 3 tours ;
+- durées de cycle de travail retenues pour cette estimation : 12 tours pour 5 km, 12 pour 10 km, 13 pour semi-marathon et 16 pour marathon.
+
+L'espérance d'un dé vaut respectivement 3,5 (D6), 4,5 (D8), 5,5 (D10) et 6,5 (D12). En fonction de la cadence d'amélioration, les budgets moyens estimés sont :
+
+| Durée du cycle | Amélioration tous les 3 tours | Amélioration tous les 2 tours | Hypothèse centrale |
+|---|---:|---:|---:|
+| 12 tours | 19,0 | 20,0 | **19,5** |
+| 13 tours | 19,5 | 20,5 | **20,0** |
+| 16 tours | 20,6 | 21,9 | **21,2** |
+
+Ces valeurs sont des ordres de grandeur issus d'un scénario simplifié, pas le résultat d'une simulation exhaustive de toutes les séquences possibles d'acquisition et d'amélioration. Elles devront être recalculées dès que le calendrier exact d'évolution des dés sera défini.
+
+En appliquant à titre exploratoire les répartitions centrales de la section 6.2 à ces budgets moyens, on obtient les allocations énergétiques indicatives suivantes :
+
+| Préparation | EF | Seuil | VMA | AS spécifique | Total moyen / tour |
+|---|---:|---:|---:|---:|---:|
+| 5 km | 14,8 | 1,6 | 2,3 | 0,8 | **19,5** |
+| 10 km | 14,8 | 2,0 | 1,8 | 1,0 | **19,5** |
+| Semi-marathon | 15,6 | 2,0 | 0,8 | 1,6 | **20,0** |
+| Marathon | 17,4 | 1,5 | 0,4 | 1,9 | **21,2** |
+
+Projection indicative sur l'ensemble du cycle :
+
+| Préparation | EF | Seuil | VMA | AS spécifique | Total du cycle |
+|---|---:|---:|---:|---:|---:|
+| 5 km | 178 | 19 | 28 | 9 | **234** |
+| 10 km | 178 | 23 | 21 | 12 | **234** |
+| Semi-marathon | 203 | 26 | 10 | 21 | **260** |
+| Marathon | 278 | 24 | 7 | 31 | **340** |
+
+Les décimales représentent des espérances agrégées, pas des allocations littérales possibles à chaque tour. Cette transposition suppose que la part d'énergie suit la part de temps de course ; cette hypothèse est pratique pour un premier budget, mais elle n'est pas démontrée. Une séance de qualité concentre davantage l'énergie sur une allure donnée, tandis que ses échauffements et récupérations contribuent à l'EF. Il faudra donc calibrer les séances concrètes plutôt que transformer ces moyennes en quotas rigides.
+
+### 6.7. Implications de conception à examiner
+
+Cette première estimation fait ressortir deux implications importantes pour le système Training. Elles sont des **hypothèses de conception à tester**, pas encore des règles validées.
+
+1. **Les séances de qualité doivent aussi contribuer à l'adaptation EF.** Une séance de seuil ou de VMA comporte généralement une durée substantielle de course facile (échauffement, récupérations, retour au calme), et s'inscrit dans une charge aérobie globale. Dans le jeu, son adaptation ne devrait donc pas être exclusivement affectée au seuil ou à la VMA : une contribution EF doit être intégrée, selon une règle à définir. Il faudra éviter de compter deux fois la même dépense ou de créer artificiellement de l'adaptation sans activité correspondante.
+2. **La fatigue devrait réguler l'allocation en qualité davantage que le budget d'énergie brut.** Les budgets moyens suggèrent qu'une réserve d'énergie suffisante peut exister pour concentrer une part importante du pool sur les intensités élevées. Limiter cette allocation uniquement par un plafond d'énergie risquerait de rendre les séances de qualité artificiellement impossibles ou trop uniformes. La fatigue et la pénibilité peuvent constituer le mécanisme principal de régulation : elles rendent possible une allocation ambitieuse, mais en augmentent le coût et les risques (fatigue résiduelle, surentraînement, perte de dés au tour suivant, ou moindre bénéfice net). Le budget d'énergie reste une contrainte physique ; la fatigue devient le régulateur du volume et de la répétition des efforts de qualité.
+
+**Point de vigilance :** cette distinction ne signifie pas que l'énergie est sans importance. Elle signifie que l'énergie détermine ce que le joueur peut engager sur le tour, tandis que la fatigue devrait davantage déterminer combien de travail de qualité il peut soutenir au fil du cycle sans dégrader sa progression.
+
+
 ## 7. Sources
 
 
