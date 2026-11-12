@@ -1,10 +1,10 @@
 # Run It — GDD V2 consolidé
 
-**29 septembre 2026 · jalon technique : `Integrated V2 baseline` (commit/PR de référence consigné à la clôture).** Le présent GDD décrit les décisions de design CURRENT, les mécanismes EXPERIMENTAL et les questions OPEN. `CURRENT_STATE.md` décrit l'état du prototype ; `DOCUMENTATION_AUDIT.md` explique les remplacements du GDD antérieur. Le code n'établit pas à lui seul une règle de design.
+**Mise à jour documentaire : 12 novembre 2026.** Le jalon historique `Integrated V2 baseline` du 29 septembre reste une référence de l'état antérieur, pas une description complète de Race V2. Le présent GDD décrit les décisions de design CURRENT, les mécanismes EXPERIMENTAL et les questions OPEN. `CURRENT_STATE.md` décrit l'état du prototype ; `DOCUMENTATION_AUDIT.md` explique les remplacements du GDD antérieur. Le code n'établit pas à lui seul une règle de design.
 
 ## 1. Concept
 
-Run It est un jeu tactique de préparation à la course. Les joueurs construisent leur pool de dés, composent des séances sous contraintes d'énergie et de risque, développent leur forme et gèrent leur fatigue. La course finale donne un sens aux décisions de préparation. Son noyau physiologique Race V2 est intégré ; son orchestration complète et son équilibrage restent partiellement OPEN ou EXPERIMENTAL selon les éléments ci-dessous.
+Run It est un jeu tactique de préparation à la course. Les joueurs construisent leur pool de dés, composent des séances sous contraintes d'énergie et de risque, développent leur forme et gèrent leur fatigue. La course finale donne un sens aux décisions de préparation. Training B est la cible de développement validée. Race V2 dispose désormais d'un prototype multi-secteur avec dés et relances ; le raccordement complet au Training et l'équilibrage restent ouverts ou expérimentaux.
 
 > **Évolution de trajectoire — 7 novembre 2026 :** le joueur a validé Training B comme cible de développement, avec possibilité d'extensions ultérieures vers C. Le modèle Training CURRENT décrit dans les sections 2 à 6 ci-dessous est conservé comme référence **HISTORICAL / RETIRED TARGET** ; il ne constitue plus la base des nouvelles règles ou implémentations. Les décisions détaillées de Training B seront promues dans ce GDD au fur et à mesure de leur validation.
 
@@ -106,46 +106,105 @@ SL est une préparation spécifique à la course ; elle n'est pas intrinsèqueme
 
 Les anciennes campagnes Fatigue V1, Overtraining Capacity, P0 et Standard Player antérieures aux corrections de D99, répétitions, bust, accès au risque et rôle de SL sont **HISTORICAL ONLY** pour leurs chiffres. Leurs observations gardent une valeur de traçabilité ; elles ne constituent pas une baseline d'équilibrage CURRENT.
 
-## 7. Course V2 — noyau intégré, calibration expérimentale, questions OPEN
+## 7. Race V2 — règles validées, prototype expérimental, intégration Training OPEN
 
-### 7.1 Profil physiologique — BASE V2 INTÉGRÉE
+La conception Race V2 est consolidée dans [`docs/game-design/RACE_V2_DESIGN.md`](docs/game-design/RACE_V2_DESIGN.md), qui constitue la spécification détaillée des décisions validées le 12 novembre 2026. Le présent GDD en fixe le statut et les principes normatifs.
 
-Le passage futur du Training vers la course utilise un `PhysiologyProfile(EF, Seuil, VMA)` avec l'invariant strict `EF < Seuil < VMA` :
+**Statut à distinguer :**
+- **DECISION VALIDATED :** règles décrites ci-dessous et dans la spécification détaillée.
+- **PROTOTYPE / EXPERIMENTAL :** orchestration multi-secteur et décisions de dés présentes dans `experiments/current/race_v2_prototype/`. Leur présence dans le code ne constitue pas une validation d'équilibrage ni une intégration à une partie complète.
+- **IMPLEMENTATION GAP :** préparation complète du profil Race à partir d'un état Training réel, notamment la construction de la table physiologique et de `S0`, ainsi que le calcul automatique du palier d'affûtage.
+- **EXPERIMENTAL CALIBRATION :** paramètres de déplacement de courbe, distributions de forme, terrain et capital de relance. Les règles de calcul sont décidées ; leur équilibre n'est pas démontré.
 
-- **EF** est le plancher de coût : toute Charge `≤ EF` est légale et coûte `EF` ;
-- **Seuil** est le changement de régime de la courbe énergétique ;
-- **VMA** est la borne dure de Charge du domaine intégré.
+### 7.1 Profil physiologique et allure spécifique
 
-Aucune contrainte supplémentaire sur `VMA − EF` n'est posée et `C(VMA)` n'est pas normalisé dans une enveloppe fixe. La légalité supérieure porte sur `Charge = Production + Difficulty ≤ VMA`, et non sur un plafond autonome de Production. Une option au-dessus de VMA est retirée avant le filtrage de Réserve.
+Le profil possède trois repères permanents EF, Seuil et VMA. Chacun a une coordonnée d'énergie et une coordonnée de vitesse, avec un ordre strictement croissant sur les deux axes : `EF < Seuil < VMA`.
 
-La courbe native intégrée est :
+La courbe de conversion est une table explicite de couples entiers `(énergie, vitesse)`, indexée par chaque niveau entier d'énergie. La Race effectue une lecture directe : aucune interpolation ni extrapolation n'est autorisée. EF est le plancher de vitesse et VMA le plafond d'énergie et de vitesse. Une VMA élevée est un plafond, pas une vitesse garantie.
 
-```text
-C(x) = EF                                               si x ≤ EF
-C(x) = EF + 2 × (x − EF)                               si EF < x ≤ Seuil
-C(x) = EF + 2 × (Seuil − EF) + 3 × (x − Seuil)        si Seuil < x ≤ VMA
-```
+L'AS est propre à la course préparée et connue dès le début du Training. AS42/AS21 se situent entre EF et Seuil ; AS10 près du Seuil, éventuellement légèrement au-dessus ; AS5 peut approcher VMA. VMA est le seul plafond de progression de l'AS5. L'AS n'est pas un quatrième repère permanent.
 
-Sa structure (origine EF, rupture Seuil, borne VMA) est intégrée. Les pentes `2 / 3` sont une **CALIBRATION EXPERIMENTAL**, pas un équilibrage CURRENT définitif.
+### 7.2 Dépense, terrain et conversion
 
-### 7.2 Résolution locale Race V2 — CURRENT / INTÉGRÉ
+À chaque secteur, le joueur lance tout son pool, effectue ses relances éventuelles, puis choisit librement les dés dépensés. La sélection vide est légale. Si aucun dé n'est dépensé, le secteur ne produit ni vitesse ni point : ni EF, ni terrain, ni aspiration ne créent une dépense ou une vitesse gratuite.
 
-Pour un segment dans le domaine physiologique :
+La somme des dés sélectionnés est la dépense réelle, écrêtée à VMA. La conversion utilise ensuite :
 
-```text
-Charge = Production + Difficulty
-Cost = C(Charge)
-Score += Production
-Reserve -= Cost
-```
+`E_conversion = E_dépensée + B_groupe − D_terrain`
 
-Difficulty ne donne aucun score, ne retire jamais directement de Réserve et ne possède aucun état persistant propre. Le noyau intégré expose cette résolution pure.
+- `B_groupe` vaut 0 ou +1 et représente une énergie virtuelle d'aspiration.
+- `D_terrain` est un entier signé : positif en montée, nul sur le plat, négatif en descente.
+- terrain et aspiration modifient uniquement la conversion, jamais la dépense réelle ni la consommation de soutenabilité.
+- après application de ces modificateurs, l'énergie de conversion est plafonnée à VMA ; la vitesse est plafonnée à la vitesse VMA.
 
-L'orchestration longitudinale conservée comme baseline **EXPERIMENTAL** révèle Form avant chaque choix S1–S3. La Réserve brute finale est connue avant le choix S3, puis son plancher `max(raw_final_reserve, spent_after_S3)` est fixé après ce choix. À partir de S4, le menu payable applique le filtre de Réserve après le filtre physiologique. Sa formule de Réserve, Form, Freshness, SL, ses politiques, longueurs et objectifs ne deviennent pas CURRENT pour autant. La conversion complète du Training reste **OPEN** ; les tables Curve A/B/C sont conservées uniquement pour reproduire les expériences historiques.
+Pour toute dépense positive, le plancher EF s'applique même si la courbe dégradée ne permet plus de l'atteindre avec l'énergie disponible. Il ne s'applique jamais à une sélection vide.
 
-### 7.3 SPEC et anciens concepts — OPEN / EXPERIMENTAL / HISTORICAL
+### 7.3 Soutenabilité
 
-**SPEC = OPEN — NOT IMPLEMENTED** dans le chemin V2 intégré. SPEC Position, SPEC Efficacité et AS42/AS21/AS10/AS5 ne sont pas des règles actives de coût. Les expériences qui les étudient demeurent des sondes **EXPERIMENTAL** relatives à une question OPEN, pas la baseline et pas une piste déclarée abandonnée. Les anciennes esquisses Mental / Pacing / Physique, objectifs secrets, personnages et manipulations sont **HISTORICAL** et ne spécifient pas Race V2.
+La soutenabilité de départ est un crédit `S0` préparé par le Training. `F` est la somme des valeurs des cartes de forme révélées et `C` la consommation cumulée des secteurs résolus.
+
+`X = S0 + F − C`
+
+`D = max(0, C − (S0 + F))`
+
+`R = max(0, (S0 + F) − C)`
+
+La soutenabilité n'a pas de plancher à zéro. La dégradation `D` est recalculée à partir des cumuls ; elle peut donc diminuer si une carte positive est révélée. La réserve `R` absorbe les consommations avant dégradation. Une carte révélée au début d'un secteur agit immédiatement sur ce secteur. La consommation du secteur est calculée à sa fin et ne modifie que les secteurs suivants.
+
+La consommation dépend de la dépense réelle avant terrain et aspiration :
+- dépense inférieure à AS−1 : 0 ;
+- dépense comprise entre AS−1 et AS+1 inclus : 1 ;
+- dépense supérieure à AS+1 : 2.
+
+La dégradation décale horizontalement la courbe vers la droite sans en changer la forme ni la pente. Le modèle initial d'une graduation par point de dégradation est **EXPERIMENTAL** et doit être calibré. Une carte positive peut restaurer la courbe jusqu'à sa position initiale, jamais au-delà. La réserve restante en fin de course est perdue ; le bilan final n'affecte ni le résultat ni le Training suivant.
+
+### 7.4 Forme du jour
+
+Avant la course, le joueur lance trois dés à six faces dédiés et utilise leur somme pour déterminer un niveau : Difficile (3–5), Moyenne (6–8), Bonne (9–12), Excellente (13–15), Exceptionnelle (16–18). Ce niveau définit une recette de trois cartes issues de quatre paquets catégoriels (Excellent, Bon, Moyen, Mauvais). Les cartes sont mélangées face cachée ; le joueur connaît les catégories mais ni les valeurs ni l'ordre.
+
+Les distributions des paquets sont celles de la spécification Race V2 et restent des paramètres **EXPERIMENTAL**. Les cartes sont révélées au début des secteurs suivants : 5 km : 2/4/6 ; 10 km : 3/6/9 ; semi : 4/8/12 ; marathon : 4/8/12. Les cartes non révélées sont retournées après le dernier secteur à titre informatif seulement.
+
+### 7.5 Groupes et aspiration
+
+Après chaque secteur, les joueurs sont classés par score cumulatif, somme des vitesses entières obtenues. Un nouveau groupe commence lorsque l'écart entre deux scores consécutifs est strictement supérieur à 1. Le regroupement suit donc les écarts entre voisins, pas l'écart au leader.
+
+Dans chaque groupe, le ou les joueurs en tête sont lièvres ; les autres bénéficient de +1 énergie virtuelle au secteur suivant. En cas d'égalité en tête, tous les joueurs concernés sont lièvres. Un joueur seul n'a aucun bonus. Les statuts et le bonus sont connus avant le choix des dés du secteur concerné. Les groupes sont recalculés après chaque secteur ; le bonus ne s'accumule pas et n'affecte pas la soutenabilité.
+
+Au premier secteur, tous les scores sont nuls : tous les joueurs sont co-lièvres et personne ne reçoit d'aspiration.
+
+### 7.6 Dés et capital de relance
+
+Chaque secteur commence par le lancer de l'intégralité du pool. Les dés peuvent être relancés individuellement, un à la fois ; chaque relance remplace le résultat précédent et consomme une unité du capital global. Un même dé peut être relancé plusieurs fois si le capital le permet. Il n'y a pas de relance après la sélection des dés dépensés. Les dés non sélectionnés ne sont pas conservés et seront relancés au secteur suivant. L'action Add n'existe pas en Race.
+
+Le capital de référence sur 5 km dépend du plus haut dé : D6 = 1, D8 = 2, D10 = 3, D12 = 4. Pour une course de `N` secteurs :
+
+`R = ceil(Rmax_5km × (N / 7) × P_affûtage)`
+
+`P_affûtage` vaut 0, 0,25, 0,50, 0,75 ou 1 selon le palier d'affûtage 0 à 4. Le capital est global, sans régénération ; le reliquat est perdu à l'arrivée.
+
+Le palier d'affûtage dépend de la fatigue résiduelle du Training. Les seuils de saturation négative et de surentraînement positive sont fonction du plus haut dé ; les seuils intermédiaires et les valeurs détaillées figurent dans la spécification Race V2. Entre deux seuils, le palier inférieur s'applique. **IMPLEMENTATION GAP :** le prototype reçoit encore directement `affutage_level` ; le calcul automatique à partir de la fatigue Training n'est pas intégré.
+
+### 7.7 Ordre de résolution d'un secteur
+
+1. Révéler les cartes prévues et actualiser `F`, `D` et `R`.
+2. Afficher le statut de groupe et le bonus, déterminés après le secteur précédent.
+3. Lancer tous les dés ; effectuer les relances individuelles.
+4. Choisir librement le sous-ensemble dépensé, éventuellement vide.
+5. Écrêter la dépense réelle à VMA. Si elle est nulle, produire zéro vitesse ; sinon calculer l'énergie de conversion avec terrain et aspiration, puis appliquer le plafond VMA.
+6. Lire la vitesse entière dans la table physiologique, avec dégradation de courbe, plancher EF et plafond VMA.
+7. Ajouter la vitesse au score cumulatif.
+8. Calculer la consommation de soutenabilité à partir de la dépense réelle et de l'AS ; l'effet est reporté au secteur suivant.
+9. Recalculer les groupes pour le secteur suivant.
+
+Après le dernier secteur, la consommation est tout de même enregistrée et les cartes restantes sont révélées pour information. Ni la réserve finale ni la dégradation finale ne modifient le résultat ou le Training suivant.
+
+### 7.8 Statut de l'implémentation et limites
+
+Le prototype `experiments/current/race_v2_prototype/` comprend le résolveur de secteur, l'orchestration multi-secteur, la forme du jour, les cartes, les groupes, les dés, les relances et la validation des décisions en deux phases. Il reste un prototype expérimental isolé.
+
+Le profil physiologique est fourni explicitement sous forme de table entière. `specific_pace`, `initial_credit`, le pool de dés et le palier d'affûtage sont également fournis dans la configuration. Il n'existe pas encore de conversion complète d'un état Training B vers cette configuration. En particulier, le calcul de `S0`, la production de la table physiologique à partir du profil Training et le calcul du palier d'affûtage restent des frontières d'intégration ouvertes.
+
+La formule d'une graduation de dégradation par point, les distributions de forme, les paramètres de terrain, le capital de relance et leur impact sur la durée/les décisions doivent être testés. Aucune campagne de simulation ne constitue à elle seule une validation du design humain.
 
 ## 8. Fatigue V1 — EXPERIMENTAL
 
