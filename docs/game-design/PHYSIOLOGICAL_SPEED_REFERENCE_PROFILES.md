@@ -83,6 +83,36 @@ Les vitesses sont arrondies au dixième de km/h pour la lisibilité. Les temps d
 | 60 | 17:03 | 35:22 | 1:18:09 | 2:43:22 |
 | 70 | 14:56 | 31:01 | 1:08:23 | 2:23:13 |
 
+
+## 3.4. Profils de départ proposés pour le jeu
+
+Pour disposer d'une gamme de départ simple et directement exploitable, huit profils sont proposés avec une EF entière de 8 à 15 km/h, par pas de 1 km/h.
+
+Les valeurs sont construites à partir des cinq profils VDOT de référence :
+1. interpolation linéaire, colonne par colonne, entre les points VDOT encadrant la valeur EF recherchée ;
+2. arrondi aux km/h entiers ;
+3. ajustement minimal lorsque l'arrondi indépendant crée des égalités ou inversions, afin de préserver l'ordre des allures et des points physiologiques.
+
+Les contraintes d'ordre appliquées sont :
+- `EF < AS42 < AS21 < Seuil` ;
+- `Seuil ≤ AS10 < AS5 ≤ VMA`.
+
+L'égalité Seuil = AS10 est autorisée : le modèle VDOT peut donner une allure 10 km très proche de l'allure seuil, particulièrement pour les profils les moins performants. Les égalités AS5 = VMA sont également tolérées lorsque l'arrondi à 1 km/h ne permet pas de conserver un écart sans déformer davantage la référence. Les valeurs restent des paramètres de départ de jeu, non des mesures physiologiques individuelles.
+
+| Profil de départ | EF | AS42 | AS21 | Seuil | AS10 | AS5 | VMA |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| P8 | 8 | 9 | 10 | 11 | 11 | 12 | 12 |
+| P9 | 9 | 10 | 11 | 12 | 12 | 13 | 13 |
+| P10 | 10 | 11 | 12 | 13 | 13 | 14 | 14 |
+| P11 | 11 | 12 | 13 | 14 | 14 | 15 | 15 |
+| P12 | 12 | 13 | 14 | 15 | 15 | 16 | 16 |
+| P13 | 13 | 15 | 16 | 17 | 17 | 18 | 18 |
+| P14 | 14 | 16 | 17 | 18 | 18 | 19 | 19 |
+| P15 | 15 | 17 | 18 | 19 | 19 | 20 | 20 |
+
+Toutes les valeurs sont en km/h. Les profils P8 à P15 constituent la proposition de gamme de départ pour le jeu. Ils ne remplacent pas les références VDOT décimales des sections précédentes, qui restent conservées comme base de calcul et de traçabilité.
+
+
 ## 4. Interprétation et limites
 
 1. **VDOT n'est pas une mesure directe de VO₂max.** C'est un indice de performance construit à partir des performances en course et intégrant notamment économie de course et fraction de VO₂max soutenable.
