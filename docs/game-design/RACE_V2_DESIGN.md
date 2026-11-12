@@ -110,9 +110,11 @@ Le bonus d'aspiration et les corrections de terrain n'entraînent aucune consomm
 La soutenabilité est construite pendant le Training. Elle représente la capacité du joueur à maintenir son effort sans dégradation de son profil de conversion.
 
 On distingue :
-- la soutenabilité initiale, préparée pendant le Training (`S0`) ;
+- le crédit initial de soutenabilité préparé pendant le Training (`S0`) ;
 - les effets cumulés des cartes de forme déjà révélées (`F`) ;
 - la consommation cumulée des secteurs déjà résolus (`C`).
+
+`S0` constitue un crédit réellement disponible au départ de la course. Il est consommé au même titre que les effets positifs des cartes de forme.
 
 La soutenabilité peut devenir négative. Il n'existe pas de plancher à zéro. La dégradation est recalculée à chaque fin de secteur à partir des cumuls `F` et `C` ; elle n'est pas une perte irréversible appliquée séparément à chaque tour.
 
@@ -120,14 +122,14 @@ La soutenabilité peut devenir négative. Il n'existe pas de plancher à zéro. 
 
 Le bilan net est :
 
-`X = F − C`
+`X = S0 + F − C`
 
 La dégradation courante et la réserve sont :
 
-- `D = max(0, C − F)` ;
-- `R = max(0, F − C)`.
+- `D = max(0, C − (S0 + F))` ;
+- `R = max(0, (S0 + F) − C)`.
 
-La variation par rapport à l'état initial est donc `Δ = C − F`. Une carte positive révélée peut réduire une dégradation déjà présente et restaurer la courbe, sans jamais la déplacer à gauche de sa position initiale.
+La dégradation dépend donc du crédit initial issu du Training et des effets de forme cumulés : `D = max(0, C − (S0 + F))`. Une carte positive révélée peut réduire une dégradation déjà présente et restaurer la courbe, sans jamais la déplacer à gauche de sa position initiale.
 
 Le principe retenu est qu'une perte de soutenabilité déplace horizontalement la courbe vers la droite : il faut davantage d'énergie de conversion pour produire une même vitesse. Le modèle de départ est d'une graduation entière par point de soutenabilité perdu. Le rapport exact et l'éventuelle utilisation de paliers pour adoucir la pénalité restent à tester.
 
@@ -148,8 +150,8 @@ La réserve est consommée automatiquement lors des dépenses ultérieures, avan
 
 Le fonctionnement peut être représenté ainsi :
 
-- Dégradation de courbe : `max(0, C − F)`
-- Réserve : `max(0, F − C)`
+- Dégradation de courbe : `max(0, C − (S0 + F))`
+- Réserve : `max(0, (S0 + F) − C)`
 
 Ainsi :
 - une réserve protège contre les consommations futures ;
@@ -387,7 +389,7 @@ Pour chaque secteur :
 9. Appliquer à cette conversion la courbe de soutenabilité en vigueur au début du secteur, lire la vitesse entière correspondante et respecter le plancher EF et le plafond de vitesse VMA.
 10. Ajouter la vitesse entière obtenue au score cumulatif.
 11. En fin de secteur, calculer la consommation de soutenabilité à partir de l'énergie réellement dépensée et de l'AS, sans tenir compte du bonus de groupe ni du terrain.
-12. Mettre à jour la consommation cumulée `C`, puis recalculer `D = max(0, C − F)` et `R = max(0, F − C)`. Cette nouvelle dégradation ou réserve sert de base au secteur suivant ; la consommation de ce secteur ne dégrade donc pas rétroactivement sa propre conversion.
+12. Mettre à jour la consommation cumulée `C`, puis recalculer `D = max(0, C − (S0 + F))` et `R = max(0, (S0 + F) − C)`. Cette nouvelle dégradation ou réserve sert de base au secteur suivant ; la consommation de ce secteur ne dégrade donc pas rétroactivement sa propre conversion.
 13. Recalculer les groupes à partir des scores cumulatifs actualisés. Les statuts et bonus ainsi obtenus s'appliquent au secteur suivant.
 
 Après la résolution du dernier secteur, retourner à titre informatif toute carte qui serait encore face cachée. La consommation du dernier secteur est bien comptabilisée, même si elle ne peut plus affecter une conversion ultérieure.
