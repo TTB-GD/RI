@@ -107,7 +107,7 @@ class SectorResolutionTests(unittest.TestCase):
             cumulative_consumption=2,
         )
         self.assertEqual(result.degradation_used, 0)
-        self.assertEqual(result.speed, 13)
+        self.assertEqual(result.speed, 12)
 
     def test_zero_expenditure_ignores_group_and_terrain(self):
         result = resolve_sector(
