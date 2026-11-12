@@ -82,3 +82,15 @@ antérieure au 12 novembre.
 La PR de consolidation est documentaire uniquement : aucun code, test ou résultat
 de simulation n'est modifié. Les statuts d'exécution CI doivent être lus dans
 GitHub ; la documentation ne déclare pas de tests réussis sans exécution vérifiée.
+
+Les références expérimentales historiques directement concernées ont également été
+reclassées pour éviter une lecture erronée de la baseline actuelle :
+- `experiments/current/race_engine_v2/README.md` et
+  `MIGRATION_AUDIT.md` décrivent l'ancien moteur Production / Difficulty /
+  Curve A-B-C, pas le prototype Race V2 multi-secteur actuel.
+- `experiments/current/training_race_bridge/README.md` et `REPORT.md`
+  décrivent une sonde synthétique construite sur cet ancien moteur ; leurs
+  résultats ne valident ni le nouveau modèle de soutenabilité ni le mapping
+  Training B → Race V2.
+- `AGENTS.md` référence désormais les documents Race V2 faisant autorité et
+  les expériences qui doivent rester historiques.
