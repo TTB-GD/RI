@@ -1,6 +1,6 @@
 # Race V2 — document de conception
 
-**Version :** V1 — consolidation des arbitrages du 12 novembre 2026  
+**Version :** V2 — précisions sur la conversion, la soutenabilité et les plafonds (12 novembre 2026)  
 **Statut :** décisions de conception retenues ; calibrations expérimentales  
 **Périmètre :** profil physiologique, dépense, soutenabilité, forme du jour, groupes, dés et relances.
 
@@ -43,7 +43,9 @@ Les deux axes doivent respecter le même ordre :
 
 **EF < Seuil < VMA**
 
-La courbe représente la conversion de l'énergie mobilisée en vitesse. Sa forme et sa pente sont préservées pendant la course. La dégradation de la soutenabilité entraîne un déplacement horizontal de la courbe vers la droite.
+La courbe représente la conversion de l'énergie mobilisée en vitesse. Elle est définie uniquement par des couples de valeurs entières `(énergie, vitesse)` : chaque niveau entier d'énergie possède une vitesse entière correspondante. La conversion se fait par lecture directe de la courbe, sans interpolation ni arrondi.
+
+EF est le plancher de vitesse et VMA le plafond de vitesse. La courbe n'est pas prolongée au-delà de ces bornes. La dégradation de la soutenabilité entraîne un déplacement horizontal de la courbe vers la droite ; elle ne modifie ni sa forme ni sa pente.
 
 ### 2.2. Allure spécifique (AS)
 
@@ -66,15 +68,24 @@ L'AS n'est donc pas un quatrième point permanent de la courbe de base.
 
 À chaque secteur, le joueur choisit librement le sous-ensemble de dés qu'il souhaite dépenser.
 
-L'énergie réellement dépensée est plafonnée à VMA.
+L'énergie réellement dépensée est plafonnée à VMA. VMA constitue le plafond de dépense physiologique.
 
 ### 3.2. Conversion
 
-La conversion énergie → vitesse utilise l'énergie effective, après application des éventuels bonus de groupe et corrections de terrain.
+La conversion énergie → vitesse utilise une énergie de conversion calculée après application du bonus de groupe et de la difficulté du terrain :
 
-Le bonus d'aspiration peut notamment conduire à une énergie de conversion supérieure à VMA, sans dépasser le plafond de dépense physiologique.
+`E_conversion = E_dépensée + B_groupe − D_terrain`
 
-Les corrections de terrain influencent la conversion en vitesse, mais pas la dépense réelle ni la consommation de soutenabilité.
+Avec :
+- `E_dépensée` : énergie réellement dépensée, plafonnée à VMA ;
+- `B_groupe` : bonus virtuel d'aspiration (0 ou +1) ;
+- `D_terrain` : difficulté entière signée du secteur (positive en montée, nulle sur le plat, négative en descente).
+
+Le terrain modifie la conversion, jamais la dépense réelle. Il ne se substitue pas à l'énergie : sans énergie dépensée, aucune conversion n'est effectuée, le secteur ne produit aucune vitesse et le terrain ne crée pas d'énergie. Le plancher EF ne s'applique qu'à une conversion effectivement engagée avec une dépense positive.
+
+Après application du groupe et du terrain, l'énergie de conversion est plafonnée à VMA. Les bonus ne permettent donc pas de dépasser le plafond énergétique de VMA. La vitesse produite est elle aussi plafonnée à la vitesse du point VMA.
+
+Les bonus de groupe et les corrections de terrain n'ont aucun effet sur la consommation de soutenabilité.
 
 ### 3.3. Consommation de soutenabilité
 
@@ -115,15 +126,16 @@ La variation par rapport à l'état initial est donc :
 
 `Δ = C − F`
 
-Un point de soutenabilité perdu entraîne un déplacement horizontal d'une graduation entière vers la droite.
+Le principe retenu est qu'une perte de soutenabilité déplace horizontalement la courbe vers la droite : il faut davantage d'énergie de conversion pour produire une même vitesse. Le modèle de départ est d'une graduation entière par point de soutenabilité perdu. Le rapport exact et l'éventuelle utilisation de paliers pour adoucir la pénalité restent à tester.
 
 ### 4.3. Déplacement de la courbe
 
-- Le déplacement est entier : une graduation par point de soutenabilité perdu.
-- La forme et la pente de la courbe restent identiques.
-- Les points physiologiques de référence restent ancrés sur leur axe initial.
+- Le déplacement horizontal ne modifie pas la forme ni la pente de la courbe.
+- Les points physiologiques de référence EF, Seuil et VMA restent fixes ; c'est la conversion énergie → vitesse qui est pénalisée.
+- Le modèle initial est un déplacement d'une graduation entière par point de dégradation ; des paliers moins sensibles pourront être évalués par test.
 - La courbe ne peut jamais être déplacée vers la gauche au-delà de sa position initiale.
 - Une carte positive peut compenser une consommation antérieure, mais ne peut pas améliorer la physiologie préparée au Training.
+- Après dégradation, si l'énergie de conversion ne permet plus d'atteindre EF sur la courbe déplacée, la vitesse est ramenée au plancher EF. Cette règle n'ajoute aucune pénalité énergétique.
 
 ### 4.4. Réserve de soutenabilité
 
@@ -247,8 +259,10 @@ Exemple :
 
 ### 6.2. Lièvres et bénéficiaires
 
+Le score de course est simplement la somme des vitesses entières obtenues dans les secteurs déjà parcourus. Il sert à classer les joueurs et à constituer les groupes ; aucun indicateur de score distinct n'est utilisé.
+
 Dans chaque groupe :
-- le ou les joueurs ayant le score le plus élevé sont les lièvres ;
+- le ou les joueurs ayant le score cumulatif le plus élevé sont les lièvres ;
 - tous les autres joueurs, dont le score est inférieur, bénéficient de l'aspiration ;
 - en cas d'égalité en tête, tous les joueurs concernés sont lièvres.
 
@@ -265,7 +279,7 @@ Cette énergie :
 - ne consomme aucune soutenabilité ;
 - ne modifie aucun autre élément du score ou de la course.
 
-Le bonus peut porter l'énergie de conversion au-delà de VMA, sans remettre en cause le plafond de dépense réelle.
+L'énergie de conversion reste plafonnée à VMA après application du bonus. Le bonus ne permet donc de dépasser ni le plafond énergétique de VMA ni la vitesse maximale associée à VMA.
 
 ### 6.4. Renouvellement
 
@@ -366,15 +380,23 @@ Pour chaque secteur :
 7. Utiliser la réserve avant de dégrader la courbe.
 8. Déterminer le déplacement éventuel de la courbe vers la droite.
 9. Appliquer le bonus de groupe et les corrections de terrain à la conversion.
-10. Convertir l'énergie effective en vitesse.
-11. Déterminer le résultat du secteur et actualiser le score cumulatif.
-12. À la fin du secteur, recalculer les groupes et les bénéficiaires de l'aspiration pour le secteur suivant.
+10. Calculer l'énergie de conversion : dépense réelle + bonus de groupe − difficulté du terrain.
+11. Si aucune énergie n'a été dépensée, ne pas effectuer de conversion. Sinon, plafonner l'énergie de conversion à VMA, appliquer le décalage de soutenabilité, puis lire la vitesse entière sur la courbe déplacée, avec plancher EF et plafond VMA.
+12. Ajouter la vitesse entière du secteur au score cumulatif.
+13. À la fin du secteur, recalculer les groupes et les bénéficiaires de l'aspiration pour le secteur suivant.
 
 ## 9. Décisions consolidées et statut
 
 | Élément | Décision | Statut |
 |---|---|---|
 | Profil physiologique | EF, Seuil, VMA sur deux axes | Retenu |
+| Courbe de conversion | Couples énergie/vitesse entiers, lecture directe sans interpolation | Retenu |
+| Plancher de vitesse | EF, même après dégradation | Retenu |
+| Plafond énergétique | VMA après bonus de groupe et terrain | Retenu |
+| Plafond de vitesse | Vitesse associée au point VMA | Retenu |
+| Terrain | Difficulté entière signée, appliquée à la conversion uniquement | Retenu |
+| Énergie nulle | Aucune conversion ; le terrain ne crée pas d'énergie | Retenu |
+| Score de course | Somme des vitesses entières des secteurs | Retenu |
 | AS | Point propre à la course préparée | Retenu |
 | Plafond de dépense | VMA | Retenu |
 | Consommation de soutenabilité | Trois niveaux selon l'écart à AS | Retenu |
@@ -406,9 +428,10 @@ Ces points ne remettent pas en cause les décisions déjà retenues. Ils nécess
 3. **Terrain :** calibrer les corrections de conversion selon les secteurs.
 4. **Forme du jour :** tester l'équilibre entre les cinq niveaux, les recettes et les distributions des paquets.
 5. **Aspiration :** vérifier que le bonus récurrent de +1 produit un effet tactique intéressant sans devenir dominant.
-6. **Score cumulatif :** conserver pour l'instant sa fonction de classement ; sa formalisation précise pourra être faite avec le calcul du résultat de secteur.
+6. **Décalage de soutenabilité :** tester le modèle d'une graduation par point et des variantes par paliers pour calibrer la sévérité de la pénalité.
 7. **Capital de relance :** tester les effets de l'arrondi supérieur, notamment sur les petites courses et les faibles niveaux d'affûtage.
-8. **Durée et fluidité :** vérifier que le nombre de secteurs et les décisions par secteur restent compatibles avec la durée de jeu visée.
+8. **Conversion entière :** définir et tester la table de couples énergie/vitesse entiers pour chaque profil physiologique.
+9. **Durée et fluidité :** vérifier que le nombre de secteurs et les décisions par secteur restent compatibles avec la durée de jeu visée.
 
 ## 11. Relation avec les documents et modèles antérieurs
 
