@@ -239,10 +239,13 @@ def _draw_form_cards(form_level: str, rng: random.Random) -> list[FormCard]:
     categories = list(FORM_RECIPES[form_level])
     rng.shuffle(categories)
     cards: list[FormCard] = []
-    for category in categories:
+    category_decks: dict[str, list[int]] = {}
+    for category in set(categories):
         deck = list(FORM_DECKS[category])
         rng.shuffle(deck)
-        cards.append(FormCard(category=category, value=deck.pop()))
+        category_decks[category] = deck
+    for category in categories:
+        cards.append(FormCard(category=category, value=category_decks[category].pop()))
     return cards
 
 
