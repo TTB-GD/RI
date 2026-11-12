@@ -1,4 +1,6 @@
-# Race Engine V2 — audit de migration vers la physiologie intégrée
+# HISTORICAL — Race Engine V2 / audit de migration vers la physiologie intégrée
+
+> **Snapshot historique antérieur à la consolidation Race V2 du 12 novembre 2026.** Cet audit décrit l'ancien chemin Production / Difficulty / Curve A-B-C et ne décrit ni ne spécifie le prototype multi-secteur actuel (`experiments/current/race_v2_prototype/`). Ses constats restent valables uniquement pour le code et les documents à la date de son audit.
 
 ## SCOPE
 

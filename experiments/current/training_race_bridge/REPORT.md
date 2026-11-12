@@ -1,6 +1,6 @@
 # Training V2 → Race V2 minimal bridge — report
 
-**EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN**
+**LEGACY EXPERIMENTAL REPORT — NOT THE CURRENT TRAINING-TO-RACE INTEGRATION.** Results apply only to the former Race Engine V2 Production / Curve B harness; they do not validate the 12 November 2026 Race V2 design or its `S0 + F - C` sustainability model.
 
 ## FACT
 

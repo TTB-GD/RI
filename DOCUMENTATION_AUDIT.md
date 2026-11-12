@@ -50,3 +50,47 @@
 La section 8 présente les paramètres expérimentaux retenus pour Fatigue V1 et les corrections éditoriales de la discussion ; elle ne prétend pas que la production maintient déjà cette dette. Le GDD ancien contenait de nombreuses propositions et tables endommagées ou devenues obsolètes ; leur version exacte reste dans l'historique Git plutôt que dans le corps CURRENT. Aucun calcul de probabilité ou résultat d'expérience n'a été régénéré pour cette tâche.
 
 **Mise à jour ciblée :** les divergences `Charge < EF`, `Charge > VMA` et le branchement Curve B → `PhysiologyProfile` sont résolus. La calibration et la conversion Training restent ouvertes.
+
+
+## Mise à jour transversale — Race V2 (12 novembre 2026)
+
+La PR #67 est fusionnée. Elle ajoute l'orchestration des décisions de dés à
+l'orchestration multi-secteur du prototype Race V2. Les règles de Race V2 ont
+été consolidées dans `docs/game-design/RACE_V2_DESIGN.md`. Cette évolution
+rend obsolètes plusieurs descriptions documentaires de la baseline Race
+antérieure au 12 novembre.
+
+| Document | Écart constaté | Mise à jour de référence | Statut |
+|---|---|---|---|
+| `Run It - GDD.md` | §7 décrivait encore Production / Difficulty / Cost / Reserve comme noyau Race V2 actif | §7 remplacé par le résumé normatif du modèle Race V2 validé ; distinction design / prototype / intégration | RESOLVED |
+| `CURRENT_STATE.md` | Snapshot daté du 11 novembre, antérieur à l'orchestration multi-secteur et à PR #67 | Snapshot daté du 12 novembre ; fonctionnalités du prototype et gaps Training → Race explicités | RESOLVED |
+| `README.md` | Présentait l'ancienne formule locale de course comme boucle actuelle | Vue projet et index des documents de référence, sans dupliquer les règles | RESOLVED |
+| `DEVELOPMENT_PLAN.md` | Chemin critique ancien et mapping Training → Race présenté comme prochaine étape immédiate | Pause d'implémentation après PR #67 ; consolidation documentaire E0 prioritaire ; E1–E5 bloqués jusqu'à nouvelle instruction | RESOLVED |
+| `experiments/current/race_v2_prototype/README.md` | Documentation incomplète de la frontière de configuration | Déroulement deux phases, entrées explicites, gaps Training et limites expérimentales | RESOLVED |
+| `docs/game-design/RACE_RESERVE_DESIGN.md` | Ancienne formule d'investissement Training → réserve pouvait être lue comme active | Document marqué HISTORICAL / SUPERSEDED AS RACE DESIGN | RESOLVED |
+
+### Autorité documentaire après consolidation
+
+- `Run It - GDD.md` : décisions normatives validées pour l'ensemble du jeu.
+- `docs/game-design/RACE_V2_DESIGN.md` : spécification détaillée des règles Race V2.
+- `CURRENT_STATE.md` : comportement effectivement présent dans le dépôt.
+- `DEVELOPMENT_PLAN.md` : dépendances, écarts et ordre des travaux.
+- `experiments/current/**` : prototypes, harnesses et résultats expérimentaux,
+  sans promotion automatique en règles de design.
+- `RACE_RESERVE_DESIGN.md` : historique d'une proposition remplacée, non active.
+
+La PR de consolidation est documentaire uniquement : aucun code, test ou résultat
+de simulation n'est modifié. Les statuts d'exécution CI doivent être lus dans
+GitHub ; la documentation ne déclare pas de tests réussis sans exécution vérifiée.
+
+Les références expérimentales historiques directement concernées ont également été
+reclassées pour éviter une lecture erronée de la baseline actuelle :
+- `experiments/current/race_engine_v2/README.md` et
+  `MIGRATION_AUDIT.md` décrivent l'ancien moteur Production / Difficulty /
+  Curve A-B-C, pas le prototype Race V2 multi-secteur actuel.
+- `experiments/current/training_race_bridge/README.md` et `REPORT.md`
+  décrivent une sonde synthétique construite sur cet ancien moteur ; leurs
+  résultats ne valident ni le nouveau modèle de soutenabilité ni le mapping
+  Training B → Race V2.
+- `AGENTS.md` référence désormais les documents Race V2 faisant autorité et
+  les expériences qui doivent rester historiques.

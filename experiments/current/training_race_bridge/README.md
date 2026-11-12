@@ -6,7 +6,7 @@
 > OPEN and not implemented in the active Race V2 path; Position, Efficacité and
 > AS42/AS21/AS10/AS5 below are preserved experimental conventions only.
 
-**EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN**
+**LEGACY EXPERIMENTAL PROBE — NOT THE CURRENT TRAINING-TO-RACE INTEGRATION.** This probe targets the former Race Engine V2 Production / Curve B harness and does not implement the validated 12 November 2026 Race V2 configuration boundary.
 
 This isolated probe connects synthetic Training V2 SPEC allocations to the
 existing experimental Race Engine V2 primitives. It changes neither production

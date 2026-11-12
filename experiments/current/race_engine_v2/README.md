@@ -1,7 +1,6 @@
 # EXP R1-A — Race Engine V2 / flat terrain
 
-**EXPERIMENTAL ONLY — NOT CURRENT GAME DESIGN.** This isolated harness neither
-replaces `race_core` nor changes training, Fatigue V1, CTL thresholds, or the GDD.
+**LEGACY EXPERIMENTAL HARNESS — NOT THE CURRENT RACE V2 PROTOTYPE.** This isolated R1 harness preserves earlier Production / Difficulty / Curve A-B-C experiments. It does not implement the validated 12 November 2026 Race V2 design. The current multi-sector prototype is `experiments/current/race_v2_prototype/`; this directory remains experimental evidence only.
 
 ## Boundaries
 
