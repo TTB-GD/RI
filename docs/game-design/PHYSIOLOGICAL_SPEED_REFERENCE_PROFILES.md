@@ -138,6 +138,25 @@ Ils ne changent pas les règles déjà retenues :
 
 Les valeurs des AS sont des valeurs initiales proposées pour les profils de référence. Leur progression, leur éventuelle saturation et leur relation exacte aux points EF / Seuil / VMA restent régies par les décisions de conception Race V2 et doivent être calibrées par simulation.
 
+
+### 5.1. Cible de progression par cycle Training
+
+**Statut : hypothèse de conception à calibrer par simulation, non règle définitive.**
+
+La cible provisoire pour un cycle Training est de permettre à un joueur réalisant un bon cycle d'obtenir environ **2 à 3 paliers de progression**. La plage de résultats envisagée est :
+
+| Résultat du cycle | Paliers obtenus |
+|---|---:|
+| Cycle peu réussi | 0 à 1 |
+| Cycle correct | 1 à 2 |
+| Bon cycle | 2 à 3 |
+| Excellent cycle | 3 à 4 |
+
+Un palier représente une amélioration choisie par le joueur sur un point ou une caractéristique de son profil physiologique. Il ne correspond pas automatiquement à +1 km/h : les choix possibles peuvent notamment porter sur la vitesse à énergie constante ou sur l'énergie à vitesse constante.
+
+Cette cible doit être évaluée en fonction de l'impact réel des améliorations sur Race : deux paliers de nature différente ne sont pas nécessairement équivalents en performance. La progression doit également ralentir avec le niveau initial et le niveau déjà atteint. L'équivalence en VDOT sert de contrôle d'ordre de grandeur, pas de conversion mécanique entre VDOT et paliers.
+
+
 ## 6. Sources
 
 - Jack Daniels, *Daniels' Running Formula*, 4th edition, Human Kinetics, 2022, tables 5.2 (« Training Intensities Based on Current VDOT ») et 5.3 (« Training Intensities for Novice Runners and Others Starting With Slow Performances »).
