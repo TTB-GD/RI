@@ -66,9 +66,9 @@ L'AS n'est donc pas un quatrième point permanent de la courbe de base.
 
 ### 3.1. Choix de l'énergie
 
-À chaque secteur, le joueur choisit librement le sous-ensemble de dés qu'il souhaite dépenser.
+À chaque secteur, le joueur lance l'intégralité de son pool, effectue ses éventuelles relances, puis choisit librement le sous-ensemble de dés qu'il souhaite dépenser. Il peut choisir de ne dépenser aucun dé ; dans ce cas, le secteur ne produit aucun point.
 
-L'énergie réellement dépensée est plafonnée à VMA. VMA constitue le plafond de dépense physiologique.
+La somme des dés sélectionnés peut dépasser VMA : l'énergie réellement dépensée est alors écrêtée à VMA. VMA constitue le plafond de dépense physiologique. Les dés non sélectionnés ne sont pas conservés : l'intégralité du pool est relancée au secteur suivant.
 
 ### 3.2. Conversion
 
@@ -111,10 +111,10 @@ La soutenabilité est construite pendant le Training. Elle représente la capaci
 
 On distingue :
 - la soutenabilité initiale, préparée pendant le Training (`S0`) ;
-- les effets cumulés des cartes de forme du jour (`F`) ;
-- la consommation cumulée liée aux dépenses de course (`C`).
+- les effets cumulés des cartes de forme déjà révélées (`F`) ;
+- la consommation cumulée des secteurs déjà résolus (`C`).
 
-La soutenabilité peut devenir négative. Il n'existe pas de plancher à zéro.
+La soutenabilité peut devenir négative. Il n'existe pas de plancher à zéro. La dégradation est recalculée à chaque fin de secteur à partir des cumuls `F` et `C` ; elle n'est pas une perte irréversible appliquée séparément à chaque tour.
 
 ### 4.2. Bilan de soutenabilité
 
@@ -122,9 +122,12 @@ Le bilan net est :
 
 `X = F − C`
 
-La variation par rapport à l'état initial est donc :
+La dégradation courante et la réserve sont :
 
-`Δ = C − F`
+- `D = max(0, C − F)` ;
+- `R = max(0, F − C)`.
+
+La variation par rapport à l'état initial est donc `Δ = C − F`. Une carte positive révélée peut réduire une dégradation déjà présente et restaurer la courbe, sans jamais la déplacer à gauche de sa position initiale.
 
 Le principe retenu est qu'une perte de soutenabilité déplace horizontalement la courbe vers la droite : il faut davantage d'énergie de conversion pour produire une même vitesse. Le modèle de départ est d'une graduation entière par point de soutenabilité perdu. Le rapport exact et l'éventuelle utilisation de paliers pour adoucir la pénalité restent à tester.
 
@@ -134,16 +137,14 @@ Le principe retenu est qu'une perte de soutenabilité déplace horizontalement l
 - Les points physiologiques de référence EF, Seuil et VMA restent fixes ; c'est la conversion énergie → vitesse qui est pénalisée.
 - Le modèle initial est un déplacement d'une graduation entière par point de dégradation ; des paliers moins sensibles pourront être évalués par test.
 - La courbe ne peut jamais être déplacée vers la gauche au-delà de sa position initiale.
-- Une carte positive peut compenser une consommation antérieure, mais ne peut pas améliorer la physiologie préparée au Training.
+- Une carte positive peut compenser une consommation antérieure et restaurer une courbe déjà dégradée, mais ne peut pas améliorer la physiologie préparée au Training ni déplacer la courbe à gauche de sa position initiale.
 - Après dégradation, si l'énergie de conversion ne permet plus d'atteindre EF sur la courbe déplacée, la vitesse est ramenée au plancher EF. Cette règle n'ajoute aucune pénalité énergétique.
 
 ### 4.4. Réserve de soutenabilité
 
-Les effets positifs des cartes peuvent compenser les consommations antérieures.
+Les effets positifs des cartes peuvent compenser les consommations antérieures. Si leur cumul dépasse les consommations et ramène la courbe à sa position initiale, l'excédent positif est placé en réserve.
 
-Si leur cumul dépasse les consommations et ramène la courbe à sa position initiale, l'excédent positif est placé en réserve.
-
-La réserve est consommée automatiquement lors des dépenses ultérieures, avant que la courbe ne soit dégradée.
+La réserve est consommée automatiquement lors des dépenses ultérieures, avant que la courbe ne soit dégradée. Une carte positive révélée en cours de course agit immédiatement : elle peut donc restaurer la courbe pour le secteur où elle est révélée.
 
 Le fonctionnement peut être représenté ainsi :
 
@@ -237,7 +238,7 @@ Les cartes sont révélées progressivement, au début du secteur indiqué, avan
 | Semi-marathon | 13 | 4, 8, 12 |
 | Marathon | 16 | 4, 8, 12 |
 
-Une carte révélée applique immédiatement son effet à la soutenabilité. Son effet reste permanent jusqu'à la fin de la course.
+Une carte révélée au début d'un secteur applique immédiatement son effet à la soutenabilité et peut restaurer la courbe pour ce même secteur. Son effet reste permanent jusqu'à la fin de la course. Toute carte qui resterait non révélée à la fin de la course est retournée après la résolution du dernier secteur, à titre informatif uniquement : elle ne modifie ni la course terminée ni son résultat.
 
 ## 6. Effet de groupe et aspiration
 
@@ -255,6 +256,9 @@ Exemples :
 | 40, 39 | Groupe 2 |
 | 35 | Groupe 3 |
 | 10, 9, 8 | Groupe 1 (un seul groupe) |
+| 10, 10, 9, 8 | Groupe 1 ; les deux joueurs à 10 sont lièvres |
+| 10, 9, 7 | Groupe 1 : 10 et 9 ; Groupe 2 : 7 |
+| 10, 8, 7 | Groupe 1 : 10 ; Groupe 2 : 8 et 7 |
 
 Dans le cas `10, 9, 8`, chaque écart adjacent vaut exactement 1 : les trois joueurs restent donc dans le même groupe. Le joueur à 10 est le lièvre ; les joueurs à 9 et 8 bénéficient de l'aspiration.
 
@@ -271,7 +275,7 @@ Un joueur seul ne bénéficie d'aucun bonus.
 
 ### 6.3. Bonus d'aspiration
 
-Chaque bénéficiaire reçoit +1 énergie virtuelle au secteur suivant.
+Chaque bénéficiaire reçoit +1 énergie virtuelle pour le secteur en cours. Le statut de chaque joueur (lièvre ou bénéficiaire de l'aspiration) et la présence ou non du bonus sont connus avant son choix de dés. Ce bonus est déterminé à partir des groupes issus du classement cumulatif du secteur précédent ; il est donc déjà établi au début du secteur où il s'applique.
 
 Cette énergie :
 - est ajoutée après le choix des dés ;
@@ -284,12 +288,12 @@ L'énergie de conversion reste plafonnée à VMA après application du bonus. Le
 
 ### 6.4. Renouvellement
 
-Les groupes sont recalculés à la fin de chaque secteur, après actualisation des scores cumulatifs.
-
-Le bonus est recalculé pour le secteur suivant :
-- il ne s'accumule pas ;
+Les groupes sont recalculés à la fin de chaque secteur, après actualisation des scores cumulatifs. Le statut et le bonus ainsi déterminés sont ceux du secteur suivant :
+- le bonus ne s'accumule pas ;
 - il peut être gagné ou perdu d'un secteur à l'autre ;
-- il ne s'applique jamais rétroactivement au secteur qui vient de se terminer.
+- il est connu avant le choix des dés du secteur où il s'applique.
+
+Au premier secteur, aucun classement cumulatif antérieur ne permet encore de déterminer les groupes et l'aspiration : la règle d'initialisation reste à définir.
 
 Cette mécanique doit permettre :
 - de mener un groupe ;
@@ -302,7 +306,7 @@ Cette mécanique doit permettre :
 
 ### 7.1. Lancer et choix des dés
 
-Le joueur lance l'intégralité de son pool pour le tour de course. Après les éventuelles relances, il choisit librement le sous-ensemble final de dés qu'il dépense.
+Le joueur lance l'intégralité de son pool pour le secteur. Après les éventuelles relances, il choisit librement le sous-ensemble final de dés qu'il dépense, y compris le sous-ensemble vide. S'il ne dépense aucun dé, il ne marque aucun point pour ce secteur. Les dés non dépensés sont relancés avec le reste du pool au secteur suivant.
 
 ### 7.2. Relances
 
@@ -372,19 +376,21 @@ Avec :
 
 Pour chaque secteur :
 
-1. Révéler une éventuelle carte de forme du jour prévue à ce tour.
-2. Appliquer immédiatement son effet à la soutenabilité et à la réserve.
-3. Lancer le pool de dés.
-4. Effectuer les éventuelles relances disponibles.
-5. Choisir les dés à dépenser.
-6. Calculer la consommation de soutenabilité à partir de la dépense réelle et de l'AS.
-7. Utiliser la réserve avant de dégrader la courbe.
-8. Déterminer le déplacement éventuel de la courbe vers la droite.
-9. Appliquer le bonus de groupe et les corrections de terrain à la conversion.
-10. Calculer l'énergie de conversion : dépense réelle + bonus de groupe − difficulté du terrain.
-11. Si aucune énergie n'a été dépensée, ne pas effectuer de conversion. Sinon, plafonner l'énergie de conversion à VMA, appliquer le décalage de soutenabilité, puis lire la vitesse entière sur la courbe déplacée, avec plancher EF et plafond VMA.
-12. Ajouter la vitesse entière du secteur au score cumulatif.
-13. À la fin du secteur, recalculer les groupes et les bénéficiaires de l'aspiration pour le secteur suivant.
+1. Révéler, le cas échéant, la carte de forme prévue au début de ce secteur.
+2. Ajouter immédiatement sa valeur aux effets cumulés `F` et actualiser la dégradation/réserve. Cette éventuelle restauration de la courbe est applicable dès ce secteur.
+3. Afficher le statut de groupe du joueur et son éventuel bonus d'aspiration, déterminés à la fin du secteur précédent. Le profil de terrain du secteur est connu depuis le début de la course.
+4. Lancer l'intégralité du pool de dés.
+5. Effectuer les éventuelles relances individuelles disponibles.
+6. Choisir librement les dés à dépenser, éventuellement aucun.
+7. Calculer l'énergie réellement dépensée : somme des dés sélectionnés, écrêtée à VMA.
+8. Si l'énergie réellement dépensée est nulle, ne produire aucune vitesse. Sinon, calculer l'énergie de conversion (`E_dépensée + B_groupe − D_terrain`), puis la plafonner à VMA.
+9. Appliquer à cette conversion la courbe de soutenabilité en vigueur au début du secteur, lire la vitesse entière correspondante et respecter le plancher EF et le plafond de vitesse VMA.
+10. Ajouter la vitesse entière obtenue au score cumulatif.
+11. En fin de secteur, calculer la consommation de soutenabilité à partir de l'énergie réellement dépensée et de l'AS, sans tenir compte du bonus de groupe ni du terrain.
+12. Mettre à jour la consommation cumulée `C`, puis recalculer `D = max(0, C − F)` et `R = max(0, F − C)`. Cette nouvelle dégradation ou réserve sert de base au secteur suivant ; la consommation de ce secteur ne dégrade donc pas rétroactivement sa propre conversion.
+13. Recalculer les groupes à partir des scores cumulatifs actualisés. Les statuts et bonus ainsi obtenus s'appliquent au secteur suivant.
+
+Après la résolution du dernier secteur, retourner à titre informatif toute carte qui serait encore face cachée. La consommation du dernier secteur est bien comptabilisée, même si elle ne peut plus affecter une conversion ultérieure.
 
 ## 9. Décisions consolidées et statut
 
@@ -396,14 +402,21 @@ Pour chaque secteur :
 | Plafond énergétique | VMA après bonus de groupe et terrain | Retenu |
 | Plafond de vitesse | Vitesse associée au point VMA | Retenu |
 | Terrain | Difficulté entière signée, appliquée à la conversion uniquement | Retenu |
-| Énergie nulle | Aucune conversion ; le terrain ne crée pas d'énergie | Retenu |
+| Énergie nulle | Aucune conversion ni point ; le terrain et l'aspiration ne créent pas d'énergie | Retenu |
+| Choix des dés | Sous-ensemble libre, y compris aucun dé | Retenu |
+| Dépense supérieure à VMA | Écrêtage de l'énergie réellement dépensée à VMA | Retenu |
+| Dés non dépensés | Relancés au secteur suivant avec le pool complet | Retenu |
 | Score de course | Somme des vitesses entières des secteurs | Retenu |
 | AS | Point propre à la course préparée | Retenu |
 | Plafond de dépense | VMA | Retenu |
 | Consommation de soutenabilité | Trois niveaux selon l'écart à AS | Retenu |
 | Dégradation de courbe | Décalage horizontal entier vers la droite | Retenu |
 | Plancher de soutenabilité | Aucun | Retenu |
-| Réserve positive | Compense les consommations futures | Retenu |
+| Réserve positive | Compense les consommations futures et peut restaurer une courbe dégradée | Retenu |
+| Actualisation de soutenabilité | Consommation calculée en fin de secteur, effet sur le secteur suivant | Retenu |
+| Cartes positives | Effet immédiat au début du secteur de révélation | Retenu |
+| Bilan final de soutenabilité | Information de conception sans effet sur le résultat ni le Training suivant | Retenu |
+| Cartes non révélées | Retournées après la course à titre informatif | Retenu |
 | Fin de course | Réserve restante perdue | Retenu |
 | Forme du jour | 3d6 dédiés | Retenu |
 | Nombre de niveaux de forme | Cinq | Retenu |
@@ -412,10 +425,12 @@ Pour chaque secteur :
 | Ordre des cartes | Mélangé face cachée | Retenu |
 | Révélation | Progressive, au début des secteurs indiqués | Retenu |
 | Effet des cartes | Permanent jusqu'à l'arrivée | Retenu |
-| Constitution des groupes | Écart de score strictement supérieur à 1 | Retenu |
+| Constitution des groupes | Écart successif strictement supérieur à 1 | Retenu |
+| Actualisation des groupes | Fin de chaque secteur, à partir des scores cumulés actualisés | Retenu |
+| Information de groupe | Statut exact et bonus connus avant le choix des dés | Retenu |
 | Lièvres | Joueur(s) en tête du groupe | Retenu |
 | Aspiration | +1 énergie virtuelle | Retenu |
-| Effet de l'aspiration | Conversion uniquement | Retenu |
+| Effet de l'aspiration | Conversion uniquement, bonus applicable au secteur en cours | Retenu |
 | Relances | Capital global consommé dé par dé | Retenu |
 | Calcul du capital | Proportionnel au nombre de secteurs, arrondi supérieur | Retenu |
 | Affûtage | Seuils selon le plus haut dé | Retenu |
@@ -433,6 +448,7 @@ Ces points ne remettent pas en cause les décisions déjà retenues. Ils nécess
 7. **Capital de relance :** tester les effets de l'arrondi supérieur, notamment sur les petites courses et les faibles niveaux d'affûtage.
 8. **Conversion entière :** définir et tester la table de couples énergie/vitesse entiers pour chaque profil physiologique.
 9. **Durée et fluidité :** vérifier que le nombre de secteurs et les décisions par secteur restent compatibles avec la durée de jeu visée.
+10. **Initialisation de l'aspiration :** définir le statut et le bonus éventuel au premier secteur, avant qu'un classement cumulatif de course existe.
 
 ## 11. Relation avec les documents et modèles antérieurs
 
