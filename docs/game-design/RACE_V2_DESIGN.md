@@ -243,19 +243,20 @@ Une carte révélée applique immédiatement son effet à la soutenabilité. Son
 
 ### 6.1. Constitution des groupes
 
-À la fin de chaque secteur, les joueurs sont classés selon leur score cumulatif de course, par ordre décroissant.
+À la fin de chaque secteur, les joueurs sont classés selon leur score cumulatif de course, par ordre décroissant. Le score est simplement la somme des vitesses entières obtenues dans les secteurs déjà parcourus.
 
-Le score est une variable de classement tactique. Sa signification physique précise n'est pas nécessaire à ce stade.
+Les joueurs sont regroupés selon les écarts successifs entre scores consécutifs. Un nouveau groupe est créé lorsque l'écart entre deux joueurs consécutifs est strictement supérieur à 1. Les écarts sont évalués entre voisins dans le classement, et non par rapport au premier joueur du groupe.
 
-Les joueurs sont regroupés selon les écarts entre scores consécutifs. Un nouveau groupe est créé lorsque l'écart entre deux joueurs consécutifs est strictement supérieur à 1.
-
-Exemple :
+Exemples :
 
 | Scores classés | Groupes |
 |---|---|
 | 45, 44, 44, 43 | Groupe 1 |
 | 40, 39 | Groupe 2 |
 | 35 | Groupe 3 |
+| 10, 9, 8 | Groupe 1 (un seul groupe) |
+
+Dans le cas `10, 9, 8`, chaque écart adjacent vaut exactement 1 : les trois joueurs restent donc dans le même groupe. Le joueur à 10 est le lièvre ; les joueurs à 9 et 8 bénéficient de l'aspiration.
 
 ### 6.2. Lièvres et bénéficiaires
 
