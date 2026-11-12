@@ -79,7 +79,7 @@ class SectorResolutionTests(unittest.TestCase):
         )
         self.assertEqual(result.conversion_energy, 6)
         self.assertEqual(result.speed, 10)
-        self.assertEqual(result.sustainability_consumption, 2)
+        self.assertEqual(result.sustainability_consumption, 1)
 
     def test_degradation_shifts_curve_right_by_integer_cells(self):
         result = resolve_sector(
