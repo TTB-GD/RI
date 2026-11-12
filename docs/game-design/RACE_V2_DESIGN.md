@@ -293,7 +293,7 @@ Les groupes sont recalculés à la fin de chaque secteur, après actualisation d
 - il peut être gagné ou perdu d'un secteur à l'autre ;
 - il est connu avant le choix des dés du secteur où il s'applique.
 
-Au premier secteur, aucun classement cumulatif antérieur ne permet encore de déterminer les groupes et l'aspiration : la règle d'initialisation reste à définir.
+Avant le premier secteur, tous les joueurs ont un score cumulatif initial de 0. Ils forment donc un seul groupe et sont tous co-lièvres ; aucun joueur ne reçoit d'aspiration au premier secteur.
 
 Cette mécanique doit permettre :
 - de mener un groupe ;
@@ -448,7 +448,7 @@ Ces points ne remettent pas en cause les décisions déjà retenues. Ils nécess
 7. **Capital de relance :** tester les effets de l'arrondi supérieur, notamment sur les petites courses et les faibles niveaux d'affûtage.
 8. **Conversion entière :** définir et tester la table de couples énergie/vitesse entiers pour chaque profil physiologique.
 9. **Durée et fluidité :** vérifier que le nombre de secteurs et les décisions par secteur restent compatibles avec la durée de jeu visée.
-10. **Initialisation de l'aspiration :** définir le statut et le bonus éventuel au premier secteur, avant qu'un classement cumulatif de course existe.
+
 
 ## 11. Relation avec les documents et modèles antérieurs
 
