@@ -51,7 +51,7 @@ Les lignes à trois dés reproduisent l'extrapolation du prototype ; leur statut
 
 Un slot D99 est consommé dès qu'une qualité est planifiée, même si elle bust ou est annulée après un bust. Aucun remboursement ni replanification de qualité. Le plafond ne garantit pas que toutes les qualités seront réalisées. Les anciennes tables de probabilités du GDD ne sont pas utilisables telles quelles pour l'équilibrage CURRENT ; elles devront être recalculées pour les pools et règles étudiés.
 
-## 3. Séances et progression — CURRENT
+## 3. Séances et progression — HISTORICAL (ancien Training CURRENT)
 
 ### S0. Catalogue
 
@@ -76,7 +76,7 @@ RPE Max délimite la **zone sûre du tour**, pas un plafond absolu pour les qual
 
 Le programme est composé, puis les risques sont testés dans l'ordre, puis le bust et les séances sont résolus, puis CTL et fatigue sont calculés sur la charge effectivement réalisée. Le CTL du tour est la somme des RPE des séances **réussies** après résolution et éventuelle redistribution EF. Seules les séances réussies contribuent aux prérequis ; seules les qualités réussies comptent vers les améliorations de dés. Les ajouts et améliorations acquis deviennent disponibles au tour suivant.
 
-## 4. Risque et bust — CURRENT
+## 4. Risque et bust — HISTORICAL (ancien Training CURRENT)
 
 ### B0. Test
 
@@ -96,11 +96,11 @@ La **dépense réellement réalisée** est la somme des coûts des séances réu
 
 Le bust décrit ici une annulation de séance, sans conséquence de blessure persistante automatiquement validée. Blessures et effets définitifs du surentraînement restent FUTURE / OPEN. Un retrait temporaire d'un dé a été exercé dans des expériences de Fatigue V1, sans valider les anciens seuils, tables ou modificateurs de risque du GDD ; le risque CURRENT n'est pas modifié par le surentraînement.
 
-## 5. SL — direction CURRENT, seuils de course OPEN
+## 5. SL — HISTORICAL (ancien Training CURRENT), seuils de course OPEN
 
 SL est une préparation spécifique à la course ; elle n'est pas intrinsèquement supérieure à une autre qualité dans une utilité générique. Les seuils de SL nécessaires à la course restent OPEN. **IMPLEMENTATION / POLICY GAP :** le sélecteur automatique du prototype lui accorde encore une priorité spéciale, antérieure à cette clarification. Le maintien ou la suppression de cette priorité requiert un arbitrage ultérieur.
 
-## 6. Politiques joueur et expériences
+## 6. Politiques joueur et expériences — HISTORICAL / EXPERIMENTAL
 
 **P0** est une baseline technique conservatrice, ni joueur humain standard, ni référence de design, ni stratégie optimale. Le **Standard Training Player** est EXPERIMENTAL. Ces noms de politiques ne désignent pas les anciennes rubriques P0–P4 du GDD. Le sélecteur pondéré, ses poids et ses choix gloutons sont des politiques techniques, pas des préférences imposées au joueur.
 
