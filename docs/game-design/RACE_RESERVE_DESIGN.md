@@ -1,4 +1,4 @@
-# Race Reserve — Training-to-Race preparation model
+# HISTORICAL — Race Reserve / ancien modèle de préparation
 
 **Status: design decisions plus experimental implementation.** Mechanisms reflect
 the discussion of 2026-11-11. Numerical course targets and freshness calibration
