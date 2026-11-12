@@ -1,8 +1,6 @@
 # HISTORICAL — Race Reserve / ancien modèle de préparation
 
-**Status: design decisions plus experimental implementation.** Mechanisms reflect
-the discussion of 2026-11-11. Numerical course targets and freshness calibration
-are configuration, not approved balance values.
+**Status: HISTORICAL / SUPERSEDED AS RACE DESIGN (12 November 2026).** This document preserves the earlier Training-investment reserve proposal. It is not the active Race V2 specification and must not be used to override the `S0 + F - C` sustainability model in `RACE_V2_DESIGN.md`.
 
 ## 1. Purpose
 
