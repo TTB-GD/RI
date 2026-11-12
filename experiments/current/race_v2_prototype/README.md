@@ -1,54 +1,86 @@
 # Race V2 — prototype multi-secteur
 
-**PROTOTYPE / EXPERIMENTAL.** Cette couche orchestre une course complète à
-plusieurs joueurs en réutilisant le résolveur déterministe de `sector.py`.
+**PROTOTYPE / EXPERIMENTAL — NOT A COMPLETE GAME LOOP.**
 
-## Inclus
+This isolated prototype implements the current multi-sector Race V2 flow described
+by `docs/game-design/RACE_V2_DESIGN.md`. The validated design and the executable
+prototype must remain distinct: code presence does not validate balance or
+Training integration.
 
-- courses 5 km / 10 km / semi / marathon et calendriers de révélation ;
-- tirage 3d6 de forme du jour et recette de catégories ;
-- paquets de cartes par catégorie, tirage sans remise et ordre mélangé ;
-- forme cumulée et soutenabilité suivies par joueur ;
-- scores entiers et classement cumulatif ;
-- groupes fondés sur les écarts successifs, lièvre local et aspiration +1 ;
-- révélation finale des cartes restantes après le dernier secteur uniquement.
+## Included
 
-## Déroulement des dés
+- 5 km / 10 km / half-marathon / marathon: 7 / 10 / 13 / 16 sectors;
+- explicit integer energy-to-speed physiology table;
+- sector resolution with VMA expenditure/conversion caps, terrain and aspiration;
+- sustainability balance from initial credit, revealed form and actual consumption;
+- 3d6 form-of-day roll, category recipe and shuffled card decks;
+- scheduled card reveals at sector start;
+- cumulative integer score and adjacent-gap group / hare / aspiration calculation;
+- complete dice-pool rolls, individual rerolls and free subset selection;
+- global non-regenerating reroll capital;
+- two-phase sector flow: reveal and roll, then validate decisions and resolve.
 
-Le composant `dice.py` reprend les tailles de dés du Training (`6`, `8`,
-`10`, `12`). Le composant `dice_session.py` le raccorde maintenant à
-`RaceState` en deux phases :
+## Sector decision sequence
 
-1. `prepare_sector()` révèle d'abord les cartes prévues au début du secteur,
-   puis lance l'intégralité du pool de chaque joueur ;
-2. `resolve_sector(choices)` applique les relances individuelles, puis la
-   sélection libre du sous-ensemble dépensé, et transmet les sommes au
-   résolveur du secteur.
+1. Reveal any scheduled form card before the dice roll.
+2. Update the cumulative form balance and display the current group status/bonus.
+3. Roll every die in each player's pool.
+4. Apply individual rerolls, each consuming one unit of global capital.
+5. Select any subset of dice to spend, including the empty subset.
+6. Resolve all players' expenditures and update score, sustainability and next-sector groups.
 
-Chaque joueur dispose d'un capital global de relance, non renouvelé entre les
-secteurs. Chaque relance consomme une unité et remplace le résultat précédent.
-Le même dé peut être relancé plusieurs fois si le capital le permet. Les dés
-non sélectionnés ne sont pas conservés : tout le pool sera relancé au secteur
-suivant. La sélection vide est autorisée et ne produit ni vitesse ni
-consommation de soutenabilité.
+A selected empty subset produces no speed and no sustainability consumption.
+Unselected dice are not carried forward; the full pool is rolled next sector.
+A die may be rerolled more than once if global capital remains. No reroll occurs
+after subset selection.
 
-Le capital suit la formule du GDD :
-`ceil(Rmax_5km × (N / 7) × P_affûtage)`.
-`RacePlayerConfig.affutage_level` fournit le palier déjà déterminé par le
-Training (0 à 4), associé aux coefficients 0, 0,25, 0,50, 0,75 et 1.
-La détermination de ce palier à partir de la fatigue résiduelle reste à
-raccorder au profil Training ; aucune conversion de fatigue n'est inventée
-ici.
+## Player configuration boundary
 
-## Déterminisme et validation
+`RacePlayerConfig` currently receives explicit inputs:
 
-Les RNG sont injectés et conservés par joueur. Une décision invalide ne
-consomme ni capital de relance ni état aléatoire de résolution ; le secteur
-reste en attente de décisions valides. Les cartes révélées et les dés lancés
-restent visibles pendant cette attente.
+- integer physiology table and its EF / Seuil / VMA energy anchors;
+- course-specific `specific_pace`;
+- initial sustainability credit `initial_credit` (the design quantity `S0`);
+- `dice_sizes` from the persistent Training pool;
+- `affutage_level` in 0..4.
+
+The reroll budget is:
+
+`ceil(Rmax_5km × (N / 7) × P_affûtage)`
+
+where `P_affûtage` maps tiers 0..4 to 0, 0.25, 0.50, 0.75 and 1.
+The thresholds for deriving the tier from residual Training fatigue are in the
+Race V2 design specification. The prototype accepts the tier as an input; it
+does not derive it from Training.
+
+## Explicit non-goals / gaps
+
+- No automatic Training B → Race player configuration.
+- No derivation of the physiology table from a Training B state.
+- No derivation of course-specific AS.
+- No calculation of initial credit `S0` from Training.
+- No residual-fatigue → affûtage-tier adapter.
+- No human-play balance validation or final calibration.
+
+The earlier `RACE_RESERVE_DESIGN.md` preparation-reserve equation is superseded
+as Race design by the validated `S0 + F - C` balance. It remains in the
+repository for historical traceability.
+
+## Determinism and validation
+
+RNG streams are seeded independently per player. A sector is prepared before
+choices are submitted. Invalid decisions are validated atomically: they do not
+consume reroll capital or resolution RNG state, and the pending dice/cards
+remain available for a valid decision.
 
 ## Tests
 
-    python -m unittest experiments.current.race_v2_prototype.test_race -v
-    python -m unittest experiments.current.race_v2_prototype.test_dice -v
-    python -m unittest experiments.current.race_v2_prototype.test_dice_session -v
+```bash
+python -m unittest experiments.current.race_v2_prototype.test_sector -v
+python -m unittest experiments.current.race_v2_prototype.test_race -v
+python -m unittest experiments.current.race_v2_prototype.test_dice -v
+python -m unittest experiments.current.race_v2_prototype.test_dice_session -v
+```
+
+These commands describe the available test suites; they are not a claim that a
+new test run was executed during this documentation-only change.
