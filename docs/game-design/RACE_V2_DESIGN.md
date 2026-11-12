@@ -81,7 +81,7 @@ Avec :
 - `B_groupe` : bonus virtuel d'aspiration (0 ou +1) ;
 - `D_terrain` : difficulté entière signée du secteur (positive en montée, nulle sur le plat, négative en descente).
 
-Le terrain modifie la conversion, jamais la dépense réelle. Il ne se substitue pas à l'énergie : sans énergie dépensée, aucune conversion n'est effectuée et le terrain ne produit pas de vitesse.
+Le terrain modifie la conversion, jamais la dépense réelle. Il ne se substitue pas à l'énergie : sans énergie dépensée, aucune conversion n'est effectuée, le secteur ne produit aucune vitesse et le terrain ne crée pas d'énergie. Le plancher EF ne s'applique qu'à une conversion effectivement engagée avec une dépense positive.
 
 Après application du groupe et du terrain, l'énergie de conversion est plafonnée à VMA. Les bonus ne permettent donc pas de dépasser le plafond énergétique de VMA. La vitesse produite est elle aussi plafonnée à la vitesse du point VMA.
 
@@ -384,7 +384,6 @@ Pour chaque secteur :
 11. Si aucune énergie n'a été dépensée, ne pas effectuer de conversion. Sinon, plafonner l'énergie de conversion à VMA, appliquer le décalage de soutenabilité, puis lire la vitesse entière sur la courbe déplacée, avec plancher EF et plafond VMA.
 12. Ajouter la vitesse entière du secteur au score cumulatif.
 13. À la fin du secteur, recalculer les groupes et les bénéficiaires de l'aspiration pour le secteur suivant.
-12. À la fin du secteur, recalculer les groupes et les bénéficiaires de l'aspiration pour le secteur suivant.
 
 ## 9. Décisions consolidées et statut
 
