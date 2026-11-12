@@ -48,6 +48,8 @@ class RacePlayerConfig:
     table: RacePhysiologyTable
     specific_pace: int
     initial_credit: int
+    dice_sizes: tuple[int, ...] = (6, 6, 6, 6)
+    affutage_level: int = 0
 
 
 @dataclass(frozen=True)
@@ -100,6 +102,8 @@ class RaceState:
     history: list[RaceSectorResult] = field(default_factory=list)
     finished: bool = False
     final_unrevealed_cards: dict[str, tuple[FormCard, ...]] = field(default_factory=dict)
+    _prepared_reveal_sector: int = 0
+    _prepared_revealed_cards: dict[str, FormCard | None] = field(default_factory=dict)
 
     @classmethod
     def create(
@@ -128,6 +132,13 @@ class RaceState:
         for config in player_configs:
             if not 0 <= config.initial_credit:
                 raise ValueError("initial_credit must be non-negative")
+            from .dice import validate_dice_pool, reroll_capital
+            validate_dice_pool(config.dice_sizes)
+            reroll_capital(
+                dice_sizes=config.dice_sizes,
+                sector_count=sector_count,
+                affutage_level=config.affutage_level,
+            )
             if not 0 < config.specific_pace <= config.table.vma_energy:
                 raise ValueError("specific_pace must be within the physiology table")
             player_rng = random.Random(root_rng.getrandbits(64))
@@ -156,6 +167,29 @@ class RaceState:
     def sector_count(self) -> int:
         return SECTOR_COUNTS[self.race_type]
 
+    def reveal_sector_cards(self) -> Mapping[str, FormCard | None]:
+        """Reveal scheduled cards at the start of the current sector, before dice decisions."""
+        if self.finished:
+            raise RuntimeError("race is already finished")
+        next_sector = self.sector_number + 1
+        if self._prepared_reveal_sector == next_sector:
+            return dict(self._prepared_revealed_cards)
+        if self._prepared_reveal_sector:
+            raise RuntimeError("a prepared sector must be resolved before preparing another")
+        reveal_at = REVEAL_SCHEDULES[self.race_type]
+        revealed: dict[str, FormCard | None] = {}
+        for player_id, player in self.players.items():
+            card = None
+            if next_sector in reveal_at:
+                card = player.cards[player.revealed_card_count]
+                player.revealed_card_count += 1
+                player.revealed_cards.append(card)
+                player.cumulative_form += card.value
+            revealed[player_id] = card
+        self._prepared_reveal_sector = next_sector
+        self._prepared_revealed_cards = revealed
+        return dict(revealed)
+
     def play_sector(self, energy_spent: Mapping[str, int]) -> RaceSectorResult:
         if self.finished:
             raise RuntimeError("race is already finished")
@@ -172,16 +206,12 @@ class RaceState:
         reveal_at = REVEAL_SCHEDULES[self.race_type]
         player_results: dict[str, PlayerSectorResult] = {}
 
-        # Reveal and apply scheduled form cards before any player resolves this sector.
-        revealed_this_sector: dict[str, FormCard | None] = {}
-        for player_id, player in self.players.items():
-            card = None
-            if next_sector in reveal_at:
-                card = player.cards[player.revealed_card_count]
-                player.revealed_card_count += 1
-                player.revealed_cards.append(card)
-                player.cumulative_form += card.value
-            revealed_this_sector[player_id] = card
+        # A dice-session may have revealed cards before the roll/choice phase.
+        # Legacy direct-energy calls reveal here, immediately before resolution.
+        if self._prepared_reveal_sector == next_sector:
+            revealed_this_sector = dict(self._prepared_revealed_cards)
+        else:
+            revealed_this_sector = dict(self.reveal_sector_cards())
 
         # Every player's group/aspiration status was established after the
         # previous sector; all players therefore resolve from the same snapshot.
@@ -225,6 +255,8 @@ class RaceState:
             finished=self.finished,
         )
         self.history.append(result)
+        self._prepared_reveal_sector = 0
+        self._prepared_revealed_cards = {}
 
         if self.finished:
             # Remaining cards are revealed only after the final sector, for information.
