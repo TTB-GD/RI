@@ -1,0 +1,423 @@
+# Race V2 — document de conception
+
+**Version :** V1 — consolidation des arbitrages du 12 novembre 2026  
+**Statut :** décisions de conception retenues ; calibrations expérimentales  
+**Périmètre :** profil physiologique, dépense, soutenabilité, forme du jour, groupes, dés et relances.
+
+> Ce document consolide les décisions de conception prises dans la discussion. Il ne décrit pas l'état actuel de l'implémentation. Les règles marquées comme retenues sont des arbitrages de design ; les valeurs signalées comme expérimentales restent à tester.
+
+## 1. Philosophie générale
+
+La course exploite le potentiel construit pendant le Training.
+
+Le Training prépare :
+- le profil physiologique du joueur ;
+- ses capacités EF, Seuil et VMA ;
+- sa soutenabilité ;
+- son pool de dés ;
+- son état de fatigue et d'affûtage.
+
+La Race met ces éléments à l'épreuve :
+- choix de l'énergie mobilisée ;
+- gestion de la soutenabilité ;
+- adaptation à la forme du jour ;
+- exploitation de l'aspiration ;
+- gestion des relances de dés.
+
+L'objectif n'est pas de simuler fidèlement la physiologie réelle, mais de produire des décisions tactiques intéressantes : tenir une allure, forcer, ralentir, profiter d'un groupe ou tenter de revenir sur les concurrents.
+
+Les règles fondamentales doivent rester communes aux courses de 5 km, 10 km, semi-marathon et marathon.
+
+## 2. Profil physiologique et allure spécifique
+
+### 2.1. Courbe physiologique
+
+Le profil physiologique comporte trois points de référence permanents :
+- EF ;
+- Seuil ;
+- VMA.
+
+Chaque point possède deux coordonnées : une énergie et une vitesse.
+
+Les deux axes doivent respecter le même ordre :
+
+**EF < Seuil < VMA**
+
+La courbe représente la conversion de l'énergie mobilisée en vitesse. Sa forme et sa pente sont préservées pendant la course. La dégradation de la soutenabilité entraîne un déplacement horizontal de la courbe vers la droite.
+
+### 2.2. Allure spécifique (AS)
+
+L'AS est un point supplémentaire associé à la course préparée. Elle est connue dès le début du Training : les joueurs préparent leur physiologie en fonction du scénario de course.
+
+Positionnement indicatif retenu :
+- AS42 et AS21 : entre EF et Seuil ;
+- AS10 : proche du Seuil, éventuellement légèrement au-dessus ;
+- AS5 : peut approcher VMA.
+
+VMA constitue le seul plafond de progression de l'AS5.
+
+Lorsque l'AS atteint son plafond physiologique, sa progression propre sature. Il faut alors développer le point physiologique supérieur pour recréer de la marge.
+
+L'AS n'est donc pas un quatrième point permanent de la courbe de base.
+
+## 3. Dépense d'énergie et conversion en vitesse
+
+### 3.1. Choix de l'énergie
+
+À chaque secteur, le joueur choisit librement le sous-ensemble de dés qu'il souhaite dépenser.
+
+L'énergie réellement dépensée est plafonnée à VMA.
+
+### 3.2. Conversion
+
+La conversion énergie → vitesse utilise l'énergie effective, après application des éventuels bonus de groupe et corrections de terrain.
+
+Le bonus d'aspiration peut notamment conduire à une énergie de conversion supérieure à VMA, sans dépasser le plafond de dépense physiologique.
+
+Les corrections de terrain influencent la conversion en vitesse, mais pas la dépense réelle ni la consommation de soutenabilité.
+
+### 3.3. Consommation de soutenabilité
+
+La consommation est calculée à partir de l'énergie réellement dépensée, avant application du bonus de groupe et des corrections de terrain.
+
+Elle dépend de l'écart entre la dépense et l'AS :
+
+| Dépense réelle par rapport à AS | Consommation de soutenabilité |
+|---|---:|
+| Inférieure à AS − 1 | 0 |
+| De AS − 1 à AS + 1 inclus | 1 |
+| Supérieure à AS + 1 | 2 |
+
+La consommation est calculée indépendamment pour chaque secteur. Il n'y a pas de report de dépassement d'un secteur vers le suivant.
+
+Le bonus d'aspiration et les corrections de terrain n'entraînent aucune consommation supplémentaire.
+
+## 4. Soutenabilité et dégradation de la courbe
+
+### 4.1. Principe
+
+La soutenabilité est construite pendant le Training. Elle représente la capacité du joueur à maintenir son effort sans dégradation de son profil de conversion.
+
+On distingue :
+- la soutenabilité initiale, préparée pendant le Training (`S0`) ;
+- les effets cumulés des cartes de forme du jour (`F`) ;
+- la consommation cumulée liée aux dépenses de course (`C`).
+
+La soutenabilité peut devenir négative. Il n'existe pas de plancher à zéro.
+
+### 4.2. Bilan de soutenabilité
+
+Le bilan net est :
+
+`X = F − C`
+
+La variation par rapport à l'état initial est donc :
+
+`Δ = C − F`
+
+Un point de soutenabilité perdu entraîne un déplacement horizontal d'une graduation entière vers la droite.
+
+### 4.3. Déplacement de la courbe
+
+- Le déplacement est entier : une graduation par point de soutenabilité perdu.
+- La forme et la pente de la courbe restent identiques.
+- Les points physiologiques de référence restent ancrés sur leur axe initial.
+- La courbe ne peut jamais être déplacée vers la gauche au-delà de sa position initiale.
+- Une carte positive peut compenser une consommation antérieure, mais ne peut pas améliorer la physiologie préparée au Training.
+
+### 4.4. Réserve de soutenabilité
+
+Les effets positifs des cartes peuvent compenser les consommations antérieures.
+
+Si leur cumul dépasse les consommations et ramène la courbe à sa position initiale, l'excédent positif est placé en réserve.
+
+La réserve est consommée automatiquement lors des dépenses ultérieures, avant que la courbe ne soit dégradée.
+
+Le fonctionnement peut être représenté ainsi :
+
+- Dégradation de courbe : `max(0, C − F)`
+- Réserve : `max(0, F − C)`
+
+Ainsi :
+- une réserve protège contre les consommations futures ;
+- une consommation absorbe d'abord la réserve ;
+- une fois la réserve épuisée, la courbe se déplace vers la droite ;
+- aucun excédent positif ne permet de dépasser la position physiologique initiale.
+
+À la fin de la course, la réserve restante est perdue. Elle n'a aucun effet sur le Training suivant. Elle indique simplement qu'une marge de soutenabilité existait encore pendant la course.
+
+## 5. Forme du jour
+
+### 5.1. Principe
+
+La forme du jour est une variabilité externe à la progression physiologique.
+
+Elle est déterminée par trois dés à six faces dédiés, indépendants du pool d'entraînement.
+
+Le joueur lance les 3d6 une fois avant la course. Il utilise uniquement la somme des dés. La distribution en cloche est considérée suffisante pour la conception actuelle.
+
+### 5.2. Table de forme du jour
+
+| Somme des 3d6 | Niveau de forme | Probabilité exacte |
+|---:|---|---:|
+| 3–5 | Difficile | 4,63 % |
+| 6–8 | Moyenne | 21,30 % |
+| 9–12 | Bonne | 48,15 % |
+| 13–15 | Excellente | 21,30 % |
+| 16–18 | Exceptionnelle | 4,63 % |
+
+Les probabilités sont calculées sur les 216 combinaisons possibles de trois dés à six faces.
+
+### 5.3. Recette des cartes
+
+Le niveau de forme détermine la composition de trois cartes :
+
+| Forme | Composition |
+|---|---|
+| Exceptionnelle | Excellent, Excellent, Bon |
+| Excellente | Excellent, Bon, Bon |
+| Bonne | Bon, Bon, Moyen |
+| Moyenne | Bon, Moyen, Mauvais |
+| Difficile | Moyen, Mauvais, Mauvais |
+
+Le joueur tire les trois cartes correspondant à cette recette. Il connaît leur catégorie, mais pas leur valeur.
+
+### 5.4. Composition des paquets
+
+Chaque catégorie comporte 15 cartes.
+
+| Catégorie | +2 | +1 | 0 | −1 | −2 |
+|---|---:|---:|---:|---:|---:|
+| Excellent | 3 | 8 | 4 | 0 | 0 |
+| Bon | 2 | 5 | 6 | 2 | 0 |
+| Moyen | 0 | 2 | 8 | 5 | 0 |
+| Mauvais | 0 | 0 | 3 | 7 | 5 |
+
+La valeur de la carte modifie directement le bilan de soutenabilité.
+
+Espérance de chaque catégorie :
+- Excellent : +0,933 ;
+- Bon : +0,467 ;
+- Moyen : −0,200 ;
+- Mauvais : −1,133.
+
+Ces distributions et leurs effets restent des paramètres expérimentaux à tester.
+
+### 5.5. Ordre et information disponible
+
+Les trois cartes sont mélangées face cachée. Leur catégorie reste identifiable (par exemple au dos de la carte), mais leur valeur et leur ordre de révélation sont inconnus.
+
+Le joueur :
+- connaît la composition de sa recette ;
+- ne connaît pas les valeurs des cartes ;
+- ne connaît pas leur ordre de révélation.
+
+L'incertitude porte donc sur la valeur exacte et le moment où chaque effet interviendra.
+
+### 5.6. Calendrier de révélation
+
+Les cartes sont révélées progressivement, au début du secteur indiqué, avant le choix de l'énergie.
+
+| Course | Nombre de secteurs | Révélations |
+|---|---:|---|
+| 5 km | 7 | 2, 4, 6 |
+| 10 km | 10 | 3, 6, 9 |
+| Semi-marathon | 13 | 4, 8, 12 |
+| Marathon | 16 | 4, 8, 12 |
+
+Une carte révélée applique immédiatement son effet à la soutenabilité. Son effet reste permanent jusqu'à la fin de la course.
+
+## 6. Effet de groupe et aspiration
+
+### 6.1. Constitution des groupes
+
+À la fin de chaque secteur, les joueurs sont classés selon leur score cumulatif de course, par ordre décroissant.
+
+Le score est une variable de classement tactique. Sa signification physique précise n'est pas nécessaire à ce stade.
+
+Les joueurs sont regroupés selon les écarts entre scores consécutifs. Un nouveau groupe est créé lorsque l'écart entre deux joueurs consécutifs est strictement supérieur à 1.
+
+Exemple :
+
+| Scores classés | Groupes |
+|---|---|
+| 45, 44, 44, 43 | Groupe 1 |
+| 40, 39 | Groupe 2 |
+| 35 | Groupe 3 |
+
+### 6.2. Lièvres et bénéficiaires
+
+Dans chaque groupe :
+- le ou les joueurs ayant le score le plus élevé sont les lièvres ;
+- tous les autres joueurs, dont le score est inférieur, bénéficient de l'aspiration ;
+- en cas d'égalité en tête, tous les joueurs concernés sont lièvres.
+
+Un joueur seul ne bénéficie d'aucun bonus.
+
+### 6.3. Bonus d'aspiration
+
+Chaque bénéficiaire reçoit +1 énergie virtuelle au secteur suivant.
+
+Cette énergie :
+- est ajoutée après le choix des dés ;
+- est utilisée uniquement pour la conversion énergie → vitesse ;
+- ne constitue pas une dépense réelle ;
+- ne consomme aucune soutenabilité ;
+- ne modifie aucun autre élément du score ou de la course.
+
+Le bonus peut porter l'énergie de conversion au-delà de VMA, sans remettre en cause le plafond de dépense réelle.
+
+### 6.4. Renouvellement
+
+Les groupes sont recalculés à la fin de chaque secteur, après actualisation des scores cumulatifs.
+
+Le bonus est recalculé pour le secteur suivant :
+- il ne s'accumule pas ;
+- il peut être gagné ou perdu d'un secteur à l'autre ;
+- il ne s'applique jamais rétroactivement au secteur qui vient de se terminer.
+
+Cette mécanique doit permettre :
+- de mener un groupe ;
+- de rester dans un groupe pour bénéficier de l'aspiration ;
+- de tenter de revenir sur un groupe ;
+- de provoquer une échappée ;
+- de ralentir volontairement pour masquer ses intentions.
+
+## 7. Dés et relances pendant la Race
+
+### 7.1. Lancer et choix des dés
+
+Le joueur lance l'intégralité de son pool pour le tour de course. Après les éventuelles relances, il choisit librement le sous-ensemble final de dés qu'il dépense.
+
+### 7.2. Relances
+
+- Le joueur peut relancer des dés individuellement.
+- Chaque relance remplace définitivement le résultat précédent du dé concerné pour le tour en cours.
+- Les relances se font une par une.
+- Le joueur choisit ensuite librement le sous-ensemble final de dés à dépenser.
+- Il n'y a aucune relance après le choix du sous-ensemble.
+- L'action Add est supprimée en Race : le choix libre du sous-ensemble permet déjà d'ajuster la dépense.
+
+### 7.3. Capital de relance
+
+Les relances constituent un capital global pour toute la course.
+
+Chaque dé relancé consomme une unité de ce capital :
+- pas de régénération entre les secteurs ;
+- les relances non utilisées sont perdues à l'arrivée.
+
+Le capital maximal de référence sur 5 km dépend du plus haut dé du pool :
+
+| Plus haut dé | Capital maximal 5 km |
+|---|---:|
+| D6 | 1 |
+| D8 | 2 |
+| D10 | 3 |
+| D12 | 4 |
+
+Le capital est ensuite proportionnel au nombre de secteurs de la course.
+
+| Course | Secteurs | Facteur |
+|---|---:|---:|
+| 5 km | 7 | 7/7 |
+| 10 km | 10 | 10/7 |
+| Semi-marathon | 13 | 13/7 |
+| Marathon | 16 | 16/7 |
+
+### 7.4. Affûtage et fatigue
+
+Le niveau d'affûtage dépend de la fatigue résiduelle à la fin du Training.
+
+La zone de surentraînement commence lorsque la fatigue atteint la valeur du plus haut dé. À l'opposé, la saturation de l'affûtage est atteinte à la valeur négative du plus haut dé.
+
+Les seuils validés sont :
+
+| Plus haut dé | 0 % | 25 % | 50 % | 75 % | 100 % |
+|---|---:|---:|---:|---:|---:|
+| D6 | 0 | −2 | −3 | −4 | −6 |
+| D8 | 0 | −2 | −4 | −6 | −8 |
+| D10 | 0 | −4 | −6 | −8 | −10 |
+| D12 | 0 | −6 | −8 | −10 | −12 |
+
+Les seuils intermédiaires débloquent le niveau correspondant. Entre deux seuils, le niveau inférieur s'applique.
+
+### 7.5. Calcul du capital effectif
+
+Le capital de relance est calculé ainsi :
+
+`R = ceil(Rmax_5km × (N / 7) × P_affûtage)`
+
+Avec :
+- `Rmax_5km` : capital maximal associé au plus haut dé ;
+- `N` : nombre de secteurs de la course ;
+- `P_affûtage` : coefficient de 0, 0,25, 0,50, 0,75 ou 1 ;
+- `ceil` : arrondi à l'entier supérieur, appliqué après le calcul complet.
+
+## 8. Déroulement synthétique d'un secteur
+
+Pour chaque secteur :
+
+1. Révéler une éventuelle carte de forme du jour prévue à ce tour.
+2. Appliquer immédiatement son effet à la soutenabilité et à la réserve.
+3. Lancer le pool de dés.
+4. Effectuer les éventuelles relances disponibles.
+5. Choisir les dés à dépenser.
+6. Calculer la consommation de soutenabilité à partir de la dépense réelle et de l'AS.
+7. Utiliser la réserve avant de dégrader la courbe.
+8. Déterminer le déplacement éventuel de la courbe vers la droite.
+9. Appliquer le bonus de groupe et les corrections de terrain à la conversion.
+10. Convertir l'énergie effective en vitesse.
+11. Déterminer le résultat du secteur et actualiser le score cumulatif.
+12. À la fin du secteur, recalculer les groupes et les bénéficiaires de l'aspiration pour le secteur suivant.
+
+## 9. Décisions consolidées et statut
+
+| Élément | Décision | Statut |
+|---|---|---|
+| Profil physiologique | EF, Seuil, VMA sur deux axes | Retenu |
+| AS | Point propre à la course préparée | Retenu |
+| Plafond de dépense | VMA | Retenu |
+| Consommation de soutenabilité | Trois niveaux selon l'écart à AS | Retenu |
+| Dégradation de courbe | Décalage horizontal entier vers la droite | Retenu |
+| Plancher de soutenabilité | Aucun | Retenu |
+| Réserve positive | Compense les consommations futures | Retenu |
+| Fin de course | Réserve restante perdue | Retenu |
+| Forme du jour | 3d6 dédiés | Retenu |
+| Nombre de niveaux de forme | Cinq | Retenu |
+| Cartes de forme | Trois cartes selon une recette | Retenu |
+| Valeur des cartes | Cachée | Retenu |
+| Ordre des cartes | Mélangé face cachée | Retenu |
+| Révélation | Progressive, au début des secteurs indiqués | Retenu |
+| Effet des cartes | Permanent jusqu'à l'arrivée | Retenu |
+| Constitution des groupes | Écart de score strictement supérieur à 1 | Retenu |
+| Lièvres | Joueur(s) en tête du groupe | Retenu |
+| Aspiration | +1 énergie virtuelle | Retenu |
+| Effet de l'aspiration | Conversion uniquement | Retenu |
+| Relances | Capital global consommé dé par dé | Retenu |
+| Calcul du capital | Proportionnel au nombre de secteurs, arrondi supérieur | Retenu |
+| Affûtage | Seuils selon le plus haut dé | Retenu |
+
+## 10. Points restant à calibrer ou à préciser
+
+Ces points ne remettent pas en cause les décisions déjà retenues. Ils nécessitent des tests ou une formalisation ultérieure.
+
+1. **Soutenabilité initiale :** préciser complètement sa construction pendant le Training, notamment la contribution des adaptations EF et des qualités spécifiques.
+2. **Courbe physiologique :** déterminer les valeurs numériques et le support de jeu permettant son déplacement horizontal.
+3. **Terrain :** calibrer les corrections de conversion selon les secteurs.
+4. **Forme du jour :** tester l'équilibre entre les cinq niveaux, les recettes et les distributions des paquets.
+5. **Aspiration :** vérifier que le bonus récurrent de +1 produit un effet tactique intéressant sans devenir dominant.
+6. **Score cumulatif :** conserver pour l'instant sa fonction de classement ; sa formalisation précise pourra être faite avec le calcul du résultat de secteur.
+7. **Capital de relance :** tester les effets de l'arrondi supérieur, notamment sur les petites courses et les faibles niveaux d'affûtage.
+8. **Durée et fluidité :** vérifier que le nombre de secteurs et les décisions par secteur restent compatibles avec la durée de jeu visée.
+
+## 11. Relation avec les documents et modèles antérieurs
+
+Ce document consolide le modèle de soutenabilité et les règles de course arbitrés le 12 novembre 2026.
+
+Il remplace, comme référence de conception pour la soutenabilité en Race, l'ancienne formule de réserve énergétique de `RACE_RESERVE_DESIGN.md` (PR #59), qui reposait sur les investissements EF / Seuil / VMA et une réserve de préparation calculée avant la course.
+
+Les compteurs d'énergie investie pendant le Training restent des données distinctes et peuvent conserver une utilité pour d'autres analyses. Cette consolidation ne modifie ni le code ni les tests existants.
+
+---
+
+**Principe de conception à préserver :** la Race doit mettre en tension le potentiel préparé pendant le Training, la dépense réellement consentie, la soutenabilité restante et les opportunités tactiques. Les mécanismes de forme du jour et d'aspiration doivent enrichir ces arbitrages sans remplacer le cœur de la conversion physiologique.
