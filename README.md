@@ -1,45 +1,37 @@
 # Run It
 
-Run It est un jeu tactique de préparation à la course : le joueur construit un
-pool de dés, compose ses entraînements sous contraintes d'énergie et de risque,
-puis convertit sa préparation en performance lors d'une course finale.
+Run It est un jeu tactique de préparation à la course. Le joueur construit une
+préparation physiologique et un pool de dés pendant le Training, puis met ce
+profil à l'épreuve dans une course où il arbitre dépense, soutenabilité et
+opportunités tactiques.
 
-## Boucle actuelle
+## État du projet
 
-1. **Préparation** — le pool persistant commence à `4d6`. Le lancer fournit le
-   budget d'énergie, la frontière sûre `RPE Max` et, via D99, le nombre maximal
-   de qualités. EF est répétable ; les qualités font progresser le catalogue et
-   les dés (`d6 → d8 → d10 → d12`). Le CTL ajoute un d6 aux seuils 50 et 100.
-2. **Risque** — tenter une qualité au-dessus de `RPE Max` peut provoquer un
-   bust. La séance busted ne produit ni CTL ni progression ; la redistribution
-   post-bust en EF suit les règles détaillées du GDD.
-3. **Course V2** — chaque segment choisit une Production. Sa Difficulty locale
-   forme `Charge = Production + Difficulty`; le score gagne seulement la
-   Production et la Réserve perd le coût physiologique de la Charge.
+- **Training :** Training B est la cible de développement validée ; son prototype
+  est encore partiel et n'est pas encore raccordé de bout en bout à Race.
+- **Race V2 :** les règles sont consolidées dans le GDD et dans
+  [la spécification détaillée](docs/game-design/RACE_V2_DESIGN.md). Un prototype
+  expérimental multi-secteur, incluant dés et relances, existe dans
+  `experiments/current/race_v2_prototype/`.
+- **Intégration :** aucune boucle complète Training B → Race V2 n'est revendiquée.
+  Le profil physiologique, l'AS, le crédit initial de soutenabilité `S0` et le
+  palier d'affûtage doivent encore être dérivés d'un état Training réel.
+- **Équilibrage :** les calibrations et les expériences restent distinctes des
+  règles validées.
 
-## Profil physiologique V2
+## Sources de référence
 
-La frontière intégrée entre un futur Training et Race V2 est un profil ordonné
-`EF < Seuil < VMA` : une Charge sous ou à EF reste légale avec un coût plancher
-EF, Seuil marque le changement de régime, et VMA borne durement la Charge. Race
-V2 choisit librement parmi les sommes de sous-ensembles telles que
-`Production + Difficulty ≤ VMA`, calcule leur coût physiologique, puis utilise
-la Réserve longitudinale expérimentale. La courbe native est continue et utilise
-actuellement des pentes 2 puis 3. Ces deux valeurs sont une
-**CALIBRATION EXPERIMENTAL**, pas un équilibrage définitif.
+| Besoin | Document |
+|---|---|
+| Règles normatives et décisions validées | [Run It - GDD.md](Run%20It%20-%20GDD.md) |
+| Spécification détaillée Race V2 | [docs/game-design/RACE_V2_DESIGN.md](docs/game-design/RACE_V2_DESIGN.md) |
+| État exact du code | [CURRENT_STATE.md](CURRENT_STATE.md) |
+| Ordre des chantiers et écarts | [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) |
+| Historique des divergences documentaires | [DOCUMENTATION_AUDIT.md](DOCUMENTATION_AUDIT.md) |
 
-## Statuts importants
+## Règle de gouvernance
 
-- **CURRENT / INTÉGRÉ :** profil EF/Seuil/VMA, calcul pur du coût, et résolution
-  locale Production + Difficulty → Charge → coût / score.
-- **EXPERIMENTAL :** pentes 2/3, construction longitudinale de la Réserve, Form,
-  Freshness, SL, politiques de course, Fatigue V1 et politiques automatiques d'entraînement.
-- **OPEN :** conversion complète du Training vers le profil, calibration des
-  mécanismes expérimentaux, rôle définitif de SL en course et SPEC. SPEC n'est pas implémenté
-  dans le chemin Race V2 ; Position, Efficacité et AS42/AS21/AS10/AS5 ne sont pas
-  des mécanismes actifs de cette baseline.
-
-Le document normatif et les distinctions de statut se trouvent dans
-[`Run It - GDD.md`](Run%20It%20-%20GDD.md). L'état exact du prototype est résumé
-dans [`CURRENT_STATE.md`](CURRENT_STATE.md), et l'ordre des prochains chantiers
-dans [`DEVELOPMENT_PLAN.md`](DEVELOPMENT_PLAN.md).
+Une décision de design n'implique pas son implémentation. Un prototype ou un
+harness expérimental ne transforme pas une hypothèse en règle validée. En cas
+de divergence, les décisions utilisateur explicites et le GDD prévalent pour le
+design ; le code et CURRENT_STATE décrivent séparément le comportement réel.
