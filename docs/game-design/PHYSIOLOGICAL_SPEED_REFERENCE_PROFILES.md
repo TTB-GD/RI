@@ -191,7 +191,70 @@ Cette sensibilité est un repère global, pas la valeur d'un palier Training : u
 Le calibrage numérique des incréments de vitesse, des réductions d'énergie et des seuils d'XP reste **OPEN**. Aucun incrément n'est fixé par cette analyse.
 
 
-## 6. Sources
+## 6. Plans d'entraînement de référence par distance
+
+**Statut : synthèse documentaire et hypothèse de calibration.** Les valeurs ci-dessous servent à comparer les demandes d'entraînement des préparations 5 km, 10 km, semi-marathon et marathon. Elles ne sont pas des prescriptions universelles ni des règles Training déjà validées.
+
+### 6.1. Durée des plans
+
+Les plans de référence consultés chez Daniels, Pfitzinger et Hansons couvrent des durées variables selon le niveau, le volume hebdomadaire et le degré de spécialisation. Les durées centrales suivantes sont des valeurs de travail représentatives, pas des moyennes statistiques calculées sur un échantillon exhaustif de plans.
+
+| Préparation | Durée centrale retenue | Plage raisonnable de référence |
+|---|---:|---:|
+| 5 km | 12 semaines | 8–16 semaines |
+| 10 km | 12 semaines | 8–16 semaines |
+| Semi-marathon | 13 semaines | 11–18 semaines |
+| Marathon | 16 semaines | 14–18 semaines |
+
+La durée d'un plan ne doit pas être confondue avec la durée d'un cycle Training dans Run It. Elle sert ici à caractériser la préparation sportive réelle et à construire une pondération relative des contenus.
+
+### 6.2. Répartition indicative du temps de course par intensité
+
+Les pourcentages portent sur le **temps total de course**, et non sur le nombre de séances ou le nombre de kilomètres. Les échauffements, récupérations trottées et retours au calme sont comptés en EF. Les fractions rapides des séances sont ventilées dans leur catégorie d'intensité.
+
+| Préparation | EF | Seuil | VMA | AS spécifique |
+|---|---:|---:|---:|---:|
+| 5 km | 76 % | 8 % | 12 % | 4 % |
+| 10 km | 76 % | 10 % | 9 % | 5 % |
+| Semi-marathon | 78 % | 10 % | 4 % | 8 % |
+| Marathon | 82 % | 7 % | 2 % | 9 % |
+
+Plages raisonnables observées/synthétisées pour construire des variantes de plans :
+
+| Préparation | EF | Seuil | VMA | AS spécifique |
+|---|---:|---:|---:|---:|
+| 5 km | 70–85 % | 5–12 % | 8–18 % | 0–6 % |
+| 10 km | 72–86 % | 7–14 % | 5–12 % | 2–8 % |
+| Semi-marathon | 75–87 % | 7–14 % | 2–7 % | 4–12 % |
+| Marathon | 78–90 % | 4–10 % | 0–5 % | 4–12 % |
+
+Les plages ne sont **pas combinables indépendamment** : choisir simultanément toutes les bornes hautes produirait un total incohérent. Les lignes centrales sont des scénarios cohérents totalisant 100 %.
+
+### 6.3. Lecture par distance
+
+- **5 km :** part relativement importante du travail VMA/VO₂max et du seuil. Le travail à AS5 peut être proche de l'allure I/VMA ; il reste distingué ici pour suivre le spécifique de course.
+- **10 km :** équilibre entre seuil, travail proche de VO₂max et allure spécifique. Dans les systèmes de zones, l'allure 10 km peut se situer entre T et I ; la séparation en catégories est donc une convention de comptage, pas une frontière physiologique absolue.
+- **Semi-marathon :** dominante aérobie, avec un poids accru du seuil et du travail spécifique à AS21 ; la VMA est présente mais minoritaire.
+- **Marathon :** forte dominante EF, travail au seuil en quantité limitée, faible volume VMA et part spécifique marathon significative. La préparation spécifique comprend aussi des sorties longues et des blocs à allure marathon.
+
+### 6.4. Conséquences pour le catalogue Training
+
+Pour Run It, cette synthèse suggère de conserver quatre familles de demande : EF, Seuil, VMA et AS de la distance préparée. Elle donne une première pondération des contenus à proposer, sans imposer que chaque plan reproduise exactement ces proportions.
+
+La comparaison doit rester fondée sur le temps de course : une séance de fractionné peut contenir une faible durée à VMA mais une durée totale importante en EF en raison de l'échauffement, des récupérations et du retour au calme. Compter uniquement les minutes rapides surestimerait donc fortement la place de la VMA dans un plan.
+
+### 6.5. Sources et limites de la synthèse
+
+Références consultées :
+- Jack Daniels, *Daniels' Running Formula*, 4th edition : zones E, T, I et plans 5 km/10 km.
+- Pete Pfitzinger, *Faster Road Racing* : principes de préparation 5 km au semi-marathon, travail au seuil, VO₂max, endurance et vitesse.
+- Plans officiels Pete Pfitzinger : plans marathon et semi-marathon, avec cycles de 14 à 18 semaines selon les variantes.
+- Plans officiels Hansons : plans marathon et semi-marathon débutant/avancé, généralement structurés sur 18 semaines.
+
+Les auteurs ne publient pas une table normalisée commune donnant la proportion exacte du temps total dans ces quatre catégories. Les durées et pourcentages de cette section sont donc une **synthèse de conception** à partir de la structure des plans et des séances décrites, et non des moyennes arithmétiques extraites des ouvrages. Les catégories se recouvrent partiellement selon les méthodes : notamment AS10 et T/I, ou AS5 et I. Cette limite doit être gardée à l'esprit lors de la calibration.
+
+## 7. Sources
+
 
 - Jack Daniels, *Daniels' Running Formula*, 4th edition, Human Kinetics, 2022, tables 5.2 (« Training Intensities Based on Current VDOT ») et 5.3 (« Training Intensities for Novice Runners and Others Starting With Slow Performances »).
 - Équivalences de performance VDOT calculées selon les équations Daniels–Gilbert, tableaux de référence VDOT 30 à 70.
