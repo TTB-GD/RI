@@ -91,23 +91,24 @@ Pour disposer d'une gamme de départ simple et directement exploitable, huit pro
 Les valeurs sont construites à partir des cinq profils VDOT de référence :
 1. interpolation linéaire, colonne par colonne, entre les points VDOT encadrant la valeur EF recherchée ;
 2. arrondi aux km/h entiers ;
-3. ajustement minimal lorsque l'arrondi indépendant crée des égalités ou inversions, afin de préserver l'ordre des allures et des points physiologiques.
+3. choix de l'arrondi qui minimise l'écart global aux valeurs interpolées, sous contraintes physiologiques.
 
-Les contraintes d'ordre appliquées sont :
-- `EF < AS42 < AS21 < Seuil` ;
-- `Seuil ≤ AS10 < AS5 ≤ VMA`.
+Les contraintes conservées sont :
+- ordre strict des trois points physiologiques : `EF < Seuil < VMA` ;
+- les allures spécifiques restent non décroissantes : `AS42 ≤ AS21 ≤ AS10 ≤ AS5` ;
+- AS42 et AS21 restent entre EF et Seuil ; AS10 est proche du Seuil ; AS5 approche VMA.
 
-L'égalité Seuil = AS10 est autorisée : le modèle VDOT peut donner une allure 10 km très proche de l'allure seuil, particulièrement pour les profils les moins performants. Les égalités AS5 = VMA sont également tolérées lorsque l'arrondi à 1 km/h ne permet pas de conserver un écart sans déformer davantage la référence. Les valeurs restent des paramètres de départ de jeu, non des mesures physiologiques individuelles.
+Avec une granularité entière, plusieurs AS peuvent donc avoir la même valeur. C'est préférable à forcer artificiellement un écart d'au moins 1 km/h entre chaque allure, ce qui déformerait fortement les performances équivalentes, surtout pour les profils bas. Les valeurs restent des paramètres de départ de jeu, non des mesures physiologiques individuelles.
 
 | Profil de départ | EF | AS42 | AS21 | Seuil | AS10 | AS5 | VMA |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| P8 | 8 | 9 | 10 | 11 | 11 | 12 | 12 |
-| P9 | 9 | 10 | 11 | 12 | 12 | 13 | 13 |
-| P10 | 10 | 11 | 12 | 13 | 13 | 14 | 14 |
-| P11 | 11 | 12 | 13 | 14 | 14 | 15 | 15 |
-| P12 | 12 | 13 | 14 | 15 | 15 | 16 | 16 |
-| P13 | 13 | 15 | 16 | 17 | 17 | 18 | 18 |
-| P14 | 14 | 16 | 17 | 18 | 18 | 19 | 19 |
+| P8 | 8 | 9 | 10 | 10 | 10 | 10 | 11 |
+| P9 | 9 | 10 | 11 | 11 | 11 | 12 | 12 |
+| P10 | 10 | 12 | 12 | 12 | 13 | 13 | 14 |
+| P11 | 11 | 13 | 13 | 14 | 14 | 15 | 15 |
+| P12 | 12 | 14 | 15 | 15 | 15 | 16 | 16 |
+| P13 | 13 | 15 | 16 | 16 | 17 | 17 | 17 |
+| P14 | 14 | 16 | 17 | 17 | 18 | 19 | 19 |
 | P15 | 15 | 17 | 18 | 19 | 19 | 20 | 20 |
 
 Toutes les valeurs sont en km/h. Les profils P8 à P15 constituent la proposition de gamme de départ pour le jeu. Ils ne remplacent pas les références VDOT décimales des sections précédentes, qui restent conservées comme base de calcul et de traçabilité.
@@ -155,6 +156,39 @@ La cible provisoire pour un cycle Training est de permettre à un joueur réalis
 Un palier représente une amélioration choisie par le joueur sur un point ou une caractéristique de son profil physiologique. Il ne correspond pas automatiquement à +1 km/h : les choix possibles peuvent notamment porter sur la vitesse à énergie constante ou sur l'énergie à vitesse constante.
 
 Cette cible doit être évaluée en fonction de l'impact réel des améliorations sur Race : deux paliers de nature différente ne sont pas nécessairement équivalents en performance. La progression doit également ralentir avec le niveau initial et le niveau déjà atteint. L'équivalence en VDOT sert de contrôle d'ordre de grandeur, pas de conversion mécanique entre VDOT et paliers.
+
+
+
+## 5.2. Contrôle de cohérence VDOT des profils entiers
+
+Un contrôle secondaire a été effectué en reconvertissant chaque vitesse AS entière en temps théorique sur sa distance, puis en recalculant le VDOT équivalent par la relation Daniels–Gilbert. Ce contrôle mesure la distorsion introduite par l'arrondi entier ; il ne transforme pas le VDOT en variable du jeu.
+
+| Profil | Marathon (AS42) | Semi (AS21) | 10 km (AS10) | 5 km (AS5) | VDOT moyen indicatif |
+|---|---:|---:|---:|---:|---:|
+| P8 | 4:41:18 | 2:06:35 | 1:00:00 | 30:00 | 32 |
+| P9 | 4:13:10 | 1:55:05 | 54:33 | 25:00 | 37 |
+| P10 | 3:30:58 | 1:45:29 | 46:09 | 23:05 | 43 |
+| P11 | 3:14:45 | 1:37:22 | 42:51 | 20:00 | 48 |
+| P12 | 3:00:50 | 1:24:23 | 40:00 | 18:45 | 53 |
+| P13 | 2:48:47 | 1:19:07 | 35:18 | 17:39 | 59 |
+| P14 | 2:38:14 | 1:14:28 | 33:20 | 15:47 | 64 |
+| P15 | 2:28:55 | 1:10:20 | 31:35 | 15:00 | 68 |
+
+Le VDOT moyen indicatif est la moyenne des quatre VDOT recalculés indépendamment à partir des quatre performances. Les écarts entre distances restent de l'ordre de 2 à 3,5 points selon le profil : ils proviennent principalement de la granularité de 1 km/h, et non d'une prétention à représenter un coureur parfaitement homogène. Les profils doivent donc être lus comme des archétypes de jeu arrondis, pas comme des équivalences VDOT exactes.
+
+### Sensibilité de la performance à une variation de vitesse
+
+À titre de repère, si les quatre vitesses AS d'un profil augmentaient toutes de +0,5 km/h, le VDOT moyen équivalent augmenterait d'environ +2,0 à +2,2 points. Une hausse uniforme de +1 km/h donnerait environ +4,0 à +4,3 points.
+
+Cette sensibilité est un repère global, pas la valeur d'un palier Training : un palier réel modifie un seul point physiologique (vitesse à énergie constante ou énergie à vitesse constante), puis la courbe Race et les performances en découlent. Il n'existe pas encore de correspondance numérique validée entre un palier EF/Seuil/VMA et une variation des quatre AS. Cette correspondance doit être mesurée avec la table physiologique énergie → vitesse et les règles de soutenabilité Race V2.
+
+### Conséquence pour le calibrage des paliers
+
+- **Palier Vitesse :** son incrément doit être calibré en km/h au niveau d'un point physiologique, puis évalué par son effet indirect sur les quatre performances Race. Il ne faut pas lui attribuer directement +2 ou +4 VDOT.
+- **Palier Économie :** il réduit l'énergie nécessaire à vitesse constante. VDOT seul ne peut pas en mesurer l'effet, puisque la vitesse théorique reste inchangée ; son intérêt se mesure par la dépense, la réserve et la soutenabilité en Race.
+- **Rendements décroissants :** les coûts croissants des paliers doivent être vérifiés contre les gains de performance Race réellement obtenus, et pas seulement contre l'XP accumulée.
+
+Le calibrage numérique des incréments de vitesse, des réductions d'énergie et des seuils d'XP reste **OPEN**. Aucun incrément n'est fixé par cette analyse.
 
 
 ## 6. Sources
