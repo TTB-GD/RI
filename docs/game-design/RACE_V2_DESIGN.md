@@ -47,6 +47,8 @@ La courbe représente la conversion de l'énergie mobilisée en vitesse. Elle es
 
 EF est le plancher de vitesse et VMA le plafond de vitesse. La courbe n'est pas prolongée au-delà de ces bornes. La dégradation de la soutenabilité entraîne un déplacement horizontal de la courbe vers la droite ; elle ne modifie ni sa forme ni sa pente.
 
+Des profils de référence pour calibrer les vitesses EF, Seuil et VMA sont consignés dans [`PHYSIOLOGICAL_SPEED_REFERENCE_PROFILES.md`](PHYSIOLOGICAL_SPEED_REFERENCE_PROFILES.md). Ils s'appuient sur cinq niveaux VDOT (30, 40, 50, 60 et 70) et sont des références de calibrage proposées, non des valeurs de progression déjà validées.
+
 ### 2.2. Allure spécifique (AS)
 
 L'AS est un point supplémentaire associé à la course préparée. Elle est connue dès le début du Training : les joueurs préparent leur physiologie en fonction du scénario de course.
@@ -448,7 +450,7 @@ Ces points ne remettent pas en cause les décisions déjà retenues. Ils nécess
 5. **Aspiration :** vérifier que le bonus récurrent de +1 produit un effet tactique intéressant sans devenir dominant.
 6. **Décalage de soutenabilité :** tester le modèle d'une graduation par point et des variantes par paliers pour calibrer la sévérité de la pénalité.
 7. **Capital de relance :** tester les effets de l'arrondi supérieur, notamment sur les petites courses et les faibles niveaux d'affûtage.
-8. **Conversion entière :** définir et tester la table de couples énergie/vitesse entiers pour chaque profil physiologique.
+8. **Conversion entière :** traduire les profils de vitesse de référence VDOT consignés dans `PHYSIOLOGICAL_SPEED_REFERENCE_PROFILES.md` en tables de couples énergie/vitesse entiers, puis tester les profils intermédiaires.
 9. **Durée et fluidité :** vérifier que le nombre de secteurs et les décisions par secteur restent compatibles avec la durée de jeu visée.
 
 
