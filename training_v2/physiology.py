@@ -1,4 +1,4 @@
-"""Two-coordinate physiological curve used by Training B and Race.
+"Two-coordinate physiological curve used by Training B and Race.
 
 The curve is an energy-to-speed mapping. Numerical milestone deltas are
 configuration, not calibrated design constants.
@@ -60,7 +60,12 @@ class PhysiologyCurve:
         return getattr(self, track)
 
     def upgraded(self, track: str, choice: str, amount: float) -> "PhysiologyCurve":
-        """Return a validated profile after one single-coordinate milestone choice."""
+        """Return a validated curve after one milestone choice.
+
+        An EF milestone translates all three physiological anchors by the same
+        amount on the selected axis. A Threshold or VMA quality milestone
+        changes only its corresponding anchor.
+        """
         if track not in TRACKS:
             raise ValueError(f"unknown physiology track: {track}")
         if choice not in CHOICES:
@@ -70,19 +75,21 @@ class PhysiologyCurve:
         if not math.isfinite(amount) or amount <= 0:
             raise ValueError("upgrade amount must be finite and positive")
 
-        old = self.point(track)
-        updated = (
-            PhysiologyPoint(old.energy, old.speed + amount)
-            if choice == "speed"
-            else PhysiologyPoint(old.energy - amount, old.speed)
-        )
         values = {name: self.point(name) for name in TRACKS}
-        values[track] = updated
+        targets = TRACKS if track == "ef" else (track,)
+        for target in targets:
+            old = values[target]
+            updated = (
+                PhysiologyPoint(old.energy, old.speed + amount)
+                if choice == "speed"
+                else PhysiologyPoint(old.energy - amount, old.speed)
+            )
+            values[target] = updated
         return PhysiologyCurve(**values)
 
     def available_choices(self, track: str, *, speed_gain: float,
                           energy_reduction: float) -> tuple[str, ...]:
-        """Return only upgrades that preserve strict EF < Seuil < VMA ordering."""
+        """Return only upgrades that preserve positive values and curve ordering."""
         available = []
         for choice, amount in (
             ("speed", speed_gain),
