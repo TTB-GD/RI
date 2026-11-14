@@ -1,6 +1,6 @@
 # Profils de référence — vitesses physiologiques et allures spécifiques
 
-**Statut :** propositions de référence à conserver pour le calibrage de la courbe Race V2  
+**Statut :** références de calibrage proposées ; les profils P8–P15 en unités internes doublées sont la nouvelle base de travail, en remplacement de leur ancienne représentation entière en km/h.  
 **Date :** 12 novembre 2026  
 **Référentiel :** Jack Daniels, *Daniels' Running Formula*, 4e édition ; équivalences de performance VDOT et tables d'intensité.
 
@@ -41,7 +41,7 @@ Conversion d'une allure en vitesse :
 
 `v (km/h) = distance (km) / durée (h)`
 
-Les vitesses sont arrondies au dixième de km/h pour la lisibilité. Les temps de course sources sont conservés ci-dessous afin de permettre de retrouver les conversions.
+Les vitesses physiques sont arrondies au dixième de km/h pour la lisibilité. Les temps de course sources sont conservés ci-dessous afin de permettre de retrouver les conversions. Pour les profils de jeu, une convention distincte est adoptée en section 3.5 : l'unité interne de vitesse vaut 0,5 km/h.
 
 ## 3. Profils proposés
 
@@ -84,7 +84,7 @@ Les vitesses sont arrondies au dixième de km/h pour la lisibilité. Les temps d
 | 70 | 14:56 | 31:01 | 1:08:23 | 2:23:13 |
 
 
-## 3.4. Profils de départ proposés pour le jeu
+## 3.4. Ancienne proposition de profils de départ (granularité 1 km/h)
 
 Pour disposer d'une gamme de départ simple et directement exploitable, huit profils sont proposés avec une EF entière de 8 à 15 km/h, par pas de 1 km/h.
 
@@ -114,6 +114,119 @@ Avec une granularité entière, plusieurs AS peuvent donc avoir la même valeur.
 Toutes les valeurs sont en km/h. Les profils P8 à P15 constituent la proposition de gamme de départ pour le jeu. Ils ne remplacent pas les références VDOT décimales des sections précédentes, qui restent conservées comme base de calcul et de traçabilité.
 
 
+### 3.5. Nouvelle échelle interne de vitesse — convention retenue
+
+**Statut : décision de conception retenue le 14 novembre 2026.** La vitesse n'est plus représentée dans les calculs du jeu par une valeur en km/h. Toutes les coordonnées de vitesse physiologique et les vitesses utilisées par Race sont exprimées dans une unité interne entière valant **0,5 km/h**.
+
+La conversion de référence est :
+
+- vitesse physique (km/h) = valeur interne / 2 ;
+- valeur interne = vitesse physique × 2, arrondie à l'entier selon la méthode précisée ci-dessous lorsqu'une valeur source n'est pas exactement représentable.
+
+Cette convention est une mise à l'échelle de l'axe vitesse. Elle ne modifie pas, à elle seule, les règles de progression, les coordonnées d'énergie, les dés, les coûts, la fatigue ou la soutenabilité.
+
+#### 3.5.1. Pourquoi une échelle doublée
+
+La granularité précédente de 1 km/h produisait des incréments trop grossiers au regard des écarts physiologiques observés dans les références. Une granularité de 0,5 km/h permet de représenter des évolutions plus progressives.
+
+Deux solutions étaient possibles : conserver des vitesses physiques décimales dans les calculs, ou abandonner l'unité km/h dans le moteur et doubler toutes les coordonnées de vitesse. La seconde est retenue afin de conserver des calculs entiers de bout en bout et d'éviter une conversion avec arrondi entre Training et Race.
+
+**Conséquence structurante :** il n'existe plus de conversion avec perte de précision entre les coordonnées physiologiques et les vitesses Race. Les deux utilisent la même unité interne entière. Les km/h restent une unité de référence documentaire et, si souhaité, d'affichage externe.
+
+#### 3.5.2. Références VDOT converties
+
+Les valeurs physiques de la section 3 sont conservées comme références documentaires. Leur conversion dans l'échelle interne donne :
+
+| VDOT | EF interne | Seuil interne | VMA interne |
+|---:|---:|---:|---:|
+| 30 | 15,2 | 18,8 | 20,2 |
+| 40 | 19,0 | 23,6 | 25,8 |
+| 50 | 22,8 | 28,2 | 30,6 |
+| 60 | 26,4 | 32,8 | 35,4 |
+| 70 | 30,0 | 37,2 | 40,2 |
+
+Les allures spécifiques converties sont :
+
+| VDOT | AS42 interne | AS21 interne | AS10 interne | AS5 interne |
+|---:|---:|---:|---:|---:|
+| 30 | 17,4 | 18,0 | 18,8 | 19,6 |
+| 40 | 22,0 | 22,8 | 24,0 | 24,8 |
+| 50 | 26,6 | 27,6 | 29,0 | 30,2 |
+| 60 | 31,0 | 32,2 | 34,0 | 35,2 |
+| 70 | 35,0 | 37,0 | 38,8 | 40,2 |
+
+Les valeurs des tables sont des entiers ou des décimales de référence. Les valeurs internes de jeu utilisées dans les profils doivent être des entiers. Les références VDOT décimales sont conservées pour la traçabilité et ne sont pas directement des profils de joueur.
+
+#### 3.5.3. Méthode de construction des nouveaux profils P8–P15
+
+Les huit profils conservent les mêmes niveaux de départ EF physiques que la gamme précédente : 8 à 15 km/h par pas de 1 km/h. En unités internes, EF vaut donc respectivement 16, 18, 20, 22, 24, 26, 28 et 30.
+
+Pour chaque profil :
+
+1. La valeur EF cible est exprimée en km/h.
+2. Chaque autre colonne (AS42, AS21, Seuil, AS10, AS5, VMA) est interpolée linéairement entre les deux références VDOT qui encadrent cette valeur EF. L'interpolation utilise la colonne EF des cinq références comme abscisse.
+3. La valeur interpolée en km/h est convertie dans l'échelle interne en la multipliant par deux.
+4. Le résultat est arrondi à l'entier le plus proche ; les éventuelles égalités exactes sont arrondies à l'entier supérieur.
+5. EF est conservée exactement à sa valeur cible entière en km/h, soit une valeur interne paire.
+
+Cette méthode produit une granularité physique de 0,5 km/h sans stocker de flottants dans les profils de jeu. Elle remplace, pour les nouveaux profils, l'arrondi précédent au km/h entier.
+
+#### 3.5.4. Nouveaux profils de départ proposés
+
+| Profil | EF | AS42 | AS21 | Seuil | AS10 | AS5 | VMA |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| P8 | 16 | 18 | 19 | 20 | 20 | 21 | 21 |
+| P9 | 18 | 21 | 22 | 22 | 23 | 23 | 24 |
+| P10 | 20 | 23 | 24 | 25 | 25 | 26 | 27 |
+| P11 | 22 | 26 | 27 | 27 | 28 | 29 | 30 |
+| P12 | 24 | 28 | 29 | 30 | 31 | 32 | 32 |
+| P13 | 26 | 31 | 32 | 32 | 33 | 35 | 35 |
+| P14 | 28 | 33 | 34 | 35 | 36 | 37 | 38 |
+| P15 | 30 | 35 | 37 | 37 | 39 | 40 | 40 |
+
+**Toutes les valeurs de ce tableau sont des unités internes entières ; une unité vaut 0,5 km/h.** Pour lecture physique, diviser les valeurs par deux. Exemple P10 : EF 20 = 10 km/h ; AS42 23 = 11,5 km/h ; AS21 24 = 12 km/h ; Seuil 25 = 12,5 km/h ; AS10 25 = 12,5 km/h ; AS5 26 = 13 km/h ; VMA 27 = 13,5 km/h.
+
+Les profils respectent les contraintes de construction :
+- ordre strict des points physiologiques : EF < Seuil < VMA ;
+- ordre non décroissant des allures spécifiques : AS42 ≤ AS21 ≤ AS10 ≤ AS5 ;
+- AS42 et AS21 restent entre EF et Seuil, bornes incluses ;
+- AS10 reste proche du Seuil ;
+- AS5 reste proche de la VMA.
+
+Les égalités entre certaines allures spécifiques ou avec le Seuil ne sont pas des erreurs : les AS sont des repères de course et non des ancres physiologiques supplémentaires. La granularité de 0,5 km/h autorise ces égalités sans imposer artificiellement des écarts.
+
+#### 3.5.5. Ancienne table P8–P15 : historique
+
+La table de la section 3.4 reste conservée comme trace de l'ancienne proposition à granularité de 1 km/h. Elle est **supplantée** par la table de la section 3.5.4 pour les nouveaux travaux de calibrage. Les cinq références VDOT décimales des sections 3 et 3.2 restent, elles, inchangées.
+
+#### 3.5.6. Conséquences sur Training et Race
+
+- Un incrément de +1 sur une coordonnée de vitesse représente +0,5 km/h.
+- Un palier EF qui améliore les trois ancres en vitesse applique le même incrément entier aux trois coordonnées de vitesse.
+- Un palier Seuil ou VMA en vitesse modifie uniquement l'ancre concernée, selon les règles de progression déjà retenues.
+- Les améliorations sur l'axe énergie ne sont pas multipliées par deux et ne sont pas affectées par cette convention.
+- Les dés, leurs faces, les sommes, les seuils de réussite, les budgets d'énergie et les règles de fatigue ne sont pas modifiés par le simple changement d'unité de vitesse.
+- La table physiologique énergie → vitesse reste une table entière sans interpolation. Ses valeurs de vitesse sont désormais exprimées dans l'unité interne doublée.
+- Race conserve des vitesses entières dans cette même unité. Il n'y a donc pas d'arrondi systématique de demi-km/h vers un km/h entier au passage de Training à Race.
+- Une conversion en km/h n'est nécessaire que pour une présentation physique ou une comparaison avec les références sportives.
+
+Cette décision ne fixe pas encore la taille numérique des paliers de progression au-delà de la convention d'unité, ni les seuils d'adaptation, les coûts ou les rendements. Ces paramètres restent à calibrer sur les effets obtenus dans Race.
+
+#### 3.5.7. Points de vigilance et travaux de validation
+
+Le doublement de l'axe vitesse impose un audit des éléments qui manipulent des vitesses ou des différences de vitesse. Il faudra notamment vérifier :
+- les plafonds et planchers EF/VMA ;
+- les vitesses de course et les allures spécifiques ;
+- les variations de vitesse et les écarts entre allures ;
+- les comparaisons, seuils et constantes exprimés dans l'ancienne unité ;
+- les fixtures, profils de test, exemples, rapports et simulations ;
+- les affichages éventuels en km/h ;
+- les formules qui combinent vitesse et énergie, afin de ne doubler que les grandeurs ayant effectivement la dimension d'une vitesse.
+
+Les grandeurs d'énergie, de fatigue, de soutenabilité, les dés et les paramètres sans dimension ne doivent pas être doublés par simple propagation mécanique.
+
+La validation quantitative devra comparer les courbes et tables Race produites avec les anciens profils et les nouveaux profils, mesurer les effets des paliers de +1 unité interne, et vérifier qu'aucune règle ne conserve accidentellement une constante exprimée dans l'ancienne échelle. La présente PR documente la convention et les profils de référence ; elle ne prétend pas réaliser cette migration de l'implémentation.
+
 ## 4. Interprétation et limites
 
 1. **VDOT n'est pas une mesure directe de VO₂max.** C'est un indice de performance construit à partir des performances en course et intégrant notamment économie de course et fraction de VO₂max soutenable.
@@ -126,18 +239,18 @@ Toutes les valeurs sont en km/h. Les profils P8 à P15 constituent la propositio
 
 ## 5. Statut pour Run It
 
-Ces cinq profils sont conservés comme **références de calibrage proposées** pour :
-- la composante vitesse de la courbe physiologique EF / Seuil / VMA ;
+Les cinq profils VDOT physiques restent conservés comme **références documentaires**. Les huit profils P8–P15 de la section 3.5.4 deviennent la **nouvelle proposition de référence de jeu**, exprimée dans l'unité interne de 0,5 km/h, pour :
+- la composante vitesse de la courbe physiologique EF / Seuil / VMA, avec des coordonnées entières dans l'échelle interne doublée ;
 - les valeurs de départ des AS42 / AS21 / AS10 / AS5.
 
 Ils ne changent pas les règles déjà retenues :
 - EF < Seuil < VMA ;
 - les trois points physiologiques possèdent chacun une coordonnée énergie et une coordonnée vitesse ;
-- la courbe de conversion est une table entière énergie → vitesse, sans interpolation ;
+- la courbe de conversion est une table entière énergie → vitesse, sans interpolation ; ses vitesses sont exprimées dans l'unité interne de 0,5 km/h ;
 - EF reste le plancher de vitesse et VMA le plafond ;
 - l'AS est un repère de course distinct, non un quatrième point physiologique.
 
-Les valeurs des AS sont des valeurs initiales proposées pour les profils de référence. Leur progression, leur éventuelle saturation et leur relation exacte aux points EF / Seuil / VMA restent régies par les décisions de conception Race V2 et doivent être calibrées par simulation.
+Les valeurs des AS sont des valeurs initiales proposées pour les profils de référence. Dans les profils P8–P15, elles sont exprimées dans la même unité interne entière que les autres vitesses. Leur progression, leur éventuelle saturation et leur relation exacte aux points EF / Seuil / VMA restent régies par les décisions de conception Race V2 et doivent être calibrées par simulation.
 
 
 ### 5.1. Cible de progression par cycle Training
@@ -159,9 +272,9 @@ Cette cible doit être évaluée en fonction de l'impact réel des amélioration
 
 
 
-## 5.2. Contrôle de cohérence VDOT des profils entiers
+## 5.2. Contrôle de cohérence VDOT des anciens profils P8–P15
 
-Un contrôle secondaire a été effectué en reconvertissant chaque vitesse AS entière en temps théorique sur sa distance, puis en recalculant le VDOT équivalent par la relation Daniels–Gilbert. Ce contrôle mesure la distorsion introduite par l'arrondi entier ; il ne transforme pas le VDOT en variable du jeu.
+Un contrôle secondaire a été effectué en reconvertissant chaque vitesse AS entière en temps théorique sur sa distance, puis en recalculant le VDOT équivalent par la relation Daniels–Gilbert. Ce contrôle mesure la distorsion introduite par l'ancien arrondi au km/h entier ; il ne transforme pas le VDOT en variable du jeu. Il documente l'ancienne gamme et ne constitue pas une validation des nouveaux profils de la section 3.5.4.
 
 | Profil | Marathon (AS42) | Semi (AS21) | 10 km (AS10) | 5 km (AS5) | VDOT moyen indicatif |
 |---|---:|---:|---:|---:|---:|
