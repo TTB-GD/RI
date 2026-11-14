@@ -84,7 +84,7 @@ Les vitesses physiques sont arrondies au dixième de km/h pour la lisibilité. L
 | 70 | 14:56 | 31:01 | 1:08:23 | 2:23:13 |
 
 
-## 3.4. Profils de départ proposés pour le jeu
+## 3.4. Ancienne proposition de profils de départ (granularité 1 km/h)
 
 Pour disposer d'une gamme de départ simple et directement exploitable, huit profils sont proposés avec une EF entière de 8 à 15 km/h, par pas de 1 km/h.
 
@@ -272,9 +272,9 @@ Cette cible doit être évaluée en fonction de l'impact réel des amélioration
 
 
 
-## 5.2. Contrôle de cohérence VDOT des profils entiers
+## 5.2. Contrôle de cohérence VDOT des anciens profils P8–P15
 
-Un contrôle secondaire a été effectué en reconvertissant chaque vitesse AS entière en temps théorique sur sa distance, puis en recalculant le VDOT équivalent par la relation Daniels–Gilbert. Ce contrôle mesure la distorsion introduite par l'arrondi entier ; il ne transforme pas le VDOT en variable du jeu.
+Un contrôle secondaire a été effectué en reconvertissant chaque vitesse AS entière en temps théorique sur sa distance, puis en recalculant le VDOT équivalent par la relation Daniels–Gilbert. Ce contrôle mesure la distorsion introduite par l'ancien arrondi au km/h entier ; il ne transforme pas le VDOT en variable du jeu. Il documente l'ancienne gamme et ne constitue pas une validation des nouveaux profils de la section 3.5.4.
 
 | Profil | Marathon (AS42) | Semi (AS21) | 10 km (AS10) | 5 km (AS5) | VDOT moyen indicatif |
 |---|---:|---:|---:|---:|---:|
