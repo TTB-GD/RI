@@ -1,4 +1,4 @@
-"Two-coordinate physiological curve used by Training B and Race.
+"""Two-coordinate physiological curve used by Training B and Race.
 
 The curve is an energy-to-speed mapping. Numerical milestone deltas are
 configuration, not calibrated design constants.
