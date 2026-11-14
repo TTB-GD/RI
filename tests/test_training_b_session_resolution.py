@@ -27,8 +27,8 @@ class TrainingBSessionResolutionTests(unittest.TestCase):
         )
         self.assertIsNone(result.busted_session)
         self.assertEqual(result.successful_sessions, ("EF2", "SEUIL3", "VMA4"))
-        self.assertEqual(state.progression_ef, 3)
-        self.assertEqual(state.progression_threshold, 4)
+        self.assertEqual(state.progression_ef, 4)
+        self.assertEqual(state.progression_threshold, 3)
         self.assertEqual(state.progression_vma, 3)
         self.assertEqual(state.fatigue, 7)
 
