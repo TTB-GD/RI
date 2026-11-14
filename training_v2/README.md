@@ -154,9 +154,9 @@ and playtest calibration, not promoted design rules.
 | SEUIL3 | 3 | 3 | Seuil +2 | EF +1 | 2 |
 | SEUIL4 | 4 | 4 | Seuil +3 | EF +1 | 3 |
 | SEUIL5 | 5 | 5 | Seuil +4 | EF +2 | 4 |
-| VMA3 | 3 | 4 | VMA +2 | Seuil +1 | 3 |
-| VMA4 | 4 | 5 | VMA +3 | Seuil +1 | 4 |
-| VMA5 | 5 | 6 | VMA +4 | Seuil +2 | 5 |
+| VMA3 | 3 | 4 | VMA +2 | EF +1 | 3 |
+| VMA4 | 4 | 5 | VMA +3 | EF +1 | 4 |
+| VMA5 | 5 | 6 | VMA +4 | EF +2 | 5 |
 
 EF1–EF3 may repeat up to their per-turn caps; EF4, Seuil and VMA entries
 are limited to one occurrence each. These limits are also provisional.
