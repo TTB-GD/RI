@@ -57,9 +57,9 @@ SESSION_DOSES = {
     "SEUIL3": SessionDose("SEUIL3", "Seuil dose 3", "SEUIL", "THRESHOLD", 3, 3, "threshold", 2, "ef", 1, 2),
     "SEUIL4": SessionDose("SEUIL4", "Seuil dose 4", "SEUIL", "THRESHOLD", 4, 4, "threshold", 3, "ef", 1, 3),
     "SEUIL5": SessionDose("SEUIL5", "Seuil dose 5", "SEUIL", "THRESHOLD", 5, 5, "threshold", 4, "ef", 2, 4),
-    "VMA3": SessionDose("VMA3", "VMA dose 3", "VMA", "VMA", 3, 4, "vma", 2, "threshold", 1, 3),
-    "VMA4": SessionDose("VMA4", "VMA dose 4", "VMA", "VMA", 4, 5, "vma", 3, "threshold", 1, 4),
-    "VMA5": SessionDose("VMA5", "VMA dose 5", "VMA", "VMA", 5, 6, "vma", 4, "threshold", 2, 5),
+    "VMA3": SessionDose("VMA3", "VMA dose 3", "VMA", "VMA", 3, 4, "vma", 2, "ef", 1, 3),
+    "VMA4": SessionDose("VMA4", "VMA dose 4", "VMA", "VMA", 4, 5, "vma", 3, "ef", 1, 4),
+    "VMA5": SessionDose("VMA5", "VMA dose 5", "VMA", "VMA", 5, 6, "vma", 4, "ef", 2, 5),
 }
 
 
