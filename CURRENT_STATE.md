@@ -4,10 +4,11 @@ Last consolidated: 2026-11-12
 Canonical branch: main
 Documentation snapshot updated after Race V2 dice-session integration (PR #67).
 
-This file describes the code that exists, not every rule that has been designed.
-The GDD is authoritative for validated design; `docs/game-design/RACE_V2_DESIGN.md`
-contains the detailed Race V2 specification; DEVELOPMENT_PLAN.md tracks gaps and
-the next work. No Training-to-Race end-to-end integration is claimed.
+This file describes the code that exists as of 2026-11-12, not every rule that has been designed.
+The GDD V3 (2026-11-16) is authoritative for the active design and supersedes the
+energy-to-speed Race model described in `docs/game-design/RACE_V2_DESIGN.md`.
+That older specification remains a historical reference for the previous prototype.
+DEVELOPMENT_PLAN.md tracks gaps and next work. No Training-to-Race end-to-end integration is claimed.
 
 ## TRAINING B — IMPLEMENTATION SNAPSHOT
 
