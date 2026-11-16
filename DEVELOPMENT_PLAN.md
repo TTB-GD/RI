@@ -35,7 +35,7 @@ La cohérence Training ↔ Race n'est pas encore réalisée. Ne pas déduire de 
 
 ### Pause d'implémentation — 2026-11-12
 
-À la demande de l'utilisateur, l'implémentation est suspendue après PR #67. Le chantier documentaire E0 (alignement GDD, spécification Race, snapshot, README, plan et références historiques) a été clôturé dans la PR #72. La revue utilisateur du GDD V3 est l'étape suivante. Aucun nouveau code, mapping Training → Race ou calibrage ne doit être engagé avant instruction explicite.
+À la demande de l'utilisateur, l'implémentation est suspendue après PR #67. Le chantier documentaire E0 (alignement GDD, spécification Race, snapshot, README, plan et références historiques) a été clôturé dans la PR #72. La PR #73 intègre la consolidation du modèle énergie–soutenabilité et reste soumise à revue utilisateur. Aucun nouveau code, mapping Training → Race ou calibrage ne doit être engagé avant instruction explicite.
 
 ## 3. Portes et statut
 
@@ -59,12 +59,13 @@ Training B est la cible validée. Son prototype et ses décisions doivent contin
 
 **E0 — DOCUMENTATION : DONE par la consolidation GDD V3 et la mise à jour des références de gouvernance.** Le snapshot CURRENT_STATE reste daté du 12 novembre et décrit volontairement le code de cette date.
 
-Après clôture documentaire, les points techniques encore ouverts sont :
-- **E1 — Profil énergétique :** définir les coordonnées énergétiques EF / Seuil / VMA à partir de l'état Training B.
-- **E2 — Courbe énergie–soutenabilité :** définir sa construction et son évolution à partir des adaptations intensives / extensives. L'AS comme entrée obligatoire de Race est supersédée.
-- **E3 — Crédit initial :** définir la construction de `S0` depuis Training B, sans réintroduire l'ancien modèle de réserve fondé sur CTL.
-- **E4 — Affûtage :** déterminer le palier depuis la fatigue résiduelle et le plus haut dé, puis vérifier sa cohérence avec Training B.
-- **E5 — Validation de l'échelle :** vérifier la cohérence des plages de dépense, des consommations issues de la courbe énergie–soutenabilité et du solde de soutenabilité.
+La consolidation du 16 novembre précise désormais une partie du modèle :
+- **E1 — Profil énergétique : PARTIELLEMENT DÉFINI.** Les trois ancres énergétiques sont des entiers ; les largeurs n = Seuil − EF et m = VMA − Seuil doivent respecter 3 ≤ n ≤ 8, 2 ≤ m ≤ 8 et m ≤ n. Les valeurs initiales des profils et le raccord avec les jauges Training restent OPEN.
+- **E2 — Courbe énergie–soutenabilité : DESIGN VALIDATED.** Ancres de coût EF / Seuil / VMA = 1 / 5 / 13 ; cartes entières basse et haute ; coude moyen ≥ 2 ; progression contrainte des ancres ; dégradation de course par décalage k = 0/1/2. Le mapping des adaptations Training vers les évolutions intensives/extensives reste à spécifier et à implémenter.
+- **E3 — Crédit initial : OPEN.** Définir la construction de `S0` depuis Training B, sans réintroduire l'ancien modèle de réserve fondé sur CTL.
+- **E4 — Allures spécifiques : DESIGN VALIDATED / INTEGRATION OPEN.** Les AS stockent une énergie et une réserve d'allure (RA), sans courbe de soutenabilité propre. Les valeurs initiales et leur transmission restent à définir.
+- **E5 — Affûtage : IMPLEMENTATION GAP.** Déterminer le palier depuis la fatigue résiduelle et le plus haut dé, puis vérifier sa cohérence avec Training B.
+- **E6 — Validation de l'échelle : OPEN.** Vérifier la cohérence des plages de dépense, du stock S0 + F, des consommations de secteur et des cas de solde négatif.
 
 ### Porte F — Boucle end-to-end (LATER / bloquée par E)
 
@@ -95,7 +96,7 @@ B — audit historique ┘                         │
                                                │
                                [pause d'implémentation — 12/11]
                                                │
-                          E1–E5 — Training → Race (à relancer)
+                          E1–E6 — Training → Race (à relancer)
                                                ↓
                                   F — boucle end-to-end
                                                ↓
@@ -104,7 +105,7 @@ B — audit historique ┘                         │
                                   H — calibration / I — choix joueur
 ```
 
-E0 est DONE ; la revue du GDD V3 et de la PR #72 est en attente. L'implémentation reste suspendue après PR #67. La reprise de E1–E5 et de la boucle end-to-end nécessite une instruction explicite après cette revue.
+E0 est DONE ; la PR #73 consolide les décisions de courbe et d'AS/RA. L'implémentation reste suspendue après PR #67. La reprise des raccords E1–E6 et de la boucle end-to-end nécessite une instruction explicite après revue de la PR #73.
 
 ## 5. Tableau de pilotage
 
@@ -117,11 +118,12 @@ E0 est DONE ; la revue du GDD V3 et de la PR #72 est en attente. L'implémentati
 | R1 | Race | P0 | DESIGN | Consolider l'ancienne Race V2 énergie–vitesse | DONE — HISTORICAL, 2026-11-12 |
 | R2 | Race | P1 | PROTOTYPE | Résolution secteur, orchestration, dés et relances | DONE — PR #67 fusionnée ; EXPERIMENTAL |
 | E0 | E | P0 | DOCUMENTATION | Alignement transversal GDD / plan / snapshot / README / références | DONE — GDD V3 |
-| E1 | E | P1 | DESIGN+TECH | Profil énergétique EF / Seuil / VMA Training → Race | BLOCKED — pause |
-| E2 | E | P1 | DESIGN+TECH | Courbe énergie–soutenabilité | BLOCKED — pause |
-| E3 | E | P1 | DESIGN+TECH | Construction de `S0` | BLOCKED — pause |
-| E4 | E | P1 | DESIGN+TECH | Fatigue résiduelle → palier d'affûtage | BLOCKED — pause |
-| E5 | E | P1 | ANALYSE | Cohérence dépense / soutenabilité Race | BLOCKED — pause |
+| E1 | E | P1 | DESIGN+TECH | Profil énergétique et valeurs initiales EF / Seuil / VMA | PARTIELLEMENT DÉFINI — intégration bloquée |
+| E2 | E | P1 | DESIGN+TECH | Cartes énergie–soutenabilité, ancres, contraintes et fatigue de course | DESIGN DONE — mapping Training / implémentation bloqués |
+| E3 | E | P1 | DESIGN+TECH | Construction de `S0` | OPEN — pause |
+| E4 | E | P1 | DESIGN+TECH | Énergies AS / réserves d'allure et intégration | DESIGN DONE — valeurs initiales / intégration OPEN |
+| E5 | E | P1 | DESIGN+TECH | Fatigue résiduelle → palier d'affûtage | BLOCKED — pause |
+| E6 | E | P1 | ANALYSE | Cohérence stock / consommation / solde Race | OPEN — pause |
 | F1–F5 | F | P1 | TEST / SIM | Boucle end-to-end et diagnostics | LATER — dépend de E |
 | G1 | G | P1/P2 | ANALYSE | Solver / oracle Race | LATER |
 | H1 | H | P1/P2 | BALANCE | Calibration séquentielle | LATER |
