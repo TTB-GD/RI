@@ -521,6 +521,28 @@ Général et Endurance sont proches par leur lien au volume, mais ne sont pas fu
 
 L'énergie peut être affectée à une ou plusieurs séances au cours d'un tour. Pour les quatre jauges Endurance, Seuil, VMA et Spécifique, la référence de conception est de l'ordre de 4 à 6 points d'énergie affectés à une ou plusieurs séances. Cette valeur est un ordre de grandeur d'allocation, pas un coût obligatoire ni une limite dure déjà calibrée.
 
+### Répartition indicative du temps d'entraînement réel
+
+Les répartitions suivantes servent de références de conception pour différencier les préparations selon la course cible. Elles portent sur le **temps total réellement couru**, et non sur le nombre de séances ou de kilomètres. Les échauffements, récupérations trottées et retours au calme sont comptés en EF ; les fractions rapides sont ventilées dans leur catégorie d'intensité.
+
+| Préparation | EF | Seuil | VMA | AS spécifique |
+|---|---:|---:|---:|---:|
+| 5 km | 76 % | 8 % | 12 % | 4 % |
+| 10 km | 76 % | 10 % | 9 % | 5 % |
+| Semi-marathon | 78 % | 10 % | 4 % | 8 % |
+| Marathon | 82 % | 7 % | 2 % | 9 % |
+
+Plages indicatives observées / retenues comme enveloppes de conception (elles ne sont pas indépendantes et ne doivent pas être combinées en prenant simultanément toutes les bornes hautes) :
+
+| Préparation | EF | Seuil | VMA | AS spécifique |
+|---|---:|---:|---:|---:|
+| 5 km | 70–85 % | 5–12 % | 8–18 % | 0–6 % |
+| 10 km | 72–86 % | 7–14 % | 5–12 % | 2–8 % |
+| Semi-marathon | 75–87 % | 7–14 % | 2–7 % | 4–12 % |
+| Marathon | 78–90 % | 4–10 % | 0–5 % | 4–12 % |
+
+Ces lignes centrales totalisent 100 %. Elles montrent notamment que la part d'EF reste majoritaire quelle que soit la distance, tandis que la stimulation VMA tend à diminuer et la part spécifique à augmenter lorsque la distance préparée s'allonge. Ces proportions sont des repères pour construire des variantes de plans ; elles ne sont pas des coefficients directs de conversion en énergie ou en points d'adaptation. La traduction du temps réel en doses de jeu reste à définir.
+
 L'énergie affectée à une séance, son RPE et les points d'adaptation qu'elle produit sont trois grandeurs distinctes. Les points d'adaptation sont déterminés par la séance et sa dose, puis distribués vers les nœuds selon la matrice de la section 3.8. Une allocation énergétique ne se convertit donc pas automatiquement point pour point en adaptation.
 
 La répartition est une décision du joueur. Le système ne transforme pas automatiquement un reliquat en une autre ressource ou en une adaptation. L'énergie non dépensée reste non dépensée. Il n'existe pas de CTL dans Training B ; le CTL de l'ancien Training ne doit pas servir de variable de préparation ni de pont caché vers Race.
@@ -714,7 +736,7 @@ Elles sont financées par les budgets existants et peuvent prendre la forme de v
 
 Leur contribution à la Race doit être réelle et lisible. Aucun bonus générique, aucune cinquième énergie et aucun effet automatique de course ne sont validés.
 
-**OPEN / LATER :** définition de la matrice SL/SPEC, de leur progression globale, de leurs effets exacts sur la courbe énergie–soutenabilité et de leur articulation avec la course cible. SPEC est OPEN / NOT IMPLEMENTED dans le chemin actif.
+**OPEN / LATER :** définition de SL et des éventuelles séances transversales de type SPEC, de leurs effets exacts et de leur articulation avec la course cible. Ne pas confondre ces catégories de séances historiques avec la jauge **Spécifique** (AS préparée), qui est désormais définie en section 3.10. SPEC au sens de famille transversale reste OPEN / NOT IMPLEMENTED dans le chemin actif.
 
 ## 3.13. Limites de répétition
 
@@ -1141,7 +1163,7 @@ Cette section ne répète pas les décisions déjà fixées dans les sections 2 
 4. Quels paramètres de séance et quelles doses doivent compléter la matrice de transfert déjà définie en section 3.8 ?
 6. Quels seuils déclenchent les états de surentraînement ?
 7. Quel est le calendrier de déblocage et d'acquisition du portefeuille ?
-8. Comment définir la progression globale ouvrant SL et SPEC ?
+8. Comment définir l'accès aux séances SL et aux éventuelles séances transversales SPEC, sans les confondre avec la jauge Spécifique liée à l'AS préparée ?
 9. Quelle est la limite spécifique éventuelle de répétition pour chaque séance ?
 
 ## 8.3. Race
