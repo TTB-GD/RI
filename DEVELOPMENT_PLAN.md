@@ -114,14 +114,14 @@ Le jalon immédiat est la consolidation documentaire E0. L'implémentation reste
 | B1–B5 | B | P0 | TECH / TEST | Intégrité de l'ancien Training CURRENT | DONE — HISTORICAL |
 | C1–C2 | C | P0 | DESIGN | Vision et trajectoire Training B | DONE — validé 2026-11-07 |
 | D1 | D | P0 | DESIGN | Training B comme cible | DONE — validé 2026-11-07 |
-| R1 | Race | P0 | DESIGN | Consolider les décisions Race V2 | DONE — 2026-11-12 |
+| R1 | Race | P0 | DESIGN | Consolider l'ancienne Race V2 énergie–vitesse | DONE — HISTORICAL, 2026-11-12 |
 | R2 | Race | P1 | PROTOTYPE | Résolution secteur, orchestration, dés et relances | DONE — PR #67 fusionnée ; EXPERIMENTAL |
 | E0 | E | P0 | DOCUMENTATION | Alignement transversal GDD / plan / snapshot / README / références | DONE — GDD V3 |
-| E1 | E | P1 | DESIGN+TECH | Table physiologique Training → Race | BLOCKED — pause |
-| E2 | E | P1 | DESIGN+TECH | Mapping de l'AS | BLOCKED — pause |
+| E1 | E | P1 | DESIGN+TECH | Profil énergétique EF / Seuil / VMA Training → Race | BLOCKED — pause |
+| E2 | E | P1 | DESIGN+TECH | Courbe énergie–soutenabilité | BLOCKED — pause |
 | E3 | E | P1 | DESIGN+TECH | Construction de `S0` | BLOCKED — pause |
 | E4 | E | P1 | DESIGN+TECH | Fatigue résiduelle → palier d'affûtage | BLOCKED — pause |
-| E5 | E | P1 | ANALYSE | Cohérence des échelles Race | BLOCKED — pause |
+| E5 | E | P1 | ANALYSE | Cohérence dépense / soutenabilité Race | BLOCKED — pause |
 | F1–F5 | F | P1 | TEST / SIM | Boucle end-to-end et diagnostics | LATER — dépend de E |
 | G1 | G | P1/P2 | ANALYSE | Solver / oracle Race | LATER |
 | H1 | H | P1/P2 | BALANCE | Calibration séquentielle | LATER |
