@@ -564,66 +564,77 @@ La fréquence à laquelle cette situation se produit, l'effet réel sur les choi
 
 
 
-## 3.6. Catalogue de séances et doses
+## 3.6. Catalogue de séances et plans de préparation
 
-Le catalogue initial est organisé autour des séances de volume général/EF, Seuil, VMA et des séances spécifiques à l'allure de la course préparée. Les entrées de base historiques du catalogue restent des références de structuration, pas une liste exhaustive ni une calibration définitive :
+**DESIGN DIRECTION — architecture simplifiée retenue le 16 novembre 2026 :** le catalogue est organisé en quatre plans, chacun correspondant à la course imposée par le scénario :
 
-| Famille de séance | Entrées de base / portée |
-|---|---|
-| EF / Endurance | EF1, EF2, EF3, EF4 |
-| Seuil | Seuil3, Seuil4, Seuil5 |
-| VMA | VMA3, VMA4, VMA5 |
-| Spécifique | Séances à l'AS de la course préparée uniquement |
-| Général | Travail de volume global ; voie principale de progression générale et de développement du pool |
+- plan 5 km ;
+- plan 10 km ;
+- plan semi-marathon ;
+- plan marathon.
 
-Le chiffre de l'identifiant représente la dose énergétique exacte de la séance. Il ne représente ni une capacité physiologique, ni une adaptation, ni le RPE.
+Une partie ne mobilise qu'un seul de ces plans. Il n'est donc pas nécessaire de proposer, dans une même préparation, des séances spécifiques à plusieurs distances. Chaque plan comprend des séances de développement général (EF, Seuil et VMA) et des séances spécifiques à l'allure de la course préparée (AS active).
 
-Chaque dose est une entrée de séance distincte. Une séance ne doit pas être comprise comme une option unique dont le coût varierait librement.
+Cette organisation réduit la matrice d'adaptation à quatre coordonnées : **EF, AS active, Seuil et VMA**. La coordonnée AS active désigne exclusivement l'allure correspondant au plan choisi : AS5 dans le plan 5 km, AS10 dans le plan 10 km, AS21 dans le plan semi-marathon et AS42 dans le plan marathon. Les quatre plans partagent ainsi une structure commune ; seule l'identité de l'allure spécifique change.
 
-Le socle initial doit proposer au moins une option dans chacune des familles EF, Seuil et VMA. Le portefeuille de séances s'enrichit ensuite.
+Le catalogue est commun dans sa structure, mais les options qui le composent peuvent varier selon le plan. Une séance spécifique appartient au plan correspondant à son AS ; elle n'est pas une option générique permettant de travailler indifféremment les quatre allures.
+
+Les anciennes entrées EF1–EF4, Seuil3–Seuil5 et VMA3–VMA5 restent des références historiques de structuration. Elles ne constituent pas une calibration définitive ni une obligation de conserver exactement ces identifiants. Le chiffre historique d'une entrée représentait sa dose énergétique ; il ne doit pas être interprété comme une quantité d'adaptation ou comme son RPE.
+
+Le socle initial doit proposer des options accessibles dans les familles EF, Seuil et VMA, ainsi que des options spécifiques cohérentes avec le plan choisi. Le catalogue pourra ensuite s'enrichir par déblocage progressif.
 
 ## 3.7. Données propres à une séance
 
-Chaque option du catalogue doit pouvoir décrire au minimum :
+Chaque fiche de séance comporte les informations suivantes :
 
 | Champ | Rôle |
 |---|---|
-| Identifiant, nom, description | Identifier et rendre la séance compréhensible |
-| Famille / filière | EF, Seuil ou VMA ; les familles transversales sont traitées séparément |
-| Dose / coût énergétique | Quantité exacte d'énergie requise |
-| RPE | Intensité et difficulté intrinsèque utilisées pour le risque |
-| Adaptation principale | Contribution principale à une réserve d'adaptation |
-| Adaptation secondaire | Contribution complémentaire, éventuellement vers EF |
-| Fatigue spécifique | Pénibilité propre à la séance, indépendante de la fatigue des dés |
-| Condition d'éligibilité | Condition qui rend l'option accessible |
-| Limite par tour | Limite facultative et spécifique, lorsqu'elle est justifiée |
+| Plan | Plan 5 km, 10 km, semi-marathon ou marathon auquel la séance appartient |
+| Nom | Nom court permettant d'identifier la séance |
+| RPE | Difficulté intrinsèque de la séance, utilisée notamment pour le test de risque |
+| Énergie nécessaire | Coût énergétique exact pour réaliser la séance |
+| Vecteur d'adaptation | Quatre coordonnées : EF, AS active, Seuil et VMA |
+| Fatigue supplémentaire | Fatigue spécifique ajoutée par la séance lorsqu'elle est réalisée |
 
-Le coût énergétique, le RPE, les adaptations et la fatigue sont des variables distinctes. Il ne faut pas les fusionner dans un coefficient unique. L'énergie détermine ce que le joueur peut engager sur le tour ; la fatigue régule davantage le volume et la répétition des efforts de qualité au fil du cycle.
+Ces six éléments constituent le format d'information de référence d'une séance. Une description peut être ajoutée pour rendre son contenu sportif intelligible, mais elle ne constitue pas un paramètre supplémentaire de résolution.
 
-Les adaptations sont définies par séance et par dose. Elles sont fixes pour une occurrence réussie ; elles ne sont pas multipliées automatiquement par le résultat des dés. La matrice de la section 3.8 définit les contributions relatives d'une famille de séances vers les nœuds physiologiques. Les effets conditionnels ou combos entre séances sont une extension possible, mais restent désactivés dans la première version : pas de moteur de combos ni de séquençage obligatoire.
+Le coût énergétique, le RPE, les adaptations et la fatigue sont des variables distinctes. Il ne faut pas les fusionner dans un coefficient unique. L'énergie détermine ce que le joueur peut engager sur le tour ; le RPE caractérise la difficulté intrinsèque et intervient dans le risque de bust ; le vecteur décrit les adaptations physiologiques produites ; la fatigue supplémentaire représente la pénibilité propre à la séance.
 
-## 3.8. Matrice de transfert des séances vers les nœuds physiologiques
+Le vecteur d'adaptation est ordonné ainsi :
 
-**DESIGN DIRECTION — matrice de référence proposée le 16 novembre 2026 :** une séance peut produire des adaptations sur plusieurs nœuds. La ligne désigne le type de travail / la famille de séance ; la colonne désigne le nœud physiologique qui reçoit les points d'adaptation.
+| Coordonnée | Signification |
+|---|---|
+| EF | Adaptation du nœud Endurance fondamentale |
+| AS active | Adaptation de l'allure spécifique du plan choisi |
+| Seuil | Adaptation du nœud Seuil |
+| VMA | Adaptation du nœud VMA |
 
-| Type d'entraînement ↓ / Nœud → | EF | AS42 | AS21 | Seuil | AS10 | AS5 | VMA |
-|---|---:|---:|---:|---:|---:|---:|---:|
-| EF (volume / Endurance) | 2 | 1 | 1 | 1 | 0 | 0 | 0 |
-| Seuil | 1 | 1 | 1 | 2 | 1 | 0 | 0 |
-| VMA | 0 | 0 | 0 | 1 | 1 | 1 | 2 |
-| AS42 | 1 | 2 | 1 | 0 | 0 | 0 | 0 |
-| AS21 | 0 | 1 | 2 | 1 | 0 | 0 | 0 |
-| AS10 | 0 | 0 | 0 | 1 | 2 | 1 | 0 |
-| AS5 | 0 | 0 | 0 | 0 | 1 | 2 | 1 |
-| Général | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
+Une coordonnée nulle signifie que la séance ne produit pas d'adaptation sur le nœud correspondant. Les valeurs positives décrivent les gains fixes associés à une occurrence réussie de la séance. Elles ne sont pas multipliées automatiquement par le résultat des dés.
 
-Les valeurs 0, 1 et 2 expriment des contributions relatives d'adaptation, pas des points d'énergie et pas encore une conversion complète énergie dépensée → adaptation. À titre d'exemple, une séance VMA de RPE 6 peut produire +2 au nœud VMA, +1 à AS5 et +1 au Seuil, conformément à la ligne VMA. La dose énergétique, le RPE et la règle de détermination de la quantité effective de points d'adaptation restent à préciser ; la matrice ne suffit pas à elle seule à calculer le résultat d'une séance.
+Les valeurs exactes des vecteurs restent à construire avec le premier catalogue. La direction de conception est de privilégier des valeurs unitaires et des contributions modestes dans le catalogue initial, plutôt que des gains très élevés sur une seule séance. Les gains de 4 points ou davantage ne constituent pas une référence à retenir à ce stade ; leur éventuelle pertinence devra être justifiée par un cas particulier et par les tests d'équilibrage.
 
-La ligne Général représente une contribution répartie uniformément sur les nœuds pertinents de la préparation. Elle ne doit pas être confondue avec la ligne EF : la séance EF/Endurance privilégie le nœud EF (coefficient 2) et a des transferts secondaires vers AS42, AS21 et Seuil ; le travail Général est transversal. Dans une partie donnée, le nœud AS actif est uniquement celui de la course imposée par le scénario ; les autres AS ne progressent pas au titre du travail Général.
+## 3.8. Vecteurs de transfert des séances vers les nœuds physiologiques
 
-Les quatre nœuds AS existent dans le modèle physiologique, mais la jauge Spécifique et les séances spécifiques ne concernent que l'AS correspondant à la course choisie. Les autres allures spécifiques ne sont pas entraînées simultanément pendant la préparation.
+**DESIGN DIRECTION — architecture à quatre coordonnées retenue le 16 novembre 2026 :** chaque séance est définie directement par son vecteur d'adaptation (EF, AS active, Seuil, VMA). Le vecteur décrit les gains attribués à une occurrence réussie de cette séance. Il remplace, pour la construction du catalogue, la matrice générale à sept colonnes qui distinguait simultanément AS42, AS21, AS10 et AS5.
 
-Cette matrice remplace la description antérieure limitée aux contributions secondaires EF des séances de qualité. Elle constitue une base de design ; la quantité de points d'adaptation produite par une dose, les paliers et les calibrages de séances restent à préciser.
+| Coordonnée | Plan 5 km | Plan 10 km | Plan semi-marathon | Plan marathon |
+|---|---|---|---|---|
+| EF | EF | EF | EF | EF |
+| AS active | AS5 | AS10 | AS21 | AS42 |
+| Seuil | Seuil | Seuil | Seuil | Seuil |
+| VMA | VMA | VMA | VMA | VMA |
+
+La simplification ne signifie pas que les quatre allures spécifiques sont physiologiquement identiques. Elle signifie qu'une partie ne prépare qu'une seule course et qu'il suffit donc de suivre l'adaptation à l'allure spécifique active dans le vecteur de séance. Les autres allures spécifiques ne sont pas des coordonnées à suivre dans cette partie.
+
+Le vecteur est renseigné directement pour chaque séance du catalogue. Il n'est pas nécessaire de calculer ses composantes à partir d'une matrice de transfert intermédiaire au moment de la résolution. La cohérence physiologique des transferts reste néanmoins un critère de conception du catalogue : une séance peut contribuer à plusieurs nœuds, et les séances d'une même famille ne sont pas obligées d'avoir des vecteurs identiques.
+
+Les quatre coordonnées d'adaptation alimentent les voies de progression physiologique correspondantes. Elles ne modifient pas le format des cinq jauges de progression défini en section 3.10 : Général reste une jauge d'énergie investie ; Endurance, Seuil, VMA et Spécifique restent des jauges de points d'adaptation. En particulier, la coordonnée AS active alimente la progression Spécifique du plan choisi.
+
+Les séances initiales restent accessibles pendant toute la partie. L'atteinte de paliers de progression peut débloquer des séances supplémentaires ou des variantes plus exigeantes, afin d'enrichir les choix disponibles au fil de la préparation. Un déblocage ajoute des options au portefeuille accessible ; il ne retire ni ne remplace les séances déjà disponibles.
+
+**OPEN — conditions de déblocage :** les paliers précis, la jauge qui déclenche chaque déblocage et le contenu des séances ainsi débloquées restent à définir. Le principe retenu est celui d'un enrichissement progressif du catalogue, pas d'un verrouillage des séances initiales ni d'une substitution obligatoire.
+
+La dose énergétique, le RPE, le vecteur d'adaptation et la fatigue supplémentaire devront être calibrés séparément pour chaque séance. Aucune conversion automatique entre ces grandeurs n'est postulée. Les règles exactes de production des adaptations à partir d'une occurrence réussie sont donc portées par les vecteurs du catalogue, et non par une formule générique encore indéfinie.
 
 ## 3.9. RPE, risque et bust
 
