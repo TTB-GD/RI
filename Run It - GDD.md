@@ -182,6 +182,16 @@ On définit n = Seuil − EF, largeur de la zone basse, et m = VMA − Seuil, la
 
 La courbe est une abstraction de jeu inspirée de la relation intensité–durée et des domaines d'intensité modéré, lourd et sévère. Les ancres 1–5–13 et les bornes n/m sont des choix de modélisation, pas des constantes physiologiques mesurées.
 
+### Repères physiologiques (justification qualitative)
+
+| Domaine d'effort | Repère physiologique approximatif | Lecture dans le jeu |
+|---|---|---|
+| Modéré | Sous le premier seuil, autour de l'endurance facile | Zone basse, plateau puis hausse lente de S |
+| Lourd | Entre le seuil critique et l'approche de la consommation maximale d'oxygène | Zone haute, coût croissant et maintien de plus en plus limité |
+| Sévère | Proche de la VMA / vVO₂max, effort maximal de quelques minutes | Extrémité haute de la courbe, coût maximal |
+
+La relation intensité–durée est fortement non linéaire : une hausse donnée d'intensité réduit beaucoup plus la durée de maintien à proximité des limites. Le coude encode cette asymétrie. Les durées usuelles évoquées pour le seuil et la VMA sont des ordres de grandeur dépendant du coureur et du protocole ; elles ne servent pas de conversion directe entre S et minutes.
+
 ## 2.4. Construction des cartes de soutenabilité
 
 La courbe se lit sans calcul en partie, sur deux cartes déterminées par n et m.
@@ -315,6 +325,17 @@ L'invariant de non-augmentation des coûts a été vérifié manuellement dans l
 
 Le profil (8, 8) est un plafond de forme : aucune ancre ne peut progresser seule. La progression générale peut néanmoins déplacer ensemble les trois énergies sans changer n ni m. Toute extension de l'échelle au-delà de ces bornes est OPEN et ne fait pas partie de la règle actuelle.
 
+### 2.8.1. Cas de progression et cas limites
+
+| Cas | Profil initial | Tentative | Résultat |
+|---|---|---|---|
+| Profil moyen (4, 3) | EF 10, Seuil 14, VMA 17 | VMA +1 | Autorisé : (4, 4), courbe 1–2–3–4–5–7–9–11–13 |
+| Diagonale (4, 4) | EF 10, Seuil 14, VMA 18 | VMA +1 | Bloqué : m deviendrait 5 > n. Seuil +1 donne (5, 3), puis VMA +1 devient possible |
+| Profil comprimé (3, 2) | EF 20, Seuil 23, VMA 25 | EF +1 ou Seuil +1 | Bloqués car n tomberait sous 3 ou m sous 2. VMA +1 vers (3, 3) reste possible |
+| Profil saturé (8, 8) | EF 10, Seuil 18, VMA 26 | Toute ancre seule +1 | Bloquée. Seule la progression générale peut encore déplacer les trois ancres ensemble |
+
+Exemple de contrainte de forme : un coureur de profil (4, 4) ne peut pas étendre sa VMA sans élargir d'abord sa zone basse. Le joueur doit développer le Seuil avant de pouvoir repousser VMA. Il s'agit d'un garde-fou de design destiné à empêcher un profil « explosif sans fond » dans l'échelle courante, et non d'une loi physiologique universelle.
+
 ## 2.9. Allures spécifiques : énergie et réserve d'allure
 
 Les allures spécifiques (AS42, AS21, AS10 et AS5) constituent une couche de spécialisation en énergie, posée sur la courbe de base sans la déformer.
@@ -349,6 +370,8 @@ Quand un secteur est couru exactement à l'énergie d'une AS, le joueur peut dé
 La RA est une capacité permanente : le stock disponible est reconstitué à sa valeur complète au début de chaque course. Une réserve vide ramène exactement au coût de base de la courbe.
 
 L'énergie achète une allure de référence plus élevée ; la RA achète une réduction locale du coût de maintien. L'augmentation d'énergie peut accroître S de plus de 1, alors qu'un point de RA réduit le coût d'un seul point et uniquement sur les secteurs courus exactement à cette AS.
+
+Exemple : pour un profil EF 12, Seuil 19, VMA 24, l'AS21 peut être positionnée à l'énergie 18. La carte donne S(18) = 4. Avec RA = 2, le joueur peut payer 3 au lieu de 4 sur deux secteurs courus exactement à l'énergie 18 ; les autres secteurs paient le coût de base ou le coût dégradé applicable.
 
 ## 2.10. Ce qui est abandonné dans le modèle actif
 
@@ -735,6 +758,8 @@ La dette de fatigue réversible (option B) est conservée comme variante avancé
 
 Le coût d'un secteur est lu à S(E + k), puis réduit éventuellement de 1 si une RA est dépensée à cette AS, avec un plancher final de 1. Cette valeur alimente C et le solde S0 + F − C.
 
+Exemple : si S(18) = 4, alors une fatigue k = 1 porte le coût de base à S(19) = 5 et k = 2 à S(20) = 6. Une RA dépensée à l'énergie 18 réduit le coût effectivement payé d'un point, sans descendre sous 1. Si k = 2, toute dépense supérieure à VMA − 2 est interdite.
+
 **OPEN :** construction de S0, définition du stock de référence et articulation exacte avec F, conséquence mécanique d'un solde négatif et traitement du reliquat à l'arrivée.
 
 ## 4.5. Forme du jour — structure héritée, calibrage expérimental
@@ -905,14 +930,15 @@ Les distances de course restent des paramètres de scénario. Elles peuvent orie
 
 | ID | Élément | Travail requis | Statut |
 |---|---|---|---|
-| E1 | Profil énergétique | Définir les coordonnées énergétiques EF / Seuil / VMA issues du Training | OPEN |
-| E2 | Courbe énergie–soutenabilité | Définir sa construction et son évolution à partir des adaptations intensives / extensives | OPEN |
+| E1 | Profil énergétique | Définir les valeurs initiales EF / Seuil / VMA et les règles de progression depuis Training | PARTIELLEMENT DÉFINI — initialisation et intégration OPEN |
+| E2 | Courbe énergie–soutenabilité | Construire les cartes depuis les ancres 1–5–13 et les largeurs n/m ; raccorder les adaptations intensives / extensives | DESIGN VALIDATED — construction définie ; raccord Training OPEN |
 | E3 | Crédit S0 | Définir la contribution du Training au crédit initial de soutenabilité | OPEN |
-| E4 | Pool de dés | Transmettre les dés réellement acquis et améliorés | IMPLEMENTATION GAP |
-| E5 | Affûtage | Déduire le palier de la fatigue résiduelle et du pool de dés | IMPLEMENTATION GAP |
-| E6 | Préparations transversales | Définir les effets Race de SL et SPEC s'ils sont retenus | OPEN / LATER |
+| E4 | Allures spécifiques | Transmettre les énergies AS et leurs réserves d'allure | DESIGN VALIDATED — règles de spécialisation définies ; valeurs initiales et intégration OPEN |
+| E5 | Pool de dés | Transmettre les dés réellement acquis et améliorés | IMPLEMENTATION GAP |
+| E6 | Affûtage | Déduire le palier de la fatigue résiduelle et du pool de dés | IMPLEMENTATION GAP |
+| E7 | Préparations transversales | Définir les effets Race de SL et SPEC s'ils sont retenus | OPEN / LATER |
 
-Les anciennes tâches E1–E5 du DEVELOPMENT_PLAN.md doivent être relues à la lumière de ce modèle : l'ancien mapping de table énergie–vitesse et l'AS comme entrée obligatoire ne sont plus des besoins du modèle actif.
+Le modèle de courbe et sa lecture sont définis dans le GDD. Le mapping des adaptations Training vers les ancres et vers les évolutions extensives reste à spécifier. L'ancienne table énergie–vitesse et l'AS comme seuil de calcul de la consommation de base ne sont plus des besoins du modèle actif ; les AS/RA sont en revanche des données de spécialisation à transmettre.
 
 ---
 
