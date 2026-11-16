@@ -35,7 +35,7 @@ La cohérence Training ↔ Race n'est pas encore réalisée. Ne pas déduire de 
 
 ### Pause d'implémentation — 2026-11-12
 
-À la demande de l'utilisateur, l'implémentation est suspendue après PR #67. Le chantier immédiat est documentaire : aligner GDD, spécification Race V2, snapshot d'implémentation, README, roadmap et références historiques. Aucun nouveau code, mapping Training → Race ou calibrage ne doit être engagé avant clôture de cette consolidation et nouvelle instruction explicite.
+À la demande de l'utilisateur, l'implémentation est suspendue après PR #67. Le chantier documentaire E0 (alignement GDD, spécification Race, snapshot, README, plan et références historiques) a été clôturé dans la PR #72. La revue utilisateur du GDD V3 est l'étape suivante. Aucun nouveau code, mapping Training → Race ou calibrage ne doit être engagé avant instruction explicite.
 
 ## 3. Portes et statut
 
@@ -104,7 +104,7 @@ B — audit historique ┘                         │
                                   H — calibration / I — choix joueur
 ```
 
-Le jalon immédiat est la consolidation documentaire E0. L'implémentation reste suspendue après PR #67. La reprise de E1–E5 et de la boucle end-to-end nécessite une instruction explicite après revue de la documentation.
+E0 est DONE ; la revue du GDD V3 et de la PR #72 est en attente. L'implémentation reste suspendue après PR #67. La reprise de E1–E5 et de la boucle end-to-end nécessite une instruction explicite après cette revue.
 
 ## 5. Tableau de pilotage
 
