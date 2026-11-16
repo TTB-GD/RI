@@ -129,13 +129,8 @@ Le jalon immédiat est la consolidation documentaire E0. L'implémentation reste
 
 ## 6. Prochain chantier recommandé
 
-**B1 TERMINÉ — PR #38 :** catalogue déclaratif et adaptations fixes génériques.
+**Maintenant :** revue utilisateur du GDD V3 et des références documentaires alignées. La consolidation E0 est terminée ; aucun code, test, harness ou résultat de simulation n'est modifié par cette étape.
 
-**B2 — coût énergétique distinct du RPE.** Les séances Seuil/VMA portent maintenant un coût énergétique fixe et un RPE indépendant. Le coût est payé sur l'énergie allouée ; le RPE pilote l'entrée dans le test de risque/bust. Les valeurs du catalogue sont des fixtures D1-S4 expérimentales, non calibrées.
+**Ensuite :** la reprise du travail de conception ou d'implémentation nécessite une instruction explicite. Le premier chantier de fond devra formaliser le profil énergétique EF / Seuil / VMA, la courbe énergie–soutenabilité et la construction de S0, puis vérifier le lien entre fatigue résiduelle et affûtage. Les paramètres manquants doivent rester OPEN plutôt que recevoir des valeurs arbitraires.
 
-**B3 EN COURS — allocation directe des dés aux séances.** Remplacer la partition EF/Qualité par une composition où chaque dé conservé finance une occurrence du catalogue. Socle EF/Seuil/VMA, répétition EF ouverte, limites de répétition spécifiques par entrée. Aucun combo. Les fixtures de coût, RPE, adaptations et fatigue r## 6. Prochain chantier recommandé
-
-**Maintenant :** faire la revue utilisateur du GDD V3 et des références documentaires alignées. Cette consolidation ne modifie aucun code, test ni sortie de simulation.
-
-**Ensuite :** faire une revue utilisateur des documents synchronisés. La reprise de l'implémentation ne sera pas implicite. Le prochain chantier technique, lorsqu'il sera autorisé, devra commencer par un audit ciblé des états Training B et des entrées Race nécessaires (profil énergétique, courbe énergie–soutenabilité, `S0`, pool de dés, affûtage), puis proposer un mapping sans inventer les valeurs manquantes.
-
+La pause d'implémentation après PR #67 reste en vigueur. La présente mise à jour documentaire ne la lève pas.
