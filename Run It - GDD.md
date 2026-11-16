@@ -562,9 +562,7 @@ La répartition est une décision du joueur. Le système ne transforme pas autom
 
 La fréquence à laquelle cette situation se produit, l'effet réel sur les choix de séances et l'équilibre de ce bonus restent à tester. La règle de coopération est retenue dans son principe, mais son rendement ne doit pas être considéré comme calibré.
 
-**DECISION VALIDATED — entraînement collectif de qualité :** lorsque plusieurs joueurs affectent la même quantité d'énergie à leur travail de qualité pendant un même tour, ils peuvent effectuer cet entraînement ensemble. Ils gagnent alors chacun un point d'adaptation supplémentaire dans une jauge choisie collectivement, parmi les adaptations communes à leurs séances respectives (intersection de leurs nœuds d'adaptation). Ce bonus collectif s'ajoute aux adaptations normales de chaque séance ; il ne les remplace pas.
 
-La fréquence à laquelle cette situation se produit, l'effet réel sur les choix de séances et l'équilibre de ce bonus restent à tester. La règle de coopération est retenue dans son principe, mais son rendement ne doit pas être considéré comme calibré.
 
 ## 3.6. Catalogue de séances et doses
 
