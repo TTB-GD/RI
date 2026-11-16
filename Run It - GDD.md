@@ -200,11 +200,13 @@ La courbe se lit sans calcul en partie, sur deux cartes déterminées par n et m
 
 Les quatre points de soutenabilité entre EF et Seuil sont répartis sur les quatre derniers pas avant le Seuil. Les pas précédents restent au plateau S = 1.
 
-Pour n ≥ 4 :
+Pour n ≥ 4, sur la zone EF → Seuil :
 
 ~~~text
 S(E) = max(1, 5 − (Seuil − E))
 ~~~
+
+Le plateau S = 1 se prolonge aux dépenses positives inférieures à EF. Une sélection vide reste un cas distinct : énergie et coût nuls.
 
 Pour n = 3, les quatre points sont répartis sur trois pas : les coûts des pas sont 1, 1, 2, d'où les valeurs S = 1, 2, 3, 5 de EF à Seuil.
 
@@ -276,7 +278,7 @@ La distinction porte sur deux transformations différentes du profil :
 | **Intensif** | Faire progresser l'intensité accessible | Augmenter l'énergie d'une ancre, donc déplacer un repère vers une dépense supérieure, sous réserve des contraintes de forme du profil. |
 | **Extensif** | Augmenter le temps de maintien à une intensité donnée | Réduire la soutenabilité S associée à une énergie donnée, sans augmenter cette énergie. Dans le modèle discret, cela passe par l'évolution des ancres et des cartes, pas par une seconde courbe stockée indépendante. |
 
-L'intensif développe le niveau de dépense accessible ; l'extensif développe la capacité à maintenir une dépense donnée. L'économie de course est représentée par la baisse du coût de soutenabilité à énergie égale, sans réintroduire une conversion cachée énergie → vitesse.
+L'intensif développe le niveau de dépense accessible ; l'extensif vise à améliorer le maintien d'une dépense donnée. L'économie de course est représentée par la baisse du coût de soutenabilité à énergie égale, sans réintroduire une conversion cachée énergie → vitesse. La règle exacte qui associe les paliers de progression aux transformations d'ancres et aux gains intensifs/extensifs reste OPEN : elle doit respecter les contraintes n/m et les invariants de la section 2.8.
 
 ## 2.6. Rôle spécifique de l'EF
 
@@ -610,7 +612,7 @@ La lecture active des choix de progression est :
 - **Intensif** : faire progresser l'intensité, en déplaçant le repère ciblé vers une dépense énergétique supérieure.
 - **Extensif** : améliorer le temps de maintien, en diminuant la consommation de soutenabilité associée à une dépense donnée.
 
-Cette distinction remplace l'ancienne explication en termes de « vitesse » et « économie » lorsqu'elle conduisait à réintroduire une coordonnée vitesse dans le modèle. Les incréments et leurs conditions restent à calibrer.
+Cette distinction remplace l'ancienne explication en termes de « vitesse » et « économie » lorsqu'elle conduisait à réintroduire une coordonnée vitesse dans le modèle. Les incréments et leurs conditions restent à calibrer. Le choix précis de l'ancre à modifier et la manière dont les gains extensifs se matérialisent dans les cartes sont OPEN.
 
 ## 3.11. Portefeuille, éligibilité et acquisition
 
@@ -717,7 +719,7 @@ Le score du secteur est égal à cette énergie réellement dépensée. Il n'exi
 
 Pour chaque secteur, la dépense réelle E détermine un coût de base S(E), lu directement sur la carte de soutenabilité du profil. L'énergie réelle est la somme des dés sélectionnés après écrêtage à VMA ; c'est cette valeur, et non la somme brute avant écrêtage, qui détermine le score et le coût.
 
-- Le coût minimal est 1, au niveau EF et sur les éventuels plateaux de la zone basse.
+- Le coût minimal d'une dépense positive est 1, au niveau EF et sur les éventuels plateaux de la zone basse. Une sélection vide reste un no-op de coût nul.
 - Le coût augmente par paliers entiers dans la zone basse puis dans la zone haute.
 - Le coût maximal de base est 13 à VMA.
 
@@ -882,18 +884,21 @@ Le terrain peut rester un facteur de difficulté locale, mais sa traduction dans
 La séquence générale conservée est :
 
 1. révéler les éventuelles cartes de forme prévues au début du secteur ;
-2. actualiser le crédit de soutenabilité disponible ;
-3. afficher les informations tactiques du secteur qui sont déjà déterminées ;
-4. lancer l'intégralité du pool de dés ;
-5. effectuer les relances individuelles disponibles ;
-6. choisir librement le sous-ensemble de dés dépensé ;
-7. calculer l'énergie réelle, plafonnée à VMA ;
-8. ajouter cette énergie au score ;
-9. calculer la consommation de soutenabilité associée à cette dépense ;
-10. actualiser le solde pour les secteurs suivants ;
-11. actualiser les groupes et informations tactiques pour le secteur suivant.
+2. appliquer les effets de forme au crédit de soutenabilité ;
+3. déterminer le niveau de fatigue k déjà atteint pour ce secteur ;
+4. afficher les informations tactiques du secteur qui sont déjà déterminées ;
+5. lancer l'intégralité du pool de dés ;
+6. effectuer les relances individuelles disponibles ;
+7. choisir librement le sous-ensemble de dés dépensé ;
+8. calculer l'énergie réelle, plafonnée à VMA et, si k > 0, à VMA − k ;
+9. ajouter cette énergie au score ;
+10. lire le coût S(E + k) ;
+11. si l'énergie est exactement celle d'une AS, décider éventuellement de dépenser un point de RA et réduire le coût de 1, sans passer sous 1 ;
+12. ajouter le coût effectivement payé à C et mettre à jour le solde S0 + F − C ;
+13. si le secteur vient de franchir un seuil de stock consommé (50 % ou 75 %), appliquer le nouveau k au secteur suivant ;
+14. actualiser les groupes et informations tactiques pour le secteur suivant.
 
-Cette séquence décrit la structure cible. Les étapes relatives au terrain et aux groupes restent incomplètes tant que leurs effets n'ont pas été redéfinis dans le modèle énergie–soutenabilité.
+Une sélection vide reste un no-op : zéro énergie, zéro point et zéro consommation. Cette séquence décrit la structure cible ; les étapes relatives au terrain et aux groupes restent incomplètes tant que leurs effets n'ont pas été redéfinis dans le modèle énergie–soutenabilité.
 
 ---
 
