@@ -94,3 +94,28 @@ reclassées pour éviter une lecture erronée de la baseline actuelle :
   Training B → Race V2.
 - `AGENTS.md` référence désormais les documents Race V2 faisant autorité et
   les expériences qui doivent rester historiques.
+
+
+## Mise à jour transversale — GDD V3 énergie–soutenabilité (16 novembre 2026)
+
+Le GDD V3 remplace le modèle physiologique Race énergie–vitesse par un modèle
+à deux dimensions utiles : énergie dépensée et consommation de soutenabilité.
+L'énergie dépensée devient la grandeur de score ; la soutenabilité décrit le
+coût de maintien de cette dépense. La distinction Training intensif / extensif
+est intégrée au modèle : intensif déplace le niveau d'intensité accessible ;
+extensif réduit le coût de soutenabilité à dépense constante.
+
+| Document | Mise à jour / statut |
+|---|---|
+| `Run It - GDD.md` | Nouvelle référence normative Training B / Race énergie–soutenabilité |
+| `README.md` | Index documentaire aligné ; l'ancienne spécification Race V2 est explicitement historique |
+| `DEVELOPMENT_PLAN.md` | E0 documentaire clôturé ; E1–E5 reformulés autour du profil énergétique, de la courbe énergie–soutenabilité et de S0 |
+| `CURRENT_STATE.md` | Snapshot du 12 novembre conservé comme état du code ; avertissement sur le décalage avec le GDD V3 |
+| `docs/game-design/RACE_V2_DESIGN.md` | Marqué historique / partiellement supersédé ; règles de conversion et score vitesse non actives |
+| `docs/game-design/PHYSIOLOGICAL_SPEED_REFERENCE_PROFILES.md` | Profils VDOT et unité 0,5 km/h conservés comme références historiques de l'ancien modèle |
+| `AGENTS.md` | Hiérarchie documentaire et statut Race V2 actualisés |
+
+La PR est documentaire uniquement. Aucun code, test, harness ou résultat
+expérimental n'est modifié. La boucle Training B → Race reste absente ; la
+courbe énergie–soutenabilité, S0 et les effets de terrain / groupe doivent être
+spécifiés avant la reprise de l'implémentation.
