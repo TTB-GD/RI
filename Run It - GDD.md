@@ -1,7 +1,7 @@
 # Run It — Game Design Document
 
 **Version :** GDD V3 — vision Training B / Race énergie–soutenabilité  
-**Date de consolidation :** 16 novembre 2026  
+**Date de consolidation :** 16 novembre 2026 — révision courbe énergie–soutenabilité  
 **Statut :** document de référence du design ; paramètres d'équilibrage et intégration encore partiellement ouverts.
 
 > Ce document remplace les anciennes descriptions du Training CURRENT et le modèle Race fondé sur une conversion énergie → vitesse. Il rassemble les décisions de conception retenues, les orientations structurantes les plus récentes, les paramètres qui restent expérimentaux et les écarts entre le design et les prototypes. Il ne prétend pas que les règles décrites sont toutes implémentées.
@@ -164,35 +164,111 @@ EF < Seuil < VMA
 
 Les coordonnées énergétiques exactes des trois repères ne sont pas encore calibrées.
 
-## 2.3. Courbe énergie–soutenabilité
+## 2.3. Courbe énergie–soutenabilité : ancres et domaine
 
-La courbe associe à chaque dépense énergétique une consommation de soutenabilité.
+**DECISION VALIDATED — 16 novembre 2026 :** la courbe est une fonction entière de lecture, construite à partir de trois ancres de soutenabilité fixes :
 
-Propriétés structurantes retenues :
+| Repère | Soutenabilité S |
+|---|---:|
+| EF | 1 |
+| Seuil | 5 |
+| VMA | 13 |
 
-- à EF, la consommation de soutenabilité est nulle ;
-- la consommation augmente avec l'intensité de la dépense ;
-- à VMA, la consommation est maximale ;
-- entre EF et VMA, la courbe décrit le coût croissant du maintien d'une dépense plus élevée.
+S est un **indice ordinal de coût**, pas une durée ni une mesure physiologique en unités physiques. Plus S est élevé, plus le maintien de la dépense est coûteux. Le coût de base d'un secteur est la valeur S lue sur la courbe. Cette échelle remplace l'ancienne formulation selon laquelle la consommation était nulle à EF : dans le modèle retenu, EF est le coût minimal, égal à 1.
 
-La courbe est du même esprit que les courbes durée–puissance : elle décrit la relation entre un niveau d'effort et la capacité à le maintenir. Elle ne cherche pas à convertir une énergie en une vitesse.
+Les trois énergies EF, Seuil et VMA sont des entiers stockés. La courbe complète est déterminée par ces trois valeurs ; aucune table d'énergie–vitesse n'est requise.
 
-**OPEN :** la forme exacte de la fonction, sa granularité, ses éventuelles ruptures de pente et la méthode de lecture entre les repères EF / Seuil / VMA. Aucune interpolation, table ou formule numérique n'est promue à ce stade.
+On définit n = Seuil − EF, largeur de la zone basse, et m = VMA − Seuil, largeur de la zone haute. Le domaine valide est 3 ≤ n ≤ 8, 2 ≤ m ≤ 8 et m ≤ n. Il existe 27 profils de forme autorisés. La condition m ≤ n garantit un coude moyen d'au moins 2 ; il vaut exactement 2 lorsque m = n.
 
-## 2.4. Intensif et extensif
+La courbe est une abstraction de jeu inspirée de la relation intensité–durée et des domaines d'intensité modéré, lourd et sévère. Les ancres 1–5–13 et les bornes n/m sont des choix de modélisation, pas des constantes physiologiques mesurées.
 
-La distinction entre entraînement intensif et extensif devient une distinction structurante du système.
+## 2.4. Construction des cartes de soutenabilité
 
-| Développement | Effet physiologique recherché | Traduction dans le modèle |
+La courbe se lit sans calcul en partie, sur deux cartes déterminées par n et m.
+
+### 2.4.1. Zone basse : EF → Seuil
+
+Les quatre points de soutenabilité entre EF et Seuil sont répartis sur les quatre derniers pas avant le Seuil. Les pas précédents restent au plateau S = 1.
+
+Pour n ≥ 4 :
+
+~~~text
+S(E) = max(1, 5 − (Seuil − E))
+~~~
+
+Pour n = 3, les quatre points sont répartis sur trois pas : les coûts des pas sont 1, 1, 2, d'où les valeurs S = 1, 2, 3, 5 de EF à Seuil.
+
+| n | Valeurs S de EF à Seuil | Coût de chaque pas |
+|---:|---|---|
+| 3 | 1 – 2 – 3 – 5 | 1, 1, 2 |
+| 4 | 1 – 2 – 3 – 4 – 5 | 1, 1, 1, 1 |
+| 5 | 1 – 1 – 2 – 3 – 4 – 5 | 0, 1, 1, 1, 1 |
+| 6 | 1 – 1 – 1 – 2 – 3 – 4 – 5 | 0, 0, 1, 1, 1, 1 |
+| 7 | 1 – 1 – 1 – 1 – 2 – 3 – 4 – 5 | 0, 0, 0, 1, 1, 1, 1 |
+| 8 | 1 – 1 – 1 – 1 – 1 – 2 – 3 – 4 – 5 | 0, 0, 0, 0, 1, 1, 1, 1 |
+
+### 2.4.2. Zone haute : Seuil → VMA
+
+On répartit les huit points entre Seuil et VMA par division entière :
+
+~~~text
+q = floor(8 / m)
+r = 8 mod m
+~~~
+
+Chaque pas coûte q ; les r derniers pas coûtent q + 1. Comme m ≤ 8, chaque pas coûte au moins 1 : la zone haute est strictement croissante, sans plateau.
+
+| m | Valeurs S de Seuil à VMA | Coût de chaque pas |
+|---:|---|---|
+| 2 | 5 – 9 – 13 | 4, 4 |
+| 3 | 5 – 7 – 10 – 13 | 2, 3, 3 |
+| 4 | 5 – 7 – 9 – 11 – 13 | 2, 2, 2, 2 |
+| 5 | 5 – 6 – 7 – 9 – 11 – 13 | 1, 1, 2, 2, 2 |
+| 6 | 5 – 6 – 7 – 8 – 9 – 11 – 13 | 1, 1, 1, 1, 2, 2 |
+| 7 | 5 – 6 – 7 – 8 – 9 – 10 – 11 – 13 | 1, 1, 1, 1, 1, 1, 2 |
+| 8 | 5 – 6 – 7 – 8 – 9 – 10 – 11 – 12 – 13 | 1, 1, 1, 1, 1, 1, 1, 1 |
+
+### 2.4.3. Profils autorisés et coude
+
+La pente moyenne de la zone basse vaut 4/n ; celle de la zone haute vaut 8/m. Le rapport des pentes (haute / basse) vaut :
+
+~~~text
+coude moyen = (8 / m) / (4 / n) = 2n / m
+~~~
+
+La contrainte m ≤ n garantit un rapport supérieur ou égal à 2. Le rapport est exactement 2 sur la diagonale m = n et supérieur à 2 lorsque m < n. Ce n'est pas un saut local strict au Seuil : la répartition entière peut produire un premier pas haut peu coûteux ; le coude est une propriété des pentes moyennes.
+
+| n \ m | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| 3 | ✓ | ✓ | – | – | – | – | – |
+| 4 | ✓ | ✓ | ✓ | – | – | – | – |
+| 5 | ✓ | ✓ | ✓ | ✓ | – | – | – |
+| 6 | ✓ | ✓ | ✓ | ✓ | ✓ | – | – |
+| 7 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | – |
+| 8 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+
+### 2.4.4. Exemple de lecture
+
+Pour EF = 10, Seuil = 14 et VMA = 17, n = 4 et m = 3 :
+
+| Énergie E | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Soutenabilité S(E) | 1 | 2 | 3 | 4 | 5 | 7 | 10 | 13 |
+
+Les cartes sont lues depuis EF pour la zone basse et depuis Seuil pour la zone haute ; aucune interpolation ni aucun arrondi ne sont nécessaires en partie.
+
+## 2.5. Développement intensif et extensif
+
+La distinction porte sur deux transformations différentes du profil :
+
+| Développement | Effet recherché | Traduction dans le modèle |
 |---|---|---|
-| **Intensif** | Faire progresser l'intensité accessible | Déplacer le repère physiologique ciblé vers une dépense énergétique supérieure. Le plafond de dépense augmente, mais le coût de soutenabilité à cette intensité peut rester élevé. |
-| **Extensif** | Augmenter le temps pendant lequel une intensité peut être maintenue | Réduire la consommation de soutenabilité associée à une dépense donnée, sans augmenter cette dépense. |
+| **Intensif** | Faire progresser l'intensité accessible | Augmenter l'énergie d'une ancre, donc déplacer un repère vers une dépense supérieure, sous réserve des contraintes de forme du profil. |
+| **Extensif** | Augmenter le temps de maintien à une intensité donnée | Réduire la soutenabilité S associée à une énergie donnée, sans augmenter cette énergie. Dans le modèle discret, cela passe par l'évolution des ancres et des cartes, pas par une seconde courbe stockée indépendante. |
 
-L'intensif développe le niveau d'intensité ; l'extensif développe la durée de maintien. Les deux dimensions sont complémentaires et ne doivent pas être ramenées à un bonus unique.
+L'intensif développe le niveau de dépense accessible ; l'extensif développe la capacité à maintenir une dépense donnée. L'économie de course est représentée par la baisse du coût de soutenabilité à énergie égale, sans réintroduire une conversion cachée énergie → vitesse.
 
-L'économie de course est ici comprise comme une amélioration de la soutenabilité d'une dépense, et non comme une réduction cachée de l'énergie nécessaire à une vitesse donnée.
-
-## 2.5. Rôle spécifique de l'EF
+## 2.6. Rôle spécifique de l'EF
 
 L'EF constitue le socle de développement général.
 
@@ -200,11 +276,11 @@ L'EF constitue le socle de développement général.
 
 - une progression EF agit sur les trois repères physiologiques EF, Seuil et VMA ;
 - elle applique un déplacement commun qui conserve les écarts relatifs entre ces repères ;
-- dans la représentation énergie–soutenabilité, cette progression générale déplace conjointement le domaine énergétique et le profil de soutenabilité selon la transformation commune retenue.
+- cette progression générale conserve donc n et m et translate le profil énergétique sans modifier la forme des cartes.
 
 L'EF ne doit donc pas être interprétée comme une progression locale qui ne ferait évoluer que le point EF.
 
-## 2.6. Rôle des qualités Seuil et VMA
+## 2.7. Rôle des qualités Seuil et VMA
 
 Les adaptations de qualité développent plus spécifiquement le repère concerné :
 
@@ -212,9 +288,69 @@ Les adaptations de qualité développent plus spécifiquement le repère concern
 - une adaptation VMA agit sur le repère VMA ;
 - ces progressions modifient les positions relatives du profil, contrairement à la translation commune produite par un palier EF.
 
-Une spécialisation intensive peut donc déplacer un repère sans améliorer automatiquement la soutenabilité de la dépense correspondante. Le développement extensif est précisément ce qui permet de réduire le coût de maintien.
+Une spécialisation intensive peut déplacer un repère sans améliorer automatiquement la soutenabilité de la dépense correspondante. Le développement extensif est représenté par une évolution de la forme des cartes au travers des ancres, sous réserve des contraintes n/m.
 
-## 2.7. Ce qui est abandonné dans le modèle actif
+## 2.8. Progression des ancres et invariants
+
+Une progression d'ancre est une hausse de +1 de l'énergie correspondante. Elle n'est autorisée que si le profil résultant respecte 3 ≤ n ≤ 8, 2 ≤ m ≤ 8 et m ≤ n.
+
+| Ancre augmentée | Nouveau profil | Condition |
+|---|---|---|
+| EF +1 | (n − 1, m) | n − 1 ≥ 3 et m ≤ n − 1 |
+| Seuil +1 | (n + 1, m − 1) | n + 1 ≤ 8 et m − 1 ≥ 2 |
+| VMA +1 | (n, m + 1) | m + 1 ≤ 8 et m + 1 ≤ n |
+| Progression générale | (n, m) inchangé | toujours possible |
+
+Si une condition échoue, l'ancre ne progresse pas : sa jauge reste pleine et attend qu'une autre ancre ait évolué. Aucun point n'est perdu et aucune ancre ne monte automatiquement.
+
+Invariants de conception :
+
+1. les ancres de soutenabilité restent EF = 1, Seuil = 5, VMA = 13 ;
+2. S(E) est non décroissante dans la zone basse et strictement croissante dans la zone haute ;
+3. une progression d'ancre ou une progression générale ne rend aucune énergie plus coûteuse ;
+4. une modification d'ancre ne change que la ou les zones adjacentes ; le Seuil touche les deux ;
+5. aucune soutenabilité propre aux allures spécifiques n'est stockée en dehors des trois ancres et des cartes dérivées.
+
+L'invariant de non-augmentation des coûts a été vérifié manuellement dans les cas de conception. Une vérification exhaustive par script et tests reste un préalable à l'implémentation et à l'impression définitive des cartes.
+
+Le profil (8, 8) est un plafond de forme : aucune ancre ne peut progresser seule. La progression générale peut néanmoins déplacer ensemble les trois énergies sans changer n ni m. Toute extension de l'échelle au-delà de ces bornes est OPEN et ne fait pas partie de la règle actuelle.
+
+## 2.9. Allures spécifiques : énergie et réserve d'allure
+
+Les allures spécifiques (AS42, AS21, AS10 et AS5) constituent une couche de spécialisation en énergie, posée sur la courbe de base sans la déformer.
+
+Chaque AS stocke deux entiers :
+- **Énergie AS** : niveau énergétique de référence de cette allure.
+- **Réserve d'allure (RA)** : nombre de réductions de coût de 1 disponibles à cette allure, au maximum une réduction par secteur.
+
+L'ordre obligatoire est :
+
+~~~text
+EF < AS42 ≤ AS21 ≤ Seuil ≤ AS10 ≤ AS5 ≤ VMA
+~~~
+
+Aucune soutenabilité n'est stockée pour une AS. Son coût de base est toujours lu sur la courbe générale : S(Énergie AS). La RA ne s'applique qu'à l'énergie exacte de l'AS concernée.
+
+### 2.9.1. Progression d'une AS
+
+À chaque palier d'une AS, le joueur choisit une seule option :
+
+1. **Énergie +1** : augmente l'énergie de référence de l'allure, si l'ordre des AS et les ancres le permettent.
+2. **RA +1** : conserve l'énergie de référence et augmente d'un point la réserve d'allure.
+
+L'énergie et la RA consomment le même compteur de paliers : choisir la RA ne contourne pas le coût croissant de la progression. La limite de progression est de cinq paliers par AS. Les seuils de jauge de référence sont 10, 12, 15, 19, 24 puis 30 points ; la correspondance exacte entre ces seuils et les cinq paliers doit rester cohérente avec la jauge d'implémentation.
+
+Si l'énergie d'une AS atteint son ancre supérieure (AS21 au Seuil, AS5 à VMA), l'option Énergie est bloquée et seul le choix RA reste disponible. Une progression des ancres peut pousser une AS vers le haut pour maintenir l'ordre ; une AS ne baisse jamais. Les règles détaillées de propagation aux AS voisines doivent préserver strictement l'ordre sans accorder de palier gratuit.
+
+### 2.9.2. Dépense de la réserve d'allure
+
+Quand un secteur est couru exactement à l'énergie d'une AS, le joueur peut dépenser un point de RA de cette AS. Le coût de soutenabilité du secteur est alors réduit de 1, sans jamais descendre sous 1. Au plus un point de RA peut être dépensé par secteur. Une RA d'AS21 ne procure aucun avantage à une dépense différente de l'énergie AS21.
+
+La RA est une capacité permanente : le stock disponible est reconstitué à sa valeur complète au début de chaque course. Une réserve vide ramène exactement au coût de base de la courbe.
+
+L'énergie achète une allure de référence plus élevée ; la RA achète une réduction locale du coût de maintien. L'augmentation d'énergie peut accroître S de plus de 1, alors qu'un point de RA réduit le coût d'un seul point et uniquement sur les secteurs courus exactement à cette AS.
+
+## 2.10. Ce qui est abandonné dans le modèle actif
 
 Les éléments suivants appartiennent à l'ancien modèle énergie–vitesse et ne doivent plus être traités comme des règles actives :
 
@@ -224,12 +360,12 @@ Les éléments suivants appartiennent à l'ancien modèle énergie–vitesse et 
 - score de course égal à la somme des vitesses ;
 - plancher de vitesse EF et plafond de vitesse VMA ;
 - décalage horizontal de la courbe énergie → vitesse pour représenter la fatigue de soutenabilité ;
-- AS42 / AS21 / AS10 / AS5 comme points de conversion nécessaires au moteur ;
+- AS comme points de conversion nécessaires au moteur ;
 - terrain et aspiration appliqués comme modificateurs de conversion énergie → vitesse.
 
-Les références VDOT et les profils P8–P15 du document PHYSIOLOGICAL_SPEED_REFERENCE_PROFILES.md restent des éléments de traçabilité sportive. Leur ancienne échelle de vitesse interne à 0,5 km/h ne définit plus le modèle physiologique actif. Une éventuelle utilisation des données physiques comme repères indirects devra être décidée explicitement ; aucune conversion automatique vers les coordonnées énergétiques n'est établie.
+Les AS restent toutefois une couche de spécialisation en énergie et réserve d'allure, distincte de l'ancienne fonction de conversion.
 
----
+Les références VDOT et les profils P8–P15 du document PHYSIOLOGICAL_SPEED_REFERENCE_PROFILES.md restent des éléments de traçabilité sportive. Leur ancienne échelle de vitesse interne à 0,5 km/h ne définit plus le modèle physiologique actif. Aucune conversion automatique vers les coordonnées énergétiques n'est établie.
 
 # 3. Training B — structure de la phase de préparation
 
@@ -556,36 +692,50 @@ Le score du secteur est égal à cette énergie réellement dépensée. Il n'exi
 
 ## 4.3. Coût de soutenabilité d'un secteur
 
-Pour chaque secteur, la dépense réelle détermine une consommation de soutenabilité par lecture de la courbe énergie–soutenabilité.
+Pour chaque secteur, la dépense réelle E détermine un coût de base S(E), lu directement sur la carte de soutenabilité du profil. L'énergie réelle est la somme des dés sélectionnés après écrêtage à VMA ; c'est cette valeur, et non la somme brute avant écrêtage, qui détermine le score et le coût.
 
-- Une dépense au niveau EF ne consomme pas de soutenabilité.
-- Une dépense plus élevée consomme progressivement davantage de soutenabilité.
-- Une dépense au niveau VMA consomme la valeur maximale définie par la courbe.
+- Le coût minimal est 1, au niveau EF et sur les éventuels plateaux de la zone basse.
+- Le coût augmente par paliers entiers dans la zone basse puis dans la zone haute.
+- Le coût maximal de base est 13 à VMA.
 
-La consommation est calculée à partir de l'énergie réellement dépensée, et non de la somme brute des dés avant écrêtage.
+Une RA peut réduire de 1 le coût d'un secteur couru exactement à l'énergie de l'AS correspondante, sans passer sous 1. La dégradation liée à la fatigue de course augmente ensuite le coût par lecture décalée de la courbe (section 4.4).
 
-**OPEN :** forme de la fonction, unités, arrondis, éventuelle lecture par paliers et traitement des dépenses entre les repères. Aucun seuil numérique n'est encore validé.
+La consommation C d'un secteur est le coût effectivement payé après application du décalage de fatigue et, le cas échéant, de la réduction RA. La consommation totale C est la somme des coûts effectivement payés.
 
-## 4.4. Crédit initial et forme du jour
+## 4.4. Crédit initial, forme du jour et dégradation par fatigue
 
-Le modèle précédent distingue :
-
-- un crédit initial de soutenabilité préparé pendant Training, noté S0 ;
-- les effets cumulés des cartes de forme révélées, notés F ;
-- la consommation de soutenabilité des secteurs résolus, notée C.
-
-Cette comptabilité reste une structure de référence compatible avec le nouveau modèle, à condition de définir C à partir de la courbe énergie–soutenabilité et non d'un écart à l'AS.
+La comptabilité de course distingue le crédit initial préparé pendant Training (S0), les effets des cartes de forme du jour (F) et la consommation réellement payée sur les secteurs (C) :
 
 ~~~text
 Solde de soutenabilité = S0 + F − C
-C = somme des consommations de soutenabilité des secteurs résolus
+C = somme des coûts de secteur effectivement payés
 ~~~
 
-La forme du jour peut donc continuer à modifier le crédit disponible pour soutenir les dépenses. Les cartes révélées au début d'un secteur agissent sur ce secteur.
+La forme du jour modifie le crédit disponible. Les cartes révélées au début d'un secteur s'appliquent selon leur calendrier. S0 et les valeurs exactes des effets F restent à définir/calibrer.
 
-**DESIGN DIRECTION :** conserver la séparation entre crédit initial, forme du jour et consommation réelle.
+**DECISION VALIDATED — forme de la dégradation :** la fatigue de course ne modifie pas le profil physiologique stocké. Elle applique un décalage temporaire de k énergies vers la gauche :
 
-**OPEN :** construction de S0 depuis Training B ; conséquences exactes d'un solde négatif ; éventuelle borne ; effet du reliquat en fin de course. Le modèle antérieur de dégradation de courbe ne doit pas être repris automatiquement, puisqu'il dépendait de la conversion énergie → vitesse désormais supprimée.
+~~~text
+Coût de base fatigué(E, k) = S(E + k)
+k ∈ {0, 1, 2}
+~~~
+
+Le joueur lit la carte existante à E + k. Il n'y a pas de nouvelle courbe ni de +1 uniforme sur S. Cette règle épargne le plateau bas et pénalise davantage les dépenses proches des limites. Les énergies supérieures à VMA − k sont interdites lorsque k > 0.
+
+**DECISION VALIDATED — déclenchement de base :** l'option A, par bandes du stock de soutenabilité dépensé, est retenue :
+
+- k = 0 tant que la moitié du stock de référence n'a pas été consommée ;
+- k = 1 à partir de 50 % consommés ;
+- k = 2 à partir de 75 % consommés ;
+- un nouveau niveau de k prend effet au début du secteur suivant celui qui franchit le seuil.
+
+Le dénominateur exact du stock de référence, notamment le traitement des cartes F révélées progressivement, doit être fixé avec S0 avant implémentation. La progression de k est non réversible dans cette règle de base.
+
+La dette de fatigue réversible (option B) est conservée comme variante avancée, non active. Le déclenchement par nombre de secteurs consécutifs au-dessus du Seuil (option C) n'est pas retenu.
+
+Le coût d'un secteur est lu à S(E + k), puis réduit éventuellement de 1 si une RA est dépensée à cette AS, avec un plancher final de 1. Cette valeur alimente C et le solde S0 + F − C.
+
+**OPEN :** construction de S0, définition du stock de référence et articulation exacte avec F, conséquence mécanique d'un solde négatif et traitement du reliquat à l'arrivée.
 
 ## 4.5. Forme du jour — structure héritée, calibrage expérimental
 
@@ -743,8 +893,11 @@ Le modèle actuel n'exige plus :
 
 - une table physiologique énergie → vitesse ;
 - un score fondé sur des vitesses entières ;
-- un point AS séparé servant de seuil de consommation ;
+- une soutenabilité indépendante stockée pour chaque AS ;
+- une AS comme seuil de calcul de la consommation de base ;
 - une conversion automatique des vitesses VDOT en valeurs de jeu.
+
+Les énergies AS42 / AS21 / AS10 / AS5 et leurs RA font en revanche partie de la couche de spécialisation de course et doivent être transmises lorsqu'elles sont utilisées.
 
 Les distances de course restent des paramètres de scénario. Elles peuvent orienter le catalogue de préparation sans créer automatiquement une coordonnée physiologique supplémentaire.
 
@@ -870,36 +1023,35 @@ Une campagne Monte-Carlo massive, un solver complet ou une politique automatique
 
 # 8. Questions ouvertes et décisions à prendre
 
-Les questions ci-dessous sont les frontières réelles du design actif. Elles ne doivent pas être résolues par des valeurs de convenance.
+Cette section ne répète pas les décisions déjà fixées dans les sections 2 à 5. Elle ne contient que les paramètres, arbitrages ou raccords qui demandent encore un travail explicite.
 
-## 8.1. Modèle énergie–soutenabilité
+## 8.1. Modèle physiologique et progression
 
-1. Quelle forme mathématique ou quelle table définit la consommation de soutenabilité entre EF et VMA ?
-2. Le repère Seuil définit-il une rupture, un point de contrôle ou seulement une position physiologique intermédiaire ?
-3. Quelle granularité utiliser pour les dépenses et les consommations ?
-4. Comment les paliers intensifs et extensifs modifient-ils exactement la courbe ?
-5. Quelles bornes s'appliquent à la progression et aux rendements décroissants ?
-6. Quelle conséquence mécanique produit un solde de soutenabilité négatif pendant la Race ?
+1. Quelles valeurs initiales d'énergie EF / Seuil / VMA sont attribuées aux profils de départ ?
+2. Comment les jauges Training déclenchent-elles les progressions d'ancre et les choix intensif / extensif dans le cadre des contraintes n/m ?
+3. Comment une adaptation extensive se traduit-elle précisément dans les ancres et les cartes, sans stocker une seconde courbe indépendante ?
+4. Comment propager une hausse d'ancre aux AS voisines tout en maintenant leur ordre, sans palier gratuit ?
+5. La limite de cinq paliers par AS et la séquence de seuils 10–12–15–19–24–30 doivent-elles être confirmées telles quelles ?
+6. La vérification exhaustive des invariants confirme-t-elle tous les passages de profils autorisés ?
 
 ## 8.2. Training
 
 1. Quels événements accordent un dé supplémentaire ou une amélioration de dé, et à quelle cadence ?
-2. Quels sont les seuils d'XP des trois filières ?
-3. Quels sont les incréments des paliers intensifs et extensifs ?
-4. Quelle règle calcule le RPE autorisé à partir du tour et des dés ?
-5. Quelles sont les valeurs de RPE et de fatigue de chaque séance ?
-6. Quelle est la matrice complète des adaptations primaires et secondaires ?
-7. Quels seuils déclenchent les états de surentraînement ?
-8. Quel est le calendrier de déblocage et d'acquisition du portefeuille ?
-9. Comment définir la progression globale ouvrant SL et SPEC ?
-10. Quelle est la limite spécifique éventuelle de répétition pour chaque séance ?
+2. Quels sont les seuils d'XP des trois filières et les incréments exacts des paliers ?
+3. Quelle règle calcule le RPE autorisé à partir du tour et des dés ?
+4. Quelles sont les valeurs de RPE et de fatigue de chaque séance ?
+5. Quelle est la matrice complète des adaptations primaires et secondaires ?
+6. Quels seuils déclenchent les états de surentraînement ?
+7. Quel est le calendrier de déblocage et d'acquisition du portefeuille ?
+8. Comment définir la progression globale ouvrant SL et SPEC ?
+9. Quelle est la limite spécifique éventuelle de répétition pour chaque séance ?
 
 ## 8.3. Race
 
 1. Comment calculer S0 à partir de Training ?
-2. Les cartes de forme conservent-elles leurs recettes, distributions et calendriers actuels ?
-3. Quelle conséquence exacte produit le dépassement du crédit de soutenabilité ?
-4. Quel score cumulatif et quelle règle de groupe produisent les interactions les plus lisibles ?
+2. Quel est le stock de référence exact pour les seuils de dégradation à 50 % et 75 %, et comment les effets F révélés progressivement y contribuent-ils ?
+3. Quelle conséquence exacte produit un solde de soutenabilité négatif : restriction immédiate, impossibilité de dépenser ou autre règle ?
+4. Quel score cumulatif et quelle règle de groupe produisent les interactions les plus lisibles avec le score énergie ?
 5. Quel effet de course remplace l'ancienne aspiration virtuelle ?
 6. Comment le terrain intervient-il sans réintroduire une conversion énergie–vitesse ?
 7. Le capital de relance et les paliers d'affûtage restent-ils équilibrés avec le score énergie ?
@@ -907,13 +1059,10 @@ Les questions ci-dessous sont les frontières réelles du design actif. Elles ne
 
 ## 8.4. Expérience et intégration
 
-1. Comment transmettre le profil physiologique et la courbe depuis Training B ?
-2. Comment distinguer un profil intensif d'un profil extensif dans les tests de Race ?
-3. Quelle télémétrie minimale permet de comprendre les arbitrages de dépense et de soutenabilité ?
-4. Quel scénario déterministe valide la chaîne Training → Race avant toute simulation longue ?
-5. Quelle durée réelle obtient-on avec 2 à 4 joueurs ?
-
----
+1. Comment dériver de façon déterministe les ancres, les AS/RA, le profil de dés, S0 et l'affûtage depuis un état Training B réel ?
+2. Quelle télémétrie minimale permet de comprendre les arbitrages de dépense et de soutenabilité, notamment les effets de k et de RA ?
+3. Quel scénario déterministe valide la chaîne Training → Race avant toute simulation longue ?
+4. Quelle durée réelle obtient-on avec 2 à 4 joueurs ?
 
 # 9. Historique des modèles remplacés
 
