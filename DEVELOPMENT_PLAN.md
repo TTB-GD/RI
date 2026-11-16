@@ -27,7 +27,7 @@ La cohérence Training ↔ Race n'est pas encore réalisée. Ne pas déduire de 
 
 ### Race V2 — règles et prototype
 
-**DECISION VALIDATED — design Race V2 consolidé le 2026-11-12.** Les règles détaillées sont dans `docs/game-design/RACE_V2_DESIGN.md` et leur statut normatif est résumé dans le GDD.
+**DESIGN UPDATE — 2026-11-16.** Le GDD V3 remplace le modèle physiologique Race énergie–vitesse par le modèle énergie–soutenabilité : l'énergie dépensée devient le score et la soutenabilité le coût de maintien. `docs/game-design/RACE_V2_DESIGN.md` reste une référence historique détaillée pour l'ancien modèle et les mécaniques tactiques qui devront être réexaminées. Le GDD est l'autorité pour le modèle actif.
 
 **PROTOTYPE / EXPERIMENTAL — PR #67 fusionnée.** `experiments/current/race_v2_prototype/` orchestre une course multi-secteur avec forme du jour, cartes, groupes, aspiration, pool complet de dés, relances individuelles, sélection libre et capital global de relance. Le prototype ne constitue pas une boucle jouable complète et ne valide pas l'équilibrage.
 
@@ -57,7 +57,7 @@ Training B est la cible validée. Son prototype et ses décisions doivent contin
 
 ### Porte E — Cohérence Training ↔ Race
 
-**E0 — DOCUMENTATION : EN COURS dans cette PR.** Réconcilier les documents normatifs, le snapshot du code et les références obsolètes.
+**E0 — DOCUMENTATION : DONE par la consolidation GDD V3 et la mise à jour des références de gouvernance.** Le snapshot CURRENT_STATE reste daté du 12 novembre et décrit volontairement le code de cette date.
 
 Après clôture documentaire, les points techniques encore ouverts sont :
 - **E1 — Table physiologique :** définir la dérivation de la table entière Race à partir du profil Training B, sans interpolation.
@@ -116,7 +116,7 @@ Le jalon immédiat est la consolidation documentaire E0. L'implémentation reste
 | D1 | D | P0 | DESIGN | Training B comme cible | DONE — validé 2026-11-07 |
 | R1 | Race | P0 | DESIGN | Consolider les décisions Race V2 | DONE — 2026-11-12 |
 | R2 | Race | P1 | PROTOTYPE | Résolution secteur, orchestration, dés et relances | DONE — PR #67 fusionnée ; EXPERIMENTAL |
-| E0 | E | P0 | DOCUMENTATION | Alignement transversal GDD / plan / snapshot / README / références | IN PROGRESS |
+| E0 | E | P0 | DOCUMENTATION | Alignement transversal GDD / plan / snapshot / README / références | DONE — GDD V3 |
 | E1 | E | P1 | DESIGN+TECH | Table physiologique Training → Race | BLOCKED — pause |
 | E2 | E | P1 | DESIGN+TECH | Mapping de l'AS | BLOCKED — pause |
 | E3 | E | P1 | DESIGN+TECH | Construction de `S0` | BLOCKED — pause |
@@ -135,7 +135,7 @@ Le jalon immédiat est la consolidation documentaire E0. L'implémentation reste
 
 **B3 EN COURS — allocation directe des dés aux séances.** Remplacer la partition EF/Qualité par une composition où chaque dé conservé finance une occurrence du catalogue. Socle EF/Seuil/VMA, répétition EF ouverte, limites de répétition spécifiques par entrée. Aucun combo. Les fixtures de coût, RPE, adaptations et fatigue r## 6. Prochain chantier recommandé
 
-**Maintenant :** terminer E0, la consolidation documentaire. Cette PR ne doit modifier aucun code, aucun test ni aucune sortie de simulation.
+**Maintenant :** faire la revue utilisateur du GDD V3 et des références documentaires alignées. Cette consolidation ne modifie aucun code, test ni sortie de simulation.
 
 **Ensuite :** faire une revue utilisateur des documents synchronisés. La reprise de l'implémentation ne sera pas implicite. Le prochain chantier technique, lorsqu'il sera autorisé, devra commencer par un audit ciblé des états Training B et des entrées Race nécessaires (table physiologique, AS, `S0`, pool de dés, affûtage), puis proposer un mapping sans inventer les valeurs manquantes.
 
