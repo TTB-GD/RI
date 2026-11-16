@@ -385,7 +385,7 @@ Aucune soutenabilité n'est stockée pour une AS. Son coût de base est toujours
 1. **Énergie +1** : augmente l'énergie de référence de l'allure, si l'ordre des AS et les ancres le permettent.
 2. **RA +1** : conserve l'énergie de référence et augmente d'un point la réserve d'allure.
 
-L'énergie et la RA consomment le même compteur de paliers : choisir la RA ne contourne pas le coût croissant de la progression. La limite de progression est de cinq paliers par AS. Les seuils de jauge de référence sont 10, 12, 15, 19, 24 puis 30 points ; la correspondance exacte entre ces seuils et les cinq paliers doit rester cohérente avec la jauge d'implémentation.
+L'énergie et la RA consomment le même compteur de paliers de la jauge Spécifique. Les cinq paliers de cette jauge sont déclenchés par les coûts successifs en points d'adaptation 3, 4, 5, 7 et 10 définis en section 3.10.2. Le choix de la RA ne contourne donc pas le coût croissant de la progression.
 
 Si l'énergie d'une AS atteint son ancre supérieure (AS21 au Seuil, AS5 à VMA), l'option Énergie est bloquée et seul le choix RA reste disponible. Une progression des ancres peut pousser une AS vers le haut pour maintenir l'ordre ; une AS ne baisse jamais. Les règles détaillées de propagation aux AS voisines doivent préserver strictement l'ordre sans accorder de palier gratuit.
 
@@ -557,6 +557,10 @@ Ces lignes centrales totalisent 100 %. Elles montrent notamment que la part d'EF
 L'énergie affectée à une séance, son RPE et les points d'adaptation qu'elle produit sont trois grandeurs distinctes. Les points d'adaptation sont déterminés par la séance et sa dose, puis distribués vers les nœuds selon la matrice de la section 3.8. Une allocation énergétique ne se convertit donc pas automatiquement point pour point en adaptation.
 
 La répartition est une décision du joueur. Le système ne transforme pas automatiquement un reliquat en une autre ressource ou en une adaptation. L'énergie non dépensée reste non dépensée. Il n'existe pas de CTL dans Training B ; le CTL de l'ancien Training ne doit pas servir de variable de préparation ni de pont caché vers Race.
+
+**DECISION VALIDATED — entraînement collectif de qualité :** lorsque plusieurs joueurs affectent la même quantité d'énergie à leur travail de qualité pendant un même tour, ils peuvent effectuer cet entraînement ensemble. Ils gagnent alors chacun un point d'adaptation supplémentaire dans une jauge choisie collectivement, parmi les adaptations communes à leurs séances respectives (intersection de leurs nœuds d'adaptation). Ce bonus collectif s'ajoute aux adaptations normales de chaque séance ; il ne les remplace pas.
+
+La fréquence à laquelle cette situation se produit, l'effet réel sur les choix de séances et l'équilibre de ce bonus restent à tester. La règle de coopération est retenue dans son principe, mais son rendement ne doit pas être considéré comme calibré.
 
 **DECISION VALIDATED — entraînement collectif de qualité :** lorsque plusieurs joueurs affectent la même quantité d'énergie à leur travail de qualité pendant un même tour, ils peuvent effectuer cet entraînement ensemble. Ils gagnent alors chacun un point d'adaptation supplémentaire dans une jauge choisie collectivement, parmi les adaptations communes à leurs séances respectives (intersection de leurs nœuds d'adaptation). Ce bonus collectif s'ajoute aux adaptations normales de chaque séance ; il ne les remplace pas.
 
