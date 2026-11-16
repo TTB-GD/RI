@@ -1,8 +1,10 @@
 # Race V2 — document de conception
 
-**Version :** V2 — précisions sur la conversion, la soutenabilité et les plafonds (12 novembre 2026)  
-**Statut :** décisions de conception retenues ; calibrations expérimentales  
-**Périmètre :** profil physiologique, dépense, soutenabilité, forme du jour, groupes, dés et relances.
+**Version :** V2 — modèle Race énergie–vitesse du 12 novembre 2026  
+**Statut :** HISTORICAL / PARTIALLY SUPERSEDED depuis le 16 novembre 2026.  
+**Périmètre :** référence détaillée de l'ancien profil énergie–vitesse, de la dépense, de la soutenabilité, de la forme du jour, des groupes, des dés et des relances.
+
+> **Avertissement de statut :** le GDD racine, version V3 du 16 novembre 2026, est désormais l'autorité pour le modèle Race actif. Il remplace la courbe énergie → vitesse et le score en vitesse par une courbe énergie–soutenabilité et un score fondé sur l'énergie dépensée. Les règles de conversion, d'AS, de terrain et d'aspiration décrites ici sont donc historiques ou à réexaminer. Les détails tactiques non dépendants de la conversion (lancer, relances, forme du jour, découpage) sont conservés comme références de travail, sans validation automatique dans le nouveau modèle.
 
 > Ce document consolide les décisions de conception prises dans la discussion. Il ne décrit pas l'état actuel de l'implémentation. Les règles marquées comme retenues sont des arbitrages de design ; les valeurs signalées comme expérimentales restent à tester.
 

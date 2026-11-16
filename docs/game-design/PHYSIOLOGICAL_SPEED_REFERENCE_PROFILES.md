@@ -1,6 +1,6 @@
 # Profils de référence — vitesses physiologiques et allures spécifiques
 
-**Statut :** références de calibrage proposées ; les profils P8–P15 en unités internes doublées sont la nouvelle base de travail, en remplacement de leur ancienne représentation entière en km/h.  
+**Statut :** références sportives et profils historiques de l'ancien modèle énergie–vitesse. Depuis le 14 novembre 2026 au soir, la vitesse n'est plus une coordonnée du modèle Race actif ; les profils P8–P15 et l'unité interne de 0,5 km/h sont conservés pour traçabilité, pas comme paramètres normatifs du GDD V3.  
 **Date :** 12 novembre 2026  
 **Référentiel :** Jack Daniels, *Daniels' Running Formula*, 4e édition ; équivalences de performance VDOT et tables d'intensité.
 
@@ -114,9 +114,9 @@ Avec une granularité entière, plusieurs AS peuvent donc avoir la même valeur.
 Toutes les valeurs sont en km/h. Les profils P8 à P15 constituent la proposition de gamme de départ pour le jeu. Ils ne remplacent pas les références VDOT décimales des sections précédentes, qui restent conservées comme base de calcul et de traçabilité.
 
 
-### 3.5. Nouvelle échelle interne de vitesse — convention retenue
+### 3.5. Ancienne échelle interne de vitesse — décision du 14 novembre, supersédée pour le modèle actif
 
-**Statut : décision de conception retenue le 14 novembre 2026.** La vitesse n'est plus représentée dans les calculs du jeu par une valeur en km/h. Toutes les coordonnées de vitesse physiologique et les vitesses utilisées par Race sont exprimées dans une unité interne entière valant **0,5 km/h**.
+**Statut historique : décision documentaire retenue le 14 novembre 2026 à midi, puis supersédée le même jour par le modèle énergie–soutenabilité.** Dans l'ancien modèle, la vitesse n'était plus représentée dans les calculs du jeu par une valeur en km/h. Toutes les coordonnées de vitesse physiologique et les vitesses utilisées par Race sont exprimées dans une unité interne entière valant **0,5 km/h**.
 
 La conversion de référence est :
 
@@ -237,7 +237,7 @@ La validation quantitative devra comparer les courbes et tables Race produites a
 6. **Les AS ne sont pas des points physiologiques supplémentaires.** Elles restent des cibles propres à la distance préparée, conformément au modèle Race V2.
 7. **Pas d'extrapolation automatique.** Le profil VDOT 70 donne une référence haute déjà performante. Une extension vers VDOT 80 ou davantage devra être justifiée séparément si le jeu doit représenter des niveaux d'élite.
 
-## 5. Statut pour Run It
+## 5. Statut historique pour Run It — modèle énergie–vitesse supersédé
 
 Les cinq profils VDOT physiques restent conservés comme **références documentaires**. Les huit profils P8–P15 de la section 3.5.4 deviennent la **nouvelle proposition de référence de jeu**, exprimée dans l'unité interne de 0,5 km/h, pour :
 - la composante vitesse de la courbe physiologique EF / Seuil / VMA, avec des coordonnées entières dans l'échelle interne doublée ;

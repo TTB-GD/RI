@@ -9,13 +9,14 @@ opportunités tactiques.
 
 - **Training :** Training B est la cible de développement validée ; son prototype
   est encore partiel et n'est pas encore raccordé de bout en bout à Race.
-- **Race V2 :** les règles sont consolidées dans le GDD et dans
-  [la spécification détaillée](docs/game-design/RACE_V2_DESIGN.md). Un prototype
-  expérimental multi-secteur, incluant dés et relances, existe dans
+- **Race :** le GDD V3 définit désormais le modèle actif énergie–soutenabilité.
+  [L'ancienne spécification Race V2](docs/game-design/RACE_V2_DESIGN.md) est
+  conservée comme référence historique pour l'ancien modèle énergie–vitesse et
+  les mécaniques tactiques à réexaminer. Le prototype multi-secteur existe dans
   `experiments/current/race_v2_prototype/`.
 - **Intégration :** aucune boucle complète Training B → Race V2 n'est revendiquée.
-  Le profil physiologique, l'AS, le crédit initial de soutenabilité `S0` et le
-  palier d'affûtage doivent encore être dérivés d'un état Training réel.
+  Le profil énergétique, la courbe énergie–soutenabilité, le crédit initial `S0`,
+  le pool de dés et le palier d'affûtage doivent encore être dérivés d'un état Training réel.
 - **Équilibrage :** les calibrations et les expériences restent distinctes des
   règles validées.
 
@@ -24,7 +25,7 @@ opportunités tactiques.
 | Besoin | Document |
 |---|---|
 | Règles normatives et décisions validées | [Run It - GDD.md](Run%20It%20-%20GDD.md) |
-| Spécification détaillée Race V2 | [docs/game-design/RACE_V2_DESIGN.md](docs/game-design/RACE_V2_DESIGN.md) |
+| Référence Race V2 antérieure (énergie–vitesse, partiellement supersédée) | [docs/game-design/RACE_V2_DESIGN.md](docs/game-design/RACE_V2_DESIGN.md) |
 | État exact du code | [CURRENT_STATE.md](CURRENT_STATE.md) |
 | Ordre des chantiers et écarts | [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) |
 | Historique des divergences documentaires | [DOCUMENTATION_AUDIT.md](DOCUMENTATION_AUDIT.md) |

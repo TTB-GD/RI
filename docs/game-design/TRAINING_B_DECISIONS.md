@@ -3,6 +3,8 @@
 > **Statut :** consolidation des réponses et clarifications recueillies jusqu'à Q55, le 10 novembre 2026.  
 > **Portée :** référence de conception pour construire la matrice des séances Training B et préparer son intégration avec Race V2.  
 > **Nature :** décisions utilisateur, hypothèses provisoires et points ouverts sont distingués. Ce document ne constitue pas une validation de l'équilibrage numérique.
+>
+> **Mise à jour de portée (16 novembre 2026) :** ce document conserve les réponses Q1–Q55 du 10 novembre. Les sections décrivant une courbe énergie–vitesse et des choix « vitesse / économie » sont des références de conception antérieures, supersédées par le GDD V3 : modèle énergie–soutenabilité, développement intensif / extensif et score Race fondé sur l'énergie dépensée. Le GDD V3 prévaut pour ces sujets.
 
 ## 1. Principes directeurs
 

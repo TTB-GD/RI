@@ -4,6 +4,12 @@
 CURRENT and the former direct-dice-to-session prototype are historical and are
 not compatibility targets.
 
+> **Design-status note (2026-11-16):** this README records implementation details,
+> including prototype-era energy/speed physiology and speed/economy milestone
+> fields. Those fields remain in the code but are superseded as game design by
+> GDD V3: the active model uses energy and sustainability consumption, with
+> intensive and extensive development. No migration of this prototype is implied.
+
 ## Historical direct dice-to-session path — RETIRED
 
 The old `training_v2.engine`, `programs`, `catalog` and console path assign

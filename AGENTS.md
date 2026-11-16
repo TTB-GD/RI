@@ -36,12 +36,12 @@ Le code n'est pas automatiquement la règle de design.
 
 ### Références Race V2 (consolidation du 12 novembre 2026)
 
-- `Run It - GDD.md` porte les règles de design validées et leur statut.
-- `docs/game-design/RACE_V2_DESIGN.md` contient la spécification détaillée Race V2.
+- `Run It - GDD.md` porte les règles de design actives et leur statut ; la version V3 du 16 novembre 2026 adopte le modèle Race énergie–soutenabilité.
+- `docs/game-design/RACE_V2_DESIGN.md` est la spécification détaillée de l'ancien modèle énergie–vitesse ; elle est historique / partiellement supersédée. Ne pas reprendre ses règles de conversion, d'AS, de score vitesse, de terrain ou d'aspiration sans nouvel arbitrage.
 - `CURRENT_STATE.md` décrit l'état réellement implémenté du prototype, distinct du design.
 - `experiments/current/race_v2_prototype/` est le prototype Race V2 multi-secteur de référence pour l'état expérimental actuel.
 - `experiments/current/race_engine_v2/` et `experiments/current/training_race_bridge/` conservent des expériences de l'ancien modèle Production / Difficulty / Curve A-B-C ; ne pas les traiter comme la nouvelle baseline Race.
-- `docs/game-design/RACE_RESERVE_DESIGN.md` est historique et supersédé pour le design Race par le modèle `S0 + F - C` de `RACE_V2_DESIGN.md`.
+- `docs/game-design/RACE_RESERVE_DESIGN.md` est historique et supersédé. La comptabilité `S0 + F - C` reste une structure de référence, mais sa consommation doit désormais être définie par la courbe énergie–soutenabilité du GDD V3.
 
 Lors d'une mission Race, vérifier ces sources dans cet ordre et maintenir la séparation entre décision validée, prototype expérimental et intégration Training → Race.
 

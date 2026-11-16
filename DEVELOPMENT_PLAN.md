@@ -27,15 +27,15 @@ La cohérence Training ↔ Race n'est pas encore réalisée. Ne pas déduire de 
 
 ### Race V2 — règles et prototype
 
-**DECISION VALIDATED — design Race V2 consolidé le 2026-11-12.** Les règles détaillées sont dans `docs/game-design/RACE_V2_DESIGN.md` et leur statut normatif est résumé dans le GDD.
+**DESIGN UPDATE — 2026-11-16.** Le GDD V3 remplace le modèle physiologique Race énergie–vitesse par le modèle énergie–soutenabilité : l'énergie dépensée devient le score et la soutenabilité le coût de maintien. `docs/game-design/RACE_V2_DESIGN.md` reste une référence historique détaillée pour l'ancien modèle et les mécaniques tactiques qui devront être réexaminées. Le GDD est l'autorité pour le modèle actif.
 
 **PROTOTYPE / EXPERIMENTAL — PR #67 fusionnée.** `experiments/current/race_v2_prototype/` orchestre une course multi-secteur avec forme du jour, cartes, groupes, aspiration, pool complet de dés, relances individuelles, sélection libre et capital global de relance. Le prototype ne constitue pas une boucle jouable complète et ne valide pas l'équilibrage.
 
-**IMPLEMENTATION GAP — Training → Race.** Les entrées Race sont encore explicites : table physiologique entière, AS, crédit initial `S0`, pool de dés et palier d'affûtage. Leur dérivation déterministe depuis un état Training B réel reste à spécifier et intégrer. En particulier, le mapping fatigue résiduelle → palier d'affûtage n'est pas implémenté.
+**IMPLEMENTATION GAP — Training → Race.** Les entrées Race sont encore explicites : profil énergétique EF / Seuil / VMA, courbe énergie–soutenabilité, crédit initial `S0`, pool de dés et palier d'affûtage. Leur dérivation déterministe depuis un état Training B réel reste à spécifier et intégrer. L'AS comme entrée obligatoire et la table énergie → vitesse sont supersédées. Le mapping fatigue résiduelle → palier d'affûtage n'est pas implémenté.
 
 ### Pause d'implémentation — 2026-11-12
 
-À la demande de l'utilisateur, l'implémentation est suspendue après PR #67. Le chantier immédiat est documentaire : aligner GDD, spécification Race V2, snapshot d'implémentation, README, roadmap et références historiques. Aucun nouveau code, mapping Training → Race ou calibrage ne doit être engagé avant clôture de cette consolidation et nouvelle instruction explicite.
+À la demande de l'utilisateur, l'implémentation est suspendue après PR #67. Le chantier documentaire E0 (alignement GDD, spécification Race, snapshot, README, plan et références historiques) a été clôturé dans la PR #72. La revue utilisateur du GDD V3 est l'étape suivante. Aucun nouveau code, mapping Training → Race ou calibrage ne doit être engagé avant instruction explicite.
 
 ## 3. Portes et statut
 
@@ -57,14 +57,14 @@ Training B est la cible validée. Son prototype et ses décisions doivent contin
 
 ### Porte E — Cohérence Training ↔ Race
 
-**E0 — DOCUMENTATION : EN COURS dans cette PR.** Réconcilier les documents normatifs, le snapshot du code et les références obsolètes.
+**E0 — DOCUMENTATION : DONE par la consolidation GDD V3 et la mise à jour des références de gouvernance.** Le snapshot CURRENT_STATE reste daté du 12 novembre et décrit volontairement le code de cette date.
 
 Après clôture documentaire, les points techniques encore ouverts sont :
-- **E1 — Table physiologique :** définir la dérivation de la table entière Race à partir du profil Training B, sans interpolation.
-- **E2 — AS :** déterminer la valeur propre à la course et son lien avec le profil Training.
-- **E3 — Soutenabilité initiale :** définir la construction de `S0` depuis le Training ; ne pas réutiliser implicitement l'ancien modèle de réserve basé sur investissements EF/Seuil/VMA ou CTL.
-- **E4 — Affûtage :** déterminer le palier depuis la fatigue résiduelle et le plus haut dé, conformément aux seuils du GDD.
-- **E5 — Validation de l'échelle :** vérifier la cohérence des plages de dépense, de la consommation par rapport à AS et de la soutenabilité, sans lancer de campagne massive prématurée.
+- **E1 — Profil énergétique :** définir les coordonnées énergétiques EF / Seuil / VMA à partir de l'état Training B.
+- **E2 — Courbe énergie–soutenabilité :** définir sa construction et son évolution à partir des adaptations intensives / extensives. L'AS comme entrée obligatoire de Race est supersédée.
+- **E3 — Crédit initial :** définir la construction de `S0` depuis Training B, sans réintroduire l'ancien modèle de réserve fondé sur CTL.
+- **E4 — Affûtage :** déterminer le palier depuis la fatigue résiduelle et le plus haut dé, puis vérifier sa cohérence avec Training B.
+- **E5 — Validation de l'échelle :** vérifier la cohérence des plages de dépense, des consommations issues de la courbe énergie–soutenabilité et du solde de soutenabilité.
 
 ### Porte F — Boucle end-to-end (LATER / bloquée par E)
 
@@ -104,7 +104,7 @@ B — audit historique ┘                         │
                                   H — calibration / I — choix joueur
 ```
 
-Le jalon immédiat est la consolidation documentaire E0. L'implémentation reste suspendue après PR #67. La reprise de E1–E5 et de la boucle end-to-end nécessite une instruction explicite après revue de la documentation.
+E0 est DONE ; la revue du GDD V3 et de la PR #72 est en attente. L'implémentation reste suspendue après PR #67. La reprise de E1–E5 et de la boucle end-to-end nécessite une instruction explicite après cette revue.
 
 ## 5. Tableau de pilotage
 
@@ -114,14 +114,14 @@ Le jalon immédiat est la consolidation documentaire E0. L'implémentation reste
 | B1–B5 | B | P0 | TECH / TEST | Intégrité de l'ancien Training CURRENT | DONE — HISTORICAL |
 | C1–C2 | C | P0 | DESIGN | Vision et trajectoire Training B | DONE — validé 2026-11-07 |
 | D1 | D | P0 | DESIGN | Training B comme cible | DONE — validé 2026-11-07 |
-| R1 | Race | P0 | DESIGN | Consolider les décisions Race V2 | DONE — 2026-11-12 |
+| R1 | Race | P0 | DESIGN | Consolider l'ancienne Race V2 énergie–vitesse | DONE — HISTORICAL, 2026-11-12 |
 | R2 | Race | P1 | PROTOTYPE | Résolution secteur, orchestration, dés et relances | DONE — PR #67 fusionnée ; EXPERIMENTAL |
-| E0 | E | P0 | DOCUMENTATION | Alignement transversal GDD / plan / snapshot / README / références | IN PROGRESS |
-| E1 | E | P1 | DESIGN+TECH | Table physiologique Training → Race | BLOCKED — pause |
-| E2 | E | P1 | DESIGN+TECH | Mapping de l'AS | BLOCKED — pause |
+| E0 | E | P0 | DOCUMENTATION | Alignement transversal GDD / plan / snapshot / README / références | DONE — GDD V3 |
+| E1 | E | P1 | DESIGN+TECH | Profil énergétique EF / Seuil / VMA Training → Race | BLOCKED — pause |
+| E2 | E | P1 | DESIGN+TECH | Courbe énergie–soutenabilité | BLOCKED — pause |
 | E3 | E | P1 | DESIGN+TECH | Construction de `S0` | BLOCKED — pause |
 | E4 | E | P1 | DESIGN+TECH | Fatigue résiduelle → palier d'affûtage | BLOCKED — pause |
-| E5 | E | P1 | ANALYSE | Cohérence des échelles Race | BLOCKED — pause |
+| E5 | E | P1 | ANALYSE | Cohérence dépense / soutenabilité Race | BLOCKED — pause |
 | F1–F5 | F | P1 | TEST / SIM | Boucle end-to-end et diagnostics | LATER — dépend de E |
 | G1 | G | P1/P2 | ANALYSE | Solver / oracle Race | LATER |
 | H1 | H | P1/P2 | BALANCE | Calibration séquentielle | LATER |
@@ -129,13 +129,8 @@ Le jalon immédiat est la consolidation documentaire E0. L'implémentation reste
 
 ## 6. Prochain chantier recommandé
 
-**B1 TERMINÉ — PR #38 :** catalogue déclaratif et adaptations fixes génériques.
+**Maintenant :** revue utilisateur du GDD V3 et des références documentaires alignées. La consolidation E0 est terminée ; aucun code, test, harness ou résultat de simulation n'est modifié par cette étape.
 
-**B2 — coût énergétique distinct du RPE.** Les séances Seuil/VMA portent maintenant un coût énergétique fixe et un RPE indépendant. Le coût est payé sur l'énergie allouée ; le RPE pilote l'entrée dans le test de risque/bust. Les valeurs du catalogue sont des fixtures D1-S4 expérimentales, non calibrées.
+**Ensuite :** la reprise du travail de conception ou d'implémentation nécessite une instruction explicite. Le premier chantier de fond devra formaliser le profil énergétique EF / Seuil / VMA, la courbe énergie–soutenabilité et la construction de S0, puis vérifier le lien entre fatigue résiduelle et affûtage. Les paramètres manquants doivent rester OPEN plutôt que recevoir des valeurs arbitraires.
 
-**B3 EN COURS — allocation directe des dés aux séances.** Remplacer la partition EF/Qualité par une composition où chaque dé conservé finance une occurrence du catalogue. Socle EF/Seuil/VMA, répétition EF ouverte, limites de répétition spécifiques par entrée. Aucun combo. Les fixtures de coût, RPE, adaptations et fatigue r## 6. Prochain chantier recommandé
-
-**Maintenant :** terminer E0, la consolidation documentaire. Cette PR ne doit modifier aucun code, aucun test ni aucune sortie de simulation.
-
-**Ensuite :** faire une revue utilisateur des documents synchronisés. La reprise de l'implémentation ne sera pas implicite. Le prochain chantier technique, lorsqu'il sera autorisé, devra commencer par un audit ciblé des états Training B et des entrées Race nécessaires (table physiologique, AS, `S0`, pool de dés, affûtage), puis proposer un mapping sans inventer les valeurs manquantes.
-
+La pause d'implémentation après PR #67 reste en vigueur. La présente mise à jour documentaire ne la lève pas.
