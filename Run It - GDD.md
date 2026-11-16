@@ -201,7 +201,7 @@ On définit n = Seuil − EF, largeur de la zone basse, et m = VMA − Seuil, la
 
 La séquence commence à S(EF) = 1 et se termine à S(VMA) = 13 ; chaque valeur intermédiaire correspond à une énergie entière successive. Ainsi, pour P1, EF = 10, Seuil = 13 et VMA = 15. Les cinq profils respectent le domaine autorisé des largeurs n et m.
 
-La moyenne du pool initial de quatre d6 vaut 4 × 3,5 = 14. Le seuil énergétique initial des cinq profils est fixé à 13 : il est donc proche, mais non égal, à cette espérance. Cet écart est accepté pour cette version provisoire des profils ; il ne doit pas être corrigé implicitement par translation des profils.
+La moyenne du pool initial de quatre d6 vaut 4 × 3,5 = 14. Le seuil énergétique initial des cinq profils est fixé à 13 : il est donc proche, mais non égal, à cette espérance. Cet écart est accepté pour cette version provisoire des profils ; il ne doit pas être corrigé implicitement par translation des profils. La proximité entre le seuil énergétique initial et l'espérance du pool sera évaluée en test : il n'est pas recherché que les profils soient identiques à l'espérance, mais ils ne doivent pas non plus s'en éloigner excessivement sans raison de design.
 
 
 La courbe est une abstraction de jeu inspirée de la relation intensité–durée et des domaines d'intensité modéré, lourd et sévère. Les ancres 1–5–13 et les bornes n/m sont des choix de modélisation, pas des constantes physiologiques mesurées.
@@ -516,7 +516,7 @@ La fatigue cumulée après application de cette contribution est bornée inféri
 
 ## 3.5. Allocation de l'énergie et cinq jauges de progression
 
-**DESIGN DIRECTION — architecture Training B précisée le 16 novembre 2026 :** l'énergie disponible issue des dés est affectée à des séances. Le système de progression distingue cinq jauges : **Général, Endurance, Seuil, VMA et Spécifique**. Elles ne représentent pas cinq capacités physiologiques indépendantes ; elles organisent les voies d'adaptation et leurs paliers.
+**DESIGN DIRECTION — architecture Training B précisée le 16 novembre 2026 :** l'énergie disponible issue des dés est affectée à des séances. Le système de progression distingue cinq jauges : **Général, Endurance, Seuil, VMA et Spécifique**. Elles ne représentent pas cinq capacités physiologiques indépendantes ; elles organisent les voies d'investissement énergétique et d'adaptation, ainsi que leurs paliers.
 
 | Jauge | Rôle | Nœud(s) concerné(s) |
 |---|---|---|
@@ -880,6 +880,8 @@ Le coût d'un secteur est lu à S(E + k), puis réduit éventuellement de 1 si u
 Exemple : si S(18) = 4, alors une fatigue k = 1 porte le coût de base à S(19) = 5 et k = 2 à S(20) = 6. Une RA dépensée à l'énergie 18 réduit le coût effectivement payé d'un point, sans descendre sous 1. Si k = 2, toute dépense supérieure à VMA − 2 est interdite.
 
 Quand le solde de soutenabilité est épuisé, le joueur est bloqué à EF : il ne peut plus dépenser au-dessus de son énergie EF. Le coût minimal de soutenabilité à EF reste 1 ; la règle n'autorise donc pas à continuer à dépenser à une intensité supérieure en créant une dette de soutenabilité.
+
+La rétroaction qui conduit progressivement à cette limite est volontaire : les dépenses élevées accélèrent la consommation du stock, les seuils de dégradation augmentent ensuite le coût des secteurs et peuvent provoquer une explosion de la consommation. Cette dynamique représente le risque de « mur » en course. L'enjeu de calibration est de permettre au joueur de gérer cette explosion par ses choix de dépense, sans la rendre ni anodine ni inévitable.
 
 **OPEN :** valeur du facteur de conversion énergie Général → S0 ; définition exacte du stock de référence pour les seuils de dégradation et articulation avec les effets F ; traitement du reliquat à l'arrivée.
 
