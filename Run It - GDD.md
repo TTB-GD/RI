@@ -176,7 +176,7 @@ Les coordonnées énergétiques exactes des trois repères ne sont pas encore ca
 
 S est un **indice ordinal de coût**, pas une durée ni une mesure physiologique en unités physiques. Plus S est élevé, plus le maintien de la dépense est coûteux. Le coût de base d'un secteur est la valeur S lue sur la courbe. Cette échelle remplace l'ancienne formulation selon laquelle la consommation était nulle à EF : dans le modèle retenu, EF est le coût minimal, égal à 1.
 
-Les trois énergies EF, Seuil et VMA sont des entiers stockés. La courbe complète est déterminée par ces trois valeurs ; aucune table d'énergie–vitesse n'est requise.
+Les trois énergies EF, Seuil et VMA sont les seules coordonnées physiologiques de base stockées, sous forme d'entiers. n et m sont dérivés de ces trois valeurs et ne constituent pas des variables supplémentaires. La courbe complète est déterminée par ces trois ancres ; aucune table d'énergie–vitesse n'est requise.
 
 On définit n = Seuil − EF, largeur de la zone basse, et m = VMA − Seuil, largeur de la zone haute. Le domaine valide est 3 ≤ n ≤ 8, 2 ≤ m ≤ 8 et m ≤ n. Il existe 27 profils de forme autorisés. La condition m ≤ n garantit un coude moyen d'au moins 2 ; il vaut exactement 2 lorsque m = n.
 
@@ -634,9 +634,21 @@ La voie locale ne doit pas permettre à un développement EF de débloquer autom
 
 **OPEN :** définition du développement global, seuils de jalons, cadence d'acquisition, nombre d'options et contreparties éventuelles. Aucun seuil observé dans un harness ne doit être repris comme règle sans décision.
 
-## 3.12. SL et SPEC
+## 3.12. SL, SPEC et allures spécifiques
 
 SL (sortie longue) et SPEC (spécifique) ne sont pas de nouvelles filières physiologiques fondamentales.
+
+### 3.12.1. Séances d'allure spécifique
+
+Les quatre allures spécifiques AS42, AS21, AS10 et AS5 sont également des cibles de spécialisation Training. Elles ne créent pas de nouvelles filières physiologiques : chaque séance AS possède un profil de transfert propre vers les adaptations EF, Seuil et VMA, défini dans la matrice d'adaptation du catalogue.
+
+Ces séances ont trois fonctions :
+1. proposer des chemins de progression différents vers les ancres physiologiques ;
+2. préparer une allure de référence correspondant à la distance ciblée ;
+3. contribuer à la spécialisation de course par la progression de l'énergie AS et de sa réserve d'allure (RA).
+
+La matrice de transfert précise pour chaque séance AS ses contributions primaires et secondaires. Les valeurs de cette matrice, les doses, les RPE, la pénibilité et les conditions d'éligibilité restent à définir ou à calibrer. Les AS ne possèdent toujours pas de courbe de soutenabilité autonome.
+
 
 - **SL** représente une préparation d'endurance longue, susceptible d'apporter des adaptations spécifiques de durabilité et une pénibilité propre.
 - **SPEC** représente une préparation ciblée et transversale, qui peut caractériser différentes séances plutôt que constituer une cinquième capacité physiologique obligatoire.
