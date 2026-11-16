@@ -24,7 +24,7 @@ opportunités tactiques.
 | Besoin | Document |
 |---|---|
 | Règles normatives et décisions validées | [Run It - GDD.md](Run%20It%20-%20GDD.md) |
-| Spécification détaillée Race V2 | [docs/game-design/RACE_V2_DESIGN.md](docs/game-design/RACE_V2_DESIGN.md) |
+| Référence Race V2 antérieure (énergie–vitesse, partiellement supersédée) | [docs/game-design/RACE_V2_DESIGN.md](docs/game-design/RACE_V2_DESIGN.md) |
 | État exact du code | [CURRENT_STATE.md](CURRENT_STATE.md) |
 | Ordre des chantiers et écarts | [DEVELOPMENT_PLAN.md](DEVELOPMENT_PLAN.md) |
 | Historique des divergences documentaires | [DOCUMENTATION_AUDIT.md](DOCUMENTATION_AUDIT.md) |
