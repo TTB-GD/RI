@@ -31,7 +31,7 @@ La cohérence Training ↔ Race n'est pas encore réalisée. Ne pas déduire de 
 
 **PROTOTYPE / EXPERIMENTAL — PR #67 fusionnée.** `experiments/current/race_v2_prototype/` orchestre une course multi-secteur avec forme du jour, cartes, groupes, aspiration, pool complet de dés, relances individuelles, sélection libre et capital global de relance. Le prototype ne constitue pas une boucle jouable complète et ne valide pas l'équilibrage.
 
-**IMPLEMENTATION GAP — Training → Race.** Les entrées Race sont encore explicites : table physiologique entière, AS, crédit initial `S0`, pool de dés et palier d'affûtage. Leur dérivation déterministe depuis un état Training B réel reste à spécifier et intégrer. En particulier, le mapping fatigue résiduelle → palier d'affûtage n'est pas implémenté.
+**IMPLEMENTATION GAP — Training → Race.** Les entrées Race sont encore explicites : profil énergétique EF / Seuil / VMA, courbe énergie–soutenabilité, crédit initial `S0`, pool de dés et palier d'affûtage. Leur dérivation déterministe depuis un état Training B réel reste à spécifier et intégrer. L'AS comme entrée obligatoire et la table énergie → vitesse sont supersédées. Le mapping fatigue résiduelle → palier d'affûtage n'est pas implémenté.
 
 ### Pause d'implémentation — 2026-11-12
 
@@ -60,11 +60,11 @@ Training B est la cible validée. Son prototype et ses décisions doivent contin
 **E0 — DOCUMENTATION : DONE par la consolidation GDD V3 et la mise à jour des références de gouvernance.** Le snapshot CURRENT_STATE reste daté du 12 novembre et décrit volontairement le code de cette date.
 
 Après clôture documentaire, les points techniques encore ouverts sont :
-- **E1 — Table physiologique :** définir la dérivation de la table entière Race à partir du profil Training B, sans interpolation.
-- **E2 — AS :** déterminer la valeur propre à la course et son lien avec le profil Training.
-- **E3 — Soutenabilité initiale :** définir la construction de `S0` depuis le Training ; ne pas réutiliser implicitement l'ancien modèle de réserve basé sur investissements EF/Seuil/VMA ou CTL.
-- **E4 — Affûtage :** déterminer le palier depuis la fatigue résiduelle et le plus haut dé, conformément aux seuils du GDD.
-- **E5 — Validation de l'échelle :** vérifier la cohérence des plages de dépense, de la consommation par rapport à AS et de la soutenabilité, sans lancer de campagne massive prématurée.
+- **E1 — Profil énergétique :** définir les coordonnées énergétiques EF / Seuil / VMA à partir de l'état Training B.
+- **E2 — Courbe énergie–soutenabilité :** définir sa construction et son évolution à partir des adaptations intensives / extensives. L'AS comme entrée obligatoire de Race est supersédée.
+- **E3 — Crédit initial :** définir la construction de `S0` depuis Training B, sans réintroduire l'ancien modèle de réserve fondé sur CTL.
+- **E4 — Affûtage :** déterminer le palier depuis la fatigue résiduelle et le plus haut dé, puis vérifier sa cohérence avec Training B.
+- **E5 — Validation de l'échelle :** vérifier la cohérence des plages de dépense, des consommations issues de la courbe énergie–soutenabilité et du solde de soutenabilité.
 
 ### Porte F — Boucle end-to-end (LATER / bloquée par E)
 
@@ -137,5 +137,5 @@ Le jalon immédiat est la consolidation documentaire E0. L'implémentation reste
 
 **Maintenant :** faire la revue utilisateur du GDD V3 et des références documentaires alignées. Cette consolidation ne modifie aucun code, test ni sortie de simulation.
 
-**Ensuite :** faire une revue utilisateur des documents synchronisés. La reprise de l'implémentation ne sera pas implicite. Le prochain chantier technique, lorsqu'il sera autorisé, devra commencer par un audit ciblé des états Training B et des entrées Race nécessaires (table physiologique, AS, `S0`, pool de dés, affûtage), puis proposer un mapping sans inventer les valeurs manquantes.
+**Ensuite :** faire une revue utilisateur des documents synchronisés. La reprise de l'implémentation ne sera pas implicite. Le prochain chantier technique, lorsqu'il sera autorisé, devra commencer par un audit ciblé des états Training B et des entrées Race nécessaires (profil énergétique, courbe énergie–soutenabilité, `S0`, pool de dés, affûtage), puis proposer un mapping sans inventer les valeurs manquantes.
 
