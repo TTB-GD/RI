@@ -1,7 +1,7 @@
 # Run It — Game Design Document
 
 **Version :** GDD V3 — vision Training B / Race énergie–soutenabilité  
-**Date de consolidation :** 16 novembre 2026 — révision courbe énergie–soutenabilité  
+**Date de consolidation :** 16 novembre 2026 — révision courbe énergie–soutenabilité et progression Training B  
 **Statut :** document de référence du design ; paramètres d'équilibrage et intégration encore partiellement ouverts.
 
 > Ce document remplace les anciennes descriptions du Training CURRENT et le modèle Race fondé sur une conversion énergie → vitesse. Il rassemble les décisions de conception retenues, les orientations structurantes les plus récentes, les paramètres qui restent expérimentaux et les écarts entre le design et les prototypes. Il ne prétend pas que les règles décrites sont toutes implémentées.
@@ -179,6 +179,23 @@ S est un **indice ordinal de coût**, pas une durée ni une mesure physiologique
 Les trois énergies EF, Seuil et VMA sont les seules coordonnées physiologiques de base stockées, sous forme d'entiers. n et m sont dérivés de ces trois valeurs et ne constituent pas des variables supplémentaires. La courbe complète est déterminée par ces trois ancres ; aucune table d'énergie–vitesse n'est requise.
 
 On définit n = Seuil − EF, largeur de la zone basse, et m = VMA − Seuil, largeur de la zone haute. Le domaine valide est 3 ≤ n ≤ 8, 2 ≤ m ≤ 8 et m ≤ n. Il existe 27 profils de forme autorisés. La condition m ≤ n garantit un coude moyen d'au moins 2 ; il vaut exactement 2 lorsque m = n.
+
+### Profils énergétiques initiaux de référence
+
+**DECISION VALIDATED — 16 novembre 2026, profil de départ provisoire :** les cinq profils historiques fondés sur des références VDOT/vitesse sont abandonnés comme profils initiaux du nouveau modèle. Les profils de départ sont définis par une séquence entière de soutenabilité relative, translatée sur l'axe énergétique par l'énergie EF.
+
+| Profil | Séquence S de EF à VMA | EF | Seuil | VMA | n | m |
+|---|---|---:|---:|---:|---:|---:|
+| P1 | 1 – 2 – 3 – 5 – 9 – 13 | 10 | 13 | 15 | 3 | 2 |
+| P2 | 1 – 2 – 3 – 5 – 7 – 10 – 13 | 10 | 13 | 16 | 3 | 3 |
+| P3 | 1 – 2 – 3 – 4 – 5 – 9 – 13 | 9 | 13 | 15 | 4 | 2 |
+| P4 | 1 – 2 – 3 – 4 – 5 – 7 – 10 – 13 | 9 | 13 | 16 | 4 | 3 |
+| P5 | 1 – 2 – 3 – 4 – 5 – 7 – 9 – 11 – 13 | 9 | 13 | 17 | 4 | 4 |
+
+La séquence commence à S(EF) = 1 et se termine à S(VMA) = 13 ; chaque valeur intermédiaire correspond à une énergie entière successive. Ainsi, pour P1, EF = 10, Seuil = 13 et VMA = 15. Les cinq profils respectent le domaine autorisé des largeurs n et m.
+
+La moyenne du pool initial de quatre d6 vaut 4 × 3,5 = 14. Le seuil énergétique initial des cinq profils est fixé à 13 : il est donc proche, mais non égal, à cette espérance. Cet écart est accepté pour cette version provisoire des profils ; il ne doit pas être corrigé implicitement par translation des profils.
+
 
 La courbe est une abstraction de jeu inspirée de la relation intensité–durée et des domaines d'intensité modéré, lourd et sévère. Les ancres 1–5–13 et les bornes n/m sont des choix de modélisation, pas des constantes physiologiques mesurées.
 
@@ -488,30 +505,37 @@ Valeurs de référence de la fonction actuelle :
 
 La fatigue cumulée après application de cette contribution est bornée inférieurement à zéro. Cette table décrit la courbe quasi-Fibonacci retenue et sa référence d'implémentation actuelle ; toute modification de la courbe doit être explicite et testée. Elle ne doit pas être remplacée par une variation linéaire de l'énergie dépensée moins le TN.
 
-## 3.5. Répartition de l'énergie
+## 3.5. Allocation de l'énergie et cinq jauges de progression
 
-L'énergie finale des dés est conservée et répartie librement entre deux compartiments :
+**DESIGN DIRECTION — architecture Training B précisée le 16 novembre 2026 :** l'énergie disponible issue des dés est affectée à des séances. Le système de progression distingue cinq jauges : **Général, Endurance, Seuil, VMA et Spécifique**. Elles ne représentent pas cinq capacités physiologiques indépendantes ; elles organisent les voies d'adaptation et leurs paliers.
 
-- **budget EF** ;
-- **budget Qualité**, lui-même réparti librement entre Seuil et VMA.
+| Jauge | Rôle | Nœud(s) concerné(s) |
+|---|---|---|
+| Général | Travail de volume global, base principale de la préparation ; contribue à la progression physiologique générale et au développement du pool | EF, Seuil, VMA et énergies des AS |
+| Endurance | Travail orienté endurance facile / volume EF | EF |
+| Seuil | Travail orienté seuil | Seuil |
+| VMA | Travail orienté VMA | VMA |
+| Spécifique | Travail à l'allure de la course préparée | Énergie de l'AS préparée et/ou sa RA |
 
-Il est possible d'investir dans Seuil et VMA au cours du même tour.
+Général et Endurance sont proches par leur lien au volume, mais ne sont pas fusionnés. Général représente la part la plus importante du travail, de l'ordre de 14 à 16 points par tour en première référence, potentiellement davantage lorsque le pool de dés progresse. Il constitue la voie principale d'ajout de dés. Endurance représente une adaptation plus spécifiquement orientée vers le nœud EF.
 
-La répartition est une décision du joueur. Le système ne transforme pas automatiquement un reliquat en une autre ressource ou en une adaptation. L'énergie non dépensée reste non dépensée.
+L'énergie peut être affectée à une ou plusieurs séances au cours d'un tour. Pour les quatre jauges Endurance, Seuil, VMA et Spécifique, la référence de conception est de l'ordre de 4 à 6 points d'énergie affectés à une ou plusieurs séances. Cette valeur est un ordre de grandeur d'allocation, pas un coût obligatoire ni une limite dure déjà calibrée.
 
-Il n'existe pas de CTL dans Training B. Le CTL de l'ancien Training ne doit pas servir de variable de préparation ni de pont caché vers Race.
+L'énergie affectée à une séance, son RPE et les points d'adaptation qu'elle produit sont trois grandeurs distinctes. Les points d'adaptation sont déterminés par la séance et sa dose, puis distribués vers les nœuds selon la matrice de la section 3.8. Une allocation énergétique ne se convertit donc pas automatiquement point pour point en adaptation.
 
-Le modèle ne réintroduit pas de quota dur général du type Qualité ≤ EF. La régulation de l'investissement en qualité doit émerger de la fatigue, de la pénibilité, des coûts d'opportunité et de la progression, sauf limite particulière justifiée pour une séance donnée.
+La répartition est une décision du joueur. Le système ne transforme pas automatiquement un reliquat en une autre ressource ou en une adaptation. L'énergie non dépensée reste non dépensée. Il n'existe pas de CTL dans Training B ; le CTL de l'ancien Training ne doit pas servir de variable de préparation ni de pont caché vers Race.
 
 ## 3.6. Catalogue de séances et doses
 
-Le catalogue initial est organisé autour des trois filières physiologiques :
+Le catalogue initial est organisé autour des séances de volume général/EF, Seuil, VMA et des séances spécifiques à l'allure de la course préparée. Les entrées de base historiques du catalogue restent des références de structuration, pas une liste exhaustive ni une calibration définitive :
 
-| Filière | Entrées de base |
+| Famille de séance | Entrées de base / portée |
 |---|---|
-| EF | EF1, EF2, EF3, EF4 |
+| EF / Endurance | EF1, EF2, EF3, EF4 |
 | Seuil | Seuil3, Seuil4, Seuil5 |
 | VMA | VMA3, VMA4, VMA5 |
+| Spécifique | Séances à l'AS de la course préparée uniquement |
+| Général | Travail de volume global ; voie principale de progression générale et de développement du pool |
 
 Le chiffre de l'identifiant représente la dose énergétique exacte de la séance. Il ne représente ni une capacité physiologique, ni une adaptation, ni le RPE.
 
@@ -537,20 +561,30 @@ Chaque option du catalogue doit pouvoir décrire au minimum :
 
 Le coût énergétique, le RPE, les adaptations et la fatigue sont des variables distinctes. Il ne faut pas les fusionner dans un coefficient unique. L'énergie détermine ce que le joueur peut engager sur le tour ; la fatigue régule davantage le volume et la répétition des efforts de qualité au fil du cycle.
 
-Les adaptations sont définies par séance et par dose. Elles sont fixes pour une occurrence réussie ; elles ne sont pas multipliées automatiquement par le résultat des dés. Les effets conditionnels ou combos entre séances sont une extension possible, mais restent désactivés dans la première version : pas de moteur de combos ni de séquençage obligatoire.
+Les adaptations sont définies par séance et par dose. Elles sont fixes pour une occurrence réussie ; elles ne sont pas multipliées automatiquement par le résultat des dés. La matrice de la section 3.8 définit les contributions relatives d'une famille de séances vers les nœuds physiologiques. Les effets conditionnels ou combos entre séances sont une extension possible, mais restent désactivés dans la première version : pas de moteur de combos ni de séquençage obligatoire.
 
-## 3.8. Adaptations primaires et secondaires
+## 3.8. Matrice de transfert des séances vers les nœuds physiologiques
 
-Les séances peuvent contribuer à plusieurs dimensions physiologiques.
+**DESIGN DIRECTION — matrice de référence proposée le 16 novembre 2026 :** une séance peut produire des adaptations sur plusieurs nœuds. La ligne désigne le type de travail / la famille de séance ; la colonne désigne le nœud physiologique qui reçoit les points d'adaptation.
 
-- Une séance EF contribue principalement à EF.
-- Une séance Seuil contribue principalement à Seuil et peut aussi contribuer à EF.
-- Une séance VMA contribue principalement à VMA et peut aussi contribuer à EF.
-- Les contributions secondaires EF des séances de qualité alimentent le même compteur EF que les adaptations primaires des séances EF.
+| Type d'entraînement ↓ / Nœud → | EF | AS42 | AS21 | Seuil | AS10 | AS5 | VMA |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| EF (volume / Endurance) | 2 | 1 | 1 | 1 | 0 | 0 | 0 |
+| Seuil | 1 | 1 | 1 | 2 | 1 | 0 | 0 |
+| VMA | 0 | 0 | 0 | 1 | 1 | 1 | 2 |
+| AS42 | 1 | 2 | 1 | 0 | 0 | 0 | 0 |
+| AS21 | 0 | 1 | 2 | 1 | 0 | 0 | 0 |
+| AS10 | 0 | 0 | 0 | 1 | 2 | 1 | 0 |
+| AS5 | 0 | 0 | 0 | 0 | 1 | 2 | 1 |
+| Général | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 
-Cette contribution secondaire représente notamment le fait qu'une séance de qualité comporte une part de travail aérobie général. Elle ne doit pas être interprétée comme une création d'énergie gratuite : elle est attachée à une séance effectivement réalisée et à ses adaptations définies.
+Les valeurs 0, 1 et 2 expriment des contributions relatives d'adaptation, pas des points d'énergie et pas encore une conversion complète énergie dépensée → adaptation. À titre d'exemple, une séance VMA de RPE 6 peut produire +2 au nœud VMA, +1 à AS5 et +1 au Seuil, conformément à la ligne VMA. La dose énergétique, le RPE et la règle de détermination de la quantité effective de points d'adaptation restent à préciser ; la matrice ne suffit pas à elle seule à calculer le résultat d'une séance.
 
-Les valeurs numériques des adaptations primaires et secondaires restent EXPERIMENTAL tant qu'elles n'ont pas été explicitement calibrées et promues.
+La ligne Général représente une contribution répartie uniformément sur les sept nœuds. Elle ne doit pas être confondue avec la ligne EF : la séance EF/Endurance privilégie le nœud EF (coefficient 2) et a des transferts secondaires vers AS42, AS21 et Seuil ; le travail Général est transversal.
+
+Les quatre nœuds AS existent dans le modèle physiologique, mais la jauge Spécifique et les séances spécifiques ne concernent que l'AS correspondant à la course choisie. Les autres allures spécifiques ne sont pas entraînées simultanément pendant la préparation.
+
+Cette matrice remplace la description antérieure limitée aux contributions secondaires EF des séances de qualité. Elle constitue une base de design ; la quantité de points d'adaptation produite par une dose, les paliers et les calibrages de séances restent à préciser.
 
 ## 3.9. RPE, risque et bust
 
@@ -580,39 +614,62 @@ Une séance bustée ne produit ni adaptation, ni progression de filière, ni fat
 
 **OPEN :** convention définitive de test, autorisation du risque, ordre exact des choix et conséquences éventuelles au-delà de l'annulation de séance. Les blessures persistantes ne sont pas une conséquence validée du bust.
 
-## 3.10. Progression physiologique par paliers
+## 3.10. Progression par paliers des cinq jauges
 
-Les adaptations réussies alimentent trois réserves de progression indépendantes : EF, Seuil et VMA.
+Les cinq jauges ont deux logiques de progression : Général d'une part, et les quatre jauges Endurance, Seuil, VMA et Spécifique d'autre part. Les points d'adaptation accumulés déclenchent les paliers propres à chaque jauge. Les valeurs ci-dessous sont des seuils de progression ; elles ne sont ni des coûts énergétiques de séance ni des niveaux de RPE.
 
-Chaque filière possède ses propres seuils de palier, croissants et de plus en plus espacés afin de matérialiser les rendements décroissants. Lorsqu'un palier est atteint :
+### 3.10.1. Jauge Général
 
-- son coût est consommé après un choix valide ;
-- l'excédent d'adaptation est conservé ;
-- le joueur choisit la transformation permise par le palier ;
-- aucune transformation automatique n'est appliquée.
+**DECISION VALIDATED — paliers de référence :**
 
-Les seuils, les incréments et les calendriers de palier restent OPEN.
+| Palier cumulé | Effet |
+|---:|---|
+| 12 | +1 énergie à EF, Seuil, VMA et à chacune des quatre énergies AS |
+| 15 | +1 énergie à EF, Seuil, VMA et à chacune des quatre énergies AS |
+| 19 | Même gain énergétique général ; ajout d'un dé au pool, dans la limite de six dés |
+| 24 | +1 énergie à EF, Seuil, VMA et à chacune des quatre énergies AS |
+| 30 | Même gain énergétique général ; ajout d'un dé au pool, dans la limite de six dés |
 
-### 3.10.1. Portée d'un palier EF
+Le travail Général est attendu comme la composante majoritaire du Training, avec un ordre de grandeur de 14 à 16 points de progression par tour au départ, potentiellement supérieur à mesure que le pool de dés s'améliore. Cette cadence est une hypothèse de rythme à vérifier, pas une quantité de points garantie par tour.
 
-Un palier EF agit sur les trois repères EF, Seuil et VMA par une transformation commune. Il conserve leurs écarts relatifs.
+Les paliers 19 et 30 débloquent chacun un dé supplémentaire. L'ajout reste soumis à la limite globale de six dés. Les dés ajoutés ne sont pas des améliorations de taille de dé et ne consomment pas le plafond global de quatre améliorations de dés décrit ci-dessous.
 
-Les adaptations EF secondaires produites par les séances Seuil et VMA alimentent également cette progression EF.
+### 3.10.2. Jauges Endurance, Seuil, VMA et Spécifique
 
-### 3.10.2. Portée d'un palier Seuil ou VMA
+**DECISION VALIDATED — même séquence de paliers pour chacune des quatre jauges :**
 
-Un palier Seuil agit sur le repère Seuil uniquement. Un palier VMA agit sur le repère VMA uniquement.
+| Palier cumulé | Effet |
+|---:|---|
+| 3 | +1 énergie au nœud concerné |
+| 4 | +1 énergie au nœud concerné et occasion d'améliorer un dé |
+| 5 | +1 énergie au nœud concerné |
+| 7 | +1 énergie au nœud concerné et occasion d'améliorer un dé |
+| 10 | +1 énergie au nœud concerné |
 
-Ces paliers permettent donc de modifier les positions relatives des repères et de développer une spécialisation d'intensité.
+- Endurance augmente l'énergie EF.
+- Seuil augmente l'énergie du nœud Seuil.
+- VMA augmente l'énergie du nœud VMA.
+- Spécifique augmente l'énergie de l'AS préparée ou sa réserve d'allure (RA), au choix du joueur à chaque palier de cette jauge. La RA est une capacité de maintien à l'allure spécifique, distincte de l'énergie de l'AS.
 
-### 3.10.3. Choix intensif / extensif
+Pour les quatre jauges, la séquence 3 / 4 / 5 / 7 / 10 est identique. Les seuils sont cumulés dans la jauge concernée ; chaque palier atteint est consommé normalement. Les gains énergétiques restent dus même si le joueur ne peut plus améliorer de dé.
 
-La lecture active des choix de progression est :
+### 3.10.3. Améliorations de dés : plafond global
 
-- **Intensif** : faire progresser l'intensité, en déplaçant le repère ciblé vers une dépense énergétique supérieure.
-- **Extensif** : améliorer le temps de maintien, en diminuant la consommation de soutenabilité associée à une dépense donnée.
+Aux paliers 4 et 7 de chacune des quatre jauges Endurance, Seuil, VMA et Spécifique, le joueur obtient une occasion d'amélioration de dé. Une amélioration peut notamment faire passer un dé d6 à d8, ou prendre une autre forme d'amélioration de qualité autorisée par les règles du pool.
 
-Cette distinction remplace l'ancienne explication en termes de « vitesse » et « économie » lorsqu'elle conduisait à réintroduire une coordonnée vitesse dans le modèle. Les incréments et leurs conditions restent à calibrer. Le choix précis de l'ancre à modifier et la manière dont les gains extensifs se matérialisent dans les cartes sont OPEN.
+**DECISION VALIDATED :** le joueur est limité à quatre améliorations de dés au total, toutes jauges confondues. Le plafond est global et non propre à chaque jauge. Les occasions d'amélioration ne sont donc pas automatiquement cumulables au-delà de ce plafond.
+
+Si le plafond global de quatre améliorations est déjà atteint lorsqu'un palier 4 ou 7 est franchi, le joueur reçoit uniquement le gain énergétique du palier concerné. Aucune amélioration de dé n'est appliquée et aucun effet de remplacement ou de compensation n'est déclenché. Le palier est néanmoins consommé normalement.
+
+Les ajouts de dés accordés par Général aux paliers 19 et 30 sont distincts des améliorations de taille/qualité et ne sont pas comptés dans le plafond de quatre améliorations. La limite de six dés dans le pool reste applicable.
+
+### 3.10.4. Progression intensive et extensive
+
+La progression physiologique intensive augmente l'énergie d'un nœud : elle déplace son repère vers une dépense énergétique supérieure et peut modifier les positions relatives EF / Seuil / VMA ou des AS.
+
+La progression extensive n'est plus représentée par une déformation de la courbe énergie–soutenabilité. Elle est portée par la réserve d'allure (RA), qui augmente le temps de maintien à l'allure spécifique préparée. La courbe S(E) décrit les capacités énergétiques et leur coût de soutenabilité ; la RA décrit séparément le maintien de l'AS.
+
+Le choix énergie ou RA n'est proposé que pour les paliers de la jauge Spécifique. Les modalités exactes de propagation des augmentations d'énergie vers les cartes, les contraintes n/m et les AS voisines restent à spécifier et à vérifier.
 
 ## 3.11. Portefeuille, éligibilité et acquisition
 
@@ -640,14 +697,14 @@ SL (sortie longue) et SPEC (spécifique) ne sont pas de nouvelles filières phys
 
 ### 3.12.1. Séances d'allure spécifique
 
-Les quatre allures spécifiques AS42, AS21, AS10 et AS5 sont également des cibles de spécialisation Training. Elles ne créent pas de nouvelles filières physiologiques : chaque séance AS possède un profil de transfert propre vers les adaptations EF, Seuil et VMA, défini dans la matrice d'adaptation du catalogue.
+Les quatre allures spécifiques AS42, AS21, AS10 et AS5 sont des nœuds de spécialisation associés aux distances de course. Elles ne créent pas de nouvelles filières physiologiques fondamentales. Le joueur ne prépare qu'une seule allure spécifique pendant une partie : la jauge Spécifique, les séances spécifiques disponibles et la progression de RA sont limitées à l'AS correspondant à la course choisie. Par exemple, une préparation semi-marathon ne rend disponible que l'AS21 ; AS42, AS10 et AS5 ne sont pas entraînées simultanément.
 
 Ces séances ont trois fonctions :
-1. proposer des chemins de progression différents vers les ancres physiologiques ;
-2. préparer une allure de référence correspondant à la distance ciblée ;
-3. contribuer à la spécialisation de course par la progression de l'énergie AS et de sa réserve d'allure (RA).
+1. proposer un chemin de transfert vers les adaptations physiologiques EF, Seuil et VMA selon la matrice de la section 3.8 ;
+2. développer l'énergie du nœud AS correspondant à la course préparée ;
+3. développer la réserve d'allure (RA), qui augmente le temps de maintien à cette allure.
 
-La matrice de transfert précise pour chaque séance AS ses contributions primaires et secondaires. Les valeurs de cette matrice, les doses, les RPE, la pénibilité et les conditions d'éligibilité restent à définir ou à calibrer. Les AS ne possèdent toujours pas de courbe de soutenabilité autonome.
+L'AS ne possède pas de courbe de soutenabilité autonome. La jauge Spécifique peut, à chaque palier, choisir entre +1 énergie à l'AS préparée et +1 RA. Cette progression extensive par RA est distincte de la progression énergétique des ancres.
 
 
 - **SL** représente une préparation d'endurance longue, susceptible d'apporter des adaptations spécifiques de durabilité et une pénibilité propre.
@@ -1070,20 +1127,18 @@ Cette section ne répète pas les décisions déjà fixées dans les sections 2 
 
 ## 8.1. Modèle physiologique et progression
 
-1. Quelles valeurs initiales d'énergie EF / Seuil / VMA sont attribuées aux profils de départ ?
-2. Comment les jauges Training déclenchent-elles les progressions d'ancre et les choix intensif / extensif dans le cadre des contraintes n/m ?
-3. Comment une adaptation extensive se traduit-elle précisément dans les ancres et les cartes, sans stocker une seconde courbe indépendante ?
-4. Comment propager une hausse d'ancre aux AS voisines tout en maintenant leur ordre, sans palier gratuit ?
-5. La limite de cinq paliers par AS et la séquence de seuils 10–12–15–19–24–30 doivent-elles être confirmées telles quelles ?
-6. La vérification exhaustive des invariants confirme-t-elle tous les passages de profils autorisés ?
+1. Comment propager les augmentations d'énergie EF / Seuil / VMA et AS dans les cartes et les contraintes n/m, en maintenant l'ordre des ancres et sans créer de palier gratuit ?
+2. Quelle règle exacte transforme la dose énergétique et le RPE d'une séance en quantité de points d'adaptation, avant application de la matrice de transfert ?
+3. Comment les gains d'énergie d'une AS affectent-ils les AS voisines et les invariants de profil ?
+4. Comment initialiser les RA et quelle est leur capacité maximale ?
+5. Comment vérifier exhaustivement les transitions de profils autorisées après progression ?
 
 ## 8.2. Training
 
-1. Quels événements accordent un dé supplémentaire ou une amélioration de dé, et à quelle cadence ?
-2. Quels sont les seuils d'XP des trois filières et les incréments exacts des paliers ?
-3. Quelle règle calcule le RPE autorisé à partir du tour et des dés ?
-4. Quelles sont les valeurs de RPE et de fatigue de chaque séance ?
-5. Quelle est la matrice complète des adaptations primaires et secondaires ?
+1. Comment calculer précisément la quantité de points d'adaptation à partir de l'énergie allouée, de la dose et du RPE ?
+2. Quelle règle calcule le RPE autorisé à partir du tour et des dés ?
+3. Quelles sont les valeurs de RPE et de fatigue de chaque séance ?
+4. Quels paramètres de séance et quelles doses doivent compléter la matrice de transfert déjà définie en section 3.8 ?
 6. Quels seuils déclenchent les états de surentraînement ?
 7. Quel est le calendrier de déblocage et d'acquisition du portefeuille ?
 8. Comment définir la progression globale ouvrant SL et SPEC ?
