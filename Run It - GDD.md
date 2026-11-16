@@ -316,6 +316,8 @@ L'EF constitue le socle de développement général.
 
 L'EF ne doit donc pas être interprétée comme une progression locale qui ne ferait évoluer que le point EF.
 
+La place de la jauge Endurance dans Training doit néanmoins rester sous surveillance : son intérêt propre devra être confirmé par les arbitrages qu'elle ouvre et par sa contribution effective au profil, en tenant compte des adaptations EF déjà produites par la matrice et des effets de Général. Cette vigilance ne remet pas en cause son maintien dans l'architecture actuelle.
+
 ## 2.7. Rôle des qualités Seuil et VMA
 
 Les adaptations de qualité développent plus spécifiquement le repère concerné :
@@ -528,7 +530,7 @@ La fatigue cumulée après application de cette contribution est bornée inféri
 
 Général et Endurance sont proches par leur lien au volume, mais ne sont pas fusionnés. Général représente la part la plus importante du travail et constitue la voie principale d'ajout de dés. La référence de 14 à 16 points par tour provient simplement de l'ordre de grandeur de l'espérance du pool de dés initial ; ce n'est ni une cadence garantie, ni une cible de conception, ni une limite. Elle pourra être supérieure ou inférieure selon les tests et l'évolution du pool.
 
-Les unités des jauges ne sont pas homogènes. **Général comptabilise l'énergie investie dans le travail Général** : ses paliers correspondent à des coûts successifs d'investissement énergétique. Les jauges Endurance, Seuil, VMA et Spécifique comptabilisent au contraire des **points d'adaptation** produits par les séances et distribués selon la matrice de transfert. Leurs seuils ne sont donc pas comparables à ceux de Général et ne doivent pas être additionnés ou mis à l'échelle les uns par rapport aux autres. Endurance représente une adaptation plus spécifiquement orientée vers le nœud EF.
+Les unités des jauges ne sont pas homogènes. **Général est une jauge d'énergie : elle comptabilise l'énergie investie dans le travail Général** et ses paliers correspondent à des coûts successifs d'investissement énergétique. Les jauges Endurance, Seuil, VMA et Spécifique comptabilisent au contraire des **points d'adaptation** produits par les séances et distribués selon la matrice de transfert. Leurs seuils ne sont donc pas comparables à ceux de Général et ne doivent pas être additionnés ou mis à l'échelle les uns par rapport aux autres. Il n'existe aucune conversion automatique des points d'adaptation des séances en énergie Général ; les effets de Général sont ceux définis séparément par ses propres paliers en section 3.10.1. Endurance représente une adaptation plus spécifiquement orientée vers le nœud EF.
 
 L'énergie peut être affectée à une ou plusieurs séances au cours d'un tour. Pour les quatre jauges Endurance, Seuil, VMA et Spécifique, la référence de conception est de l'ordre de 4 à 6 points d'énergie affectés à une ou plusieurs séances. Cette valeur est un ordre de grandeur d'allocation, pas un coût obligatoire ni une limite dure déjà calibrée.
 
@@ -621,9 +623,11 @@ Les adaptations sont définies par séance et par dose. Elles sont fixes pour un
 
 Les valeurs 0, 1 et 2 expriment des contributions relatives d'adaptation, pas des points d'énergie et pas encore une conversion complète énergie dépensée → adaptation. À titre d'exemple, une séance VMA de RPE 6 peut produire +2 au nœud VMA, +1 à AS5 et +1 au Seuil, conformément à la ligne VMA. La dose énergétique, le RPE et la règle de détermination de la quantité effective de points d'adaptation restent à préciser ; la matrice ne suffit pas à elle seule à calculer le résultat d'une séance.
 
-La ligne Général représente une contribution répartie uniformément sur les nœuds pertinents de la préparation. Elle ne doit pas être confondue avec la ligne EF : la séance EF/Endurance privilégie le nœud EF (coefficient 2) et a des transferts secondaires vers AS42, AS21 et Seuil ; le travail Général est transversal. Dans une partie donnée, le nœud AS actif est uniquement celui de la course imposée par le scénario ; les autres AS ne progressent pas au titre du travail Général.
+La matrice complète est conservée sans suppression ni modification de ses coefficients, y compris ses colonnes AS42, AS21, AS10 et AS5 et sa ligne Général. Elle décrit les transferts entre familles de travail et nœuds physiologiques ; elle ne constitue pas une conversion automatique des points d'adaptation en énergie de la jauge Général.
 
-Les quatre nœuds AS existent dans le modèle physiologique, mais la jauge Spécifique et les séances spécifiques ne concernent que l'AS correspondant à la course choisie. Les autres allures spécifiques ne sont pas entraînées simultanément pendant la préparation.
+La ligne Général représente une contribution répartie uniformément sur les nœuds de la matrice. Elle ne doit pas être confondue avec la ligne EF : la séance EF/Endurance privilégie le nœud EF (coefficient 2) et possède ses transferts secondaires propres ; le travail Général est transversal. La jauge Général reste toutefois une jauge d'énergie indépendante, dont les effets de palier sont définis en section 3.10.1.
+
+Dans une partie, le scénario impose une seule course et donc une seule AS active/préparée. Cela ne réduit pas la matrice à une seule colonne : les transferts inscrits dans la matrice restent applicables, y compris vers les autres nœuds AS lorsque la famille de travail concernée le prévoit. En revanche, la jauge Spécifique, les séances dédiées à l'allure spécifique et la progression de RA ne concernent que l'AS active. Les autres AS ne sont pas des objectifs de spécialisation simultanés, mais elles restent présentes dans le modèle et peuvent recevoir des adaptations indirectes prévues par la matrice.
 
 Cette matrice remplace la description antérieure limitée aux contributions secondaires EF des séances de qualité. Elle constitue une base de design ; la quantité de points d'adaptation produite par une dose, les paliers et les calibrages de séances restent à préciser.
 
@@ -688,7 +692,7 @@ Les paliers 19 et 30 débloquent chacun un dé supplémentaire. L'ajout reste so
 | 7 | +1 énergie au nœud concerné et occasion d'améliorer un dé |
 | 10 | +1 énergie au nœud concerné |
 
-- Endurance augmente l'énergie EF.
+- Endurance augmente l'énergie EF. Son intérêt propre comme jauge distincte reste un point de vigilance : il faudra vérifier qu'elle crée un arbitrage utile et une progression identifiable, sans faire doublon avec les transferts EF de la matrice ou les effets de Général.
 - Seuil augmente l'énergie du nœud Seuil.
 - VMA augmente l'énergie du nœud VMA.
 - Spécifique augmente l'énergie de l'AS préparée ou sa réserve d'allure (RA), au choix du joueur à chaque palier de cette jauge. La RA est une capacité de maintien à l'allure spécifique, distincte de l'énergie de l'AS.
@@ -739,7 +743,7 @@ SL (sortie longue) et SPEC (spécifique) ne sont pas de nouvelles filières phys
 
 ### 3.12.1. Séances d'allure spécifique
 
-Les quatre allures spécifiques AS42, AS21, AS10 et AS5 sont des nœuds de spécialisation associés aux distances de course. Elles ne créent pas de nouvelles filières physiologiques fondamentales. Le scénario impose une seule course commune : la jauge Spécifique, les séances spécifiques disponibles et la progression de RA sont limitées à l'AS correspondant à cette course. Par exemple, une préparation semi-marathon ne rend disponible que l'AS21 ; AS42, AS10 et AS5 ne sont pas entraînées simultanément.
+Les quatre allures spécifiques AS42, AS21, AS10 et AS5 sont des nœuds de spécialisation associés aux distances de course. Elles ne créent pas de nouvelles filières physiologiques fondamentales. Le scénario impose une seule course commune et sélectionne donc une seule AS active/préparée. La jauge Spécifique, les séances dédiées à l'allure spécifique et la progression de RA sont limitées à cette AS. Par exemple, une préparation semi-marathon sélectionne AS21 comme cible spécifique ; cela n'efface pas les autres nœuds AS de la matrice, qui peuvent continuer à recevoir les transferts indirects prévus par celle-ci.
 
 Ces séances ont trois fonctions :
 1. proposer un chemin de transfert vers les adaptations physiologiques EF, Seuil et VMA selon la matrice de la section 3.8 ;
@@ -1178,6 +1182,7 @@ Cette section ne répète pas les décisions déjà fixées dans les sections 2 
 4. Comment initialiser les RA et quelle est leur capacité maximale ?
 5. Comment vérifier exhaustivement les transitions de profils autorisées après progression ?
 6. La contrainte m ≤ n est conservée comme domaine de validité de référence, mais son effet potentiellement trop restrictif sur certaines trajectoires de progression doit être évalué en test avant toute modification ?
+7. La jauge Endurance apporte-t-elle un intérêt décisionnel suffisamment distinct, compte tenu des transferts EF de la matrice et des effets de Général, ou ses effets se recouvrent-ils trop avec ces autres voies de progression ?
 
 ## 8.2. Training
 
