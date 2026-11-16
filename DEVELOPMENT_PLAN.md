@@ -35,7 +35,7 @@ La cohérence Training ↔ Race n'est pas encore réalisée. Ne pas déduire de 
 
 ### Pause d'implémentation — 2026-11-12
 
-À la demande de l'utilisateur, l'implémentation est suspendue après PR #67. Le chantier documentaire E0 (alignement GDD, spécification Race, snapshot, README, plan et références historiques) a été clôturé dans la PR #72. La revue utilisateur du GDD V3 est l'étape suivante. Aucun nouveau code, mapping Training → Race ou calibrage ne doit être engagé avant instruction explicite.
+À la demande de l'utilisateur, l'implémentation est suspendue après PR #67. Le chantier documentaire E0 (alignement GDD, spécification Race, snapshot, README, plan et références historiques) a été clôturé dans la PR #72. La PR #73 intègre la consolidation du modèle énergie–soutenabilité et reste soumise à revue utilisateur. Aucun nouveau code, mapping Training → Race ou calibrage ne doit être engagé avant instruction explicite.
 
 ## 3. Portes et statut
 
@@ -96,7 +96,7 @@ B — audit historique ┘                         │
                                                │
                                [pause d'implémentation — 12/11]
                                                │
-                          E1–E5 — Training → Race (à relancer)
+                          E1–E6 — Training → Race (à relancer)
                                                ↓
                                   F — boucle end-to-end
                                                ↓
@@ -105,7 +105,7 @@ B — audit historique ┘                         │
                                   H — calibration / I — choix joueur
 ```
 
-E0 est DONE ; la revue du GDD V3 et de la PR #72 est en attente. L'implémentation reste suspendue après PR #67. La reprise de E1–E5 et de la boucle end-to-end nécessite une instruction explicite après cette revue.
+E0 est DONE ; la PR #73 consolide les décisions de courbe et d'AS/RA. L'implémentation reste suspendue après PR #67. La reprise des raccords E1–E6 et de la boucle end-to-end nécessite une instruction explicite après revue de la PR #73.
 
 ## 5. Tableau de pilotage
 
