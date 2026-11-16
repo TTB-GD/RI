@@ -80,7 +80,7 @@ La préparation n'est pas un simple prélude à la course : elle constitue la ma
 - 2 à 4 joueurs en priorité ;
 - environ 60 à 90 minutes ;
 - environ deux tiers du temps consacré au Training et un tiers à la Race ;
-- une préparation de l'ordre de 12 à 16 tours de Training à tester selon le scénario ;
+- une préparation de 7, 10, 13 ou 16 tours de Training selon le scénario, harmonisée avec les secteurs de la course finale ;
 - une course finale qui exploite les différences de préparation ;
 - une coopération positive et opportuniste, sans compétition pour une ressource commune.
 
@@ -117,11 +117,18 @@ Une proposition qui améliore une métrique locale mais détériore fortement la
 
 ## 1.5. Course cible et structure de préparation
 
-Le joueur choisit sa course cible avant le début du Training. Cette cible ne peut pas être changée en cours de partie. Elle détermine le contexte de préparation et la course finale.
+La course cible est imposée par le scénario : tous les joueurs d'une même partie préparent et courent la même distance. Il n'y a donc pas de choix individuel de course cible. Le scénario détermine à la fois la préparation et la course finale.
 
-Les distances de référence envisagées sont 5 km, 10 km, semi-marathon et marathon. Les scénarios peuvent utiliser des durées de Training différentes, tout en conservant le même nombre de tours pour tous les joueurs d'un même scénario.
+**DECISION VALIDATED — harmonisation des durées :** les quatre scénarios utilisent le même nombre de tours de Training et de secteurs de Race :
 
-Les durées centrales de 12, 12, 13 et 16 tours respectivement sont des repères de travail issus des références de plans sportifs ; elles ne sont pas encore un calendrier de jeu validé.
+| Scénario | Tours de Training | Secteurs de Race |
+|---|---:|---:|
+| 5 km | 7 | 7 |
+| 10 km | 10 | 10 |
+| Semi-marathon | 13 | 13 |
+| Marathon | 16 | 16 |
+
+La durée de préparation et la longueur de la course sont donc harmonisées par scénario. Tous les joueurs d'une partie suivent le même calendrier.
 
 ---
 
@@ -194,7 +201,7 @@ On définit n = Seuil − EF, largeur de la zone basse, et m = VMA − Seuil, la
 
 La séquence commence à S(EF) = 1 et se termine à S(VMA) = 13 ; chaque valeur intermédiaire correspond à une énergie entière successive. Ainsi, pour P1, EF = 10, Seuil = 13 et VMA = 15. Les cinq profils respectent le domaine autorisé des largeurs n et m.
 
-La moyenne du pool initial de quatre d6 vaut 4 × 3,5 = 14. Le seuil énergétique initial des cinq profils est fixé à 13 : il est donc proche, mais non égal, à cette espérance. Cet écart est accepté pour cette version provisoire des profils ; il ne doit pas être corrigé implicitement par translation des profils.
+La moyenne du pool initial de quatre d6 vaut 4 × 3,5 = 14. Le seuil énergétique initial des cinq profils est fixé à 13 : il est donc proche, mais non égal, à cette espérance. Cet écart est accepté pour cette version provisoire des profils ; il ne doit pas être corrigé implicitement par translation des profils. La proximité entre le seuil énergétique initial et l'espérance du pool sera évaluée en test : il n'est pas recherché que les profils soient identiques à l'espérance, mais ils ne doivent pas non plus s'en éloigner excessivement sans raison de design.
 
 
 La courbe est une abstraction de jeu inspirée de la relation intensité–durée et des domaines d'intensité modéré, lourd et sévère. Les ancres 1–5–13 et les bornes n/m sont des choix de modélisation, pas des constantes physiologiques mesurées.
@@ -293,9 +300,9 @@ La distinction porte sur deux transformations différentes du profil :
 | Développement | Effet recherché | Traduction dans le modèle |
 |---|---|---|
 | **Intensif** | Faire progresser l'intensité accessible | Augmenter l'énergie d'une ancre, donc déplacer un repère vers une dépense supérieure, sous réserve des contraintes de forme du profil. |
-| **Extensif** | Augmenter le temps de maintien à une intensité donnée | Réduire la soutenabilité S associée à une énergie donnée, sans augmenter cette énergie. Dans le modèle discret, cela passe par l'évolution des ancres et des cartes, pas par une seconde courbe stockée indépendante. |
+| **Extensif** | Augmenter le temps de maintien à l'allure spécifique préparée | Augmenter la réserve d'allure (RA) de l'AS préparée, sans déformer la courbe énergie–soutenabilité. |
 
-L'intensif développe le niveau de dépense accessible ; l'extensif vise à améliorer le maintien d'une dépense donnée. L'économie de course est représentée par la baisse du coût de soutenabilité à énergie égale, sans réintroduire une conversion cachée énergie → vitesse. La règle exacte qui associe les paliers de progression aux transformations d'ancres et aux gains intensifs/extensifs reste OPEN : elle doit respecter les contraintes n/m et les invariants de la section 2.8.
+L'intensif développe le niveau de dépense énergétique accessible. L'extensif développe le temps de maintien à l'allure spécifique préparée via la RA. La courbe S(E) n'est donc pas abaissée ou déformée par une progression extensive ; la RA constitue une ressource distincte, dépensable à l'énergie exacte de l'AS. La règle de progression extensive est portée par la jauge Spécifique (section 3.10.4).
 
 ## 2.6. Rôle spécifique de l'EF
 
@@ -317,7 +324,7 @@ Les adaptations de qualité développent plus spécifiquement le repère concern
 - une adaptation VMA agit sur le repère VMA ;
 - ces progressions modifient les positions relatives du profil, contrairement à la translation commune produite par un palier EF.
 
-Une spécialisation intensive peut déplacer un repère sans améliorer automatiquement la soutenabilité de la dépense correspondante. Le développement extensif est représenté par une évolution de la forme des cartes au travers des ancres, sous réserve des contraintes n/m.
+Une spécialisation intensive peut déplacer un repère sans améliorer automatiquement la soutenabilité de la dépense correspondante. Le développement extensif ne déforme pas les cartes : il est représenté par la progression de RA à l'allure spécifique préparée.
 
 ## 2.8. Progression des ancres et invariants
 
@@ -378,7 +385,7 @@ Aucune soutenabilité n'est stockée pour une AS. Son coût de base est toujours
 1. **Énergie +1** : augmente l'énergie de référence de l'allure, si l'ordre des AS et les ancres le permettent.
 2. **RA +1** : conserve l'énergie de référence et augmente d'un point la réserve d'allure.
 
-L'énergie et la RA consomment le même compteur de paliers : choisir la RA ne contourne pas le coût croissant de la progression. La limite de progression est de cinq paliers par AS. Les seuils de jauge de référence sont 10, 12, 15, 19, 24 puis 30 points ; la correspondance exacte entre ces seuils et les cinq paliers doit rester cohérente avec la jauge d'implémentation.
+L'énergie et la RA consomment le même compteur de paliers de la jauge Spécifique. Les cinq paliers de cette jauge sont déclenchés par les coûts successifs en points d'adaptation 3, 4, 5, 7 et 10 définis en section 3.10.2. Le choix de la RA ne contourne donc pas le coût croissant de la progression.
 
 Si l'énergie d'une AS atteint son ancre supérieure (AS21 au Seuil, AS5 à VMA), l'option Énergie est bloquée et seul le choix RA reste disponible. Une progression des ancres peut pousser une AS vers le haut pour maintenir l'ordre ; une AS ne baisse jamais. Les règles détaillées de propagation aux AS voisines doivent préserver strictement l'ordre sans accorder de palier gratuit.
 
@@ -503,21 +510,25 @@ Valeurs de référence de la fonction actuelle :
 | −9 | −5 |
 | ≤ −10 | −8 |
 
+La contribution négative correspondant à la récupération est plafonnée en valeur absolue par la taille du plus grand dé du pool : −6 au maximum avec un pool dont le plus grand dé est un d6, −8 avec un d8, etc. Si aucun dé n'est disponible, la référence est un d6. Ainsi, les valeurs de récupération de la table constituent une courbe brute ; la borne liée au plus grand dé s'applique ensuite.
+
 La fatigue cumulée après application de cette contribution est bornée inférieurement à zéro. Cette table décrit la courbe quasi-Fibonacci retenue et sa référence d'implémentation actuelle ; toute modification de la courbe doit être explicite et testée. Elle ne doit pas être remplacée par une variation linéaire de l'énergie dépensée moins le TN.
 
 ## 3.5. Allocation de l'énergie et cinq jauges de progression
 
-**DESIGN DIRECTION — architecture Training B précisée le 16 novembre 2026 :** l'énergie disponible issue des dés est affectée à des séances. Le système de progression distingue cinq jauges : **Général, Endurance, Seuil, VMA et Spécifique**. Elles ne représentent pas cinq capacités physiologiques indépendantes ; elles organisent les voies d'adaptation et leurs paliers.
+**DESIGN DIRECTION — architecture Training B précisée le 16 novembre 2026 :** l'énergie disponible issue des dés est affectée à des séances. Le système de progression distingue cinq jauges : **Général, Endurance, Seuil, VMA et Spécifique**. Elles ne représentent pas cinq capacités physiologiques indépendantes ; elles organisent les voies d'investissement énergétique et d'adaptation, ainsi que leurs paliers.
 
 | Jauge | Rôle | Nœud(s) concerné(s) |
 |---|---|---|
-| Général | Travail de volume global, base principale de la préparation ; contribue à la progression physiologique générale et au développement du pool | EF, Seuil, VMA et énergies des AS |
+| Général | Travail de volume global, base principale de la préparation ; contribue à la progression physiologique générale et au développement du pool | EF, Seuil, VMA et énergie de la seule AS préparée |
 | Endurance | Travail orienté endurance facile / volume EF | EF |
 | Seuil | Travail orienté seuil | Seuil |
 | VMA | Travail orienté VMA | VMA |
 | Spécifique | Travail à l'allure de la course préparée | Énergie de l'AS préparée et/ou sa RA |
 
-Général et Endurance sont proches par leur lien au volume, mais ne sont pas fusionnés. Général représente la part la plus importante du travail, de l'ordre de 14 à 16 points par tour en première référence, potentiellement davantage lorsque le pool de dés progresse. Il constitue la voie principale d'ajout de dés. Endurance représente une adaptation plus spécifiquement orientée vers le nœud EF.
+Général et Endurance sont proches par leur lien au volume, mais ne sont pas fusionnés. Général représente la part la plus importante du travail et constitue la voie principale d'ajout de dés. La référence de 14 à 16 points par tour provient simplement de l'ordre de grandeur de l'espérance du pool de dés initial ; ce n'est ni une cadence garantie, ni une cible de conception, ni une limite. Elle pourra être supérieure ou inférieure selon les tests et l'évolution du pool.
+
+Les unités des jauges ne sont pas homogènes. **Général comptabilise l'énergie investie dans le travail Général** : ses paliers correspondent à des coûts successifs d'investissement énergétique. Les jauges Endurance, Seuil, VMA et Spécifique comptabilisent au contraire des **points d'adaptation** produits par les séances et distribués selon la matrice de transfert. Leurs seuils ne sont donc pas comparables à ceux de Général et ne doivent pas être additionnés ou mis à l'échelle les uns par rapport aux autres. Endurance représente une adaptation plus spécifiquement orientée vers le nœud EF.
 
 L'énergie peut être affectée à une ou plusieurs séances au cours d'un tour. Pour les quatre jauges Endurance, Seuil, VMA et Spécifique, la référence de conception est de l'ordre de 4 à 6 points d'énergie affectés à une ou plusieurs séances. Cette valeur est un ordre de grandeur d'allocation, pas un coût obligatoire ni une limite dure déjà calibrée.
 
@@ -546,6 +557,14 @@ Ces lignes centrales totalisent 100 %. Elles montrent notamment que la part d'EF
 L'énergie affectée à une séance, son RPE et les points d'adaptation qu'elle produit sont trois grandeurs distinctes. Les points d'adaptation sont déterminés par la séance et sa dose, puis distribués vers les nœuds selon la matrice de la section 3.8. Une allocation énergétique ne se convertit donc pas automatiquement point pour point en adaptation.
 
 La répartition est une décision du joueur. Le système ne transforme pas automatiquement un reliquat en une autre ressource ou en une adaptation. L'énergie non dépensée reste non dépensée. Il n'existe pas de CTL dans Training B ; le CTL de l'ancien Training ne doit pas servir de variable de préparation ni de pont caché vers Race.
+
+**DECISION VALIDATED — entraînement collectif de qualité :** lorsque plusieurs joueurs affectent la même quantité d'énergie à leur travail de qualité pendant un même tour, ils peuvent effectuer cet entraînement ensemble. Ils gagnent alors chacun un point d'adaptation supplémentaire dans une jauge choisie collectivement, parmi les adaptations communes à leurs séances respectives (intersection de leurs nœuds d'adaptation). Ce bonus collectif s'ajoute aux adaptations normales de chaque séance ; il ne les remplace pas.
+
+La fréquence à laquelle cette situation se produit, l'effet réel sur les choix de séances et l'équilibre de ce bonus restent à tester. La règle de coopération est retenue dans son principe, mais son rendement ne doit pas être considéré comme calibré.
+
+**DECISION VALIDATED — entraînement collectif de qualité :** lorsque plusieurs joueurs affectent la même quantité d'énergie à leur travail de qualité pendant un même tour, ils peuvent effectuer cet entraînement ensemble. Ils gagnent alors chacun un point d'adaptation supplémentaire dans une jauge choisie collectivement, parmi les adaptations communes à leurs séances respectives (intersection de leurs nœuds d'adaptation). Ce bonus collectif s'ajoute aux adaptations normales de chaque séance ; il ne les remplace pas.
+
+La fréquence à laquelle cette situation se produit, l'effet réel sur les choix de séances et l'équilibre de ce bonus restent à tester. La règle de coopération est retenue dans son principe, mais son rendement ne doit pas être considéré comme calibré.
 
 ## 3.6. Catalogue de séances et doses
 
@@ -602,7 +621,7 @@ Les adaptations sont définies par séance et par dose. Elles sont fixes pour un
 
 Les valeurs 0, 1 et 2 expriment des contributions relatives d'adaptation, pas des points d'énergie et pas encore une conversion complète énergie dépensée → adaptation. À titre d'exemple, une séance VMA de RPE 6 peut produire +2 au nœud VMA, +1 à AS5 et +1 au Seuil, conformément à la ligne VMA. La dose énergétique, le RPE et la règle de détermination de la quantité effective de points d'adaptation restent à préciser ; la matrice ne suffit pas à elle seule à calculer le résultat d'une séance.
 
-La ligne Général représente une contribution répartie uniformément sur les sept nœuds. Elle ne doit pas être confondue avec la ligne EF : la séance EF/Endurance privilégie le nœud EF (coefficient 2) et a des transferts secondaires vers AS42, AS21 et Seuil ; le travail Général est transversal.
+La ligne Général représente une contribution répartie uniformément sur les nœuds pertinents de la préparation. Elle ne doit pas être confondue avec la ligne EF : la séance EF/Endurance privilégie le nœud EF (coefficient 2) et a des transferts secondaires vers AS42, AS21 et Seuil ; le travail Général est transversal. Dans une partie donnée, le nœud AS actif est uniquement celui de la course imposée par le scénario ; les autres AS ne progressent pas au titre du travail Général.
 
 Les quatre nœuds AS existent dans le modèle physiologique, mais la jauge Spécifique et les séances spécifiques ne concernent que l'AS correspondant à la course choisie. Les autres allures spécifiques ne sont pas entraînées simultanément pendant la préparation.
 
@@ -612,16 +631,17 @@ Cette matrice remplace la description antérieure limitée aux contributions sec
 
 Le RPE caractérise la difficulté intrinsèque de la séance. Il est distinct du coût énergétique.
 
-Le risque dépend du dépassement entre le RPE de la séance et le RPE autorisé pour le tour. Le meilleur dé du pool persistant constitue le dé de référence du test.
-
-La forme candidate utilisée dans le prototype est :
+Le risque dépend du dépassement entre le RPE de la séance et le RPE autorisé pour le tour. Le joueur lance son meilleur dé disponible, c'est-à-dire le dé de plus grande taille de son pool persistant. À défaut de dé disponible, le test utilise un d6.
 
 ~~~text
-excès = max(0, RPE_séance − RPE_autorisé)
-bust si face_brute_du_meilleur_dé ≤ excès
+excès = RPE_séance − RPE_autorisé
+si excès > 0 :
+    bust si résultat du dé lancé ≤ excès
+sinon :
+    aucun test de bust
 ~~~
 
-Le RPE autorisé est une donnée de contexte du tour ; sa dérivation complète et son articulation avec les décisions de dés restent à finaliser. Les valeurs de RPE, les seuils de risque et les pénibilités du catalogue sont EXPERIMENTAL.
+La différence de RPE constitue directement le seuil du test : obtenir cette valeur ou moins provoque le bust ; obtenir davantage permet de réussir la séance. Le RPE autorisé est une donnée de contexte du tour ; sa dérivation complète et son articulation avec les décisions de dés restent à finaliser. Les valeurs de RPE, les pénibilités et les catalogues de séances restent EXPERIMENTAL.
 
 Ordre de résolution :
 
@@ -634,25 +654,25 @@ Ordre de résolution :
 
 Une séance bustée ne produit ni adaptation, ni progression de filière, ni fatigue spécifique. Les séances non exécutées après le bust ne produisent pas non plus ces effets. La fatigue issue des dés reste néanmoins acquise.
 
-**OPEN :** convention définitive de test, autorisation du risque, ordre exact des choix et conséquences éventuelles au-delà de l'annulation de séance. Les blessures persistantes ne sont pas une conséquence validée du bust.
+**DECISION VALIDATED — test de bust :** le meilleur dé du pool (dé de plus grande taille, d6 à défaut) est lancé et comparé à l'excès de RPE. Un résultat inférieur ou égal à cet excès provoque le bust. Le RPE autorisé, les valeurs de séance et les pénibilités restent à calibrer. Les blessures persistantes ne sont pas une conséquence validée du bust.
 
 ## 3.10. Progression par paliers des cinq jauges
 
-Les cinq jauges ont deux logiques de progression : Général d'une part, et les quatre jauges Endurance, Seuil, VMA et Spécifique d'autre part. Les points d'adaptation accumulés déclenchent les paliers propres à chaque jauge. Les valeurs ci-dessous sont des seuils de progression ; elles ne sont ni des coûts énergétiques de séance ni des niveaux de RPE.
+Les cinq jauges ont deux logiques de progression distinctes. Général progresse en fonction de l'énergie investie dans le travail Général ; les quatre jauges Endurance, Seuil, VMA et Spécifique progressent en fonction des points d'adaptation produits par les séances. Les nombres des deux séquences ne sont donc pas exprimés dans la même unité. Dans chaque séquence, les valeurs indiquent les coûts successifs nécessaires pour franchir chacun des cinq paliers ; elles ne sont pas des seuils cumulatifs.
 
 ### 3.10.1. Jauge Général
 
 **DECISION VALIDATED — paliers de référence :**
 
-| Palier cumulé | Effet |
+| Coût énergétique du palier Général | Effet |
 |---:|---|
-| 12 | +1 énergie à EF, Seuil, VMA et à chacune des quatre énergies AS |
-| 15 | +1 énergie à EF, Seuil, VMA et à chacune des quatre énergies AS |
+| 12 | +1 énergie à EF, Seuil, VMA et à l'AS préparée |
+| 15 | +1 énergie à EF, Seuil, VMA et à l'AS préparée |
 | 19 | Même gain énergétique général ; ajout d'un dé au pool, dans la limite de six dés |
-| 24 | +1 énergie à EF, Seuil, VMA et à chacune des quatre énergies AS |
+| 24 | +1 énergie à EF, Seuil, VMA et à l'AS préparée |
 | 30 | Même gain énergétique général ; ajout d'un dé au pool, dans la limite de six dés |
 
-Le travail Général est attendu comme la composante majoritaire du Training, avec un ordre de grandeur de 14 à 16 points de progression par tour au départ, potentiellement supérieur à mesure que le pool de dés s'améliore. Cette cadence est une hypothèse de rythme à vérifier, pas une quantité de points garantie par tour.
+Les cinq coûts successifs représentent 12 + 15 + 19 + 24 + 30 = **100 points d'énergie investis au total** pour franchir l'ensemble des paliers Général. Ils ne sont pas des seuils de points d'adaptation. La quantité d'énergie réellement affectée à Général par tour n'est pas fixée : l'ordre de grandeur de 14 à 16 points évoqué en section 3.5 vient de l'espérance moyenne du pool initial et sert uniquement de repère intuitif de départ. Le rythme réel sera observé et ajusté par les tests ; aucune cadence garantie n'est postulée.
 
 Les paliers 19 et 30 débloquent chacun un dé supplémentaire. L'ajout reste soumis à la limite globale de six dés. Les dés ajoutés ne sont pas des améliorations de taille de dé et ne consomment pas le plafond global de quatre améliorations de dés décrit ci-dessous.
 
@@ -660,7 +680,7 @@ Les paliers 19 et 30 débloquent chacun un dé supplémentaire. L'ajout reste so
 
 **DECISION VALIDATED — même séquence de paliers pour chacune des quatre jauges :**
 
-| Palier cumulé | Effet |
+| Points d'adaptation investis pour le palier | Effet |
 |---:|---|
 | 3 | +1 énergie au nœud concerné |
 | 4 | +1 énergie au nœud concerné et occasion d'améliorer un dé |
@@ -673,7 +693,7 @@ Les paliers 19 et 30 débloquent chacun un dé supplémentaire. L'ajout reste so
 - VMA augmente l'énergie du nœud VMA.
 - Spécifique augmente l'énergie de l'AS préparée ou sa réserve d'allure (RA), au choix du joueur à chaque palier de cette jauge. La RA est une capacité de maintien à l'allure spécifique, distincte de l'énergie de l'AS.
 
-Pour les quatre jauges, la séquence 3 / 4 / 5 / 7 / 10 est identique. Les seuils sont cumulés dans la jauge concernée ; chaque palier atteint est consommé normalement. Les gains énergétiques restent dus même si le joueur ne peut plus améliorer de dé.
+Pour chacune des quatre jauges, les coûts successifs en points d'adaptation sont 3 / 4 / 5 / 7 / 10, soit 29 points d'adaptation pour franchir les cinq paliers d'une jauge. Les points sont suivis séparément dans chaque jauge ; ils ne sont pas convertis en énergie investie. Chaque palier atteint est consommé normalement. Les gains énergétiques restent dus même si le joueur ne peut plus améliorer de dé.
 
 ### 3.10.3. Améliorations de dés : plafond global
 
@@ -689,7 +709,7 @@ Les ajouts de dés accordés par Général aux paliers 19 et 30 sont distincts d
 
 La progression physiologique intensive augmente l'énergie d'un nœud : elle déplace son repère vers une dépense énergétique supérieure et peut modifier les positions relatives EF / Seuil / VMA ou des AS.
 
-La progression extensive n'est plus représentée par une déformation de la courbe énergie–soutenabilité. Elle est portée par la réserve d'allure (RA), qui augmente le temps de maintien à l'allure spécifique préparée. La courbe S(E) décrit les capacités énergétiques et leur coût de soutenabilité ; la RA décrit séparément le maintien de l'AS.
+La progression extensive n'est pas représentée par une déformation de la courbe énergie–soutenabilité. Elle est portée par la réserve d'allure (RA), qui augmente le temps de maintien à l'allure spécifique préparée. La courbe S(E) décrit les capacités énergétiques et leur coût de soutenabilité ; la RA décrit séparément le maintien de l'AS préparée.
 
 Le choix énergie ou RA n'est proposé que pour les paliers de la jauge Spécifique. Les modalités exactes de propagation des augmentations d'énergie vers les cartes, les contraintes n/m et les AS voisines restent à spécifier et à vérifier.
 
@@ -719,7 +739,7 @@ SL (sortie longue) et SPEC (spécifique) ne sont pas de nouvelles filières phys
 
 ### 3.12.1. Séances d'allure spécifique
 
-Les quatre allures spécifiques AS42, AS21, AS10 et AS5 sont des nœuds de spécialisation associés aux distances de course. Elles ne créent pas de nouvelles filières physiologiques fondamentales. Le joueur ne prépare qu'une seule allure spécifique pendant une partie : la jauge Spécifique, les séances spécifiques disponibles et la progression de RA sont limitées à l'AS correspondant à la course choisie. Par exemple, une préparation semi-marathon ne rend disponible que l'AS21 ; AS42, AS10 et AS5 ne sont pas entraînées simultanément.
+Les quatre allures spécifiques AS42, AS21, AS10 et AS5 sont des nœuds de spécialisation associés aux distances de course. Elles ne créent pas de nouvelles filières physiologiques fondamentales. Le scénario impose une seule course commune : la jauge Spécifique, les séances spécifiques disponibles et la progression de RA sont limitées à l'AS correspondant à cette course. Par exemple, une préparation semi-marathon ne rend disponible que l'AS21 ; AS42, AS10 et AS5 ne sont pas entraînées simultanément.
 
 Ces séances ont trois fonctions :
 1. proposer un chemin de transfert vers les adaptations physiologiques EF, Seuil et VMA selon la matrice de la section 3.8 ;
@@ -820,14 +840,18 @@ La consommation C d'un secteur est le coût effectivement payé après applicati
 
 ## 4.4. Crédit initial, forme du jour et dégradation par fatigue
 
-La comptabilité de course distingue le crédit initial préparé pendant Training (S0), les effets des cartes de forme du jour (F) et la consommation réellement payée sur les secteurs (C) :
+La comptabilité de course distingue le crédit initial préparé pendant Training (S0), le bonus d'affûtage (A), les effets des cartes de forme du jour (F) et la consommation réellement payée sur les secteurs (C) :
 
 ~~~text
-Solde de soutenabilité = S0 + F − C
+S0 = facteur_de_conversion × énergie_totale_investie_en_Général
+Crédit initial disponible = S0 + A
+Solde de soutenabilité = S0 + A + F − C
 C = somme des coûts de secteur effectivement payés
 ~~~
 
-La forme du jour modifie le crédit disponible. Les cartes révélées au début d'un secteur s'appliquent selon leur calendrier. S0 et les valeurs exactes des effets F restent à définir/calibrer.
+**DECISION VALIDATED — principe de calcul de S0 :** le crédit initial est directement proportionnel à l'énergie totale investie dans le travail Général pendant le Training. Un facteur de conversion transforme cette énergie investie en crédit de soutenabilité. La valeur de ce facteur reste à calibrer ; la proportionnalité, elle, est retenue.
+
+La forme du jour modifie le crédit disponible. Les cartes révélées au début d'un secteur s'appliquent selon leur calendrier. Les valeurs exactes des effets F restent à définir/calibrer.
 
 **DECISION VALIDATED — forme de la dégradation :** la fatigue de course ne modifie pas le profil physiologique stocké. Elle applique un décalage temporaire de k énergies vers la gauche :
 
@@ -849,11 +873,17 @@ Le dénominateur exact du stock de référence, notamment le traitement des cart
 
 La dette de fatigue réversible (option B) est conservée comme variante avancée, non active. Le déclenchement par nombre de secteurs consécutifs au-dessus du Seuil (option C) n'est pas retenu.
 
+**EXPERIMENTAL — variante avancée de la RA :** la réserve d'allure pourrait également décaler les seuils de dégradation de la soutenabilité (50 % et 75 % du stock consommé), afin de retarder le passage à k = 1 puis k = 2. Cette piste est conservée pour un mode expérimenté ; elle ne fait pas partie de la règle de base. L'amplitude du décalage, son éventuel coût en RA et son équilibre restent à tester.
+
 Le coût d'un secteur est lu à S(E + k), puis réduit éventuellement de 1 si une RA est dépensée à cette AS, avec un plancher final de 1. Cette valeur alimente C et le solde S0 + F − C.
 
 Exemple : si S(18) = 4, alors une fatigue k = 1 porte le coût de base à S(19) = 5 et k = 2 à S(20) = 6. Une RA dépensée à l'énergie 18 réduit le coût effectivement payé d'un point, sans descendre sous 1. Si k = 2, toute dépense supérieure à VMA − 2 est interdite.
 
-**OPEN :** construction de S0, définition du stock de référence et articulation exacte avec F, conséquence mécanique d'un solde négatif et traitement du reliquat à l'arrivée.
+Quand le solde de soutenabilité est épuisé, le joueur est bloqué à EF : il ne peut plus dépenser au-dessus de son énergie EF. Le coût minimal de soutenabilité à EF reste 1 ; la règle n'autorise donc pas à continuer à dépenser à une intensité supérieure en créant une dette de soutenabilité.
+
+La rétroaction qui conduit progressivement à cette limite est volontaire : les dépenses élevées accélèrent la consommation du stock, les seuils de dégradation augmentent ensuite le coût des secteurs et peuvent provoquer une explosion de la consommation. Cette dynamique représente le risque de « mur » en course. L'enjeu de calibration est de permettre au joueur de gérer cette explosion par ses choix de dépense, sans la rendre ni anodine ni inévitable.
+
+**OPEN :** valeur du facteur de conversion énergie Général → S0 ; définition exacte du stock de référence pour les seuils de dégradation et articulation avec les effets F ; traitement du reliquat à l'arrivée.
 
 ## 4.5. Forme du jour — structure héritée, calibrage expérimental
 
@@ -883,16 +913,16 @@ Les anciennes distributions de paquets (15 cartes par catégorie, valeurs de +2 
 
 ## 4.6. Découpage de course
 
-Le prototype Race V2 utilise les longueurs suivantes :
+Les quatre scénarios utilisent les durées de préparation et les longueurs de course harmonisées :
 
-| Course | Secteurs |
-|---|---:|
-| 5 km | 7 |
-| 10 km | 10 |
-| Semi-marathon | 13 |
-| Marathon | 16 |
+| Scénario | Tours de Training | Secteurs de Race |
+|---|---:|---:|
+| 5 km | 7 | 7 |
+| 10 km | 10 | 10 |
+| Semi-marathon | 13 | 13 |
+| Marathon | 16 | 16 |
 
-Ces longueurs constituent le découpage de référence du prototype, pas encore une validation de durée ou d'équilibrage avec le nouveau score.
+**DECISION VALIDATED :** le nombre de tours de Training est harmonisé avec le nombre de secteurs de Race pour chaque scénario. Ces durées sont les références communes de préparation et de course ; leur équilibre et leur durée réelle restent à vérifier en test.
 
 ## 4.7. Dés et relances en Race
 
@@ -927,18 +957,11 @@ Cette mécanique de capital est indépendante de la conversion énergie–vitess
 
 ## 4.8. Affûtage
 
-L'affûtage dépend de la fatigue résiduelle à la fin du Training. Le modèle Race V2 précédent définit cinq paliers et des seuils dépendant du plus haut dé du pool. Entre deux seuils, le palier inférieur s'applique.
+L'affûtage dépend de la fatigue résiduelle à la fin du Training. La récupération issue des dés peut produire une contribution de fatigue négative ; elle représente une diminution de la fatigue accumulée. Cette contribution négative est bornée en valeur absolue par le nombre de faces du plus grand dé du pool (ou par 6 avec un d6 à défaut). La fatigue cumulée ne descend pas sous zéro.
 
-Les seuils de référence consignés dans RACE_V2_DESIGN.md sont :
+Le bonus d'affûtage correspondant s'ajoute directement à S0 : il augmente le crédit de soutenabilité disponible au départ de la course. Il ne modifie ni les ancres physiologiques ni la courbe S(E).
 
-| Plus haut dé | 0 % | 25 % | 50 % | 75 % | 100 % |
-|---|---:|---:|---:|---:|---:|
-| D6 | 0 | −2 | −3 | −4 | −6 |
-| D8 | 0 | −2 | −4 | −6 | −8 |
-| D10 | 0 | −4 | −6 | −8 | −10 |
-| D12 | 0 | −6 | −8 | −10 | −12 |
-
-Ces seuils sont conservés comme référence de conception antérieure. Leur compatibilité avec la fatigue Training B et la nouvelle courbe énergie–soutenabilité doit être vérifiée avant de les traiter comme définitivement intégrés.
+Les anciens seuils négatifs d'affûtage de Race V2 ne sont pas repris comme règle active : ils appartiennent à un modèle de fatigue antérieur et ne sont pas directement compatibles avec cette comptabilité. La fonction exacte qui transforme la fatigue résiduelle en bonus d'affûtage A reste à calibrer.
 
 ## 4.9. Groupes et coopération en course
 
@@ -1149,11 +1172,12 @@ Cette section ne répète pas les décisions déjà fixées dans les sections 2 
 
 ## 8.1. Modèle physiologique et progression
 
-1. Comment propager les augmentations d'énergie EF / Seuil / VMA et AS dans les cartes et les contraintes n/m, en maintenant l'ordre des ancres et sans créer de palier gratuit ?
+1. Comment propager les augmentations d'énergie EF / Seuil / VMA et de l'AS préparée dans les cartes et les contraintes n/m, en maintenant l'ordre des ancres et sans créer de palier gratuit ?
 2. Quelle règle exacte transforme la dose énergétique et le RPE d'une séance en quantité de points d'adaptation, avant application de la matrice de transfert ?
-3. Comment les gains d'énergie d'une AS affectent-ils les AS voisines et les invariants de profil ?
+3. Comment les gains d'énergie de l'AS préparée affectent-ils les AS voisines et les invariants de profil ?
 4. Comment initialiser les RA et quelle est leur capacité maximale ?
 5. Comment vérifier exhaustivement les transitions de profils autorisées après progression ?
+6. La contrainte m ≤ n est conservée comme domaine de validité de référence, mais son effet potentiellement trop restrictif sur certaines trajectoires de progression doit être évalué en test avant toute modification ?
 
 ## 8.2. Training
 
@@ -1168,14 +1192,14 @@ Cette section ne répète pas les décisions déjà fixées dans les sections 2 
 
 ## 8.3. Race
 
-1. Comment calculer S0 à partir de Training ?
+1. Quel facteur de conversion appliquer à l'énergie totale investie en Général pour calculer S0 ?
 2. Quel est le stock de référence exact pour les seuils de dégradation à 50 % et 75 %, et comment les effets F révélés progressivement y contribuent-ils ?
-3. Quelle conséquence exacte produit un solde de soutenabilité négatif : restriction immédiate, impossibilité de dépenser ou autre règle ?
+3. Le principe de blocage à EF lorsque le stock de soutenabilité est épuisé doit-il recevoir des précisions de séquencement ?
 4. Quel score cumulatif et quelle règle de groupe produisent les interactions les plus lisibles avec le score énergie ?
 5. Quel effet de course remplace l'ancienne aspiration virtuelle ?
 6. Comment le terrain intervient-il sans réintroduire une conversion énergie–vitesse ?
-7. Le capital de relance et les paliers d'affûtage restent-ils équilibrés avec le score énergie ?
-8. Le nombre de secteurs est-il adapté au rythme de décisions du nouveau modèle ?
+7. Le capital de relance et la conversion de la fatigue résiduelle en bonus d'affûtage restent-ils équilibrés avec le score énergie ?
+8. Le décalage des seuils 50 % / 75 % par la RA est une variante expérimentale à calibrer pour un mode avancé.
 
 ## 8.4. Expérience et intégration
 
@@ -1183,6 +1207,7 @@ Cette section ne répète pas les décisions déjà fixées dans les sections 2 
 2. Quelle télémétrie minimale permet de comprendre les arbitrages de dépense et de soutenabilité, notamment les effets de k et de RA ?
 3. Quel scénario déterministe valide la chaîne Training → Race avant toute simulation longue ?
 4. Quelle durée réelle obtient-on avec 2 à 4 joueurs ?
+5. La charge cognitive du Training (choix de dés, allocation, séances, risque, fatigue, adaptations et suivi des jauges) reste un point de surveillance pour les playtests ; aucun allègement structurel n'est décidé avant d'avoir observé les parties.
 
 # 9. Historique des modèles remplacés
 
