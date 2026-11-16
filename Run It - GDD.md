@@ -296,9 +296,36 @@ L'énergie disponible est la somme des faces finales. Le TN est l'espérance du 
 - cette contribution est calculée après l'opération de dés et avant la résolution des séances ;
 - elle reste acquise même si une séance bust ensuite.
 
-La fatigue issue des dés est distincte de la fatigue spécifique des séances. Elle ne doit pas être annulée rétroactivement par un bust.
+La fatigue issue des dés est distincte de la fatigue spécifique des séances. Elle ne doit pas être annulée rétroactivement par un bust. L'énergie issue du lancer reste la somme finale des dés : la fatigue ne réduit pas le budget énergétique.
 
-La formule exacte et ses valeurs doivent rester rattachées à la fonction de référence du dépôt tant qu'une révision explicite n'est pas décidée. Les paramètres de la courbe ne doivent pas être remplacés par une simple variation linéaire de l'énergie dépensée moins le TN.
+La courbe de référence actuellement utilisée par le chemin Training B applique :
+
+~~~text
+offset = ceil(énergie_finale − TN)
+
+si offset ≥ −1 : fatigue_dés = Fibonacci(offset + 3)
+si offset ∈ {−2, −3} : fatigue_dés = 0
+si offset ≤ −4 : fatigue_dés = −récupération(offset)
+~~~
+
+Valeurs de référence de la fonction actuelle :
+
+| Offset | Contribution de fatigue |
+|---:|---:|
+| −1 | +1 |
+| 0 | +2 |
+| +1 | +3 |
+| +2 | +5 |
+| +3 | +8 |
+| +4 | +13 |
+| −2 ou −3 | 0 |
+| −4 ou −5 | −1 |
+| −6 ou −7 | −2 |
+| −8 | −3 |
+| −9 | −5 |
+| ≤ −10 | −8 |
+
+La fatigue cumulée après application de cette contribution est bornée inférieurement à zéro. Cette table décrit la courbe quasi-Fibonacci retenue et sa référence d'implémentation actuelle ; toute modification de la courbe doit être explicite et testée. Elle ne doit pas être remplacée par une variation linéaire de l'énergie dépensée moins le TN.
 
 ## 3.5. Répartition de l'énergie
 
@@ -347,9 +374,9 @@ Chaque option du catalogue doit pouvoir décrire au minimum :
 | Condition d'éligibilité | Condition qui rend l'option accessible |
 | Limite par tour | Limite facultative et spécifique, lorsqu'elle est justifiée |
 
-Le coût énergétique, le RPE, les adaptations et la fatigue sont des variables distinctes. Il ne faut pas les fusionner dans un coefficient unique.
+Le coût énergétique, le RPE, les adaptations et la fatigue sont des variables distinctes. Il ne faut pas les fusionner dans un coefficient unique. L'énergie détermine ce que le joueur peut engager sur le tour ; la fatigue régule davantage le volume et la répétition des efforts de qualité au fil du cycle.
 
-Les adaptations sont définies par séance et par dose. Elles sont fixes pour une occurrence réussie ; elles ne sont pas multipliées automatiquement par le résultat des dés.
+Les adaptations sont définies par séance et par dose. Elles sont fixes pour une occurrence réussie ; elles ne sont pas multipliées automatiquement par le résultat des dés. Les effets conditionnels ou combos entre séances sont une extension possible, mais restent désactivés dans la première version : pas de moteur de combos ni de séquençage obligatoire.
 
 ## 3.8. Adaptations primaires et secondaires
 
@@ -442,7 +469,7 @@ Deux voies de progression sont envisagées :
 - **Voie locale** : les jalons EF, Seuil et VMA ouvrent des options avancées de la filière correspondante.
 - **Voie globale** : une progression générale ouvre progressivement les familles transversales, notamment SL et SPEC.
 
-La voie locale ne doit pas permettre à un développement EF de débloquer automatiquement une option avancée VMA, ou inversement.
+La voie locale ne doit pas permettre à un développement EF de débloquer automatiquement une option avancée VMA, ou inversement. L'acquisition ne doit pas introduire une seconde monnaie dédiée : les conditions de jalon et le choix du joueur suffisent à structurer cette progression.
 
 **OPEN :** définition du développement global, seuils de jalons, cadence d'acquisition, nombre d'options et contreparties éventuelles. Aucun seuil observé dans un harness ne doit être repris comme règle sans décision.
 
