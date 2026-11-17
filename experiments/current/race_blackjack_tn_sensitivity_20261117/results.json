@@ -5,121 +5,116 @@
       9,
       14
     ],
-    "ef_rule": "TN - 5",
-    "vma_rule": "TN + 3",
-    "curve_costs_ef_to_vma": [
-      1,
-      1,
-      2,
-      3,
-      4,
-      5,
-      7,
-      10,
-      13
-    ],
+    "tn_role": "Blackjack target only; effective target is min(TN, long-term affordable target)",
+    "ef_energy": 9,
+    "vma_energy": 17,
+    "sustainability_curve": {
+      "9": 1,
+      "10": 1,
+      "11": 2,
+      "12": 3,
+      "13": 4,
+      "14": 5,
+      "15": 7,
+      "16": 10,
+      "17": 13
+    },
+    "below_ef": "raw energy below 9 costs 0 and output is capped at 8",
+    "above_vma": "output capped at 17 and cost fixed at 13",
     "initial_sustainability": 8,
     "turns": 8,
     "reroll_reserve": 8,
-    "policy": "Long-term heuristic; target highest energy affordable with ceil(remaining sustainability / turns remaining)."
+    "policy": "Long-term heuristic: highest energy affordable with ceil(remaining sustainability / turns remaining), capped by TN",
+    "reroll_rule": "shared course reserve; each die at most once per turn; reroll replaces its result",
+    "reserve_depletion": "when sustainability reaches 0, one die is removed and all remaining turns are locked to output 8",
+    "unaffordable_result": "output is locked to 8 for the turn; no sustainability is spent"
   },
   "seed": 20261117,
   "results": [
     {
       "tn": 9,
-      "ef": 4,
-      "vma": 12,
       "runs": 50000,
-      "mean_energy": 34.69504,
-      "sd_energy": 1.5592844595,
+      "mean_energy": 73.45978,
+      "sd_energy": 1.439119,
       "ci95_energy": [
-        34.6813722691,
-        34.7087077309
+        73.447166,
+        73.472394
       ],
-      "mean_sustainability_spent": 7.52788,
-      "mean_dice_lost": 0.66644,
-      "mean_rerolls_used": 7.15734,
-      "mean_ef_locked_turns": 4.68602
+      "mean_sustainability_spent": 7.73062,
+      "mean_dice_lost": 0.78998,
+      "mean_rerolls_used": 7.58032,
+      "mean_ef_locked_turns": 2.98336
     },
     {
       "tn": 10,
-      "ef": 5,
-      "vma": 13,
       "runs": 50000,
-      "mean_energy": 43.1556,
-      "sd_energy": 1.5934112524,
+      "mean_energy": 75.59632,
+      "sd_energy": 1.769696,
       "ci95_energy": [
-        43.1416331346,
-        43.1695668654
+        75.580808,
+        75.611832
       ],
-      "mean_sustainability_spent": 7.60128,
-      "mean_dice_lost": 0.71142,
-      "mean_rerolls_used": 7.21656,
-      "mean_ef_locked_turns": 4.3086
+      "mean_sustainability_spent": 7.62758,
+      "mean_dice_lost": 0.7163,
+      "mean_rerolls_used": 7.6098,
+      "mean_ef_locked_turns": 3.37656
     },
     {
       "tn": 11,
-      "ef": 6,
-      "vma": 14,
       "runs": 50000,
-      "mean_energy": 51.5107,
-      "sd_energy": 1.6435022154,
+      "mean_energy": 75.51198,
+      "sd_energy": 1.779876,
       "ci95_energy": [
-        51.4962940679,
-        51.5251059321
+        75.496379,
+        75.527581
       ],
-      "mean_sustainability_spent": 7.63846,
-      "mean_dice_lost": 0.73976,
-      "mean_rerolls_used": 7.2836,
-      "mean_ef_locked_turns": 3.97876
+      "mean_sustainability_spent": 7.65926,
+      "mean_dice_lost": 0.74564,
+      "mean_rerolls_used": 7.6056,
+      "mean_ef_locked_turns": 3.51042
     },
     {
       "tn": 12,
-      "ef": 7,
-      "vma": 15,
       "runs": 50000,
-      "mean_energy": 59.59294,
-      "sd_energy": 1.6504958767,
+      "mean_energy": 75.49846,
+      "sd_energy": 1.80852,
       "ci95_energy": [
-        59.5784727658,
-        59.6074072342
+        75.482608,
+        75.514312
       ],
-      "mean_sustainability_spent": 7.65112,
-      "mean_dice_lost": 0.74592,
-      "mean_rerolls_used": 7.44638,
-      "mean_ef_locked_turns": 3.84108
+      "mean_sustainability_spent": 7.6509,
+      "mean_dice_lost": 0.74728,
+      "mean_rerolls_used": 7.60658,
+      "mean_ef_locked_turns": 3.50482
     },
     {
       "tn": 13,
-      "ef": 8,
-      "vma": 16,
       "runs": 50000,
-      "mean_energy": 67.59838,
-      "sd_energy": 1.7077996683,
+      "mean_energy": 75.4964,
+      "sd_energy": 1.809313,
       "ci95_energy": [
-        67.5834104759,
-        67.6133495241
+        75.480541,
+        75.512259
       ],
-      "mean_sustainability_spent": 7.65222,
-      "mean_dice_lost": 0.7473,
-      "mean_rerolls_used": 7.52704,
-      "mean_ef_locked_turns": 3.68534
+      "mean_sustainability_spent": 7.65074,
+      "mean_dice_lost": 0.7457,
+      "mean_rerolls_used": 7.6095,
+      "mean_ef_locked_turns": 3.51852
     },
     {
       "tn": 14,
-      "ef": 9,
-      "vma": 17,
       "runs": 50000,
-      "mean_energy": 75.50838,
-      "sd_energy": 1.8071068281,
+      "mean_energy": 75.51086,
+      "sd_energy": 1.807027,
       "ci95_energy": [
-        75.4925400103,
-        75.5242199897
+        75.495021,
+        75.526699
       ],
-      "mean_sustainability_spent": 7.64926,
-      "mean_dice_lost": 0.7445,
-      "mean_rerolls_used": 7.61184,
-      "mean_ef_locked_turns": 3.50676
+      "mean_sustainability_spent": 7.64632,
+      "mean_dice_lost": 0.74496,
+      "mean_rerolls_used": 7.61292,
+      "mean_ef_locked_turns": 3.50238
     }
-  ]
-}\n
+  ],
+  "caveat": "Explicit heuristic, not an optimal-play solver."
+}
