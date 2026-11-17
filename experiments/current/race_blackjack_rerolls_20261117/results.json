@@ -1,0 +1,106 @@
+{
+  "model": {
+    "initial_pool": "4d6",
+    "target_number": 14,
+    "ef_energy": 9,
+    "vma_energy": 17,
+    "initial_sustainability": 8,
+    "turns": 8,
+    "sustainability_curve": {
+      "9": 1,
+      "10": 1,
+      "11": 2,
+      "12": 3,
+      "13": 4,
+      "14": 5,
+      "15": 7,
+      "16": 10,
+      "17": 13
+    },
+    "below_ef": "raw energy below 9 costs 0 and output is capped at 8",
+    "above_vma": "output capped at 17 and cost fixed at 13",
+    "unaffordable_result": "output is locked to 8 for the turn; no sustainability is spent",
+    "reserve_depletion": "when sustainability reaches 0, one die is removed and all remaining turns are locked to output 8",
+    "reroll_rule": "shared course reserve; each die can be rerolled at most once per turn; reroll replaces its result"
+  },
+  "policies": {
+    "opportunistic": "At each turn, target the highest energy level affordable with the current remaining sustainability. Correct only results whose cost exceeds the remaining reserve.",
+    "long_term": "At each turn, target the highest energy level affordable with ceil(remaining sustainability / turns left). Correct overshoots of that target with available rerolls.",
+    "caveat": "Both are explicit heuristic policies, not optimal strategies. Rerolls are used sequentially; no die is rerolled twice in a turn."
+  },
+  "seed": 20261117,
+  "results": [
+    {
+      "policy": "opportunistic",
+      "reroll_reserve": 0,
+      "runs": 50000,
+      "mean_energy": 73.51388,
+      "se_energy": 0.007102081082549963,
+      "sd_energy": 1.5880736082297013,
+      "mean_sustainability_spent": 7.69484,
+      "mean_dice_lost": 0.83428,
+      "mean_rerolls_used": 0,
+      "mean_ef_locked_turns": 5.19734
+    },
+    {
+      "policy": "opportunistic",
+      "reroll_reserve": 4,
+      "runs": 50000,
+      "mean_energy": 73.16734,
+      "se_energy": 0.005872804391391022,
+      "sd_energy": 1.313199076391803,
+      "mean_sustainability_spent": 7.80396,
+      "mean_dice_lost": 0.88566,
+      "mean_rerolls_used": 3.4619,
+      "mean_ef_locked_turns": 5.51808
+    },
+    {
+      "policy": "opportunistic",
+      "reroll_reserve": 8,
+      "runs": 50000,
+      "mean_energy": 73.1274,
+      "se_energy": 0.004976171223501149,
+      "sd_energy": 1.1127057123426867,
+      "mean_sustainability_spent": 7.88202,
+      "mean_dice_lost": 0.9298,
+      "mean_rerolls_used": 5.55026,
+      "mean_ef_locked_turns": 5.68592
+    },
+    {
+      "policy": "long_term",
+      "reroll_reserve": 0,
+      "runs": 50000,
+      "mean_energy": 74.98792,
+      "se_energy": 0.006580299953569714,
+      "sd_energy": 1.471399800852059,
+      "mean_sustainability_spent": 7.7911,
+      "mean_dice_lost": 0.82568,
+      "mean_rerolls_used": 0,
+      "mean_ef_locked_turns": 3.98152
+    },
+    {
+      "policy": "long_term",
+      "reroll_reserve": 4,
+      "runs": 50000,
+      "mean_energy": 75.24836,
+      "se_energy": 0.007529002585043952,
+      "sd_energy": 1.6835361582929917,
+      "mean_sustainability_spent": 7.72382,
+      "mean_dice_lost": 0.78562,
+      "mean_rerolls_used": 3.98966,
+      "mean_ef_locked_turns": 3.72626
+    },
+    {
+      "policy": "long_term",
+      "reroll_reserve": 8,
+      "runs": 50000,
+      "mean_energy": 75.50058,
+      "se_energy": 0.008074088003603985,
+      "sd_energy": 1.8054209632374079,
+      "mean_sustainability_spent": 7.64916,
+      "mean_dice_lost": 0.74648,
+      "mean_rerolls_used": 7.6067,
+      "mean_ef_locked_turns": 3.5116
+    }
+  ]
+}
