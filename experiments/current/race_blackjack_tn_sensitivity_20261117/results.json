@@ -1,0 +1,120 @@
+{
+  "model": {
+    "initial_pool": "4d6",
+    "tn_range": [
+      9,
+      14
+    ],
+    "tn_role": "Blackjack target only; effective target is min(TN, long-term affordable target)",
+    "ef_energy": 9,
+    "vma_energy": 17,
+    "sustainability_curve": {
+      "9": 1,
+      "10": 1,
+      "11": 2,
+      "12": 3,
+      "13": 4,
+      "14": 5,
+      "15": 7,
+      "16": 10,
+      "17": 13
+    },
+    "below_ef": "raw energy below 9 costs 0 and output is capped at 8",
+    "above_vma": "output capped at 17 and cost fixed at 13",
+    "initial_sustainability": 8,
+    "turns": 8,
+    "reroll_reserve": 8,
+    "policy": "Long-term heuristic: highest energy affordable with ceil(remaining sustainability / turns remaining), capped by TN",
+    "reroll_rule": "shared course reserve; each die at most once per turn; reroll replaces its result",
+    "reserve_depletion": "when sustainability reaches 0, one die is removed and all remaining turns are locked to output 8",
+    "unaffordable_result": "output is locked to 8 for the turn; no sustainability is spent"
+  },
+  "seed": 20261117,
+  "results": [
+    {
+      "tn": 9,
+      "runs": 50000,
+      "mean_energy": 73.45978,
+      "sd_energy": 1.439119,
+      "ci95_energy": [
+        73.447166,
+        73.472394
+      ],
+      "mean_sustainability_spent": 7.73062,
+      "mean_dice_lost": 0.78998,
+      "mean_rerolls_used": 7.58032,
+      "mean_ef_locked_turns": 2.98336
+    },
+    {
+      "tn": 10,
+      "runs": 50000,
+      "mean_energy": 75.59632,
+      "sd_energy": 1.769696,
+      "ci95_energy": [
+        75.580808,
+        75.611832
+      ],
+      "mean_sustainability_spent": 7.62758,
+      "mean_dice_lost": 0.7163,
+      "mean_rerolls_used": 7.6098,
+      "mean_ef_locked_turns": 3.37656
+    },
+    {
+      "tn": 11,
+      "runs": 50000,
+      "mean_energy": 75.51198,
+      "sd_energy": 1.779876,
+      "ci95_energy": [
+        75.496379,
+        75.527581
+      ],
+      "mean_sustainability_spent": 7.65926,
+      "mean_dice_lost": 0.74564,
+      "mean_rerolls_used": 7.6056,
+      "mean_ef_locked_turns": 3.51042
+    },
+    {
+      "tn": 12,
+      "runs": 50000,
+      "mean_energy": 75.49846,
+      "sd_energy": 1.80852,
+      "ci95_energy": [
+        75.482608,
+        75.514312
+      ],
+      "mean_sustainability_spent": 7.6509,
+      "mean_dice_lost": 0.74728,
+      "mean_rerolls_used": 7.60658,
+      "mean_ef_locked_turns": 3.50482
+    },
+    {
+      "tn": 13,
+      "runs": 50000,
+      "mean_energy": 75.4964,
+      "sd_energy": 1.809313,
+      "ci95_energy": [
+        75.480541,
+        75.512259
+      ],
+      "mean_sustainability_spent": 7.65074,
+      "mean_dice_lost": 0.7457,
+      "mean_rerolls_used": 7.6095,
+      "mean_ef_locked_turns": 3.51852
+    },
+    {
+      "tn": 14,
+      "runs": 50000,
+      "mean_energy": 75.51086,
+      "sd_energy": 1.807027,
+      "ci95_energy": [
+        75.495021,
+        75.526699
+      ],
+      "mean_sustainability_spent": 7.64632,
+      "mean_dice_lost": 0.74496,
+      "mean_rerolls_used": 7.61292,
+      "mean_ef_locked_turns": 3.50238
+    }
+  ],
+  "caveat": "Explicit heuristic, not an optimal-play solver."
+}
