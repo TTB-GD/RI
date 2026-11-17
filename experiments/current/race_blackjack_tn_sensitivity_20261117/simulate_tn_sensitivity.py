@@ -190,7 +190,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     data = run(args.runs, args.seed)
     args.output.write_text(
-        json.dumps(data, indent=2, ensure_ascii=False) + "\\n",
+        json.dumps(data, indent=2, ensure_ascii=False) + "\n",
         encoding="utf-8",
     )
     for row in data["results"]:
